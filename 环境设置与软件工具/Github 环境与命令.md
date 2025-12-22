@@ -1,3 +1,7 @@
+- github 文件下载镜像
+    - <https://github.akams.cn/>
+    - <https://git.yylx.win/>
+
 - 将远程仓库克隆到本地计算机，[MDN 开发者学习](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Django/development_environment#clone_the_repo_to_your_local_computer)：
     1. 创建仓库
     2. 点击绿色的 Code 按钮，在 Local-Clone-HTTPS 选项中复制 URL 地址
