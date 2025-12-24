@@ -52,3 +52,19 @@
         将IP地址转换为反向格式（如 192.168.1.100 → 100.1.168.192.in-addr.arpa）
 - `-l <域名> [权威 DNS 服务器地址]` 使用 AXFR（区域传输）协议，列出一个域的所有主机记录
 - `<server>` 指定本次查询的 DNS 服务器
+
+#### nc
+
+```nc [-46CDdFhklNnrStUuvZz] [-I length] [-i interval] [-M ttl]
+	  [-m minttl] [-O length] [-P proxy_username] [-p source_port]
+	  [-q seconds] [-s sourceaddr] [-T keyword] [-V rtable] [-W recvlimit]
+	  [-w timeout] [-X proxy_protocol] [-x proxy_address[:port]]
+	  [destination] [port]
+```
+
+#### echo
+
+
+参数
+- `-n` 不输出尾随的换行符
+- `-e` 启用反斜杠转义的解释

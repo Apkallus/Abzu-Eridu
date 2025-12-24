@@ -104,7 +104,7 @@
 #### 渗透靶场
 - web应用程序
     - [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/)
-        - 靶场，采用 Node.js、Express 和 Angular 编写，完全基于 JavaScript 开发的应用。
+        - 本地靶场，单应用集成多挑战，采用 Node.js、Express 和 Angular 编写，完全基于 JavaScript 开发的应用。
     - OWASP Node.js Goat
     - PentesterLab
     - OWASP Damn Vulnerable Serverless
@@ -113,11 +113,13 @@
 
 - 综合
     - [vulhub 基于 docker 的靶场](https://github.com/vulhub/vulhub)
-        - 基于 docker 的靶场
+        - 漏洞复现型本地综合靶场，基于 docker
     - [Root Me 在线靶场](https://www.root-me.org/)
-        - 综合靶场
+        - 在线综合靶场
     - VulnHub
     - PwnTillDawn Online
+    - [RingZer0 Team Online CTF](https://ringzer0ctf.com/)
+        - 在线综合靶场
     - Hacker101 CTF
     - CTFlearn
     - picoCTF
@@ -126,7 +128,7 @@
 - 系统与二进制
     - OverTheWire
     - ropemporium
-    - Exploit Education
+    - [Exploit Education](https://exploit.education/)
 
 #### 开发文档
 
@@ -140,6 +142,11 @@
 
 - HackTricks
     <https://book.hacktricks.wiki/en/welcome/hacktricks-values-and-faq.html#license>
+
+### :copyright: 版权声明许可
+- MITRE
+    <https://attack.mitre.org/resources/legal-and-branding/terms-of-use/#license>
+    > © 2025 The MITRE Corporation. This work is reproduced and distributed with the permission of The MITRE Corporation.
 
 ### :lock: 禁止
 - PortSwigger
