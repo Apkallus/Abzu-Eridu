@@ -18,10 +18,24 @@
 [手册](https://curl.se/docs/manpage.html)
 
 参数
-- ```-O，--remote-name``` 下载的文件名使用原文件名
-- ```-s, --silent``` 静默下载
-- ```-S, --show-error``` 失败时显示错误信息
-
+- ```-d, --data <data>```
+    (HTTP MQTT) Sends the specified data in a POST request to the HTTP server
+- ```-I, --head```
+	Fetch the headers only.
+- ```-k, --insecure```
+	(TLS SFTP SCP) 默认情况下，curl 建立的每个安全连接在传输之前都会验证其安全性。这个选项使 curl 跳过验证步骤，在不检查的情况下继续进行。
+- ```-L, --location```
+	(HTTP) 如果服务器报告请求的页面已移动到不同位置（通过 Location: 标头和 3XX 响应代码指示），此选项会使 curl 重新向新位置发起请求。如果与 --show-headers 或 --head 一起使用，则会显示所有请求页面的标头。
+- ```-O，--remote-name``` 
+	下载的文件名使用原文件名
+- ```-s, --silent``` 
+	静默下载
+- ```-S, --show-error``` 
+	失败时显示错误信息
+- ```-x, --proxy [protocol://]host[:port]``` 
+	Use the specified proxy.
+- ```-X, --request <method>``` 
+	Change the method to use when starting the transfer.
 
 #### wget
 
@@ -68,3 +82,21 @@
 参数
 - `-n` 不输出尾随的换行符
 - `-e` 启用反斜杠转义的解释
+
+
+#### namei
+
+``` namei [options] pathname...```
+
+递归列出目录中文件信息
+
+#### dig
+
+域名信息收集器（domain information groper）
+
+参数
+- `+short` 简洁信息
+
+#### whois
+
+查询对象的 whois 数据库
