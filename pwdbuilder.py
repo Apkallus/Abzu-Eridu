@@ -1,3 +1,5 @@
+import re
+
 pwd_str = """4.7.1 反射型跨站脚本测试
 4.7.2 存储型跨站脚本测试
 4.7.3 HTTP方法篡改测试
@@ -38,8 +40,8 @@ print(file_clear_list)
 try:
     for new_file in file_clear_list:
         with open(f'{filepath}\\{new_file}.md', 'x', encoding='utf-8') as f:
-            # 提取文件名
-            f.write(f'# {new_file.split()[1]}\n\n')
+            # 提取文件名，从去除头尾空白的字符串中，忽略开头的非空白字符与第一个空白字符，提取字符直到末尾
+            f.write(f'# {re.search(r'^\S*\s(.*)$', new_file.strip()).group(1)}\n\n')
 except FileExistsError:
     print('目录字符串中的文件已存在')
     raise
