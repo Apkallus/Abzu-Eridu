@@ -136,15 +136,16 @@
 
 
 ## 文档与靶场内容版权
-### :book: 知识共享署名
 - OWASP
+    :book: CC-BY-SA 4.0
     <https://owasp.org/about/#licensing>
 
 - HackTricks
+    :book: Attribution Share Adapt 
     <https://book.hacktricks.wiki/en/welcome/hacktricks-values-and-faq.html#license>
 
-### :copyright: 版权声明许可
 - MITRE
+    :copyright: 版权声明许可
     <https://attack.mitre.org/resources/legal-and-branding/terms-of-use/#license>
     > © 2025 The MITRE Corporation. This work is reproduced and distributed with the permission of The MITRE Corporation.
 
