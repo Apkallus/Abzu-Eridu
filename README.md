@@ -99,6 +99,7 @@
     - [OWASP 固件安全测试方法](https://github.com/scriptingxss/owasp-fstm)
     - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/)
         - 黑盒测试技术
+    - [OWASP Community](https://owasp.org/www-community/)
     - MITRE ATT&CK
 
 #### 渗透靶场
@@ -136,22 +137,28 @@
 
 
 ## 文档与靶场内容版权
+
+### :book: 署名
+
 - OWASP
-    :book: CC-BY-SA 4.0
+    CC-BY-SA 4.0
     <https://owasp.org/about/#licensing>
 
 - HackTricks
-    :book: Attribution Share Adapt 
+    Attribution Share Adapt 
     <https://book.hacktricks.wiki/en/welcome/hacktricks-values-and-faq.html#license>
 
-- MITRE
-    :copyright: 版权声明许可
+### :copyright: 版权声明许可
+
+-  MITRE  
     <https://attack.mitre.org/resources/legal-and-branding/terms-of-use/#license>
     > © 2025 The MITRE Corporation. This work is reproduced and distributed with the permission of The MITRE Corporation.
 
 ### :lock: 禁止
+
 - PortSwigger
     <https://portswigger.net/web-security/certification/terms-and-conditions/website-terms-of-use#7-use-of-website-content>
+    
 - Root-Me
     <https://www.root-me.org/?page=structure&inc=page-mentions_legales&lang=en>
 
