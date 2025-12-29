@@ -100,3 +100,13 @@
 #### whois
 
 查询对象的 whois 数据库
+
+#### grep
+
+[手册](https://www.man7.org/linux/man-pages/man1/grep.1.html)
+
+参数
+- `-r, --recursive`  
+	递归搜索目录
+- `-E, --extended-regexp` 
+	将模式解释为扩展正则表达式。
