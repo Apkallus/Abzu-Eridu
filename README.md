@@ -61,7 +61,6 @@
             按主题组织的高质量资料，值得反复查看。
 -  Web
     - MDN Web开发者教程 [后半部分](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions)
-        - 关联之后的 Juice Shop 靶机。
 
 - Web 应用程序渗透测试
     - [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) 靶机
@@ -71,22 +70,26 @@
 
     - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/) 文档
         - 项目主页的排版：标题缺少锚点，并且目录为静态侧边栏。
-            直接查看 [Github 文档](https://github.com/OWASP/wstg/tree/master/document)。
+            直接查看 [Github 文档](https://github.com/OWASP/wstg/tree/master/document)。并且可在 LLM 中直接使用文档的md代码翻译。
+            附录部分的工具、推荐文档等内容值得查看。
+            Github 项目中拥有对应的 Checklist 检查清单。
 
-    - OWASP CheatSheet 文档
     - OWASP WebGoat
     
 
 ### 资源池
 
 #### 文档与靶场
+
 - Web 应用程序渗透测试
     - [PortSwigger Web Security Academy](https://portswigger.net/web-security/all-topics) 
         - 主题文档 + 靶机 + 研究文章
 - 网络安全
     - [pwn.college](https://pwn.college/) 
         - 主题文档 + 靶机 + ASU 公开课
+
 #### 渗透文档
+
 - 速查手册
     - [HackTricks wiki](https://book.hacktricks.wiki/)
         - 综合黑客技术手册
@@ -103,6 +106,7 @@
     - MITRE ATT&CK
 
 #### 渗透靶场
+
 - web应用程序
     - [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/)
         - 本地靶场，单应用集成多挑战，采用 Node.js、Express 和 Angular 编写，完全基于 JavaScript 开发的应用。
