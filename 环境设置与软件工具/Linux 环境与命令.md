@@ -110,3 +110,22 @@
 	递归搜索目录
 - `-E, --extended-regexp` 
 	将模式解释为扩展正则表达式。
+
+#### openssl
+
+- `s_client`
+	通用 SSL/TLS 客户端
+
+##### openssl x509
+
+- `-noout`
+	禁止其他输出
+
+- `-pubkey`
+	以PEM格式打印证书公钥
+
+
+#### 其他
+
+- `2>/dev/null`
+	丢弃错误信息
