@@ -57,25 +57,27 @@
     - ```《黑客攻防技术宝典：Web实战篇》 Dafydd Stuttard / Marcus Pinto```
         - 拥有知识架构以及部分过时的内容，但结合作者的 PortSwigger Academy 仍值得阅读。
     - [PortSwigger Web Security Academy](https://portswigger.net/web-security)  文档与 lab
-        - 包含[主题文档与对应 lab](https://portswigger.net/web-security/all-topics) 还有[研究](https://portswigger.net/research)，以及 [Burp 的使用文档](https://portswigger.net/burp/documentation/contents)。
+        - 包含[主题文档与对应 lab](https://portswigger.net/web-security/all-topics) 还有[研究](https://portswigger.net/research)，以及 [Burp 工具文档](https://portswigger.net/burp/documentation/contents)。
+            除工具文档外，主题文档、lab也对应 Burp 的各种功能与插件的实际使用。
             按主题组织的高质量资料，值得反复查看。
 -  Web
     - MDN Web开发者教程 [后半部分](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions)
 
 - Web 应用程序渗透测试
-    - [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) 靶机
+    1. [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) 靶机
         - 项目拥有挑战的对应指南 [Pwning OWASP Juice Shop](https://pwning.owasp-juice.shop/companion-guide/latest/index.html)，不包含知识文档
         - 综合型靶机，在按主题分类的 PortSwigger 后拥有连贯视角，有一些新奇的挑战。
             然而由于其性质，无法与 OWASP WSTG 指南一起构建实践框架。
 
-    - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/) 文档
+    2. [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/) 文档
         - 项目主页的排版：标题缺少锚点，并且目录为静态侧边栏。
             直接查看 [Github 文档](https://github.com/OWASP/wstg/tree/master/document)。并且可在 LLM 中直接使用文档的md代码翻译。
-            附录部分的工具、推荐文档等内容值得查看。
+            附录部分的工具、推荐文档等内容也值得查看。
             Github 项目中拥有对应的 Checklist 检查清单。
 
-    - OWASP WebGoat
-    
+    - [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
+        - 基于 Java，拥有模拟攻击者服务器“WebWolf”，拥有[项目wiki（包含解决方案）](https://github.com/WebGoat/WebGoat/wiki)。
+            模块中介绍 ZAP 的使用，[ZAP 工具文档](https://www.zaproxy.org/docs/) 。
 
 ### 资源池
 
