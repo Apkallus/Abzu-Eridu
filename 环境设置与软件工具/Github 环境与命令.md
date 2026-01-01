@@ -84,3 +84,7 @@
         ```sh
         git remote -v
         ```
+    - 当前分支首次推送时设置对应的上游分支，每个分支的设置独立
+        ```sh
+        git push --set-upstream origin branch_name
+        ```

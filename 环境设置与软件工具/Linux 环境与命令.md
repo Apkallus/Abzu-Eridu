@@ -125,6 +125,16 @@
 	以PEM格式打印证书公钥
 
 
+#### docker
+
+`docker run -d -p 127.0.0.1:3000:3000 getting-started`
+[文档](https://docs.docker.com/get-started/workshop/02_our_app/)
+
+- `docker run`
+	运行容器，并指定镜像的名称
+- `-p HOST:CONTAINER`
+	用于在主机和容器之间创建端口映射，其中 HOST 是主机上的地址， CONTAINER 是容器上的端口
+
 #### 其他
 
 - `2>/dev/null`

@@ -1,10 +1,6 @@
 ---
-title:            
-difficulty:              
-category:             
-tags: 
-    - 
-    - 
+title: 
+id: 
 ---
 <!-- muse start -->
 
