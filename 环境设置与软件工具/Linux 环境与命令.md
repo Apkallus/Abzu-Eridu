@@ -110,11 +110,35 @@
 	递归搜索目录
 - `-E, --extended-regexp` 
 	将模式解释为扩展正则表达式。
+- `-P, --perl-regexp`
+	将模式解释为 perl 正则表达式。
+	- `(?<=foo)`
+		匹配 foo 但不包含在结果中
+- `-o, --only-matching`
+	仅打印匹配（非空）的行部分，每个这样的部分单独输出在一行上。
 
 #### openssl
 
 - `s_client`
 	通用 SSL/TLS 客户端
+
+##### openssl enc
+
+`openssl enc|cipher [-cipher] [-help] [-list] [-ciphers] [-in filename] [-out filename] [-pass arg] [-e] [-d] [-a] [-base64] [-A] [-k password] [-kfile filename] [-K key] [-iv IV] [-S salt] [-salt] [-nosalt] [-z] [-md digest] [-iter count] [-pbkdf2] [-saltlen size] [-p] [-P] [-bufsize number] [-nopad] [-v] [-debug] [-none] [-skeymgmt skeymgmt] [-skeyopt opt:value] [-skeyuri uri] [-storepass arg] [-rand files] [-writerand file] [-provider name] [-provider-path path] [-provparam [name:]key=value] [-propquery propq]`
+
+[文档](https://docs.openssl.org/master/man1/openssl-enc/)
+
+- `-a` 或 `-base64`
+	编码解码时处理换行符
+- `-A`
+	不处理换行符
+- `-d`
+	解密数据
+- `-kfile filename`
+	从指定文件读取密码
+- `-加密算法-密钥长度-工作模式`
+	- 例：`-aes-256-cbc`
+		aes算法 256位密钥 密码块链接模式（cbc）
 
 ##### openssl x509
 
@@ -124,6 +148,28 @@
 - `-pubkey`
 	以PEM格式打印证书公钥
 
+##### openssl rsa
+
+`openssl rsa [-help] [-inform DER|PEM|P12|ENGINE] [-outform DER|PEM] [-in filename|uri] [-passin arg] [-out filename] [-passout arg] [-aes128] [-aes192] [-aes256] [-aria128] [-aria192] [-aria256] [-camellia128] [-camellia192] [-camellia256] [-des] [-des3] [-idea] [-text] [-noout] [-modulus] [-traditional] [-check] [-pubin] [-pubout] [-RSAPublicKey_in] [-RSAPublicKey_out] [-pvk-strong] [-pvk-weak] [-pvk-none] [-engine id] [-provider name] [-provider-path path] [-propquery propq]`
+
+- `-in filename|uri` 
+	指定了从何处读取密钥，如果未指定此选项，则使用标准输入。如果密钥是加密的，将提示输入密码短语。
+- `-noout` 
+- `-modulus`
+	打印出密钥的模值。
+
+##### openssl dgst
+
+`openssl dgst|digest [-digest] [-list] [-help] [-c] [-d] [-debug] [-hex] [-binary] [-xoflen length] [-r] [-out filename] [-sign filename|uri] [-keyform DER|PEM|P12|ENGINE] [-passin arg] [-verify filename] [-prverify filename] [-signature filename] [-sigopt nm:v] [-hmac key] [-mac alg] [-macopt nm:v] [-fips-fingerprint] [-engine id] [-engine_impl id] [-rand files] [-writerand file] [-provider name] [-provider-path path] [-propquery propq] [file ...]`
+
+- `-digest`
+	指定要使用的支持的分 digest 的名称。见 `-list` 选项
+- `-sign filename|uri`
+	使用提供的私钥对摘要进行数字签名。
+- `-out filename`
+	输出文件名，或默认标准输出。
+- `file ...`
+	要处理的文件或文件列表。如果没有指定文件，则使用标准输入。
 
 #### docker
 
@@ -134,6 +180,30 @@
 	运行容器，并指定镜像的名称
 - `-p HOST:CONTAINER`
 	用于在主机和容器之间创建端口映射，其中 HOST 是主机上的地址， CONTAINER 是容器上的端口
+
+- `-ps`
+	显示正在运行的容器。要查看所有容器，使用 --all （或 -a ）标志
+- `docker exec [OPTIONS] CONTAINER COMMAND [ARG...]` 
+	运行中的容器中执行新命令，[文档](https://docs.docker.com/reference/cli/docker/container/exec/)
+	- `-i, --interactive`
+		即使未附加也保持 STDIN 打开
+	- `-t, --tty`		
+		分配伪终端
+	- `-u, --user`
+		Username or UID，使用 `-u root`以root权限进入
+#### tr
+
+`tr [OPTION]... STRING1 [STRING2]`
+
+- `[:lower:]`
+    all lower case letters
+
+- `[:upper:]`
+   all upper case letters
+
+例：
+- 字符串大写转小写
+	`tr [:upper:] [:lower:]`
 
 #### 其他
 

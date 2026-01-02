@@ -1,6 +1,6 @@
 ---
-title: Missing Function Level Access Control
 id: CWE-862
+title: Missing Function Level Access Control
 ---
 <!-- muse start -->
 旧版敏感功能端点未实施授权校验且未下线，修复的新版敏感功能仅设置为不可见，从中推测旧版端点地址后导致信息泄露与权限提升。

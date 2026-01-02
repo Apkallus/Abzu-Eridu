@@ -1,6 +1,6 @@
 ---
+id: CWE-639
 title: Authenticate First, Abuse Authorization Later
-category: CWE-639
 ---
 <!-- muse start -->
 水平越权，可能的垂直权限提升。

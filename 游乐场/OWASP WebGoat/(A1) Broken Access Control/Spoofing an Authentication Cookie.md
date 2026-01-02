@@ -1,6 +1,6 @@
 ---
-title: Spoofing an Authentication Cookie
 id: CWE-261
+title: Spoofing an Authentication Cookie
 ---
 <!-- muse start -->
 会话ID（cookie）使用多层简单编码而不是加密或加盐散列。

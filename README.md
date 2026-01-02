@@ -76,8 +76,10 @@
             Github 项目中拥有对应的 Checklist 检查清单。
 
     - [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
-        - 基于 Java，拥有模拟攻击者服务器“WebWolf”，拥有[项目wiki（包含解决方案）](https://github.com/WebGoat/WebGoat/wiki)。
+        - 基于 Java，挑战与小节文档在同一页面而非独立环境。
+            拥有模拟攻击者服务器“WebWolf”，项目 wiki 的文档缺乏信息。
             模块中介绍 ZAP 的使用，[ZAP 工具文档](https://www.zaproxy.org/docs/) 。
+
 
 ### 资源池
 
@@ -86,6 +88,8 @@
 - Web 应用程序渗透测试
     - [PortSwigger Web Security Academy](https://portswigger.net/web-security/all-topics) 
         - 主题文档 + 靶机 + 研究文章
+    - [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
+        - 基础小节文档 + 与文档同一页面的教学挑战
 - 网络安全
     - [pwn.college](https://pwn.college/) 
         - 主题文档 + 靶机 + ASU 公开课
@@ -140,7 +144,7 @@
 #### 开发文档
 
 - [MDN Web 文档](https://developer.mozilla.org/en-US/docs/Web) （不同于 MDN 开发者教程）
-
+- [sqlcourse](http://www.sqlcourse.com/)
 
 ## 文档与靶场内容版权
 
