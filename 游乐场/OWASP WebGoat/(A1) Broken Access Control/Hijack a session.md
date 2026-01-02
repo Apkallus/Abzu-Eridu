@@ -1,6 +1,6 @@
 ---
-title: Hijack a session                  
 id: CWE-341
+title: Hijack a session                  
 ---
 <!-- muse start -->
 易于预测的cookie，分析后进行会话劫持。

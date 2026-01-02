@@ -28,3 +28,26 @@ WebWolf 9090
 > WebGoat 中的一个练习只能用 Burp 解决，还不能用 OWAP ZAP 解决。
 
 爆破时设置单线程避免报错
+
+暂略：
+- General - Writing new lesson 
+    跳过
+
+- Developer Tools - 6
+    :x: 无法通过
+    在开发者工具的网络标签中查看 POST 请求体的参数值
+    
+- Crypto Basics - 6 
+    :x: 无法通过 
+    使用密钥对模数进行签名
+
+- SQL Injection (mitigation) - 9
+    :x: 无法通过
+    响应 404，似乎运行错误
+
+- SQL Injection (mitigation) - 10
+    :x: 无法通过
+    响应 404，似乎运行错误
+
+
+
