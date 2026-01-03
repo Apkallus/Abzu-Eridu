@@ -76,9 +76,10 @@
             Github 项目中拥有对应的 Checklist 检查清单。
 
     - [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
-        - 基于 Java，挑战与小节文档在同一页面而非独立环境。
+        - 基于 Java，挑战与小节文档在同一页面而非独立环境，教学型SQL。
             拥有模拟攻击者服务器“WebWolf”，项目 wiki 的文档缺乏信息。
             模块中介绍 ZAP 的使用，[ZAP 工具文档](https://www.zaproxy.org/docs/) 。
+            [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)
 
 
 ### 资源池
@@ -99,7 +100,10 @@
 - 速查手册
     - [HackTricks wiki](https://book.hacktricks.wiki/)
         - 综合黑客技术手册
+    - [OWASP 速查表系列](https://cheatsheetseries.owasp.org/)
+        - 大型应用程序预防与绕过速查表
     - PayloadsAllTheThings
+    - [OWASP Community](https://owasp.org/www-community/)
 - 漏洞库
     - Exploit-DB
 - 攻防框架
@@ -108,7 +112,6 @@
     - [OWASP 固件安全测试方法](https://github.com/scriptingxss/owasp-fstm)
     - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/)
         - 黑盒测试技术
-    - [OWASP Community](https://owasp.org/www-community/)
     - MITRE ATT&CK
 
 #### 渗透靶场

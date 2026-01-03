@@ -3,7 +3,8 @@ id:
 title: SQL Injection (mitigation)
 ---
 <!-- muse start -->
-即使使用预编译查询，ORDER BY 子句根据定义也可以包含表达式。
+Web Goat 的 SQL 注入缓解以及后端代码示例，参数化查询、输入验证、ORDER BY 特性。
+即使使用参数化查询，ORDER BY 子句根据定义也可以包含表达式。
 <!-- muse end -->
 
 ## 不可变查询
@@ -320,4 +321,8 @@ GET http://localhost:3000/WebGoat/SqlInjectionMitigations/servers?column=hostnam
 载荷 `104` 得到差异排序
 提交 `104.130.219.202` 通过挑战
 
-示例解决方案使用字符串字串来逐个字符确认
+示例解决方案使用字符串字串来逐个字符确认，
+并在 `WHEN` 后使用 `IS NOT NULL` 处理 NULL 值
+```sql
+(CASE WHEN (SELECT ip FROM servers WHERE hostname='webgoat-prd' AND substr(ip,1,1) = '1') IS NOT NULL THEN hostname ELSE id END)
+```
