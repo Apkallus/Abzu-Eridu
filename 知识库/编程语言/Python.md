@@ -58,6 +58,17 @@
     - ```*?``` ```+?``` ```??```
         在默认贪婪的匹配符后的 ```?``` 转为非贪婪模式
 
+
+### zipfile
+
+[文档](https://docs.python.org/zh-cn/3/library/zipfile.html)
+
+- `ZipFile.write(filename, arcname=None, compress_type=None, compresslevel=None)`
+    将名为 filename 的文件写入归档，给予的归档名为 arcname (默认情况下将与 filename 一致，但是不带驱动器盘符并会移除开头的路径分隔符)。
+- `ZipFile.writestr(zinfo_or_arcname, data, compress_type=None, compresslevel=None)`
+    将一个文件写入归档，内容为 data。 zinfo_or_arcname 可以是它在归档中将被给予的名称，或者是 ZipInfo 的实例。
+    即，设置归档内文件名及其数据。
+
 ### 备忘
 - ```with open(filepath, 'r', encoding='utf-8') as f:```
     设置文件路径、模式、编码后读取文件，作用域结束后自动关闭
