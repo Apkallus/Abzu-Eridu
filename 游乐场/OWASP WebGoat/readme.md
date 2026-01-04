@@ -32,6 +32,8 @@ WebWolf 9090
 [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)
 
 
+:warning: 已知容器内文档渲染有误(XXE 10. Blind XXE)，与 Github 仓库的文档内容不同。
+
 暂略：
 - General - Writing new lesson  
     跳过
@@ -53,5 +55,7 @@ WebWolf 9090
     :x: 无法通过
     响应 404，似乎运行错误
 
+- JWT tokens - 13
+    使用提示得到刷新令牌端点，但除爆破外如何发现？
 
 

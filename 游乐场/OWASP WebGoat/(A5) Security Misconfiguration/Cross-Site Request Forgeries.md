@@ -47,6 +47,7 @@ CSRF 攻击针对/滥用的是基本的 Web 功能。如果站点允许的操作
 > `Each file will be available under the following url: http://:9090/WebWolf/files/{username}/{filename}.`
 
 :x: 上传文件失败，响应 500
+此处使用 Zap 内置 Firefox，换到 Burp 的内置 Chrome 后可用
 
 尝试在本地开启服务器，使用 vscode扩展 `Live Server - Ritwick Dey`
 同时修改表单的目标地址为 Web Goat的端口，省略JavaScript的自动提交

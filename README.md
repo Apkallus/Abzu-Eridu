@@ -80,6 +80,7 @@
             拥有模拟攻击者服务器“WebWolf”，项目 wiki 的文档缺乏信息。
             模块中介绍 ZAP 的使用，[ZAP 工具文档](https://www.zaproxy.org/docs/) 。
             [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)
+            [IYS 的解决方案](https://inventyourshit.com/labs/webgoat/)
 
 
 ### 资源池
@@ -101,9 +102,10 @@
     - [HackTricks wiki](https://book.hacktricks.wiki/)
         - 综合黑客技术手册
     - [OWASP 速查表系列](https://cheatsheetseries.owasp.org/)
-        - 大型应用程序预防与绕过速查表
-    - PayloadsAllTheThings
+        - 应用程序预防与缓解速查表 
     - [OWASP Community](https://owasp.org/www-community/)
+        - 应用程序攻击与漏洞文档
+    - PayloadsAllTheThings
 - 漏洞库
     - Exploit-DB
 - 攻防框架
