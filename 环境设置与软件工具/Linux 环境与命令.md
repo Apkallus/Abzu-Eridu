@@ -205,7 +205,13 @@
 - 字符串大写转小写
 	`tr [:upper:] [:lower:]`
 
+#### hashcat
+
+[文档](https://hashcat.net/wiki/doku.php?id=frequently_asked_questions#how_do_i_install_hashcat)
+
 #### 其他
 
 - `2>/dev/null`
 	丢弃错误信息
+
+

