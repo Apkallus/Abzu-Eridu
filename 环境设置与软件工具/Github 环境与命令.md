@@ -88,3 +88,12 @@
         ```sh
         git push --set-upstream origin branch_name
         ```
+    - `git checkout` 
+        - `git checkout <branch>`  
+            切换分支
+        - `git checkout <commit> <filename>` or `git checkout <filename>`  
+            恢复文件的不同版本
+    - `git log`  
+        显示提交日志
+    - `git show`  
+        显示一个或多个对象（blob、树、标签和提交）。
