@@ -1,4 +1,4 @@
-### 功能
+## 功能
 
 #### head
 
@@ -9,7 +9,75 @@
 参数
 - ```n行数``` 显示的行数
 
-### 工具
+#### echo
+
+
+参数
+- `-n` 不输出尾随的换行符
+- `-e` 启用反斜杠转义的解释
+
+
+#### namei
+
+``` namei [options] pathname...```
+
+递归列出目录中文件信息
+
+#### docker
+
+`docker run -d -p 127.0.0.1:3000:3000 getting-started`
+[文档](https://docs.docker.com/get-started/workshop/02_our_app/)
+
+- `docker run`
+	运行容器，并指定镜像的名称
+- `-p HOST:CONTAINER`
+	用于在主机和容器之间创建端口映射，其中 HOST 是主机上的地址， CONTAINER 是容器上的端口
+
+- `-ps`
+	显示正在运行的容器。要查看所有容器，使用 --all （或 -a ）标志
+- `docker exec [OPTIONS] CONTAINER COMMAND [ARG...]` 
+	运行中的容器中执行新命令，[文档](https://docs.docker.com/reference/cli/docker/container/exec/)
+	- `-i, --interactive`
+		即使未附加也保持 STDIN 打开
+	- `-t, --tty`		
+		分配伪终端
+	- `-u, --user`
+		Username or UID，使用 `-u root` 或 `-u 0`以root权限进入
+	
+	例，`docker exec -u root -it 容器名或ID /bin/bash`
+
+#### tr
+
+`tr [OPTION]... STRING1 [STRING2]`
+
+- `[:lower:]`
+    all lower case letters
+
+- `[:upper:]`
+   all upper case letters
+
+例：
+- 字符串大写转小写
+	`tr [:upper:] [:lower:]`
+
+
+#### grep
+
+[手册](https://www.man7.org/linux/man-pages/man1/grep.1.html)
+
+参数
+- `-r, --recursive`  
+	递归搜索目录
+- `-E, --extended-regexp` 
+	将模式解释为扩展正则表达式。
+- `-P, --perl-regexp`
+	将模式解释为 perl 正则表达式。
+	- `(?<=foo)`
+		匹配 foo 但不包含在结果中
+- `-o, --only-matching`
+	仅打印匹配（非空）的行部分，每个这样的部分单独输出在一行上。
+
+## 工具
 
 #### curl
 
@@ -56,6 +124,13 @@
 - ```-p<port ranges>``` 指定扫描的端口，如```-p22```,```-p0-65535```
 - ```-sV``` 探测开放端口以识别服务/版本信息
 
+#### Ncat
+
+[手册](https://nmap.org/book/ncat-man.html)
+参数：
+- `-l, --listen`  
+	绑定并监听传入连接
+
 #### host
 
 ```host [-aCdilrTvVw] [-c class] [-N ndots] [-t type] [-W time] [-R number] [-m flag] [-p port] hostname [server]```
@@ -76,19 +151,7 @@
 	  [destination] [port]
 ```
 
-#### echo
 
-
-参数
-- `-n` 不输出尾随的换行符
-- `-e` 启用反斜杠转义的解释
-
-
-#### namei
-
-``` namei [options] pathname...```
-
-递归列出目录中文件信息
 
 #### dig
 
@@ -101,21 +164,7 @@
 
 查询对象的 whois 数据库
 
-#### grep
 
-[手册](https://www.man7.org/linux/man-pages/man1/grep.1.html)
-
-参数
-- `-r, --recursive`  
-	递归搜索目录
-- `-E, --extended-regexp` 
-	将模式解释为扩展正则表达式。
-- `-P, --perl-regexp`
-	将模式解释为 perl 正则表达式。
-	- `(?<=foo)`
-		匹配 foo 但不包含在结果中
-- `-o, --only-matching`
-	仅打印匹配（非空）的行部分，每个这样的部分单独输出在一行上。
 
 #### openssl
 
@@ -171,39 +220,7 @@
 - `file ...`
 	要处理的文件或文件列表。如果没有指定文件，则使用标准输入。
 
-#### docker
 
-`docker run -d -p 127.0.0.1:3000:3000 getting-started`
-[文档](https://docs.docker.com/get-started/workshop/02_our_app/)
-
-- `docker run`
-	运行容器，并指定镜像的名称
-- `-p HOST:CONTAINER`
-	用于在主机和容器之间创建端口映射，其中 HOST 是主机上的地址， CONTAINER 是容器上的端口
-
-- `-ps`
-	显示正在运行的容器。要查看所有容器，使用 --all （或 -a ）标志
-- `docker exec [OPTIONS] CONTAINER COMMAND [ARG...]` 
-	运行中的容器中执行新命令，[文档](https://docs.docker.com/reference/cli/docker/container/exec/)
-	- `-i, --interactive`
-		即使未附加也保持 STDIN 打开
-	- `-t, --tty`		
-		分配伪终端
-	- `-u, --user`
-		Username or UID，使用 `-u root`以root权限进入
-#### tr
-
-`tr [OPTION]... STRING1 [STRING2]`
-
-- `[:lower:]`
-    all lower case letters
-
-- `[:upper:]`
-   all upper case letters
-
-例：
-- 字符串大写转小写
-	`tr [:upper:] [:lower:]`
 
 #### hashcat
 

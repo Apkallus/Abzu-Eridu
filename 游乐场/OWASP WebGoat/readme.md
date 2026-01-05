@@ -30,7 +30,7 @@ WebWolf 9090
 爆破时设置单线程避免报错
 
 [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)
-
+[IYS 的解决方案](https://inventyourshit.com/labs/webgoat/)
 
 :warning: 已知容器内文档渲染有误(XXE 10. Blind XXE)，与 Github 仓库的文档内容不同。
 
@@ -58,4 +58,9 @@ WebWolf 9090
 - JWT tokens - 13
     使用提示得到刷新令牌端点，但除爆破外如何发现？
 
-
+- Password reset - 6    
+    :x: 未完成  
+    Host 头注入攻击，但无法收到请求
+    Web Wolf 的端点为端口特定路径 `/WebWolf`，对根目录的请求未被记录    
+    尝试在宿主机使用 `ncat` 对容器的映射端口进行监听，失败  
+    尝试在容器内安装 `ncat` 进行端口监听，失败  

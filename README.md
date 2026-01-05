@@ -76,11 +76,10 @@
             Github 项目中拥有对应的 Checklist 检查清单。
 
     - [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
-        - 基于 Java，挑战与小节文档在同一页面而非独立环境，教学型SQL。
-            拥有模拟攻击者服务器“WebWolf”，项目 wiki 的文档缺乏信息。
+        - 基于 Java，挑战与小节文档在同一页面而非独立环境，教学型SQL，项目 wiki 的文档缺乏信息。    
+            材料质量不一，包含有争议的概念，但一些内容仍值得查看。    
             模块中介绍 ZAP 的使用，[ZAP 工具文档](https://www.zaproxy.org/docs/) 。
-            [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)
-            [IYS 的解决方案](https://inventyourshit.com/labs/webgoat/)
+            [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)，[IYS 的解决方案](https://inventyourshit.com/labs/webgoat/)
 
 
 ### 资源池
@@ -171,9 +170,9 @@
 
 ### :lock: 禁止
 
-- PortSwigger
+- PortSwigger   
     <https://portswigger.net/web-security/certification/terms-and-conditions/website-terms-of-use#7-use-of-website-content>
     
-- Root-Me
+- Root-Me  
     <https://www.root-me.org/?page=structure&inc=page-mentions_legales&lang=en>
 
