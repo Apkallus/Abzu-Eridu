@@ -226,9 +226,28 @@
 
 [文档](https://hashcat.net/wiki/doku.php?id=frequently_asked_questions#how_do_i_install_hashcat)
 
+
+#### ssh-keygen
+
+[文档](https://www.ssh.com/academy/ssh/keygen)
+
+参数：
+- `-f <filename>`
+	选择存储密钥的文件
+- `-N "新"` 	
+	为密钥提供一个新的密码短语
+- `-i "输入"` 	
+	访问现有密钥文件
+
+示例：
+- `ssh-keygen -f key -N ''`	
+	生成一个 以 `key` 为名称的 ssh 密钥，私钥 `key`，公钥 `key.pub`。密码为 `''`
+	
+
 #### 其他
 
 - `2>/dev/null`
 	丢弃错误信息
 
-
+- `mkdir [OPTION]... DIRECTORY...`
+	创建目录
