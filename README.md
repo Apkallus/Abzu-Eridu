@@ -166,7 +166,7 @@
     <https://owasp.org/about/#licensing>
 
 - HackTricks
-    Attribution Share Adapt 
+    Attribution Share Adapt  
     <https://book.hacktricks.wiki/en/welcome/hacktricks-values-and-faq.html#license>
 
 #### 署名 不发布解决方案
