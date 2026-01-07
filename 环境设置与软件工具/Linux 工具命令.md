@@ -1,29 +1,8 @@
 ## 功能
 
-#### head
-
-```head [参数] [文件]```
-
-默认查看文件前十行
-
-参数
-- ```n行数``` 显示的行数
-
-#### echo
 
 
-参数
-- `-n` 不输出尾随的换行符
-- `-e` 启用反斜杠转义的解释
-
-
-#### namei
-
-``` namei [options] pathname...```
-
-递归列出目录中文件信息
-
-#### docker
+### docker
 
 `docker run -d -p 127.0.0.1:3000:3000 getting-started`
 [文档](https://docs.docker.com/get-started/workshop/02_our_app/)
@@ -46,6 +25,38 @@
 	
 	例，`docker exec -u root -it 容器名或ID /bin/bash`
 
+
+### man
+
+man 是系统的手册分页程序。
+
+手册页操作：
+您可以使用方向键（以及 PgUp/PgDn 键）滚动手册页，并使用 `/` 进行搜索。
+搜索后，可按 `n` 键跳至下一个结果，按 `N` 键跳至上一个结果。
+除了 `/`，您还可以使用 `?` 进行反向搜索！
+
+参数：
+- `-k, --apropos [关键词]`  
+	大约等同于 apropos。搜索关键词对应的手册概述并显示所有匹配结果。
+
+### 文件与内容，字符串处理
+
+#### head
+
+```head [参数] [文件]```
+
+默认查看文件前十行
+
+参数
+- ```n行数``` 显示的行数
+
+#### echo
+
+
+参数
+- `-n` 不输出尾随的换行符
+- `-e` 启用反斜杠转义的解释
+
 #### tr
 
 `tr [OPTION]... STRING1 [STRING2]`
@@ -60,10 +71,18 @@
 - 字符串大写转小写
 	`tr [:upper:] [:lower:]`
 
-
 #### grep
 
 [手册](https://www.man7.org/linux/man-pages/man1/grep.1.html)
+
+```sh
+grep [OPTION]... PATTERNS [FILE]...
+grep [OPTION]... -e PATTERNS ... [FILE]...
+grep [OPTION]... -f PATTERN_FILE ... [FILE]...
+```
+
+`grep` 在每个`FILE`中搜索模式。  
+在第一个形式中（如果没有 -e 或 -f 选项），第一个操作数模式是由换行符分隔的一个或多个模式，grep 会打印出与模式匹配的每一行。
 
 参数
 - `-r, --recursive`  
@@ -76,6 +95,113 @@
 		匹配 foo 但不包含在结果中
 - `-o, --only-matching`
 	仅打印匹配（非空）的行部分，每个这样的部分单独输出在一行上。
+
+#### diff
+
+```sh
+diff [OPTION]... FILES
+```
+
+逐行比较文件。
+
+输出示例：
+- `2a3` 在第一个文件的第2行后追加第二个文件的第3行
+- `5c5` 第一个文件的第5行被替换为第二个文件的第5行
+
+#### ls
+
+`ls [OPTION]... [FILE]...`
+
+列出参数所指定目录中的文件，若未提供参数则默认列出当前目录内容。
+
+参数：
+- `-a, --all`  
+	不忽略以 . 开头的条目。
+- `-l`  
+	使用长列表格式
+- `-R, --recursive`  
+	递归列出子目录
+
+#### touch
+
+`touch [OPTION]... FILE...`
+
+更新每个文件的访问和修改时间为当前时间。
+如果不存在，一个不存在的文件参数会被创建为空文件，除非提供 -c 或 -h 选项。
+
+#### mv
+
+```sh
+mv [OPTION]... [-T] SOURCE DEST
+mv [OPTION]... SOURCE... DIRECTORY
+mv [OPTION]... -t DIRECTORY SOURCE...
+```
+
+将 SOURCE 重命名为 DEST，或将 SOURCE(s) 移动到 DIRECTORY。
+
+#### cp
+
+```sh
+cp [OPTION]... [-T] SOURCE DEST
+cp [OPTION]... SOURCE... DIRECTORY
+cp [OPTION]... -t DIRECTORY SOURCE...
+```
+
+将 SOURCE 复制到 DEST，或将 SOURCE(s) 复制到 DIRECTORY。
+
+#### namei
+
+``` namei [options] pathname...```
+
+递归列出目录中文件信息
+
+#### mkdir
+
+```sh
+mkdir [OPTION]... DIRECTORY...
+```
+
+创建目录（如果它们尚不存在）。
+
+#### find
+
+`find [path...] [expression]`
+
+如果未指定搜索条件，`find` 将匹配所有文件。  
+如果未指定搜索位置，`find` 将使用当前工作目录（`.`）。  
+
+参数：
+- `-name pattern`  
+	基础文件名匹配 pattern
+- `type [类型]`  
+	d 目录  
+	f 普通文件  
+	l 符号链接  
+	p 命名管道  
+	s 套接字  
+
+#### ln
+
+```sh
+ln [选项]... [-T] 目标 链接名
+ln [选项]... 目标
+ln [选项]... 目标... 目录
+ln [选项]... -t 目录 目标...
+```
+
+在第一种格式中，创建具有指定链接名且指向指定目标的链接。在第二种格式中，在当前目录创建指向目标位置的链接。在第三、四种格式中，在指定目录中创建指向指定目标的链接。默认创建硬链接，当使用 --symbolic 时创建符号链接。
+
+参数：
+- `-s, --symbolic`  
+	创建符号链接而非硬链接
+
+#### 文件名通配符
+
+- `*` 多字符通配符，可以匹配文件名中除 `/` 或开头的 `.` 字符之外的任何部分。
+- `?` 单字符通配符，，可以匹配文件名中除 `/` 或开头的 `.` 字符之外的任何部分。
+- `[]` 单字符限定匹配，匹配括号内指定的可能字符子集的通配符。
+- `[!]`、`[^]` 排除符，如果方括号内的第一个字符是 `!` 或（在较新版本的 bash 中）`^`，该通配符模式将进行反向匹配，即该方括号实例会匹配*不*在所列出的字符范围内的字符。  
+	当 `!` 字符不是 `[]` 通配符的首字符时，它在 bash 中具有不同的特殊含义！`^` 没有这个问题，但在较旧的 shell 中可能不兼容。
 
 ## 工具
 
@@ -251,3 +377,20 @@
 
 - `mkdir [OPTION]... DIRECTORY...`
 	创建目录
+
+- 如果你在 shell 中按 tab 键，它会尝试推断你将要输入的内容并自动补全。  
+	默认情况下，`bash` 会在出现多个匹配选项时自动扩展到第一个分歧点（在此例中为 `fl`）。  
+	当你*第二次*按下 tab 键时，它会列出这些匹配选项。  
+	
+	补全选项根据位置，即上下文不同，对应不同文件:
+	- 命令位置：补的是“可执行命令”（过滤掉普通文件）。
+	- 参数位置：补的是“文件名/路径”（不过滤普通文件）。
+
+
+## 参考
+
+https://man.archlinux.org/man
+
+https://linux.die.net/man
+
+https://pwn.college/
