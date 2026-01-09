@@ -69,6 +69,33 @@
     将一个文件写入归档，内容为 data。 zinfo_or_arcname 可以是它在归档中将被给予的名称，或者是 ZipInfo 的实例。
     即，设置归档内文件名及其数据。
 
+###  string
+
+- `string.replace(old, new[, count])`  
+    使用字串new替换字串old  
+    count设置替换次数，若未指定则替换所有
+
+### urllib
+
+`urllib.request.urlopen(url, data=None, [timeout, ]*, context=None)`
+打开 *url*，它可以是包含有效、正确编码的 URL 的字符串，也可以是 Request 对象。
+
+```python
+import urllib.request
+
+url = 'https://www.example.com'
+response = urllib.request.urlopen(url)
+# 此处读取为字节序列，或需使用 decode('utf-8') 解码
+content = response.read()
+
+print(content)
+```
+
+### sys
+
+- `sys.argv`
+    一个列表，其中包含了被传递给 Python 脚本的命令行参数。 `argv[0]` 为脚本的名称（是否是完整的路径名取决于操作系统）。
+
 ### 备忘
 - ```with open(filepath, 'r', encoding='utf-8') as f:```
     设置文件路径、模式、编码后读取文件，作用域结束后自动关闭
@@ -79,3 +106,11 @@
 
 - `'abcde'[1:]`
     提取子串
+
+- `for i, value in enumerate(列表)`  
+    `enumerate()` 函数返回下标与值，可用来遍历列表
+    
+
+## 参考
+
+https://geek-docs.com/python
