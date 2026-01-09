@@ -15,3 +15,11 @@ flag 格式为 `pwn.college{xx.xx}`
 使用 vscode UI 模式：
 - 可设置 vscode 的各种字体大小以及终端的配色
 - 响应迅速
+
+md文本的编辑链接
+```html
+<a href="https://github.com/pwncollege/linux-luminarium/edit/master/processes/kill/DESCRIPTION.md#L1" target="_blank" class="github-edit-link" title="Edit on GitHub">
+    <i class="fas fa-edit"></i>
+</a>
+```
+选择所有编辑链接，将跳转替换为复制链接地址到粘贴板，并阻止跳转。见 JavaScript.md 的浏览器脚本

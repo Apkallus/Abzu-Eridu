@@ -37,3 +37,18 @@ window.addEventListener('storage', (event) => {
 在当前页面，创建一个`localStorage.setItem`的包装函数，添加储存条件为储存字段非拦截字段。
 `storage` 事件，在同源的其他页面存储操作完成时触发。
 在当前页面添加存储事件监听器，当其他页面的存储事件触时清空拦截字段的值（清空后值为 `null`，添加条件判断避免死循环）。
+
+
+### 选择所有编辑链接，将跳转替换为复制链接地址到粘贴板，并阻止跳转
+
+```js
+const edit_links = document.querySelectorAll("a.github-edit-link");
+
+edit_links.forEach(link => {
+    link.addEventListener('click', (event) => {
+        console.log(event.currentTarget.href);
+        navigator.clipboard.writeText(event.currentTarget.href);
+        event.preventDefault();
+    });
+});
+```
