@@ -40,9 +40,12 @@
         ```
 
 - 修改并同步更改，[MDN 开发者学习](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Django/development_environment#modify_and_sync_changes)：
-    1. 获取并拉取仓库内容
+    1. 从远程仓库获取最新分支信息，并删除本地已不存在于远程的分支引用
         ```sh
-        git fetch origin main
+        git fetch --prune origin
+        ```
+    1. 拉取仓库内容
+        ```sh    
         git pull origin main
         ```
         origin 为远程仓库位置

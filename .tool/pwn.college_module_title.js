@@ -1,3 +1,6 @@
+// 读取模块内的挑战名
+// @match        https://pwn.college/*
+
 // 在道场的模块页面加载后，选择模块名与挑战名，并添加md标题符号。
 // 使用浏览器控制台命令 copy 复制标题字符串到粘贴板 -> 改为设置事件监听器触发粘贴板api
 
@@ -13,6 +16,12 @@ window.addEventListener('load', (e) => {
     // const challenges = document.querySelectorAll('.pr-2');
     // 文本段读取修改为属性读取，同时仅限挑战标题而排除讲座标题
     const challenges = document.querySelectorAll('h4[data-challenge-name]');
+
+    
+    if(challenges.length == 0){
+        // 避免多个监听器冲突
+        return;
+    }
 
     let str = `# ${module_name.textContent}\n\n\n`;
     str += `## Challenge\n\n\n`;
