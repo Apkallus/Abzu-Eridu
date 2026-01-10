@@ -30,6 +30,7 @@ from markdown_it import MarkdownIt
 from mdformat.renderer import MDRenderer
 import sys
 import urllib.request
+import re
 
 md_input_file_path = ".tool\\md_input_file.md"
 # md_output_file_path = ".tool\\md_output_file.md"
@@ -75,6 +76,10 @@ def replace_fence_to_placeholder(text):
     
     output_markdown = renderer.render(new_tokens, options, env)
     print(output_markdown)
+
+    # 渲染器将水平线替换为大量下划线，挑战渲染器或匹配替换
+    output_markdown = re.sub(r'_{10,}', '----', output_markdown)
+
     if prompt:
         output_markdown = prompt + output_markdown
     # replace_placeholder_to_fence(output_markdown, origin_fence)
@@ -89,6 +94,9 @@ def replace_placeholder_to_fence(text, origin_fence):
         cur_placeholder_str = f"`{placeholder_str}-{i}`"
         print(i, cur_placeholder_str, origin_fence[i])
         text = text.replace(cur_placeholder_str, origin_fence[i], 1)
+    
+    # 移除围栏代码块后面的多余换行  
+    text = re.sub(r'```\n{3,}', '```\n\n', text)
 
     print(text)
     return text

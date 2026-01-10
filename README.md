@@ -148,13 +148,13 @@
             [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)，[IYS 的解决方案](https://inventyourshit.com/labs/webgoat/)
 
 - 网络安全
-    1. [pwn.college CSE 365：网络安全导论](https://pwn.college/dojos)   
+    1. [pwn.college CSE 365：网络安全导论](https://pwn.college/dojos) 公开课程  
         CSE 365 还包括对 pwn.college 平台本身的介绍：
         - 拥有定制的 GPT5 “sensai”。    
         - 视频 + 文档 + CTF 型靶机，三者融合在模块化的小节中。
         - 各种内容持续更新  
         
-        虽然B站拥有公开课程的LLM翻译视频，但还是使用最新材料。   
+        与模块视频不同，B站拥有公开课程的LLM翻译视频。  
 
 
 ## 文档与靶场内容版权
