@@ -31,6 +31,7 @@ from mdformat.renderer import MDRenderer
 import sys
 import urllib.request
 import re
+from mylib import *
 
 md_input_file_path = ".tool\\md_input_file.md"
 # md_output_file_path = ".tool\\md_output_file.md"
@@ -57,28 +58,28 @@ def replace_fence_to_placeholder(text):
 
     for token in tokens:
         if token.type == "fence":
-            # 解析后的列表为 [开始, 内容, 结束]
-            # 选择列表第二项即为占位符的 token
+            # 解析后的列表为 [paragraph_open, code_inline, paragraph_close]
             placeholder_token_str = f"`{placeholder_str}-{count}`"
-            placeholder_token = MarkdownIt().parse(placeholder_token_str)[1]
-            print(placeholder_token)
+            # 行内代码的拥有3个而不是1个token
+            placeholder_token = MarkdownIt().parse(placeholder_token_str)
+            # print(placeholder_token)
 
             # 还原为字符串后添加到列表，替换代码标记
             if token.info == "console":
                 token.info = "sh"
             origin_fence.append(renderer.render([token], options, env))
 
-            new_tokens.append(placeholder_token)
+            new_tokens.extend(placeholder_token)
             count += 1 
             # print(token)
             continue
         new_tokens.append(token)
     
     output_markdown = renderer.render(new_tokens, options, env)
-    print(output_markdown)
+    # print(output_markdown)
 
     # 渲染器将水平线替换为大量下划线，挑战渲染器或匹配替换
-    output_markdown = re.sub(r'_{10,}', '----', output_markdown)
+    output_markdown = re.sub(r'\n*_{10,}\n*', '\n----\n\n', output_markdown)
 
     if prompt:
         output_markdown = prompt + output_markdown
@@ -88,32 +89,25 @@ def replace_fence_to_placeholder(text):
 def replace_placeholder_to_fence(text, origin_fence):
     print(origin_fence)
 
-    # 翻译后原格式破坏，无法直接使用md库，简单使用字串替换
+    # 翻译后原格式破坏，无法直接使用md库，使用正则表达式匹配
 
     for i, fence in enumerate(origin_fence):
+        # print(f'{'='*8} no.{i} start {'='*8}')
         cur_placeholder_str = f"`{placeholder_str}-{i}`"
-        print(i, cur_placeholder_str, origin_fence[i])
-        text = text.replace(cur_placeholder_str, origin_fence[i], 1)
+        # 设置换行确保围栏代码块前后拥有空行，围栏末尾标记自带一个换行
+        pattern = rf'\s*{re.escape(cur_placeholder_str)}\s*'
+        
+        # 使用正则替换的函数模式，返回值作为字面量。避免字符串模式中的字符被解析。
+        def repl(m, s=fence):
+            return f'\n\n{fence}\n'
+        
+        text = re.sub(pattern, repl, text)
+        # print(f'{'='*8} no.{i} end {'='*8}')
     
-    # 移除围栏代码块后面的多余换行  
-    text = re.sub(r'```\n{3,}', '```\n\n', text)
-
-    print(text)
     return text
 
-def read_md():
-    # 从文件读取内容，若不存在则创建
-    try:
-        with open(md_input_file_path, 'r+', encoding='utf-8') as f:
-            md_text = f.read()
-    except FileNotFoundError:
-        with open(md_input_file_path, 'x', encoding='utf-8') as f:
-            pass
-    return md_text
 
-def write_md(text):
-    with open(md_output_file_path, 'w', encoding='utf-8') as f:
-        f.write(text)
+
 
 argv_num = len(sys.argv)
 print("参数个数为:", argv_num)
@@ -122,22 +116,27 @@ print("参数列表:", sys.argv)
 if argv_num > 1:
     print("从程序参数读取 url 文件内容到 md 输入文件")
     # 获取编辑链接转换为文件链接
-    url = sys.argv[1]
-    url = url.replace("//github.com/", "//raw.githubusercontent.com/")
-    url = url.replace("/edit/", "/refs/heads/")
+    replace_list = []
+    replace_list.append(("//github.com/", "//raw.githubusercontent.com/"))
+    replace_list.append(("/edit/", "/refs/heads/"))
+    url = url_trans(sys.argv[1], replace_list)
+
+    # url = sys.argv[1]
+    # url = url.replace("//github.com/", "//raw.githubusercontent.com/")
+    # url = url.replace("/edit/", "/refs/heads/")
     print(url)
     
     response = urllib.request.urlopen(url)
     en_md_text = response.read().decode("utf-8")
-    print(en_md_text)
+    # print(en_md_text)
 
 else:
     print("直接从输入文件读取内容")
-    en_md_text = read_md()
+    en_md_text = read_or_creat_file(md_input_file_path)
 
 # print(md_text)
 en_placeholder_md, origin_fence = replace_fence_to_placeholder(en_md_text)
-write_md(en_placeholder_md)
+write_to_file(md_output_file_path, en_placeholder_md)
 
 if origin_fence != []:
     print(f"替换围栏代码块数量：{len(origin_fence)}")
@@ -146,6 +145,6 @@ else:
     print("无围栏代码块，无需还原，在输出文件中复制md文档")
     exit(0)
 
-cn_md_text = read_md()
+cn_md_text = read_or_creat_file(md_input_file_path)
 cn_md = replace_placeholder_to_fence(cn_md_text, origin_fence)
-write_md(cn_md)
+write_to_file(md_output_file_path, cn_md)
