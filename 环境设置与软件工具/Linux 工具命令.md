@@ -55,6 +55,42 @@ which 接受一个或多个参数。对于它的每个参数，它会向标准�
 
 恶意软件常以 `.bashrc` 等启动脚本为目标，以实现持久化驻留！
 
+设置变量，变量作用范围仅限当前bash及其子进程：
+```sh
+#!/bin/bash
+
+cp /challenge/server myrun
+if [ -n "$BashrcExist" ]; then
+    return
+fi
+
+/challenge/server
+export BashrcExist=1
+```
+
+设置标记文件，仅在非持久目录下作用于所有bash：
+```sh
+FLAG_FILE="/tmp/server_started"
+
+cp /challenge/server myrun
+if [ ! -f "$FLAG_FILE" ]; then
+    /challenge/server
+    touch "$FLAG_FILE"
+fi
+```
+
+按完整命令行路径匹配，作用于所有bash：
+```sh
+#!/bin/bash
+
+ProgramPath="/challenge/server"
+
+cp $ProgramPath myrun
+if ! pgrep -f "$ProgramPath" >/dev/null 2>&1; then 
+    $ProgramPath
+fi
+```
+
 ##### .bash_profile
 
 .bash_profile 是每个用户主目录中的一个隐藏文件，用于定义该用户特定的环境变量和启动程序。
@@ -287,6 +323,9 @@ Sed 是一个流编辑器。流编辑器用于对输入流（文件或来自管�
 - `'s/regexp/replacement/g'`  
 	尝试将 regexp 的匹配项替换为 replacement。  
 	`g` 表示“全局”替换（所有出现的都删掉）
+- `-e script, --expression=script`
+	将脚本添加到要执行的命令中  
+	即，添加多个处理
 
 #### tr
 
@@ -363,6 +402,17 @@ yes OPTION
 
 反复输出所有指定的 STRING(s)或'y'。
 
+#### seq
+
+```sh
+seq [OPTION]... LAST
+seq [OPTION]... FIRST LAST
+seq [OPTION]... FIRST INCREMENT LAST
+```
+
+从 FIRST 到 LAST 按 INCREMENT 的步长打印数字。
+可搭配循环使用。
+
 #### tee
 
 `tee [选项]... [文件列表]...`
@@ -421,6 +471,32 @@ kill -l [信号]
 
 命令 kill 向指定的进程或进程组发送指定的信号。如果没有指定信号，将发送 TERM 信号。TERM 信号会杀死那些不捕获此信号的进程。对于其他进程，可能需要使用 KILL（9）信号，因为该信号无法被捕获。
 
+#### pgrep && pkill
+
+```sh
+pgrep [-flvx] [-d delimiter] [-n|-o] [-P ppid,...] [-g pgrp,...]
+[-s sid,...] [-u euid,...] [-U uid,...] [-G gid,...]
+[-t term,...] [pattern]
+```
+
+```sh
+pkill [-signal] [-fvx] [-n|-o] [-P ppid,...] [-g pgrp,...]
+[-s sid,...] [-u euid,...] [-U uid,...] [-G gid,...]
+[-t term,...] [pattern]
+```
+
+`pgrep` 会检查当前正在运行的进程，并将符合选择条件的进程 ID 列出到标准输出。
+
+`pgrep -u root sshd`
+只会列出名为 sshd 且由 root 拥有的进程。
+
+`pkill` 会将指定的信号（默认为 SIGTERM）发送给每个进程，而不是在标准输出中列出它们。
+
+参数：
+- `-f`：通常情况下，模式仅与进程名匹配。当设置-f 时，将使用完整的命令行（包含路径）。
+- `-x`：仅匹配名称（如果指定了 -f，则为命令行）完全匹配模式的进程。
+	- `-fx`: 按完整命令行匹配（所有内容，包含参数）
+
 ### 终端快捷键 & 作业控制（概念）
 
 #### 终端快捷键与命令
@@ -434,7 +510,7 @@ kill -l [信号]
 
 在命令末尾追加 `&` 符号可直接启动即进入*后台*运行！
 
-使用特殊的 `?` 变量获取最近终止命令的退出码（注意读取值时需前缀 `$` 符号）
+`$?` 使用特殊的 `?` 变量获取最近终止命令的退出码（注意读取值时需前缀 `$` 符号）
 
 ### 终端多路复用
 
@@ -744,6 +820,9 @@ visudo 以安全的方式编辑 sudoers 文件，类似于 vipw(8)。visudo 锁�
 
 - `2>/dev/null`  
 	丢弃错误信息
+- `if ! 命令 >/dev/null 2>&1; then`  
+	将命令的标准输出重定向到黑洞丢弃，将标准错误重定向到标准输出（当前为黑洞丢弃）。
+	使用命令的返回状态码进行判断
 
 #### 交互性 / 易用性功能（Shell 前端行为）
 
@@ -819,7 +898,8 @@ visudo 以安全的方式编辑 sudoers 文件，类似于 vipw(8)。visudo 锁�
 	`<(command)`、`>(command)`
 	连接到一个命令输出创建的临时文件
 
-- 单双引号
+- 单双引号  
+	在 Shell 中，所有引号都必须*成对匹配*，否则命令无效。
 	- 单引号 `'...'` 几乎禁止一切展开
 	- 双引号 `"..."` 保留大部分展开，但不解析为转义序列（`\n`）
 
@@ -1044,6 +1124,151 @@ nc [-46CDdFhklNnrStUuvZz] [-I length] [-i interval] [-M ttl]
 	
 	例，`docker exec -u root -it 容器名或ID /bin/bash`
 
+
+
+
+## bash 脚本
+
+bash中无数据类型的概念、无需声明变量。
+
+关键字**local**创建局部变量
+
+变量名仅限字母数字下划线，于是`$VAL`将读取直到有效变量名外的字符。如：
+`export PATH=$PATH:/usr/sbin`
+变量在`:`符号终止，即使没有使用显式的分隔`${}`也可被shell识别。
+
+在 Bash 里，单引号 `'` 和 双引号 `"` 的区别：
+
+- 单引号：几乎什么都不展开，按字面原样保留。
+    即，不触发 `!` 历史扩展
+- 双引号：会做变量、命令替换、历史扩展等部分展开。
+
+`bash [options] [file]`
+Bash 是一个兼容 sh 的命令语言解释器，它执行从标准输入或文件中读取的命令。
+
+按照惯例，Shell脚本通常以 `sh` 作为后缀命名
+然后通过将其作为参数传递给新的Shell实例（`bash`）来执行！
+当以这种方式调用Shell时，它不会从用户处获取命令，而是从文件中读取命令。
+
+```sh
+hacker@dojo:~$ bash pwn.sh
+```
+
+如果您的Shell脚本文件是*可执行的*（请回顾 linux-文件权限），您可以直接通过其相对路径或绝对路径调用它
+
+```sh
+echo 'hack the planet' > solve.sh && chmod u+x solve.sh
+```
+### 参数
+
+```sh
+hacker@dojo:~$ bash myscript.sh hello world
+```
+
+脚本可以通过特殊变量访问这些参数：
+- `$1` 包含第一个参数（"hello"）
+- `$2` 包含第二个参数（"world"）
+- `$3` 将包含第三个参数（如果存在）
+- ...以此类推
+
+以下是一个简单示例：
+
+```bash
+hacker@dojo:~$ cat myscript.sh
+#!/bin/bash
+echo "First argument: $1"
+echo "Second argument: $2"
+hacker@dojo:~$ bash myscript.sh hello world
+First argument: hello
+Second argument: world
+hacker@dojo:~$
+```
+
+### 条件
+
+```bash
+if [ "$1" == "one" ]
+then
+    echo "1"
+elif [ "$1" == "two" ]
+then
+    echo "2"
+else
+    echo "unknown"
+fi
+```
+
+语法规则较为严格，主要有以下原因：
+首先，*必须*在`if`后、`[`后以及`]`前保留空格（如果您熟悉C等语言，这点有所不同）；
+其次，`if`、`then`和`fi`必须位于不同行（或用分号分隔），不能将它们合并到同一语句中。
+另一个特殊之处是：`if`语句的结束标记是`fi`（即*if*的倒写），而非`endif`或`end`等常见形式。
+
+
+与`if`类似，*必须*在`elif`后使用`then`
+
+`else`没有条件——它会捕获所有之前未匹配的情况。它也不需要`then`语句。最后，`fi`需放置在`else`代码块之后，表示整个复合语句的结束
+
+`if [ 条件 ]; then` 这里的 `[` 实际上是一个命令，等价于：
+`test 条件`
+
+### 循环
+
+```bash
+for i in $(seq 1 5 100); do
+    echo "select substr(datum, $i, 5) from dataset;" \
+    | /challenge/sql \
+    | grep "substr(datum" \
+    | sed -e "s/.*, 5)': '//" -e "s/'}.*//"
+    
+done | tr -d '\n'
+```
+
+### 操作符
+
+```sh
+[ -n "$var" ]   # var 非空？
+[ -z "$var" ]   # var 为空？（-z 是 is zero-length）
+```
+
+`-n`、`-z` 是 字符串测试 的一元（单目）操作符
+
+## 程序调试
+
+### 跟踪系统调用
+
+#### strace
+
+<https://linux.die.net/man/1/strace>
+
+```sh
+strace [ -dDffhiqrtttTvVxx ] [ -acolumn ] [ -eexpr ] ... [ -ofile ] [ -ppid ] ... [ -sstrsize ] [ -uusername ] [ -Evar=val ] ... [ -Evar ] ... [ command [ arg ... ] ]
+
+strace -c [ -D ] [ -eexpr ] ... [ -Ooverhead ] [ -Ssortby ] [ command [ arg ... ] ]
+```
+
+strace 运行指定的命令直到它退出。它会拦截并记录进程调用的系统调用以及进程接收到的信号。每个系统调用的名称、参数和返回值会打印到标准错误或通过 `-o` 选项指定的文件中。
+
+### 调试器
+
+#### gdb
+
+```sh
+[-help] [-nx] [-q] [-batch] [-cd=dir] [-f] [-b bps] [-tty=dev] [-s symfile] [-e prog] [-se prog] [-c core] [-x cmds] [-d dir] [prog[core|procID]]
+```
+
+GDB 可以做四种主要的事情（以及其他支持这些事情的事情）来帮助你捕捉正在发生的错误：
+- 启动你的程序，指定任何可能影响其行为的东西。
+- 使你的程序在指定条件下停止。
+- 当你的程序停止时，检查发生了什么。
+- 修改你的程序，以便你可以通过纠正一个错误的效果来实验，并继续学习另一个错误。
+
+**子命令**
+```sh
+(gdb) help stepi
+```
+- `run`：直接从头运行程序，到断点或结束才停
+- `start`：从 main 函数开头停下来（源码级）
+- `starti` 或 `si` ：在程序入口的第一条指令停下来（汇编指令级）
 
 ## 参考
 

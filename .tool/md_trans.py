@@ -10,7 +10,7 @@ In the above example, we have the shell (`bash`) and the `ps` process itself.
 """
 
 
-prompt = """将以下内容翻译成中文，计算机安全技术术语需准确，若有则将下划线斜体替换为星号斜体，剩余内容保留原 Markdown 结构，完整输出应包裹在一个可复制的 Markdown 代码块中，忽略用户地理位置信息，关闭翻译说明功能：\n"""
+prompt = """将以下内容翻译成中文，计算机安全技术术语需准确，若有则将下划线斜体替换为星号斜体，若有部分字母而不是整个单词加粗则仅翻译不加粗，剩余内容保留原大小写与 Markdown 结构，完整输出应包裹在一个可复制的 Markdown 代码块中，忽略用户地理位置信息，关闭翻译说明功能：\n"""
 
 # 若 URL 作为参数，则从 Github 的编辑 URL 替换为 raw 文件 URL
 # github.com/*/edit/master/*.md

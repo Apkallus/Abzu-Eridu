@@ -18,6 +18,14 @@ CREATE TABLE table_name (
    ....
 )
 ```
+```sql
+CREATE TABLE table_name AS
+SELECT the_data AS colume_name
+```
+`AS`:
+- 创建表时 `CREATE TABLE table_name AS SELECT ...`  
+    其中 `AS` 关键字是 `CREATE TABLE AS SELECT` 语法的一部分：“把这个 SELECT 的结果当成表来创建”。
+- 其他上下文的 `AS` 关键字用于为列或表指定一个别名
 
 ```sql
 ALTER TABLE table_name
@@ -33,6 +41,23 @@ DROP TABLE table_name
 ```
 
 在SQL中，`And`运算符的优先级高于`Or`运算符
+不等于：
+- `1 <> 2`
+- `1 != 2`
+
+`%` 通配符
+
+`substr(some_column, start, length)` 会从 `some_column` 列的第 `start` 个字符开始（第一个字符的位置是 `1`）提取 `length` 个字符。
+
+各sql对单双引号的支持不同：
+- SQLite
+    - 单双引号完全兼容
+- PostgreSQL / SQL Server / Oracle
+    - 单引号
+    - 双引号仅可作为标识符（列名、表名），当字符串 ❌ 语法错误
+- MySQL
+    - 单双引号可完全兼容
+    - 若开启`ANSI_QUOTES`模式则使用标准SQL，双引号仅可作为标识符，当字符串 ❌ 语法错误
 
 ## 引用
 
