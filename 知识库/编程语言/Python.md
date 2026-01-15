@@ -112,6 +112,10 @@ Example: `bytes.fromhex('B9 01EF')` -> `b'\xb9\x01\xef'`.
 
 ### string
 
+- 字符集
+    `string.ascii_letters`
+    `string.digits`
+
 - `string.replace(old, new[, count])`  
     使用字串new替换字串old  
     count设置替换次数，若未指定则替换所有
@@ -184,9 +188,14 @@ data = base64.b64decode(encoded)
 import urllib.request
 import urllib.parse
 
-target_url = 'http://localhost:80/foo?bar=aaa'
+target_url = 'http://localhost:80/x?'
 method = 'POST'
+# 查询参数构造为名值对字符串并进行url编码
+query = urllib.parse.urlencode({'foo':"bar"})
+target_url += query
+# 表单内容构造为名值对并url编码后再编码为bytes，data必须是 bytes，否则报 TypeError。
 data =  urllib.parse.urlencode({'name': 'value'}).encode()
+
 req = urllib.request.Request(target_url, method=method, data=data)
 req.add_header('User-Agent', 'Firefox')
 req.add_header('Host', 'localhost:80')
@@ -201,18 +210,24 @@ print(resp_body)
 
 #### urllib.request
 
-- `urllib.request.urlopen(url, data=None, [timeout, ]*, context=None)`  
-    此函数始终返回一个可以作为 context manager 工作的对象，并具有 *url*、*headers* 和 *status* 属性。
+- `urllib.request.urlopen(url, data=None, [timeout, ]*, context=None)` 
+    - 返回一个 类文件对象（`http.client.HTTPResponse` 的子类）
+        - 支持 `read()`, `readline()`, `close()`
+        - 也支持 `with` 上下文管理器
+    
+    并具有 *url*、*headers* 和 *status* 属性。  
+    `data` 不为 `None` 时，`urlopen` 会自动使用 POST 方法
 
 - `class urllib.request.Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)`  
-    这个类是 URL 请求的抽象。  
+    这个类是 URL 请求的抽象。   
+    `data` 不为 `None` 时，`urlopen` 会自动使用 POST 方法
     - `Request.add_header(key, val)`  
         向请求添加另一个头部。
 
 #### urllib.parse
 
 - `urllib.parse.urlencode(query, doseq=False, safe='', encoding=None, errors=None, quote_via=quote_plus) -> str`  
-    生成表单参数的名值对字符串  
+    生成表单或查询参数的名值对字符串  
     - `query: Union[Mapping[Any, Any], Mapping[Any, Sequence[Any]], Sequence[Tuple[Any, Any]], Sequence[Tuple[Any, Sequence[Any]]]]`  
         ```py
         urllib.parse.urlencode({'spam': 1, 'eggs': 2, 'bacon': 0})
@@ -225,8 +240,22 @@ print(resp_body)
 
 - `url`  
     检索到的资源的 URL，通常用于确定是否发生了重定向。
+
 - `headers`  
-    以 `EmailMessage` 实例的形式返回响应头。
+    类字典对象的形式返回响应头。
+
+    ```py
+    resp.getheader('Content-Type')
+    resp.headers['Content-Type']
+    ```
+
+- `resp.read()`
+    返回 bytes，对于文本常见做法是 
+
+    ```py
+    resp.read().decode('utf-8')
+    ```
+
 - `status`  
     服务器返回的状态码。
 
@@ -240,28 +269,14 @@ Session对象允许您将某些参数持久化 请求。它还在所有请求中
 
 ```python
 s = requests.Session()
-r = s.get("http://localhost:80/foosetcookie")
-print(r.headers)
-r = s.get("http://localhost:80/barcarrycookie")
+r = s.get("http://localhost:80/")
+
+data = {'username': 'admin', 'password': "foo"}
+r = s.post("http://challenge.localhost:80/", data=data, allow_redirects=False)
+
+print(r.status_code)
 print(r.headers)
 print(r.text)
-```
-
-### flask
-
-<https://flask.palletsprojects.com/zh-cn/stable/quickstart/#a-minimal-application>
-
-```python
-import flask
-
-app = flask.Flask(__name__)
-    
-@app.route("/", methods=["GET"])
-def index():
-    return flask.redirect('http://challenge.localhost:80/gate', 302)
-
-app.secret_key = os.urandom(8)
-app.run("localhost", 1337)
 ```
 
 ### 备忘

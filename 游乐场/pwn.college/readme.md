@@ -24,22 +24,23 @@ md文本的编辑链接
 
 B站公开课视频似乎与道场的模块视频不同。
 
+<https://pwn.college/cse365-f2025>
 CSE 365 2025 秋 
 课程模块 - 道场 映射：
 模块1 - 道场 Linux Luminarium - 全部
 模块2 - 道场 Playing With Programs - 除“程序滥用”模块外
-模块3 - 道场 网络安全简介 - Web安全
+模块3 - 橙带 Web Security - Web安全
 模块4 - 道场 Computing 101 - 全部
-模块5 - 道场 网络安全简介 - 逆向工程
-模块6 - 道场 网络安全简介 - 二进制漏洞利用
-模块7 - 道场 网络安全简介 - 通信拦截
-模块8 - 道场 网络安全简介 - 密码学
+模块5 - 橙带 Web Security - 逆向工程
+模块6 - 橙带 Web Security - 二进制漏洞利用
+模块7 - 橙带 Web Security - 通信拦截
+模块8 - 橙带 Web Security - 密码学
 
 即，CSE 365 不包括基础道场的：  
 Playing With Programs - 程序滥用
-网络安全简介 - 密码学
-网络安全简介 - 访问控制
-网络安全简介 - 集成安全
+橙带 Web Security - 密码学
+橙带 Web Security - 访问控制
+橙带 Web Security - 集成安全
 
 按照 CSE 365 课程模块顺序，最后再返回基础道场
 

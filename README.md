@@ -23,6 +23,7 @@
     - [OWASP Community](https://owasp.org/www-community/)
         - 应用程序攻击与漏洞文档
     - PayloadsAllTheThings
+    - [Hacker Recipes](https://www.thehacker.recipes/)
 - 漏洞库
     - Exploit-DB
 - 攻防框架
@@ -32,6 +33,8 @@
     - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/)
         - 黑盒测试技术
     - MITRE ATT&CK
+    - NIST SP 800-115
+    - OSSTMM v3
 
 #### 渗透靶场
 
@@ -67,6 +70,11 @@
 
 - [MDN Web 文档](https://developer.mozilla.org/en-US/docs/Web) （不同于 MDN 开发者教程）
 - [sqlcourse](http://www.sqlcourse.com/)
+
+#### 教科书
+
+- Security Engineering: A Guide to Building Dependable Distributed Systems 3rd Edition, by Ross Anderson (Author)   
+    <https://www.cl.cam.ac.uk/archive/rja14/book.html>
 
 ## :infinity: 线路
 
@@ -155,6 +163,7 @@
         - 各种内容持续更新  
         
         与模块视频不同，B站拥有公开课程的LLM翻译视频。  
+        往期课程无首页链接但可修改URL访问 `cse365-f2025` `cse365-s2025` `cse365-f2024`
 
 
 ## 文档与靶场内容版权
