@@ -1,54 +1,34 @@
-从程序的角度看，计算机内存是一个存储数据的巨大空间。
-就像街道上的房屋一样，内存的每个部分都有一个数字*地址*，并且这些数字（大部分）是连续的。
-现代计算机拥有海量内存，而典型现代程序的内存视图实际上存在大量空隙（可以理解为：街道上尚未建造房屋的区域，因此这些地址被跳过）。
-但这些都只是细节：关键在于，计算机将数据（主要是顺序地）存储在内存中。
+将以下内容翻译成中文，计算机安全技术术语需准确，若有则将下划线斜体替换为星号斜体，若有部分字母而不是整个单词加粗则仅翻译不加粗，剩余内容保留原大小写与 Markdown 结构，完整输出应包裹在一个可复制的 Markdown 代码块中，忽略用户地理位置信息，关闭翻译说明功能：
+The first few challenges in this dojo will walk you through the creation of your first basic cIMG image.
+Of course, the point of this is not to create images, but rather to experience the process of understanding a program, and by extension understanding logic and data formats used by the program, just from reversing its binary.
 
-在本关卡中，我们将练习访问存储在内存中的数据。
-我们该如何做到这一点？
-回想一下，要将一个值移入寄存器，我们曾执行类似这样的操作：
+The `/challenge/cimg` binary in this level is (the start of) an image rendering program, specifically focusing on the cIMG format.
+Software identifies the formats of files (e.g., whether the file is a GIF, a JPEG, an MP3, or so on) in a few ways:
 
-```assembly
-mov rdi, 31337
-```
+1. The file extension.
+   This is the part of the file after the `.`: a `ZardusSmiling.jpg` is probably a JPEG (image) of Zardus smiling, whereas `KanakLaughing.mp3` is probably an MP3 (audio) of Kanak laughing.
+1. The _magic number_.
+   Files can get renamed, or the filenames associated with files can be lost (e.g., in a partial filesystem failure) or simply missing (e.g., in a data stream).
+   Thus, most file formats include a _magic number_ in the format that a parser can check to identify it.
 
-执行后，`rdi` 的值变为 `31337`。
-很好。
-那么，我们可以使用相同的指令来访问内存！
-该指令有另一种格式，它将第二个参数用作要访问的内存地址！
-假设我们的内存布局如下：
+You've already interacted with plenty of files containing magic numbers.
+For example, the ELF binary files you've worked with all start with the bytes `\x7fELF`.
+Of course, to you, this looks like a semantic-bearing string of characters, but a computer reads it as a number, hence the term.
 
-```text
-  Address │ Contents
-+────────────────────+
-│ 31337   │ 42       │
-+────────────────────+
-```
-
-要访问内存地址 31337 处的内容，你可以这样做：
-
-```assembly
-mov rdi, [31337]
-```
-
-当 CPU 执行此指令时，它当然理解 `31337` 是一个*地址*，而不是原始值。
-如果你将指令想象成一个人告诉 CPU 该做什么，并且沿用我们的"街道房屋"类比，那么指令/人并不是直接递给 CPU 数据，而是*指向街道上的一栋房屋*。
-CPU 随后会前往该地址，按响门铃，打开前门，将里面的数据拖出来，并将其放入 `rdi`。
-因此，此上下文中的 `31337` 是*内存地址*，用于*指向*存储在该内存地址的数据。
-此指令执行后，存储在 `rdi` 中的值将是 `42`！
-
-让我们将其付诸实践！
-我已经将一个秘密数字存储在内存地址 `133700` 处，如下所示：
-
-```text
-  Address │ Contents
-+────────────────────+
-│ 133700  │ ???      │
-+────────────────────+
-```
-
-你必须检索这个秘密数字，并将其用作程序的退出代码。
-为此，你必须将其读入 `rdi`，如果你还记得的话，`rdi` 的值是 `exit` 的第一个参数，并被用作退出代码。
-祝你好运！
+In this challenge, you must craft a file with a `cimg` extension that contains the correct magic number.
+You can learn this magic number by reversing the `/challenge/cimg` binary.
+If you properly get past the magic number check, the challenge will give you the flag!
 ----
 
-*注意*：要解决此挑战，你必须将输出的可执行二进制文件或汇编代码 `.s` 文件传递给 `/challenge/check`。
+**Approach Suggestions:**
+Some hopefully-useful suggestions to get you started:
+
+- Reverse engineering can be done "statically" (e.g., in a graphical reversing tool such as IDA and the like, with the program you are trying to understand remaining "at rest") or "dynamically" (e.g., in a debugger such as gdb, with the program you are trying to understand running).
+  We recommend a combination of these techniques throughout this module.
+  Use your graphical reversing tool to form hypotheses about the program (e.g., "it compares some bytes of my input against something at this assembly instruction address") and then verify these hypotheses in gdb (e.g., break at the address in question, look at the values of the registers it compares, and correlate them with your input).
+- **Leave objdump behind.** You might have used objdump previously to look at assembly code.
+  You might be able to solve this level (and maybe the next) with objdump, but **you cannot do this module** without a good graphical reversing tool.
+  Use this challenge as impetus to begin gaining familiarity with a graphical reversing tool.
+- Retrace your successful solution.
+  If you solve this challenge without using _both_ a graphical reversing tool and a debugger (gdb), go back and re-verify your solution using the tools that you did not use.
+  This will be good practice for understanding how to use these tools in later levels, and you should apply it in any challenge that you solve without relying on both tools.

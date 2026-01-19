@@ -136,7 +136,7 @@ else:
 
 # print(md_text)
 en_placeholder_md, origin_fence = replace_fence_to_placeholder(en_md_text)
-write_to_file(md_output_file_path, en_placeholder_md)
+write_to_file(md_output_file_path, en_placeholder_md, "w")
 
 if origin_fence != []:
     print(f"替换围栏代码块数量：{len(origin_fence)}")
@@ -147,4 +147,4 @@ else:
 
 cn_md_text = read_or_creat_file(md_input_file_path)
 cn_md = replace_placeholder_to_fence(cn_md_text, origin_fence)
-write_to_file(md_output_file_path, cn_md)
+write_to_file(md_output_file_path, cn_md, "w")

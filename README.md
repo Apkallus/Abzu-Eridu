@@ -2,45 +2,48 @@
 
 ## 资源池
 
-#### 文档与靶场
+### 文档与靶场
 
 - Web 应用程序渗透测试
-    - [PortSwigger Web Security Academy](https://portswigger.net/web-security/all-topics) 
+    - [PortSwigger Web Security Academy](https://portswigger.net/web-security/all-topics)  :star: 
         - 主题文档 + 靶机 + 研究文章
     - [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
         - 基础小节文档 + 与文档同一页面的教学挑战
-- 网络安全
-    - [pwn.college](https://pwn.college/) 
-        - 主题文档 + 靶机 + ASU 公开课
+- 二进制漏洞
+    - [pwn.college](https://pwn.college/) :star:
+        - 模块文档 + 模块视频 + 靶机（+ ASU 公开课）
 
-#### 渗透文档
+### 渗透文档
 
 - 速查手册
     - [HackTricks wiki](https://book.hacktricks.wiki/)
-        - 综合黑客技术手册
-    - [OWASP 速查表系列](https://cheatsheetseries.owasp.org/)
-        - 应用程序预防与缓解速查表 
-    - [OWASP Community](https://owasp.org/www-community/)
-        - 应用程序攻击与漏洞文档
-    - PayloadsAllTheThings
+        - 实战化攻防技巧百科，覆盖渗透全流程各类服务与场景。
     - [Hacker Recipes](https://www.thehacker.recipes/)
+        - 按“配方”组织的攻击路径手册，侧重红队与内网渗透流程。
+    - [OWASP 速查表系列](https://cheatsheetseries.owasp.org/)
+        - 开发/防御向的 Web 安全最佳实践速查文档。
+    - [OWASP Community](https://owasp.org/www-community/)
+        - 社区维护的 Web 安全知识与漏洞分类参考库。
+    - [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
+        - 按漏洞分类整理的常用 payload 与利用技巧合集。
+
 - 漏洞库
     - Exploit-DB
 - 攻防框架
+    - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/)
+        - Web 应用程序黑盒测试框架与细节
     - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines)
     - [OWASP 移动安全测试指南](https://owasp.org/www-project-mobile-security-testing-guide/)
     - [OWASP 固件安全测试方法](https://github.com/scriptingxss/owasp-fstm)
-    - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/)
-        - 黑盒测试技术
     - MITRE ATT&CK
     - NIST SP 800-115
     - OSSTMM v3
 
-#### 渗透靶场
+### 渗透靶场
 
 - web应用程序
     - [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/)
-        - 本地靶场，单应用集成多挑战，采用 Node.js、Express 和 Angular 编写，完全基于 JavaScript 开发的应用。
+        - 本地靶场，单应用集成多挑战，前后端都基于 JavaScript 开发。
     - OWASP Node.js Goat
     - PentesterLab
     - OWASP Damn Vulnerable Serverless
@@ -49,13 +52,15 @@
 
 - 综合
     - [vulhub 基于 docker 的靶场](https://github.com/vulhub/vulhub)
-        - 漏洞复现型本地综合靶场，基于 docker
-    - [Root Me 在线靶场](https://www.root-me.org/)
-        - 在线综合靶场
-    - VulnHub
-    - PwnTillDawn Online
+        - 基于 Docker 的漏洞环境合集，用于本地快速复现各类 CVE。
+    - [Root Me](https://www.root-me.org/)
+        - 在线解题式 CTF 平台，覆盖主流攻防方向多种题型。
+    - [VulnHub](https://www.vulnhub.com/)
+        - 可下载靶机镜像平台，侧重完整渗透测试与提权实战。
+    - [PwnTillDawn Online](https://online.pwntilldawn.com/)
+        - 在线多主机渗透实战靶场，偏红队风格全流程攻击。
     - [RingZer0 Team Online CTF](https://ringzer0ctf.com/)
-        - 在线综合靶场
+        - 在线 CTF 挑战平台，侧重技巧型 Web、Pwn、Crypto 等题目。
     - Hacker101 CTF
     - CTFlearn
     - picoCTF
@@ -66,17 +71,58 @@
     - ropemporium
     - [Exploit Education](https://exploit.education/)
 
-#### 开发文档
+### 环境构建
 
-- [MDN Web 文档](https://developer.mozilla.org/en-US/docs/Web) （不同于 MDN 开发者教程）
-- [sqlcourse](http://www.sqlcourse.com/)
+- AD：
+    - [vulnerable-AD](https://github.com/safebuffer/vulnerable-AD)
+    - [BadBlood](https://github.com/davidprowe/BadBlood)
 
-#### 教科书
+
+### 图书/待购/可用
+
+- 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis
+- 《渗透测试高手》（Advanced Penetration Testing）-  Wil Allsopp 
+- 《渗透测试实战 第三版》（The Hacker Playbook 3）-  Peter Kim 
+- 《灰帽黑客 第六版》（Gray Hat Hacking）- HARPER
+
+- 《API 攻防》（Hacking APIs） — Corey Ball
+- 《攻击网络协议》（Attacking Network Protocols） — James Forshaw
+- 《信息安全原理与实践 (第2版)》（Information Security: Principles and Practice）- Mark Stamp
+- 《Web 之困》The Tangled Web — Michal Zalewski
 
 - Security Engineering: A Guide to Building Dependable Distributed Systems 3rd Edition, by Ross Anderson (Author)   
     <https://www.cl.cam.ac.uk/archive/rja14/book.html>
 
-## :infinity: 线路
+### 未拥有
+
+- 《Network Security Assessment (3rd Edition)》 – Chris McNab
+
+### 开发文档
+
+- [MDN Web 文档](https://developer.mozilla.org/en-US/docs/Web) （不同于 MDN 开发者教程）
+- [sqlcourse](http://www.sqlcourse.com/)
+- [Microsoft Learn](https://learn.microsoft.com/zh-cn/security/)
+
+### 弃
+
+- 《渗透测试实践指南》（The Basics of Hacking and Penetration Testing） — Patrick
+- 《信息安全完全参考手册》（Information Security: The Complete Reference） — Mark Rhodes-Ousley
+- 《黑客大曝光 : Web应用程序安全》(Hacking Exposed Web Applications)
+- 《黑客大曝光》（Hacking Exposed）
+- 《开发者的web安全戒律》（Web Security for Developers） — Malcolm McDonald
+- 《漏洞管理实战》（Practical Vulnerability Management） — Andrew Magnusson
+- 《计算机安全导论》（Computer Security Fundamentals） — Chuck Easttom
+
+### 工具
+
+#### 逆向
+
+- `strace`：状态追踪
+- `cloud.binary.ninja`：可视化静态分析
+- `gdb`：动态分析
+- `ide.kaitai.io`：文件结构解析
+
+## 线路
 
 - 操作系统
     1. ```《C语言程序设计》 何钦铭、颜晖``` 慕课

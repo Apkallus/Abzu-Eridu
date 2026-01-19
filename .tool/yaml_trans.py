@@ -6,6 +6,14 @@
 #     binary_name: runme
 #     variants: 16
 #     challenge: PasswordCheckerBase
+# resources:
+# - name: Tip - Debugging Your Assembly
+#   type: markdown
+#   content: |
+#       These challenges are written in Python and run your assembly code in an emulator.
+#       This means you cannot use the normal debugging tools such as `gdb` to debug the challenge. However, we have added a special debug functionality to these challenges.
+#       If an `int3` instruction is executed by the challenge in your assembly code, the emulator will print out the current state of the registers and memory.
+#       This can be extremely useful to reason about your code!
 # challenges:
 # - id: password-simple-2
 #   name: "... and again!"
@@ -55,17 +63,30 @@ yaml_data = yaml.safe_load(yaml_str)  # 避免执行恶意代码
 
 # print(yaml_data)
 
+# 分为资源与挑战两部分
+# 资源内容为description，挑战内容为content
+# 添加条件检测确保存在，或使用异常
 md_list = []
+part_list = ["resources", "challenges"]
+text_list = ["description", "content"]
 
 module_name_str = yaml_data["name"]
 
 md_list.append(f"# {module_name_str}")
-md_list.append(f"## Challenge")
 
-challenges_data_list = yaml_data["challenges"]
-for challenge in challenges_data_list:
-    md_list.append(f"### {challenge["name"]}")
-    md_list.append(challenge["description"])
+for part in part_list:
+    if part not in yaml_data:
+        continue
+
+    md_list.append(f"## {part}")
+
+    data_list = yaml_data[part]
+    for challenge in data_list:
+        md_list.append(f"### {challenge["name"]}")
+
+        for text in text_list:
+            if text in challenge:
+                md_list.append(challenge[text])
 
 md_str = "\n\n".join(md_list)
-write_to_file(yaml_to_md_path, md_str)
+write_to_file(yaml_to_md_path, md_str, "w")

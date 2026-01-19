@@ -140,6 +140,53 @@ echo "Hello Hackers!"
 
 递归列出目录中文件信息
 
+#### file - 确定文件类型
+
+`file [-bchikLNnprsvz0] [--apple] [--mime-encoding] [--mime-type] [-e testname] [-F separator] [-f namefile] [-m magicfiles] file ...`
+
+`file` 会尝试对每个参数进行分类。测试分为三组，按以下顺序执行：文件系统测试、魔数测试和语言测试。第一个成功的测试会导致文件类型被打印出来。
+
+#### readelf 
+
+readelf 显示一个或多个 ELF 格式目标文件的信息。选项控制要显示的特定信息。
+
+- `-a, --all`
+	等同于指定 --file-header、--program-headers、--sections、--symbols、--relocs、--dynamic、--notes 和 --version-info。
+
+#### nm - 列出来自目标文件中的符号
+
+- `-a, --debug-syms`
+	显示所有符号，包括仅供调试器使用的符号；通常这些符号不会被列出。
+- `-D, --dynamic`
+	显示动态符号而不是普通符号。这仅对动态对象有意义，例如某些类型的共享库。
+
+#### patchelf - 修改 ELF 文件
+
+`patchelf OPTION FILE ...`
+
+PatchELF 是一个用于修改现有 ELF 可执行文件和库的简单工具。它可以更改可执行文件的动态加载器（"ELF 解释器"），以及更改可执行文件和库的 RPATH。
+
+#### objcopy - 复制和转换目标文件
+
+GNU objcopy 工具将一个目标文件的内容复制到另一个文件中。创建临时文件来执行其转换，并在完成后删除它们。
+
+#### strip - 从对象文件中丢弃符号
+
+strip 从对象文件 objfile 中丢弃所有符号。对象文件列表可以包含归档文件。至少必须给出一个对象文件。
+strip 修改其参数中指定的文件，而不是以不同的名称写入修改后的副本。
+
+#### du - 估计文件空间使用情况
+
+递归地总结每个文件（目录）的磁盘使用情况。
+
+#### strings - 打印文件中可打印字符的字符串。
+
+strings 主要用于确定非文本文件的内容。
+
+#### objdump - 显示来自对象文件的信息
+
+objdump 显示一个或多个目标文件的信息。选项用于控制显示特定的信息。
+
 
 ### 文件/目录管理
 
@@ -1236,7 +1283,7 @@ done | tr -d '\n'
 
 ### 跟踪系统调用
 
-#### strace
+#### strace 与 ltrace
 
 <https://linux.die.net/man/1/strace>
 
@@ -1248,9 +1295,25 @@ strace -c [ -D ] [ -eexpr ] ... [ -Ooverhead ] [ -Ssortby ] [ command [ arg ... 
 
 strace 运行指定的命令直到它退出。它会拦截并记录进程调用的系统调用以及进程接收到的信号。每个系统调用的名称、参数和返回值会打印到标准错误或通过 `-o` 选项指定的文件中。
 
+### 编译
+
+### gcc
+
+```sh
+gcc -o prog code.
+```
+
+预处理（对 .c），调用 `as` 汇编，再调用 `ld` 链接。
+`-o <输出文件>`，紧跟在 `-o` 后面的就是目标文件名。
+其他不以 `-` 开头的参数就是输入/源文件。
+
+若汇编代码中存在 `_start` 入口，使用 `gcc -o` 时默认添加的对象文件或库中也存在 `_start`，将报错 `multiple definition of '_start'`
+
 ### 调试器
 
 #### gdb
+
+https://pwn.college/computing-101/debugging-refresher/
 
 ```sh
 [-help] [-nx] [-q] [-batch] [-cd=dir] [-f] [-b bps] [-tty=dev] [-s symfile] [-e prog] [-se prog] [-c core] [-x cmds] [-d dir] [prog[core|procID]]
@@ -1262,13 +1325,124 @@ GDB 可以做四种主要的事情（以及其他支持这些事情的事情）�
 - 当你的程序停止时，检查发生了什么。
 - 修改你的程序，以便你可以通过纠正一个错误的效果来实验，并继续学习另一个错误。
 
+参数：
+- `-x 脚本` 从脚本处读取gdb命令，用于复杂调试
+- `--args` 启动带参数的命令
+
 **子命令**
 ```sh
 (gdb) help stepi
 ```
-- `run`：直接从头运行程序，到断点或结束才停
-- `start`：从 main 函数开头停下来（源码级）
-- `starti` 或 `si` ：在程序入口的第一条指令停下来（汇编指令级）
+输入子命令之后按下回车即可重复此命令，而无需重复输入。
+
+1. `gdb 命令地址`：启动gdb来调试命令
+2. `run`（`r`）：从头运行程序，到断点或结束暂停
+	- `run 参数1 参数2`：向程序提供参数
+- `start`：在main()函数的第一行停止执行来开始调试程序。
+- `break *函数名`（`b`）：在函数入口设置断点
+	- `break *函数名 + 50` 在函数入口的偏移量处设置断点
+- `del break 1`：删除断点1
+- `catch syscall 系统调用名` 在“系统调用”发生时自动中断（设置一种特殊的断点）。
+	- `catch syscall read` 每次程序执行 read 系统调用，gdb 都会停下来。
+- `continue`：继续执行直至遇到断点
+- `info register`或缩写`info reg`：查看所有寄存器信息
+	- `info break` 查看断点信息
+- `layout regs`: 启用 gdb 的 TUI 模式，显示所有寄存器内容及附近指令
+- `print $rax`（`p`）：查看特定寄存器信息
+	- `p/[x] $rsp`拥有多种格式，需查表
+	- `p/a *(long *) $rsp`将寄存器rsp的值作为长指针并解引用再按地址格式打印
+- `x/5i $rip` 查看寄存器rip地址处的5条汇编指令
+	- `x/[x] $rip`拥有多种格式，需查表
+	注，x之后即为地址，无需转换并解引用，可直接使用地址。
+- `disassemble 函数名`（`disass`）：查看函数的汇编代码
+- `stepi <n>` （`si <n>`）单步执行一条指令，可选`n`指令步数
+- `nexti <n>` （ `ni <n>`）单步执行一条指令，但会跳过函数调用，可选`n`指令步数
+- ``display/<n><u><f>`  每次程序停止时自动显示表达式的值  
+	- `display/8i $rip` 会持续显示后续 8 条指令
+	- `display/4gx $rsp` 会持续显示栈上前 4 个值
+	- `undisplay 1` 或 `delete display 1` 删除自动显示项目
+	- `disable display 1` 与 `enable display 1` 禁用与启用显示项目
+- `finish` 执行完成当前函数
+- `$变量`使用变量，包括寄存器变量与保存的打印值变量
+- `set $变量 = $rdi`创建并设置自定义变量
+	- 也可以修改目标程序的状态。例如：
+		- `set $rdi = 0` 可将 $rdi 清零
+		- `set *((uint64_t *) $rsp) = 0x1234` 可将栈顶第一个值设为 0x1234  
+		- `set *((uint16_t *) 0x31337000) = 0x1337` 可将地址 0x31337000 处的 2 字节设为 0x1337
+	- `set args 参数` 设置参数
+- `q`退出
+- `record` 录制功能
+	- `rsi` 启用录制功能后可回退（然而回退时的寄存器状态可能不准确）
+	- `record stop` 停止录制
+
+使用参数化命令 `x/<n><u><f> <address>` 来检查内存内容。此格式中：
+- `<u>` 表示显示的单位大小
+- `<f>` 表示显示的格式  
+- `<n>` 表示要显示的元素数量
+
+有效的单位大小包括：`b`（1 字节）、`h`（2 字节）、`w`（4 字节）和 `g`（8 字节）。有效的格式包括：`d`（十进制）、`x`（十六进制）、`s`（字符串）和 `i`（指令）。地址可以通过寄存器名、符号名或绝对地址指定。此外，在指定地址时还可以使用数学表达式。
+
+例，从rsp保存的地址读取十六进制的八字节整数：
+`p/x *(long *) $rsp`
+等效于
+`x/gx $rsp`
+
+
+汇编语法查看指令，可通过命令 `set disassembly-flavor intel` 设置。
+
+`info`命令：
+| 命令                | 作用说明                                      |
+|---------------------|-----------------------------------------------|
+| info functions      | 列出所有已知函数                              |
+| info functions PAT  | 列出匹配 PAT 的函数（如 `info functions win`) |
+| info variables      | 列出全局/静态变量                            |
+| info locals         | 查看当前栈帧里的局部变量                      |
+| info args           | 查看当前函数的参数                            |
+| info registers      | 查看所有寄存器值                              |
+| info registers REG  | 查看指定寄存器值（如 `info registers rax`)    |
+| info frame          | 查看当前栈帧信息                              |
+| info stack          | 查看调用栈（等价于 `backtrace` 简版）        |
+| info breakpoints    | 列出所有断点/观察点                          |
+| info watchpoints    | 列出观察点                                  |
+| info threads        | 列出所有线程                                  |
+| info files          | 查看当前加载的可执行文件及调试符号            |
+| info proc           | 查看被调试进程的信息（PID 等）                |
+| info sharedlibrary  | 查看已加载的共享库                            |
+| info line *ADDR     | 查看某地址对应的源码行                        |
+| info symbol ADDR    | 查看某地址对应的符号名                        |
+| info address NAME   | 查看某符号（如函数）所在地址                  |
+| info sources        | 列出已知的源码文件                            |
+| info display        | 查看自动显示表达式（`display` 设置的）        |
+| info target         | 查看当前调试目标相关信息                      |
+| info inferiors      | 查看被调试的进程列表                          |
+
+**脚本**
+
+你可以将命令写入某个文件（例如 `x.gdb`），然后使用 `-x <脚本路径>` 参数启动 gdb。该文件将在 gdb 启动后执行所有命令。
+
+或者，你可以使用 `-ex '<命令>'` 执行单个命令，并通过多个 `-ex` 参数传递多个命令。
+
+最后，你可以将某些命令放入 `~/.gdbinit` 中，使其在任何 gdb 会话中自动执行（建议将 `set disassembly-flavor intel` 放入该文件）。
+
+`commands` 给“最近设置的断点”绑定一段 gdb 自动执行的脚本。
+`end`结束 `commands` 脚本块
+```
+commands
+	代码块
+	continue
+end
+```
+
+`set pagination off` 关闭分页
+`set confirm off` 关闭确认
+
+创建gdb脚本后的使用：
+- 在gdb内 `source 脚本名.gdb`，也可将此命令放入 `.gdbinit`
+- 在命令行启动gdb `gdb 文件 -x 脚本名.gdb`
+
+**插件**
+
+- GEF
 
 ## 参考
 
