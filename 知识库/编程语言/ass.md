@@ -451,3 +451,85 @@ call 使用间接调用
 使用后恢复栈
 
 `[寄存器 - 值]` 的减法运算可能报错，可能需拆分步骤或转为加法
+
+### 不常见的指令
+
+#### `repne   scasb byte [rdi]` 
+
+等效于：
+`repnz scas al,BYTE PTR es:[rdi]`
+
+```log
+mov     rbp, qword [rsi+0x8]      ; rbp = argv[1]，指向整个文件名字符串
+
+or      rcx, 0xffffffffffffffff   ; rcx = -1 (0xffffffffffffffff)
+lea     rsi, [rel data_4020d3]    ; rsi = ".cimg"
+mov     rdi, rbp                  ; rdi = argv[1]，扫描的起始地址
+
+repne   scasb byte [rdi]          ; 用 AL 中的字节在 [rdi] 开始的串里查找
+                                  ; （这里 AL=0，用来找 '\0' 终止符）
+not     rcx
+lea     rdi, [rbp+rcx-0x6]        ; 重新算一个指针 rdi，指向“末尾往前 6 字节”的位置
+call    strcmp
+```
+
+- `scasb`：把内存 [rdi] 的一个字节和 `AL` 比较，每次比较后：
+    - `rdi` 自动加 1（DF=0 时）
+    - `rcx` 自动减 1
+- `repne`：在 `ZF == 0` 且 `RCX != 0` 时重复
+
+典型用法是：
+事先把 AL 设成 0（查找字符串终止符 '\0'）
+RCX 设成 -1，表示“无限大计数器”
+执行完后：
+rdi 指向字符串末尾的 '\0' 后面一个字节
+rcx 变成 -(长度+2)，not rcx 后就变成 长度+1（回想二进制反转：-1反转为0，-2反转为+1）。
+`rbp+rcx-0x6` 同样指向字符串末尾的 '\0' 后面一个字节
+
+#### `rep stosb byte [rdi]`
+
+等效于：
+`rep stos BYTE PTR es:[rdi],al`
+
+- `stosb`：把寄存器 `AL` 的值，写到内存地址 [rdi]，然后根据方向标志调整 rdi（一般是 rdi++）。
+- `rep`：把 `stosb` 重复执行 `ecx` 次。
+
+#### 函数参数
+
+System V AMD64 调用约定下，前 6 个整数/指针参数放在寄存器里（后面的可变参数走栈 push）。
+即，看到调用函数前的一堆push已经之后的 add rsp 即推测为函数参数操作
+
+### 跳转表
+
+跳转表：一块连续的内存区域，里面每一项都是一个代码位置的地址（或相对偏移）。
+
+### `sendfile(输入，输出，偏移，长度)`
+
+```asm
+## read() 代码 2
+# 设置字符串 /flag 为第一参数
+mov rdi, 0x0067616c662f
+push rdi
+mov rdi, rsp
+# 设置 O_RDONLY 为第二参数，对应数字 0
+xor rsi, rsi
+# 设置 read 的系统调用代码
+mov rax, 2
+syscall
+# rax 得到文件描述符
+
+## sendfile() 代码 40
+# 设置标准输出为 sendfile 的输出
+mov rdi, 1
+# 设置 /flag 文件描述符为输入
+mov rsi, rax
+# 设置第三参数偏移为0，第四参数长度为1000
+xor rdx, rdx
+mov r10, 1000
+mov rax, 40
+syscall
+
+## 退出 60
+mov rax, 60
+syscall
+```

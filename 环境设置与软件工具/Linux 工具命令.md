@@ -91,6 +91,51 @@ if ! pgrep -f "$ProgramPath" >/dev/null 2>&1; then
 fi
 ```
 
+若为 .c 源码文件则复制，若为二进制文件则使用base64编码，否则为python文件复制
+```sh
+#!/bin/bash
+
+ProgramPath="/challenge/cimg"
+
+if [ -f "${ProgramPath}.c" ]; then
+    cp "${ProgramPath}.c" myrun
+elif file $ProgramPath | grep -q 'ELF'; then
+        base64 $ProgramPath > ~/myrun
+else
+        cp $ProgramPath myrun
+fi
+```
+
+获取二进制文件路径，对其使用base64编码后保存到home目录
+```sh
+#!/bin/bash
+
+# 显示挑战目录内容
+echo ">>>"
+ls -al /challenge/
+echo ">>>"
+file /challenge/*
+echo ">>>"
+
+MY_COPY_DIR=~/challenge-copy/
+
+# 清空当前复制目录并新建
+rm -rf "$MY_COPY_DIR"
+mkdir -p "$MY_COPY_DIR"
+
+# 复制挑战目录内容到复制目录
+cp -r /challenge/* "$MY_COPY_DIR"
+
+# 获取二进制文件路径与名称
+BIN_FILE_PATH=$(file /challenge/* \
+    | grep ELF \
+    | sed 's/: \{1,\}.*$//')
+BIN_FILE_NAME=$(echo $BIN_FILE_PATH | sed 's/\/.*\///')
+
+# 对二进制文件进行base64编码后重命名
+base64 "$BIN_FILE_PATH" > "$MY_COPY_DIR$BIN_FILE_NAME.base64"
+```
+
 ##### .bash_profile
 
 .bash_profile 是每个用户主目录中的一个隐藏文件，用于定义该用户特定的环境变量和启动程序。
@@ -146,12 +191,27 @@ echo "Hello Hackers!"
 
 `file` 会尝试对每个参数进行分类。测试分为三组，按以下顺序执行：文件系统测试、魔数测试和语言测试。第一个成功的测试会导致文件类型被打印出来。
 
+#### basename 从文件名中剥离目录和后缀
+
+打印移除任何前导目录组件的 NAME。如果指定，也移除尾随的 SUFFIX。
+
+#### du - 估计文件空间使用情况
+
+递归地总结每个文件（目录）的磁盘使用情况。
+
+### 逆向工程/二进制
+
 #### readelf 
 
 readelf 显示一个或多个 ELF 格式目标文件的信息。选项控制要显示的特定信息。
 
-- `-a, --all`
+- `-a`  
+	`--all`  
 	等同于指定 --file-header、--program-headers、--sections、--symbols、--relocs、--dynamic、--notes 和 --version-info。
+- `-S`  
+	`--sections`   
+	`--section-headers`  
+	显示文件节标题中包含的信息（如果有的话）。
 
 #### nm - 列出来自目标文件中的符号
 
@@ -175,18 +235,24 @@ GNU objcopy 工具将一个目标文件的内容复制到另一个文件中。�
 strip 从对象文件 objfile 中丢弃所有符号。对象文件列表可以包含归档文件。至少必须给出一个对象文件。
 strip 修改其参数中指定的文件，而不是以不同的名称写入修改后的副本。
 
-#### du - 估计文件空间使用情况
-
-递归地总结每个文件（目录）的磁盘使用情况。
-
 #### strings - 打印文件中可打印字符的字符串。
 
 strings 主要用于确定非文本文件的内容。
+
+参数：
+- `-t radix`
+ `--radix=radix`
+	在文件中每个字符串之前打印其偏移量。单个字符参数指定偏移量的基数:   
+	o 表示八进制，x 表示十六进制，或 d 表示十进制。
 
 #### objdump - 显示来自对象文件的信息
 
 objdump 显示一个或多个目标文件的信息。选项用于控制显示特定的信息。
 
+指令：
+- `-d`
+	`--disassemble`
+	显示来自objfile的机器指令的汇编助记符。此选项仅反汇编预期包含指令的部分。
 
 ### 文件/目录管理
 
@@ -204,6 +270,11 @@ mkdir [OPTION]... DIRECTORY...
 ```
 
 创建目录（如果它们尚不存在）。
+
+参数：
+- `-p, --parents`  
+	如果已存在，则不报错，按需创建父目录
+
 #### mv
 
 ```sh
@@ -223,6 +294,10 @@ cp [OPTION]... -t DIRECTORY SOURCE...
 ```
 
 将 SOURCE 复制到 DEST，或将 SOURCE(s) 复制到 DIRECTORY。
+
+参数：
+- `-R, -r, --recursive`   
+	递归复制目录内容
 
 #### rm
 
@@ -297,7 +372,15 @@ ln [选项]... -t 目录 目标...
 - ```n行数``` 或 ```n 行数```  
 	显示设置的行数
 
-#### tail
+#### tail - 输出文件的最后一部分
+
+`tail [OPTION]... [FILE]...`
+
+将每个文件的最后 10 行打印到标准输出。如果有多个文件，每个文件前会加上一个标题，显示文件名。如果没有文件，或者文件是-，则读取标准输入。
+
+参数
+- `-n, --lines=K`
+	输出最后 K 行，而不是最后 10 行；或使用-n +K 输出从第 K 行开始的行
 
 #### cat 
 
@@ -318,6 +401,13 @@ cut OPTION... [FILE]...
 	指定*字段*编号；如果未指定-s 选项，也会打印包含无分隔符字符的任何行
 
 #### less
+
+#### readlink 读取符号链接指向的目标
+
+示例：
+- `readlink /proc/self/ns/net`  
+	读取当前进程(/proc/self/)的 network namespace 的“命名空间句柄”符号链接。
+	(Network namespace 是 Linux 的一种隔离机制：每个 netns 拥有自己独立的网络栈视图)
 
 ### 过滤 & 匹配
 
@@ -359,6 +449,10 @@ grep [OPTION]... -f PATTERN_FILE ... [FILE]...
 
 - `-C NUM, -NUM, --context=NUM`
     打印 NUM 行的输出上下文。
+
+General Output Control:
+- `-q, --quiet, --silent` 安静模式；不将任何内容写入标准输出。如果找到任何匹配项，即使检测到错误，也会立即以零状态退出。另请参阅 -s 或 --no-messages 选项。  
+	可用来在脚本的条件表达式中根据返回值判断是否找到。
 
 #### sed
 
@@ -543,6 +637,25 @@ pkill [-signal] [-fvx] [-n|-o] [-P ppid,...] [-g pgrp,...]
 - `-f`：通常情况下，模式仅与进程名匹配。当设置-f 时，将使用完整的命令行（包含路径）。
 - `-x`：仅匹配名称（如果指定了 -f，则为命令行）完全匹配模式的进程。
 	- `-fx`: 按完整命令行匹配（所有内容，包含参数）
+
+#### parallel - 并行运行程序
+
+```
+parallel [options] [command] -- [argument ...]
+parallel [options] -- [command ...]
+```
+
+parallel 运行指定的命令，并将其中指定的每个参数逐一传递给它。对每个参数都重复这一过程。任务可以并行运行。默认情况下，每个 CPU 运行一个任务。
+
+如果 -- 前面没有指定命令，那么它后面的命令将并行运行。
+
+选项：
+- `-j maxjobs`  
+	用于限制同时运行的任务数量。
+
+参数：
+- `--delay secs`
+	控制任务启动间隔
 
 ### 终端快捷键 & 作业控制（概念）
 
@@ -969,6 +1082,104 @@ visudo 以安全的方式编辑 sudoers 文件，类似于 vipw(8)。visudo 锁�
 
 ## 网络 & 安全工具
 
+### 状态信息 & 配置
+
+#### ip - 显示/操作路由、设备、策略路由和隧道
+
+```
+ip [ OPTIONS ] OBJECT { COMMAND | help }
+OBJECT := { link | addr | addrlabel | route | rule | neigh | tunnel | maddr | mroute | monitor }
+OPTIONS := { -V[ersion] | -s[tatistics] | -r[esolve] | -f[amily] { inet | inet6 | ipx | dnet | link } | -o[neline] }
+```
+ip addr add 10.0.0.2/24 dev eth0
+配置：
+- `ip addr add A.B.C.D/24 dev 网络接口名`  
+	对网络接口(如 eth)设置 ip 地址与网段
+
+#### iptables - IPv4 数据包过滤和 NAT 的管理工具
+
+iptables 用于设置、维护和检查 Linux 内核中 IP 数据包过滤规则的表。
+可以定义多个不同的表。每个表包含若干内置链，也可能包含用户定义的链。
+
+目标：
+防火墙规则指定了数据包的标准和一个目标。如果数据包不匹配，则检查链中的下一条规则；如果匹配，则由目标值指定的下一条规则将被执行，该目标值可以是用户定义链的名称，或者是 ACCEPT、DROP、QUEUE 或 RETURN 等特殊值之一：
+
+- `ACCEPT` 表示允许数据包通过。
+- `DROP` 表示丢弃数据包。
+- `QUEUE` 表示将数据包传递给用户空间。
+- `RETURN` 表示停止遍历此链并在前一个（调用）链中的下一个规则处继续。
+
+表：
+目前有三个独立的表
+
+- `-t, --table table`  
+	这个选项指定了命令应该操作的包匹配表。
+
+	- filter:  
+		这是默认表（如果未传递 -t 选项）。它包含内置链 INPUT（用于发往本地套接字的包）、FORWARD（用于通过该设备路由的包）和 OUTPUT（用于本地生成的包）。
+	- nat:  
+		当遇到创建新连接的数据包时，会查询此表。它包含三个内置链：PREROUTING（在数据包刚到达时立即修改）、OUTPUT（在本地生成的数据包路由之前修改）和 POSTROUTING（在数据包即将外出时修改）。
+	- mangle:  
+		此表用于专门的数据包修改。在内核 2.4.17 之前，它有两个内置链：PREROUTING（在数据包路由之前修改传入的数据包）和 OUTPUT（在本地生成的数据包路由之前修改）。自内核 2.4.18 起，还支持另外三个内置链：INPUT（用于进入设备本身的数据包）、FORWARD（用于修改通过设备路由的数据包）和 POSTROUTING（在数据包即将外出时修改）。
+	- raw:  
+		此表主要用于配置与 NOTRACK 目标结合使用的连接跟踪豁免。
+
+
+命令：
+- `-A, --append chain rule-specification`  
+	将一个或多个规则附加到选定链的末尾。
+
+- `-I, --insert chain [rulenum] rule-specification`
+	将一条或多条规则插入到选定链中作为给定的规则编号。因此，如果规则编号为 1，则规则或规则将插入到链头。如果没有指定规则编号，这也是默认行为。
+
+- `-D, --delete chain rule-specification`  
+	`-D, --delete chain rulenum`  
+	从选定链中删除一条或多条规则。该命令有两种版本：规则可以指定为链中的编号（从 1 开始为第一条规则）或匹配规则。
+
+- `-L, --list [chain]`
+	列出选定链中的所有规则。如果没有选定链，将列出所有链。
+
+参数：
+- `-p, --protocol [!] protocol`  
+	规则或要检查的数据包的协议。  
+	指定的协议可以是 tcp、udp、icmp 或 all，也可以是一个数值，代表这些协议中的一种或另一种。  
+	在协议前使用 "!" 参数可以反转测试结果。
+
+- `-s, --source [!] address[/mask]`
+	源地址指定。  
+	地址可以是网络名称、主机名（请注意，使用远程查询（如 DNS）解析任何名称是一个非常糟糕的想法）、网络 IP 地址（带/掩码）或普通 IP 地址。掩码可以是网络掩码或普通数字，指定网络掩码左侧的 1 的个数。因此，掩码 24 相当于 255.255.255.0。在地址指定前使用"!"参数会反转地址的意义。标志--src 是这个选项的别名。	
+
+- `-d, --destination [!] address[/mask]`
+	目标指定。有关语法细节，请参阅 -s（源）标志的描述。标志 --dst 是此选项的别名。
+
+- `-j, --jump target`  
+	这指定了规则的目标；即，如果数据包匹配该规则要做什么。
+
+匹配扩展：
+iptables 可以使用扩展包匹配模块。这些模块有两种加载方式：隐式加载，当指定`-p` 或`--protocol` 时；或者使用`-m` 或`--match` 选项，后跟匹配模块的名称。
+
+- `--source-port [!] port[:port]`  
+	源端口或端口范围指定。  
+	这可以是一个服务名称或端口号。也可以使用 port:port 格式指定一个包含范围。如果省略第一个端口，则默认为 "0"；如果省略最后一个端口，则默认为 "65535"。如果第二个端口大于第一个端口，它们将被交换。标志 `--sport` 是这个选项的便捷别名。
+
+- `--destination-port [!] port[:port]`  
+	目标端口或端口范围指定。标志 `--dport` 是此选项的方便别名。
+
+
+
+目标扩展:
+- `REDIRECT`  
+	这个目标仅在 nat 表中有效，在 PREROUTING 和 OUTPUT 链中，以及仅从这些链调用的用户定义链中。它通过将目标 IP 更改为入站接口的主地址来将数据包重定向到机器本身（本地生成的数据包映射到 127.0.0.1 地址）。
+
+	- `--to-ports port[-port]` 
+		这指定了要使用的目标端口或端口范围：如果没有这个选项，目标端口将不会被修改。只有当规则同时指定 -p tcp 或 -p udp 时才有效。
+
+- `REJECT`  
+	这用于向匹配的数据包发送错误数据包：否则它等同于 DROP，因此它是一个终止目标，结束规则遍历。这个目标仅在 INPUT、FORWARD 和 OUTPUT 链中有效，以及仅从这些链调用的用户定义链中有效。
+	
+
+#### nft
+
 ### 基础下载/请求
 
 #### curl
@@ -1012,19 +1223,106 @@ visudo 以安全的方式编辑 sudoers 文件，类似于 vipw(8)。visudo 锁�
 参数
 - ```--no-verbose``` 关闭详细输出
 
+### 网络监听
+
+#### wireshark
+
+```
+wireshark [ -a <捕获自动停止条件> ] ... [ -b <捕获环形缓冲区选项> ] ... [ -B <捕获缓冲区大小（仅限 Win32）] [ -c <捕获数据包数量> ] [ -C <配置配置文件> ] [ -D ] [ --display=<要使用的 X 显示> ] [ -f <捕获过滤器> ] [ -g <数据包编号> ] [ -h ] [ -H ] [ -i <捕获接口>|- ] [ -k ] [ -K <密钥表> ] [ -l ] [ -L ] [ -m <字体> ] [ -n ] [ -N <名称解析标志> ] [ -o <偏好/最近设置> ] ... [ -p ] [ -P <路径设置>] [ -Q ] [ -r <输入文件> ] [ -R <读取（显示）过滤器> ] [ -S ] [ -s <捕获快照长度> ] [ -t ad|a|r|d|dd|e ] [ -v ] [ -w <输出文件> ] [ -y <捕获链路类型> ] [ -X <扩展选项> ] [ -z <统计信息> ] [ <输入文件> ]
+```
+
+GUI：
+`follow - TCP Stream `查看 
+    把同一条 TCP 连接里的所有 payload，按顺序重组并展示出来
+
+#### tshark - 抓取和分析网络流量
+
+TShark 是一款网络协议分析器。它可以从活动网络中抓取数据包，或从先前保存的抓取文件中读取数据包，将数据包的解码形式打印到标准输出，或写入文件。TShark 的原生抓取文件格式是 libpcap 格式，这也是 tcpdump 和其他各种工具使用的格式。
+
+TShark 能够检测、读取和写入 Wireshark 支持的相同捕获文件。
+
+参数：
+- `-r <infile>`  
+	从 infile 中读取数据包，可以是任何支持的捕获文件格式（包括压缩文件）。这里不能使用命名管道或 stdin！
+
+#### tcpdump 抓包工具
+
+- `-n`：不做名字解析
+- `-i 接口`：指定抓包接口（如，eth0）
+- `-vv`：更详细输出
+- `-A`: 以ASCII格式显示内容
+- `-X`: 以十六进制和ASCII格式显示
+
+示例：
+- `tcpdump -ni eth0 -vv 'arp or icmp or (udp and host 10.0.0.2)'`
+
 ### 网络扫描 & 连接
 
-#### Nmap
+#### ping, ping6 - 向网络主机发送 ICMP ECHO_REQUEST
 
-```nmap [Scan Type(s)] [Options] {target specification}```
+参数：
+- `-c count`  
+	在发送 count 个 ECHO_REQUEST 数据包后停止。使用截止时间选项时，ping 会等待 count 个 ECHO_REPLY 数据包，直到超时过期。
+- `-W timeout`  
+	等待响应的时间，以秒为单位。
+
+#### nmap - 网络探索工具和安全/端口扫描器
 
 [文档](https://nmap.org/book/man.html)
 
+```nmap [Scan Type(s)] [Options] {target specification}```
+
+Nmap ("网络映射器") 是一个开源的网络探索和安全审计工具。它被设计用于快速扫描大型网络，虽然它对单个主机也工作得很好。Nmap 以新颖的方式使用原始 IP 数据包来确定网络上的哪些主机可用，这些主机提供哪些服务（应用程序名称和版本），它们运行哪些操作系统（以及操作系统版本），使用哪些类型的包过滤器/防火墙，以及其他几十个特性。
+
 参数
-- ```-Pn``` 将所有主机视为在线，跳过主机发现
+
 - ```-sS/sT/sA/sW/sM``` 分别对应TCP SYN/Connect()/ACK/Window/Maimon scans
-- ```-p<port ranges>``` 指定扫描的端口，如```-p22```,```-p0-65535```
 - ```-sV``` 探测开放端口以识别服务/版本信息
+
+
+主机发现:
+默认情况下，Nmap 会进行主机发现，然后对每个确定在线的主机执行端口扫描。
+- `-sn` 
+	不进行端口扫描
+- `-Pn` 
+	将所有主机视为在线，跳过主机发现
+- `-n` 
+	不进行 DNS 解析
+
+Port Specification And Scan Order
+端口规范和扫描顺序：
+- `-p port ranges`  
+	仅扫描指定端口。可以单独指定端口编号，也可以使用连字符分隔的范围（例如 1-1023）
+
+
+Timing And Performance
+时间和性能：
+- `--min-rate number; --max-rate number`  
+	直接控制扫描速率。
+	参数是一个表示每秒数据包数的正实数。例如，指定--min-rate 300 意味着 Nmap 会尝试将发送速率保持在 300 包/秒或更高。
+
+- `--min-parallelism numprobes; --max-parallelism numprobes`   
+	调整探测并行化，控制针对一个主机组可能同时发出的探测总数。它们用于端口扫描和主机发现。  
+	最常见的用法是将--min-parallelism 设置为大于 1 的数值，以加快性能较差的主机或网络的扫描速度。这是一个有风险的选择，因为设置过高可能会影响准确性。设置此选项也会降低 Nmap 根据网络条件动态控制并行度的能力。10 可能是一个合理的值，但我仅会在万不得已时调整此值。
+
+- `-T paranoid|sneaky|polite|normal|aggressive|insane`  
+	六种时间模板允许用户指定他们希望采取的攻击强度: 偏执狂（0）、鬼祟（1）、礼貌（2）、正常（3）、侵略（4）和疯狂（5）。
+	前两种用于入侵检测系统（IDS）规避。
+	礼貌模式会减慢扫描速度以减少带宽和目标机器资源的使用。
+	正常模式是默认设置，所以-T3 不会产生任何效果。
+	侵略模式通过假设你处于一个相当快且可靠的网络上来加速扫描。
+	最后是疯狂模式，它假设你处于一个异常快的网络上，或者愿意为了速度牺牲一些准确性。
+
+Verbosity and debugging options
+详细级别和调试选项：
+- `-v`
+	增加详细级别
+
+- `--open`  
+	仅显示开放（或可能开放）的端口
+
+
+
 
 #### Ncat
 
@@ -1032,6 +1330,37 @@ visudo 以安全的方式编辑 sudoers 文件，类似于 vipw(8)。visudo 锁�
 参数：
 - `-l, --listen`  
 	绑定并监听传入连接
+
+#### nc - 任意 TCP 和 UDP 连接/监听
+
+```
+nc [-46CDdFhklNnrStUuvZz] [-I length] [-i interval] [-M ttl]
+	  [-m minttl] [-O length] [-P proxy_username] [-p source_port]
+	  [-q seconds] [-s sourceaddr] [-T keyword] [-V rtable] [-W recvlimit]
+	  [-w timeout] [-X proxy_protocol] [-x proxy_address[:port]]
+	  [destination] [port]
+```
+
+nc（或 netcat）工具可用于各种涉及 TCP 或 UDP 的任务。它可以打开 TCP 连接、发送 UDP 数据包、监听任意 TCP 和 UDP 端口、进行端口扫描，并处理 IPv4 和 IPv6。与 telnet(1) 不同，nc 脚本编写得很好，并将错误消息输出到标准错误而不是像 telnet(1) 那样发送到标准输出。
+
+参数：
+- `-v`  
+	标志来开启详细输出
+- `-u` 
+	使用 UDP 而不是默认的 TCP 选项。如监听udp数据包
+- `-l`  
+	监听传入连接而不是向远程主机发起连接。
+- `-w timeout`  
+	如果连接和标准输入在超过 timeout 秒后处于空闲状态，则连接将被静默关闭。
+- `-N`   
+	在输入结束后通过 shutdown(2) 系统调用关闭网络套接字。
+	
+
+示例：
+- `nc -l 1234`  
+	监听 1234 端口上的连接
+- `nc 127.0.0.1 1234`  
+	连接到 ip 127.0.0.1 端口 1234
 
 #### host
 
@@ -1043,18 +1372,6 @@ visudo 以安全的方式编辑 sudoers 文件，类似于 vipw(8)。visudo 锁�
         将IP地址转换为反向格式（如 192.168.1.100 → 100.1.168.192.in-addr.arpa）
 - `-l <域名> [权威 DNS 服务器地址]` 使用 AXFR（区域传输）协议，列出一个域的所有主机记录
 - `<server>` 指定本次查询的 DNS 服务器
-
-#### nc
-
-```
-nc [-46CDdFhklNnrStUuvZz] [-I length] [-i interval] [-M ttl]
-	  [-m minttl] [-O length] [-P proxy_username] [-p source_port]
-	  [-q seconds] [-s sourceaddr] [-T keyword] [-V rtable] [-W recvlimit]
-	  [-w timeout] [-X proxy_protocol] [-x proxy_address[:port]]
-	  [destination] [port]
-```
-
-- `-v` 标志来开启详细输出
 
 #### dig
 
@@ -1068,6 +1385,13 @@ nc [-46CDdFhklNnrStUuvZz] [-I length] [-i interval] [-M ttl]
 查询对象的 whois 数据库
 
 ### 加密 & 哈希
+
+#### base64
+
+`base64 [OPTION]... [FILE]`
+
+- `-d, --decode`
+	Decode data.
 
 #### openssl
 
@@ -1129,6 +1453,15 @@ nc [-46CDdFhklNnrStUuvZz] [-I length] [-i interval] [-M ttl]
 
 [文档](https://hashcat.net/wiki/doku.php?id=frequently_asked_questions#how_do_i_install_hashcat)
 
+
+#### ssh - OpenSSH SSH 客户端（远程登录程序）
+
+参数：
+- `-i identity_file`  
+	选择一个文件，从中读取用于 RSA 或 DSA 身份验证的身份（私钥）。
+	
+示例：
+- `ssh -i key hacker@dojo.pwn.college`  
 
 #### ssh-keygen
 
@@ -1261,6 +1594,7 @@ fi
 ### 循环
 
 ```bash
+# 从1开始，间隔5，直到100
 for i in $(seq 1 5 100); do
     echo "select substr(datum, $i, 5) from dataset;" \
     | /challenge/sql \
@@ -1278,6 +1612,11 @@ done | tr -d '\n'
 ```
 
 `-n`、`-z` 是 字符串测试 的一元（单目）操作符
+
+判断文件是否存在:
+`-e path`：存在（不管是文件还是目录）
+`-f path`：存在且是普通文件
+`-d path`：存在且是目录
 
 ## 程序调试
 
@@ -1325,6 +1664,8 @@ GDB 可以做四种主要的事情（以及其他支持这些事情的事情）�
 - 当你的程序停止时，检查发生了什么。
 - 修改你的程序，以便你可以通过纠正一个错误的效果来实验，并继续学习另一个错误。
 
+当程序设置suid位时默认启用地址空间随机化功能。
+
 参数：
 - `-x 脚本` 从脚本处读取gdb命令，用于复杂调试
 - `--args` 启动带参数的命令
@@ -1339,6 +1680,7 @@ GDB 可以做四种主要的事情（以及其他支持这些事情的事情）�
 2. `run`（`r`）：从头运行程序，到断点或结束暂停
 	- `run 参数1 参数2`：向程序提供参数
 - `start`：在main()函数的第一行停止执行来开始调试程序。
+	- `start 参数1 参数2`：向程序提供参数
 - `break *函数名`（`b`）：在函数入口设置断点
 	- `break *函数名 + 50` 在函数入口的偏移量处设置断点
 - `del break 1`：删除断点1
@@ -1436,13 +1778,54 @@ end
 `set pagination off` 关闭分页
 `set confirm off` 关闭确认
 
+保存输出内容到日志文件：
+`set print elements 0` 关闭显示的元素数目限制
+`set logging file gdb_log_output.txt` 设置日志文件
+`set logging on` 日志记录开始
+`set logging off` 日志记录停止
+退出gdb后得到此日志文件
+
+导出内存范围的二进制内容到文件：
+`dump binary memory out.bin 起始地址 结束地址`
+- 使用 `info files` 获取 `.rodata`或`.data`等字段（根据起始地址查看所属字段） 的末尾作为结束地址
+
 创建gdb脚本后的使用：
 - 在gdb内 `source 脚本名.gdb`，也可将此命令放入 `.gdbinit`
 - 在命令行启动gdb `gdb 文件 -x 脚本名.gdb`
 
+
+为了在 .gdbinit 里自动化，一种常见做法是用 hook，在“程序已经开始运行”之后再下 display，例如：
+
+用 `hookpost-start` 或 `hookpost-run` 在你敲 `start` / `run` 之后自动执行一些命令；
+在这个 hook 里再下 `display/3i $rip`（那时寄存器已经存在了）。
+
+```
+set disassembly-flavor intel
+
+define hookpost-start
+    display/3i $rip
+end
+```
+
 **插件**
 
 - GEF
+
+## 系统管理
+
+### setarch 在新程序环境中更改报告的架构和/或设置个性标志
+
+```sh
+setarch [arch] [options] [program [argument...]]
+arch [options] [program [argument...]]
+```
+
+参数：
+- `-R, --addr-no-randomize`  
+	禁用虚拟地址空间的随机化。启用 ADDR_NO_RANDOMIZE。
+
+例如：
+- `setarch x86_64 -R 文件路径`
 
 ## 参考
 
