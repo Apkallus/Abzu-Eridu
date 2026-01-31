@@ -4,7 +4,11 @@ Python 有两种类字符串常量：`str` 字符串（表示为 `"asdf"`）和 
 
 对于数值常量，Python 的表示法是在二进制数据前加 `0b`，十六进制前加 `0x`，十进制保持不变，因此 `11 == 0b1011 == 0xb`
 
-对于 `bytes`可以使用*转义序列*来指定它们。转义序列以 `\x` 开头，后跟两个十六进制数字，从而将一个具有该值的单个字节放入 `bytes` 常量中！
+常规可输入字符可直接放入 Python 字节字符串进行写入。
+- `b"HELLO WORLD"`
+
+对于 `bytes`可以使用*转义序列*来指定它们。转义序列以 `\x` 开头，后跟两个十六进制数字，从而将一个具有该值的单个字节放入 `bytes` 常量中
+- `b"HELLO \x57\x4f\x52\x4c\x44"`
 
 其他一些可能有用的 Python 特性：
 - 如果你用 `print(n)` 打印一个数字或用 `str(n)` 将其转换为字符串，该数字将以十进制表示。
@@ -13,9 +17,182 @@ Python 有两种类字符串常量：`str` 字符串（表示为 `"asdf"`）和 
 
 ### bytes
 
-`bytes.fromhex(string: str,) -> bytes`
+- `bytes.fromhex(string: str,) -> bytes`  
+    Example: `bytes.fromhex('B9 01EF')` -> `b'\xb9\x01\xef'`.
 
-Example: `bytes.fromhex('B9 01EF')` -> `b'\xb9\x01\xef'`.
+- `bytes.hex()`  
+    将bytes转为十六进制字符串
+
+- `bytes(...)`  
+    当参数是 “可迭代的整数序列” 时（比如列表、元组），bytes 会把每个整数当作一个字节（0–255），拼成一个 bytes 对象。  
+    比如：`bytes((65, 66, 67)) == b"ABC"`。
+    
+
+### bytearray
+
+使用 bytearray() 对 bytes 进行处理，可执行切片赋值。
+
+然而，单个索引赋值必须是一个 0–255 的整数，不能是 bytes 对象。
+
+### int
+
+- `int.to_bytes()`   
+    将数字转为字节，设置长度与大小端序（也可用 `struct` 包）
+    ```py
+    def to_bytes(self, length: int, byteorder: str, *, signed: bool=...) -> bytes
+    ```
+- `int.from_bytes(test_bytes, byteorder='little')`
+    将bytes转为int
+
+- `ord(asc_str)`：
+    把单字符变成它的 ASCII 码，比如：
+    `ord("c") == 99`
+
+- `int(内容, 进制)`
+    以选定进制转为int
+
+### subprocess 子进程管理
+
+subprocess 模块允许你生成新的进程，连接它们的输入、输出、错误管道，并且获取它们的返回码。
+
+推荐的调用子进程的方式是在任何它支持的用例中使用 run() 函数。对于更进阶的用例，也可以使用底层的 Popen 接口。
+
+例如：
+```py
+
+p = subprocess.run(
+    ["/challenge/目标程序"], # 要执行的命令（列表形式），
+    input=payload,          # 作为 stdin 发送的内容（bytes）
+    capture_output=True,     # 捕获 stdout 和 stderr
+    text=False               # False 表示用 bytes，不做编码转换
+    )
+
+if b"pwn.college" in p.stdout:
+    print(f"response: {p.stdout}")
+```
+
+### scapy
+
+<https://scapy.readthedocs.io/en/latest/>
+
+基础使用：
+
+- 堆叠层:
+    `/` 运算符已被用作两层之间的组合运算符。这样做时，较低层的一个或多个默认字段可以根据较高层进行重载。一个字符串可以用作原始层。例：
+    ```py
+    Ether()/IP()/TCP()
+
+    IP()/TCP()/"GET / HTTP/1.0\r\n\r\n"
+
+    Ether()/IP()/IP()/UDP()
+    ```
+
+    堆叠对象使用 `.show2()` 方法展示字段
+
+    当 Scapy 解析到某一层之后，剩下的字节它不知道该按什么协议解释时，就会把它放进一个通用层: `Raw`。
+    - 对 TCP 来说，`Raw` 往往就是“应用层数据”。
+        - 判断是否有应用层数据：`pkt.haslayer(scapy.Raw)`
+        - 取出这段原始数据：`pkt[scapy.Raw].load`（类型是 `bytes`）
+
+- 发送数据包:
+    `send()`函数会在第 3 层发送数据包。也就是说，它会为你处理路由和第 2 层。
+    `sendp()`函数会在第 2 层工作。你需要自己选择正确的接口和正确的链路层协议。
+    如果将 return_packets=True 作为参数传递，send()和 sendp()也会返回发送的数据包列表。
+    即，使用`send()`同时堆叠`Ether()`将报错
+
+- 接收数据包：
+    `sr1()` 函数发送并等待响应，返回响应内容
+
+网络栈：
+
+- 获取接口的 IP 地址
+    ```py
+    get_if_addr(conf.iface)  # default interface
+    get_if_addr("eth0")
+    ```
+
+- 获取接口的 MAC 地址 
+    ```py
+    get_if_hwaddr(conf.iface)  # default interface
+    get_if_hwaddr("eth0")
+    ```
+
+- 获取到达 IP 的下一跳的 MAC 地址
+    ```py
+    getmacbyip("10.0.0.1")
+    ```
+
+嗅探：
+我们可以轻松捕获一些数据包，甚至可以克隆 tcpdump 或 tshark。可以提供一个接口或接口列表来进行嗅探。如果没有给出接口，嗅探将在 conf.iface 上进行。
+
+```py
+sniff(
+    iface="eth0",                         # scapy.conf.iface
+    filter="tcp port 31337 or arp",       # BPF 过滤
+    prn=handle,                           # 抓包的处理函数
+    store=False,                          # 不存内存
+)
+```
+
+其他：
+- `包.haslayer(scapy.Ether)` 判断是否存在对应网络层
+- 删除  
+    修改内容后使用删除后scapy自动重新计算
+    ```py
+    del pkt[scapy.IP].len
+    del pkt[scapy.IP].chksum
+    del pkt[scapy.TCP].chksum
+    ```
+
+### asyncio - 异步协程（协作式切换）
+
+- `class asyncio.Semaphore(value=1)`  
+    信号量：限制同一时刻最多允许多少个任务“进入临界区”
+
+    使用 `Semaphore` 的推荐方式是通过 `async with` 语句（异步上下文管理器）。:
+    如果内部计数器的值大于零，则将其减一并立即返回 True。 如果其值为零，则会等待直到 release() 并调用并返回 True。
+    ```py
+    sem = asyncio.Semaphore(10)
+
+    # ... 稍后
+    async with sem:
+        # 操作共享的资源
+    ```
+- `create_task()`
+    将协程对象创建并调度为一个任务来执行，返回一个 Task 对象。
+    通常设置“任务数≈信号量”
+
+- `await gather()`  
+    聚合多个协程或 Future 对象的结果，返回一个汇总结果的 Future 对象。协程会被自动包装成 Future 并调度到事件循环中执行，但不保证调度顺序与传入顺序一致。
+
+- `await asyncio.sleep()`
+    非阻塞的暂停当前协程（秒）
+
+- `await open_connection()`  
+    异步建立 TCP 连接，返回 `(reader, writer)`
+    - `reader` 用 `await reader.read(n)` 读取
+    - `writer` 用 `writer.write(...)` + `await writer.drain()` 写入    
+        - `writer.close()`  发起关闭
+        - `await writer.wait_closed()` 等待关闭真正完成（缓冲刷出/FIN 发送/传输层状态清理等）
+
+
+### collections
+
+#### namedtuple
+
+自动生成一个带字段名的 `tuple` 类
+
+```py
+from collections import namedtuple
+
+Pixel = namedtuple("Pixel", ["ascii"])
+p = Pixel(65)
+```
+
+此处：
+- 生成一个新类，类名叫 Pixel
+- 这个类的“字段”（成员）只有一个，名字叫 "ascii"
+- 然后把这个类赋值给变量 Pixel，可以像普通类一样用它
 
 ### sys
 
@@ -42,6 +219,18 @@ Example: `bytes.fromhex('B9 01EF')` -> `b'\xb9\x01\xef'`.
 
 - `os.path.relpath(path, startPath)`
     计算基于起始路径的相对路径
+
+- `os.urandom(n)`
+    随机字节生成。  
+    `secrets.token_bytes(n)` 为对应的安全封装函数
+
+### json
+
+- `json.dumps()`  
+    将python对象转为json格式的字符串
+
+- `json.loads()`  
+    将json内容转为python对象
 
 ### frontmatter
 - <https://python-frontmatter.readthedocs.io/en/latest/>
@@ -84,11 +273,33 @@ Example: `bytes.fromhex('B9 01EF')` -> `b'\xb9\x01\xef'`.
 
 - ```re.search()```
     在字符串的任意位置匹配模式，返回第一个匹配的 ```Match``` 或 ```None```
-
+- `re.findall(pattern, string, flags=0)`  
+    返回 pattern 在 string 中的所有非重叠匹配，以字符串列表或字符串元组列表的形式。对 string 的扫描从左至右，匹配结果按照找到的顺序返回。 空匹配也包括在结果中。
 - ```Match.group([group1, ...])```
     单个参数返回字符串，多个参数返回元组
     参数 ```0``` 应用所有子分组的匹配，其他数字则返回对应子分组的匹配
 
+    ```py
+    m = re.match(r"(\w+) (\w+)", "Isaac Newton, physicist")
+    m.group(0)       # 整个匹配
+
+    m.group(1)       # 第一个圆括号标记的子分组。
+
+    m.group(2)       # 第二个圆括号标记的子分组。
+
+    m.group(1, 2)    # 使用多个参数则返回一个元组。
+    ```
+    
+- `Match.groups(default=None)`
+    返回一个元组，包含所有匹配的子组，在样式中出现的从1到任意多的组合。 default 参数用于不参与匹配的情况，默认为 None。
+
+    ```py
+    m = re.match(r"(\d+)\.(\d+)", "24.1632")
+    m.groups()
+    ('24', '1632')
+    ```
+
+例如：
 - 正则表达式
     - ```*?``` ```+?``` ```??```
         在默认贪婪的匹配符后的 ```?``` 转为非贪婪模式
@@ -113,12 +324,21 @@ Example: `bytes.fromhex('B9 01EF')` -> `b'\xb9\x01\xef'`.
 ### string
 
 - 字符集
-    `string.ascii_letters`
-    `string.digits`
+    - `string.ascii_letters` 大小写字母
+    - `string.digits` 数字
+    - `string.punctuation` 标点符号
+    - `string.printable` 可打印字符
+    
 
 - `string.replace(old, new[, count])`  
     使用字串new替换字串old  
     count设置替换次数，若未指定则替换所有
+
+- `chr()`  
+    将ascii转为字符
+
+- `.encode()`
+    字符串转为bytes
 
 #### f-string
 
@@ -128,8 +348,44 @@ Example: `bytes.fromhex('B9 01EF')` -> `b'\xb9\x01\xef'`.
 `:[[fill]align][sign][#][0][width][grouping_option][.precision][type]`
 - `0`：如果不够 8 位，用 0 在左侧补齐。
 - `8`：宽度为 8 个字符。
-- `b`：以二进制形式输出，只包含 0/1。
 
+进制：
+- `b`：以二进制形式输出，只包含 0/1。
+- `x`:十六进制
+
+### PyCryptoDome
+
+<https://pycryptodome.readthedocs.io/en/latest/>
+
+`from Crypto.Util.strxor import strxor`
+- `strxor()` 函数对两个字符串进行异或运算，消耗和产生的是字节
+    
+- `pad(data_to_pad: bytes, block_size: int, style: Optional[str]='pkcs7') -> bytes`
+    填充
+
+- `from Crypto.Random.random import getrandbits`  
+    获得随机bytes
+
+```python
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
+
+cipher = AES.new(key=key, mode=AES.MODE_CBC)
+ciphertext = cipher.iv + cipher.encrypt(pad(flag, cipher.block_size))
+```
+
+#### RSA
+
+```py
+from Crypto.PublicKey import RSA
+```
+
+- `RSA.generate(bits: int, randfunc: Optional[RNG]=None, e: Optional[int]=65537) -> RsaKey`
+    Create a new RSA key pair.
+
+#### Hash
+
+`from Crypto.Hash.SHA256 import SHA256Hash`
 
 ### urllib
 
@@ -166,6 +422,18 @@ print(content)
 
 方法：
 - `to_bytes(self, length: int, byteorder: str, *, signed: bool=...) -> bytes`
+
+### random
+
+- `random.randint(a, b)`  
+    生成 [a, b] 范围内的整数（包含两端）。
+
+- `random.uniform(a, b)` 
+    生成 [a, b] 范围内的随机浮点数。
+
+### hashlib
+
+`hashlib.sha256()`
 
 ### base64
 
@@ -279,6 +547,47 @@ print(r.headers)
 print(r.text)
 ```
 
+### Numba 性能库
+
+即时编译（Just-In-Time Compilation, JIT）
+
+### pwntools
+
+- `sendlineafter(delim, data, timeout=default)→ str`  
+    在获得 `delim` 提示后，发送 `data` 数据
+
+- `recvline(drop=False, timeout=default)→ bytes`  
+    从管道中接收一行数据。  
+    “一行”是指以 `newline` 中设置的字节序列终止的任意字节序列，默认值为 `b'\n'` 。
+
+- `recvuntil(delims, drop=False, timeout=default)→ bytes`
+    接收数据直到遇到其中一个分隔符。  
+    可与`recvline`组合，在收到提示数据后再读取。
+
+- `recvall(timeout=Timeout.forever)`
+
+- `p.clean(timeout=0.05)`
+    把已有输出都读掉
+
+示例：
+```py
+from pwn import process
+
+p = process(["/challenge/run"])
+
+p.sendlineafter(b'Choice? ', b'1')
+
+p.recvuntil(b"Result: ")
+line = p.recvline()
+```
+
+`from pwn import xor` 处理python原生不支持的bytes之间异或
+
+### math
+
+- `math.ceil()`  向上取整
+- `math.gcd()` 判断是否互质
+
 ### 备忘
 
 - ```with open(filepath, 'r', encoding='utf-8') as f:```
@@ -301,6 +610,15 @@ print(r.text)
     - condition：需验证的条件表达式，结果为 True 或 False。
     - error_message：可选参数，当条件为 False 时抛出的异常提示信息
 
+- `next(迭代器, 默认值)`  
+    遍历迭代器，返回第一个匹配的元素。若不存在则返回默认值
+
+- `reversed()`  
+    迭代器的逆向
+
+- `pow(base, exp, mod)`  
+    快速横幂运算
+    
 ## 参考
 
 https://geek-docs.com/python

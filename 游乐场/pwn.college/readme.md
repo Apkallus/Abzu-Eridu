@@ -41,7 +41,6 @@ CSE 365 2025 秋
 
 即，CSE 365 不包括基础道场的：  
 Playing With Programs - 程序滥用
-橙带 Web Security - 密码学
 橙带 Web Security - 访问控制
 橙带 Web Security - 集成安全
 
