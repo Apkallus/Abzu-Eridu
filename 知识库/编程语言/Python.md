@@ -1,3 +1,5 @@
+## 
+
 ### 进制编码
 
 Python 有两种类字符串常量：`str` 字符串（表示为 `"asdf"`）和 `bytes` 字节串（表示为 `b"asdf"`）。
@@ -51,6 +53,17 @@ Python 有两种类字符串常量：`str` 字符串（表示为 `"asdf"`）和 
 - `int(内容, 进制)`
     以选定进制转为int
 
+### struct 
+
+`struct.pack(format, v1, v2, ...)`
+
+格式字符串：
+- `<`：小端序（little-endian）。
+- `>`：大端序（big-endian），也称作网络字节序。
+- `!`：网络字节序（等同于 >）。
+- 默认（不写）则使用系统原生字节序。
+
+
 ### subprocess 子进程管理
 
 subprocess 模块允许你生成新的进程，连接它们的输入、输出、错误管道，并且获取它们的返回码。
@@ -64,7 +77,7 @@ p = subprocess.run(
     ["/challenge/目标程序"], # 要执行的命令（列表形式），
     input=payload,          # 作为 stdin 发送的内容（bytes）
     capture_output=True,     # 捕获 stdout 和 stderr
-    text=False               # False 表示用 bytes，不做编码转换
+    text=False               # False 表示 input 为 bytes，否则为 str
     )
 
 if b"pwn.college" in p.stdout:
@@ -227,7 +240,7 @@ p = Pixel(65)
 ### json
 
 - `json.dumps()`  
-    将python对象转为json格式的字符串
+    将python对象转为json格式的字符串，产生自带引号的字符串
 
 - `json.loads()`  
     将json内容转为python对象
@@ -276,7 +289,7 @@ p = Pixel(65)
 - `re.findall(pattern, string, flags=0)`  
     返回 pattern 在 string 中的所有非重叠匹配，以字符串列表或字符串元组列表的形式。对 string 的扫描从左至右，匹配结果按照找到的顺序返回。 空匹配也包括在结果中。
 - ```Match.group([group1, ...])```
-    单个参数返回字符串，多个参数返回元组
+    `re.Match` 对象的单个参数返回字符串，多个参数返回元组
     参数 ```0``` 应用所有子分组的匹配，其他数字则返回对应子分组的匹配
 
     ```py
@@ -292,6 +305,7 @@ p = Pixel(65)
     
 - `Match.groups(default=None)`
     返回一个元组，包含所有匹配的子组，在样式中出现的从1到任意多的组合。 default 参数用于不参与匹配的情况，默认为 None。
+    注意，不包含 group 的整个匹配，仅为子分组。
 
     ```py
     m = re.match(r"(\d+)\.(\d+)", "24.1632")
@@ -431,6 +445,9 @@ print(content)
 - `random.uniform(a, b)` 
     生成 [a, b] 范围内的随机浮点数。
 
+- `random.shuffle()`
+    列表随机
+    
 ### hashlib
 
 `hashlib.sha256()`
@@ -504,6 +521,11 @@ print(resp_body)
 
     如果生成的字符串要用作 `urlopen()` 函数的 POST 操作的 data，则应将其编码为字节，否则会引发 TypeError。
 
+- `parse.quote()`  
+    URL 编码
+- `parse.unquote()`
+    URL 解码
+
 #### urllib.response
 
 - `url`  
@@ -535,8 +557,11 @@ print(resp_body)
 
 Session对象允许您将某些参数持久化 请求。它还在所有请求中持久化cookie 会话实例，并将使用连接池。
 
+- `requests.post(..., data={...})` 会把数据按 `application/x-www-form-urlencoded` 编码（等价于自动做一遍 URL 编码）。
+
 ```python
 s = requests.Session()
+s.cookies['cookie_name'] = 'cookie_value'
 r = s.get("http://localhost:80/")
 
 data = {'username': 'admin', 'password': "foo"}
@@ -547,24 +572,43 @@ print(r.headers)
 print(r.text)
 ```
 
+- `response = session.post(url, json=your_dict_data)`  
+    使用post的 json 参数并传入字典以发送 json 数据
+
+返回对象使用 `r.json()` 转为python对象
+
 ### Numba 性能库
 
 即时编译（Just-In-Time Compilation, JIT）
 
 ### pwntools
 
+设置timeout并满足时，将抛出异常。使用 `try ... except ...`
+
+- `send()`  
+    发送原始字节
+    - `shutdown('send')`  
+        发送 EOF 关闭 `send`
+
+- `sendline()`
+    发送一行数据，末尾添加换行符 `\n`
 - `sendlineafter(delim, data, timeout=default)→ str`  
     在获得 `delim` 提示后，发送 `data` 数据
 
+- `recv(n)`：
+    最多读 n 字节（可能少于 n）
+- `recvn(n)`：
+    确保读满 n 字节（不够会等）
 - `recvline(drop=False, timeout=default)→ bytes`  
     从管道中接收一行数据。  
     “一行”是指以 `newline` 中设置的字节序列终止的任意字节序列，默认值为 `b'\n'` 。
 
 - `recvuntil(delims, drop=False, timeout=default)→ bytes`
-    接收数据直到遇到其中一个分隔符。  
+    接收数据直到遇到其中一个分隔符，分隔符将被消耗。
     可与`recvline`组合，在收到提示数据后再读取。
 
 - `recvall(timeout=Timeout.forever)`
+    接收所有内容直到超时
 
 - `p.clean(timeout=0.05)`
     把已有输出都读掉
@@ -572,8 +616,9 @@ print(r.text)
 示例：
 ```py
 from pwn import process
+from subprocess import STDOUT
 
-p = process(["/challenge/run"])
+p = process(["/challenge/run"], stderr=STDOUT)
 
 p.sendlineafter(b'Choice? ', b'1')
 
@@ -587,6 +632,35 @@ line = p.recvline()
 
 - `math.ceil()`  向上取整
 - `math.gcd()` 判断是否互质
+
+### http.server
+
+```py
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import time
+import urllib.parse as up
+
+class H(BaseHTTPRequestHandler):
+    def do_GET(self):
+        qs = up.urlparse(self.path).query
+        print(time.strftime("%H:%M:%S"), self.path, qs, flush=True)
+        self.send_response(204)   # No Content
+        self.end_headers()
+
+    def log_message(self, *args):
+        pass
+
+HTTPServer(("0.0.0.0", 9999), H).serve_forever()
+```
+
+### threading
+
+`from threading import Condition`
+
+- `threading.Condition`：
+    带锁的全局共享状态变量（锁/阻塞/唤醒）
+    - `wait(timeout)` 阻塞直到被 `notify_all()` 唤醒或超时。
+    - `wait_for(...)` 等待直到条件满足或超时
 
 ### 备忘
 
@@ -619,6 +693,16 @@ line = p.recvline()
 - `pow(base, exp, mod)`  
     快速横幂运算
     
+- `raise`
+    手动触发异常
+    `raise ValueError("错误信息")`
+
+- `_, a, b, _, c = 函数()`  
+    使用`_` 忽略对应字段
+
+- `global var`
+    使用 `global` 前缀在函数中修改全局变量
+
 ## 参考
 
 https://geek-docs.com/python

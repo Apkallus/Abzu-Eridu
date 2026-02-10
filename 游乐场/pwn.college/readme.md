@@ -31,6 +31,7 @@ B站公开课视频似乎与道场的模块视频不同。
 CSE 365 2025 秋 
 课程模块 - 道场 映射：
 模块1 - 道场 Linux Luminarium - 全部
+        道场 Access Control - 其中6个讲座视频
 模块2 - 道场 Playing With Programs - 除“程序滥用”模块外
 模块3 - 橙带 Web Security - Web安全
 模块4 - 道场 Computing 101 - 全部
@@ -41,7 +42,7 @@ CSE 365 2025 秋
 
 即，CSE 365 不包括基础道场的：  
 Playing With Programs - 程序滥用
-橙带 Web Security - 访问控制
+橙带 Web Security - 访问控制 - 1个讲座视频与所有挑战
 橙带 Web Security - 集成安全
 
 按照 CSE 365 课程模块顺序，最后再返回基础道场

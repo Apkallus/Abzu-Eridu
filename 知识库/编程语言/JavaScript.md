@@ -56,3 +56,52 @@ edit_links.forEach(link => {
 ### fetch
 
 <https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch>
+
+
+- `response.ok` 判断状态
+```js
+if (!response.ok) {
+  if (response.status === 404) {
+    console.log('请求的资源不存在');
+  } else if (response.status === 500) {
+    console.log('服务器内部错误');
+  }
+}
+
+```
+
+### setInterval
+
+setInterval方法用于按照指定的时间间隔重复调用函数或执行代码片段。
+
+```js
+<script>
+(()=> {
+  if (window.__hb1) return;
+  window.__hb1 = 1;
+  let i = 0;
+  setInterval(async () => {
+    i++;
+
+    const img = new Image();
+    img.src = "http://10.0.0.5:9999/ping?i=" + i + "&t=" + Date.now();
+  }, 1000);
+})();
+</script>
+```
+
+
+### 其他
+
+在 `window` 全局作用域设置 `__` 双下划线自定义属性名，避免重复执行后续js代码。
+自定义属性名初始为 undefined（假值）。
+```js
+if (window.__agent) return;
+window.__agent = true;
+```
+
+- `JSON.stringify(value, replacer, space)` 
+    用于将 JavaScript 值（对象、数组、原始类型等）转换为 JSON 格式字符串
+
+- `encodeURIComponent()`
+    对字符串进行 URI 编码

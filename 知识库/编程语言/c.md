@@ -50,3 +50,32 @@ read(0, page, 0x1000);
 // 即，强制类型转换为函数指针后调用那块 RWX 内存
 ((void(*)())page)();
 ```
+
+### personality()
+
+读取/设置当前进程的 personality 标志位（一个 bitmask）。
+
+`personality(0xffffffff)`（也常写 `personality(-1)`）是一个约定用法：表示“只读取当前 personality，不修改”。
+
+如果调用成功，current 通常是个不大的数；只有调用失败才会返回 -1。
+
+### dlsym(RTLD_NEXT, x) 
+
+`#include <dlfcn.h>`
+
+dlsym 是动态链接库（DL）操作的函数，用于在运行时（Runtime）从一个已加载的共享库（如 .so 文件）中查找指定符号（函数或变量）的内存地址。
+
+原型：void *dlsym(void *handle, const char *symbol);
+
+返回值：成功时返回指向符号 symbol 的指针（函数指针），失败则返回 NULL。
+
+RTLD_NEXT 句柄：查找“下一个”定义
+- RTLD_NEXT 是一个特殊的伪句柄（Pseudo-handle），它指示 dlsym 从当前库之后加载的库中，按照默认的库搜索顺序查找指定的符号。
+
+`dlsym(RTLD_NEXT, "bind")` 在库打桩中，于当前的自定义构造库后（原库）查找函数，从而得到原始函数以包装。
+
+
+### accept(server_fd, addr, addrlen)
+
+在 Linux 上常用 accept(server_fd, NULL, NULL)：
+只要 addr 和 addrlen 同时设为 NULL，内核不会去解引用指针，也就不会因为 EFAULT 崩掉。

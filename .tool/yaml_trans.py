@@ -38,6 +38,8 @@ import re
 # yaml 库将 yam 文件yaml_data解析为字典
 # 转换字典为md文件，之后使用已存在的md占位符转换程序
 
+trans_str = "将以下内容翻译成中文，计算机安全技术术语需准确，忽略搜索结果引用，若有则将下划线斜体替换为星号斜体，保留占位符，剩余内容保留原大小写与 Markdown 结构，完整输出应包裹在一个可复制的 Markdown 代码块中，忽略用户地理位置信息，关闭翻译说明功能："
+
 yaml_to_md_path = ".cache\\yaml_to_md.md"
 
 argv_num = len(sys.argv)
@@ -51,7 +53,7 @@ if argv_num > 1:
     replace_list.append(("//github.com/", "//raw.githubusercontent.com/"))
     replace_list.append(("/edit/", "/refs/heads/"))
     url = url_trans(sys.argv[1], replace_list)
-    print(url)
+    print(f"url: {url}")
     
     response = urllib.request.urlopen(url)
     yaml_str = response.read().decode("utf-8")
@@ -69,11 +71,16 @@ yaml_data = yaml.safe_load(yaml_str)  # 避免执行恶意代码
 # 分为资源与挑战两部分
 # 资源内容为description，挑战内容为content
 # 添加条件检测确保存在，或使用异常
-md_list = []
+md_list = [trans_str]
 part_list = ["description", "resources", "challenges"]
 text_list = ["description", "content"]
 
 # 获取模块名称
+
+# 对于网络安全-路径遍历模块的特殊构造
+if "modules" in yaml_data:
+    yaml_data = yaml_data["modules"][3]
+
 module_name_str = yaml_data["name"]
 
 md_list.append(f"# {module_name_str}")
@@ -94,7 +101,9 @@ for part in part_list:
         if "type" in data and data["type"] == "header":
             md_list.append(f"## {data["content"]}")
             continue
-        md_list.append(f"### {data["name"]}")
+
+        if "name" in data:
+            md_list.append(f"### {data["name"]}")
 
         for text in text_list:
             if text in data:
