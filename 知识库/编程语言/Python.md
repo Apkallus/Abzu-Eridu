@@ -29,6 +29,8 @@ Python 有两种类字符串常量：`str` 字符串（表示为 `"asdf"`）和 
     当参数是 “可迭代的整数序列” 时（比如列表、元组），bytes 会把每个整数当作一个字节（0–255），拼成一个 bytes 对象。  
     比如：`bytes((65, 66, 67)) == b"ABC"`。
     
+- `.zfill(N)`
+    补前导0到N
 
 ### bytearray
 
@@ -43,6 +45,8 @@ Python 有两种类字符串常量：`str` 字符串（表示为 `"asdf"`）和 
     ```py
     def to_bytes(self, length: int, byteorder: str, *, signed: bool=...) -> bytes
     ```
+    - 默认 unsigned，负数将报错。使用 `signed=True` 参数以正负补码形式
+    
 - `int.from_bytes(test_bytes, byteorder='little')`
     将bytes转为int
 
@@ -354,6 +358,9 @@ p = Pixel(65)
 - `.encode()`
     字符串转为bytes
 
+- `.zfill(N)`
+    补前导0到N
+
 #### f-string
 
 `f'...{val:08b}...'`
@@ -583,35 +590,52 @@ print(r.text)
 
 ### pwntools
 
+创建 tube 对象：
+- 进程：`p = process(["/challenge/run"], stderr=STDOUT)`
+- 网络：`p = remote("127.0.0.1", 1337)`
+
 设置timeout并满足时，将抛出异常。使用 `try ... except ...`
 
+tube 对象函数：
 - `send()`  
-    发送原始字节
+    发送原始字节（对应接收程序的 `read`）
     - `shutdown('send')`  
         发送 EOF 关闭 `send`
 
 - `sendline()`
-    发送一行数据，末尾添加换行符 `\n`
+    发送一行数据，末尾添加换行符 `\n`（对应接收程序的 `scanf`）
 - `sendlineafter(delim, data, timeout=default)→ str`  
     在获得 `delim` 提示后，发送 `data` 数据
 
 - `recv(n)`：
-    最多读 n 字节（可能少于 n）
+    最多读 n 字节（可能少于 n），若省略则读取直到超时。设置超时极短或0或与recvuntil搭配使用则不会导致EOF报错
 - `recvn(n)`：
     确保读满 n 字节（不够会等）
-- `recvline(drop=False, timeout=default)→ bytes`  
+- `recvline(drop=False, timeout=default, keepends=True)→ bytes`  
     从管道中接收一行数据。  
     “一行”是指以 `newline` 中设置的字节序列终止的任意字节序列，默认值为 `b'\n'` 。
-
+    - `keepends` 数据是否包括末尾的换行符
+- `recvall(timeout=Timeout.forever)`
+    尽量把对端输出读到 EOF（进程结束/管道关闭）为止，即如果希望后续继续发送数据可能导致EOF报错
 - `recvuntil(delims, drop=False, timeout=default)→ bytes`
     接收数据直到遇到其中一个分隔符，分隔符将被消耗。
     可与`recvline`组合，在收到提示数据后再读取。
 
-- `recvall(timeout=Timeout.forever)`
-    接收所有内容直到超时
+- `p.close()`
+    关闭当前线程
 
 - `p.clean(timeout=0.05)`
     把已有输出都读掉
+- `cyclic(N)`
+    循环字符串（如，baacaadaa），相对重复字符串还可显示对应位置：
+    - `cyclic_find("caa")`
+        定位特定循环模式的偏移
+
+- `p64(N)`  
+    将int包装为小端序的64位bytes
+- `u64()`
+    将64位bytes以小端序解包为int
+        
 
 示例：
 ```py
@@ -626,7 +650,37 @@ p.recvuntil(b"Result: ")
 line = p.recvline()
 ```
 
-`from pwn import xor` 处理python原生不支持的bytes之间异或
+其他：
+- `context.log_level = "debug"` 显示收发的字节，虽然此时不必将接收字节打印，但没有接收的部分不会被显示
+- `from pwn import xor` 处理python原生不支持的bytes之间异或
+- `pwnlib.context` — 设置运行时变量
+    - `context.arch = 'amd64'`
+        设置架构为 64 位 Intel
+- `asm()` 将表示汇编的指令字符串转为实际汇编字节
+- `gdb` 
+    或需先运行 `tmux`
+    - `gdb.debug()` 使用gdb调试程序
+    - `gdb.debug_assembly()` 使用gdb调试汇编
+    - `gdb.attach()` 
+        ```py
+        gdb.attach(p, gdbscript="""
+        set disassembly-flavor intel
+        display/3i $rip
+        display/3i $rsp
+        b *main+0
+        c
+        """)
+        ```
+- `SigreturnFrame()` 构建信号帧
+    例：
+    ```py
+    frame = SigreturnFrame()
+    frame.rax = 0
+    frame.rip = 0x0000
+    ```
+- `unhex()` 将十六进制字符串转为原始字节
+- `shellcraft.cat("/flag")`: 
+    生成汇编代码（仅为汇编代码，仍需使用 `asm()` 转为机器指令字节）
 
 ### math
 
@@ -702,6 +756,11 @@ HTTPServer(("0.0.0.0", 9999), H).serve_forever()
 
 - `global var`
     使用 `global` 前缀在函数中修改全局变量
+
+- `[::-1]` 反转
+
+- `.ljust(N, char)`
+    使用选定字符左对齐N位
 
 ## 参考
 

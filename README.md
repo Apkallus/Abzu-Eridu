@@ -131,12 +131,12 @@
 ## 线路
 
 - 操作系统
-    1. ```《C语言程序设计》 何钦铭、颜晖``` 慕课
+    1. `《C语言程序设计》 何钦铭、颜晖` 慕课
         - 慕课 [C语言程序设计 - 翁恺](https://www.icourse163.org/course/0809ZJU007A-199001)
         - 教材验证码的 [PTA 编程题目集](https://pintia.cn/problem-sets)
         - 学习方式：教材 + 慕课 + 在线编程题，三者结合作为第一门编程语言的学习足够充分。
 
-    2. ```《深入理解计算机系统》 Randal E. Bryant / David O'Hallaron``` 公开课
+    2. `《深入理解计算机系统》 Randal E. Bryant / David O'Hallaron` 公开课
         - 公开课[主页](https://csapp.cs.cmu.edu/3e/home.html) 包含：自动 lab、代码、网络旁注
         - 公开课对应 [CMU 的页面](https://www.cs.cmu.edu/~213/schedule.html) 可查看最新 pdf 或 ppt
         - 公开课视频 [B站](https://www.bilibili.com/video/BV1iW411d7hd/)，缺最后一个视频
@@ -146,7 +146,7 @@
             值得再次重温，网络旁注的扩展部分也有不少内容。
 
 - 网络
-    1. ```《Python编程导论》 John V. Guttag``` 公开课
+    1. `《Python编程导论》 John V. Guttag` 公开课
         - 公开课页面 [MIT ocw 6.100L](https://ocw.mit.edu/courses/6-100l-introduction-to-cs-and-programming-using-python-fall-2022/pages/material-by-lecture/) 包含视频、代码、题目
         - 教材作者在 [Github 公布的教材代码](https://github.com/guttag/Intro-to-Computation-and-Programming)
         - 公开课视频 [B站](https://www.bilibili.com/video/BV1rr421G7nM)
@@ -155,13 +155,13 @@
             第一次接触到了橡皮鸭调试法，虽然之后我与 LLM 进行争论。 
             聚焦于基础语法，信息密度低，有些瞌睡。
 
-    2. ```《Python for Everybody》 Charles Severance``` 公开课程
+    2. `《Python for Everybody》 Charles Severance` 公开课程
         - 公开课程[主页](https://www.py4e.com/)，包含在线可下载教材、视频与自动题目
         - 公开课程B站视频 [CS自学社区](https://www.bilibili.com/video/BV1vGbAeYEpz) 与 [中英字幕课程](https://www.bilibili.com/video/BV1b7LwzCEPo)
         - 学习方法：在线课程教材 + 视频 + 自动题目。视频有多个版本，且其中也包含代码讲解。  
             不深入但还是覆盖了一些正则表达式、网络编程、数据库的内容。
 
-    - ```《计算机网络 自顶向下方法》 James F·Kurose / Keith W. Ross``` 公开课程
+    - `《计算机网络 自顶向下方法》 James F·Kurose / Keith W. Ross` 公开课程
         - 公开课程[主页](https://gaia.cs.umass.edu/kurose_ross/index.php)  
             - 其中 [wireshark lab](https://gaia.cs.umass.edu/kurose_ross/wireshark.php)、[编程作业](https://gaia.cs.umass.edu/kurose_ross/programming.php) 在图书的对应章节中列出
             - 包含 [视频/幻灯片/章内小节知识检测](https://gaia.cs.umass.edu/kurose_ross/lectures.php) 、[交互式章末习题](https://gaia.cs.umass.edu/kurose_ross/interactive/) 
@@ -171,7 +171,7 @@
             作者的课程网站包含大量内容，且随新版发布更新。  
             英文第八版的泄露习题答案可被搜索下载，但不完全对应中文习题。
 
-    - ```《Wireshark数据包分析实战》 Chris Sanders```
+    - `《Wireshark数据包分析实战》 Chris Sanders`
         - 作者在 [Github 发布的捕获数据包](https://github.com/chrissanders/packets)
 
 - Web
@@ -180,7 +180,7 @@
             教程扩展部分不在侧边栏中，使用对应模块介绍页的链接进入
 
 - Web 应用程序渗透测试
-    - ```《黑客攻防技术宝典：Web实战篇》 Dafydd Stuttard / Marcus Pinto```
+    - `《黑客攻防技术宝典：Web实战篇》 Dafydd Stuttard / Marcus Pinto`
         - 拥有知识架构以及部分过时的内容，但结合作者的 PortSwigger Academy 仍值得阅读。
     - [PortSwigger Web Security Academy](https://portswigger.net/web-security)  文档与 lab
         - 包含[主题文档与对应 lab](https://portswigger.net/web-security/all-topics) 还有[研究](https://portswigger.net/research)，以及 [Burp 工具文档](https://portswigger.net/burp/documentation/contents)。   
@@ -208,16 +208,23 @@
             [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)，[IYS 的解决方案](https://inventyourshit.com/labs/webgoat/)
 
 - 网络安全
-    1. [pwn.college CSE 365：网络安全导论](https://pwn.college/dojos) 公开课程  
+    1. [pwn.college CSE 365：网络安全导论](https://pwn.college/cse365-f2025/) 公开课程  
         CSE 365 还包括对 pwn.college 平台本身的介绍：
         - 拥有定制的 GPT5 “sensai”。    
         - 视频 + 文档 + CTF 型靶机，三者融合在模块化的小节中。  
             视频与幻灯片的部分概念不存在于文档中。
         - 各种内容持续更新
         
-        与模块视频不同，B站拥有公开课程的LLM翻译视频。  
+        与模块视频不同，B站拥有公开课(直播的youtube视频)的LLM翻译视频。  
         往期课程无首页链接但可修改URL访问： `cse365-f2025` `cse365-s2025` `cse365-f2024`
 
+- 计算机系统安全
+    - [pwn.college CSE 466：计算机系统安全](https://pwn.college/cse466-f2025/) 公开课程  
+
+    - `《计算机安全导论：深度实践》`杜文亮
+        - 项目资源页面：[SEED](https://www.handsonsecurity.net/resources.html)
+            - 图书章节的对应 lab、幻灯片、无答案的问题集
+        
 
 ## 文档与靶场内容版权
 
@@ -241,11 +248,3 @@
 - MITRE    
     <https://attack.mitre.org/resources/legal-and-branding/terms-of-use/#license>   
     > © 2025 The MITRE Corporation. This work is reproduced and distributed with the permission of The MITRE Corporation.   
-
-### :lock: 禁止
-
-- PortSwigger   
-    <https://portswigger.net/web-security/certification/terms-and-conditions/website-terms-of-use#7-use-of-website-content>
-
-- Root-Me   
-    <https://www.root-me.org/?page=structure&inc=page-mentions_legales&lang=en>
