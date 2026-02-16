@@ -38,7 +38,9 @@ import re
 # yaml 库将 yam 文件yaml_data解析为字典
 # 转换字典为md文件，之后使用已存在的md占位符转换程序
 
-trans_str = "将以下内容翻译成中文，计算机安全技术术语需准确，忽略搜索结果引用，若有则将下划线斜体替换为星号斜体，保留占位符，剩余内容保留原大小写与 Markdown 结构，完整输出应包裹在一个可复制的 Markdown 代码块中，忽略用户地理位置信息，关闭翻译说明功能："
+with open("./.tool/trans_prompt.txt", "r", encoding="utf-8") as f:
+    trans_str = f.read()
+# trans_str = "将以下内容翻译成中文，计算机安全技术或CTF术语需准确，忽略搜索结果引用，若有则将下划线斜体替换为星号斜体，保留占位符，剩余内容保留原大小写与 Markdown 结构，保留原段落分隔与换行，完整输出应包裹在一个可复制的 Markdown 代码块中，忽略用户地理位置信息，关闭翻译说明功能："
 
 yaml_to_md_path = ".cache\\yaml_to_md.md"
 
