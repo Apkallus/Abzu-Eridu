@@ -79,3 +79,8 @@ RTLD_NEXT 句柄：查找“下一个”定义
 
 在 Linux 上常用 accept(server_fd, NULL, NULL)：
 只要 addr 和 addrlen 同时设为 NULL，内核不会去解引用指针，也就不会因为 EFAULT 崩掉。
+
+## 原型
+
+- `size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)`  
+    写入指针，每块大小，块数，读取文件流
