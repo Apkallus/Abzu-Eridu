@@ -47,13 +47,15 @@
     context.arch = "amd64"
     # 设置终端
     context.terminal = ["tmux", "splitw", "-h"]
-    # 使用gdb调试程序
+    # 使用gdb调试程序，使用 gdb 的自定义脚本时需关闭 gef 插件，否则仅显示 gef 默认界面
     p = gdb.debug("/challenge/run", """
         display/3i $rip
         display/3i $rsp
-        display/8gx $rbp-0x20
+        display/4gx $rsp
+        display/6gx $rbp-0x30
+        display/4gx $rbp
         b * main
-    """)
+    """, setuid=False, aslr=False)
     # 停止
     p.interactive()
     ```
@@ -141,12 +143,6 @@
 - 基于分页中的低3个半字节不变，对地址进行部分覆盖爆破
     - 若地址随机可选择固定值爆破
     - 若地址固定（关闭随机或服务器这样仅初始随机而后续固定）应当使用遍历爆破
-- 在无符号时 gdb 调试：
-    顺序：`_start` >> `__libc_start_main` >> `main`
-    手动：
-    - 使用 `starti` 进入第一条指令
-    - 使用 `info files` 得到 `Entry point: 0x64cfd404d1a0` 为 `_start` 地址。
-    - 若无包装函数，那么其中 rdi 是 main 地址
 
 - 保护特性状态：
     - `checksec` 
@@ -159,7 +155,6 @@
 - 故障排除：
     - 各字段值设置是否准确
     - 实际长度是否超过最大预期长度，从而导致边界超出，使得后续字段偏移
-        
 
 ROP：
 - 若使用 call 工具链，无需将 rip 压栈
@@ -173,7 +168,11 @@ GOT：
 
 ## SROP
 
-rt_sigreturn 可一次设置多个寄存器
+rt_sigreturn （系统调用号 15）内核会把当前用户栈当作“信号栈帧（ucontext/sigcontext）”去解析，然后一次性恢复一堆寄存器
+- rax = 15
+- 拥有 syscall
+- RSP 指向受控内存地址
+
 使用 pwntool 的 SigreturnFrame() 信号帧结构快速创建信号帧
 
 落脚点设置：
@@ -210,3 +209,5 @@ rt_sigreturn 可一次设置多个寄存器
     - 每轮 读取-执行 后，空间可覆盖，于是 rsp 可设置同一位置
     - 在 mmap 分配的空间中，可选择不会被帧载荷覆盖的另一段地址保存字符串或文件内容
     - 若拥有 mmap 空间的 x 权限，可在 read 载荷后设置 rip 执行 shellcode
+
+## setcontext 

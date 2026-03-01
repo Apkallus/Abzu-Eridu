@@ -59,6 +59,20 @@ Python 有两种类字符串常量：`str` 字符串（表示为 `"asdf"`）和 
 
 ### struct 
 
+```py
+import struct
+
+class cimg:
+    MAGIC = b"CNNR"
+    RENDER_FRAME =  struct.pack("<H", 1)
+    RENDER_PATCH =  struct.pack("<H", 2)
+    CREATE_SPRITE = struct.pack("<H", 3)
+    RENDER_SPRITE = struct.pack("<H", 4)
+    LOAD_SPRITE =   struct.pack("<H", 5)
+    FLUSH =         struct.pack("<H", 6)
+    SLEEP =         struct.pack("<H", 7)
+```
+
 `struct.pack(format, v1, v2, ...)`
 
 格式字符串：
@@ -271,13 +285,13 @@ p = Pixel(65)
 - `r"内容"`  
     正则表达式使用反斜杠字符 ('\') 表示特殊形式或是允许在使用特殊字符时不引发它们的特殊含义。即，正则表达式使用反斜杠的字面量。  
     `r`前缀确保反斜杠不必做任何特殊处理。 因此 r"\n" 表示包含 '\' 和 'n' 两个字符的字符串。
-- ```re.compile(pattern, flags=0)```
+- `re.compile(pattern, flags=0)`
     将正则表达式保存到对象中复用
 - `re.escape(pattern)`  
     在 pattern 中转义特殊字符。
-- ```flags```
-    - ```re.DOTALL```
-    使 ```.``` 匹配包含 ```\n``` 在内的任意字符
+- `flags`
+    - `re.DOTALL`
+    使 `.` 匹配包含 `\n` 在内的任意字符
 - `re.sub(pattern, repl, string, count=0, flags=0)`  
     返回通过使用 repl 替换在 string 最左边非重叠出现的 pattern 而获得的字符串。 如果样式没有找到，则不加改变地返回 string。  
     可选参数 count 是要替换的模式的最大出现次数；count 必须是一个非负整数。 如果省略或为零，则将全部替换。
@@ -288,11 +302,11 @@ p = Pixel(65)
     替换报错时，检查repl是否使用了字符串模式且未转义，于是可能被解析的字符使用函数模式。
     pattern 里通过 `re.escape` 把占位符当字面量；
 
-- ```re.search()```
-    在字符串的任意位置匹配模式，返回第一个匹配的 ```Match``` 或 ```None```
+- `re.search()`
+    在字符串的任意位置匹配模式，返回第一个匹配的 `Match` 或 `None`
 - `re.findall(pattern, string, flags=0)`  
     返回 pattern 在 string 中的所有非重叠匹配，以字符串列表或字符串元组列表的形式。对 string 的扫描从左至右，匹配结果按照找到的顺序返回。 空匹配也包括在结果中。
-- ```Match.group([group1, ...])```
+- `Match.group([group1, ...])`
     `re.Match` 对象的单个参数返回字符串，多个参数返回元组
     参数 ```0``` 应用所有子分组的匹配，其他数字则返回对应子分组的匹配
 
@@ -316,6 +330,9 @@ p = Pixel(65)
     m.groups()
     ('24', '1632')
     ```
+
+tips:
+- 末尾使用非贪婪模式可导致匹配失败返回空串
 
 例如：
 - 正则表达式
@@ -374,6 +391,9 @@ p = Pixel(65)
 - `b`：以二进制形式输出，只包含 0/1。
 - `x`:十六进制
 
+例：
+- `f"{int_number:#x}"` 以拥有 `0x` 前缀的十六进制打印数字
+
 ### PyCryptoDome
 
 <https://pycryptodome.readthedocs.io/en/latest/>
@@ -406,7 +426,19 @@ from Crypto.PublicKey import RSA
 
 #### Hash
 
-`from Crypto.Hash.SHA256 import SHA256Hash`
+```py
+from Crypto.Hash import SHA256
+
+data = b"Hello, World!"
+
+hash_object = SHA256.new(data=data)
+
+# 获取原始二进制哈希值（32字节）
+digest_bytes = hash_object.digest()
+
+# 获取十六进制字符串表示
+digest_hex = hash_object.hexdigest()
+```
 
 ### urllib
 
@@ -453,7 +485,7 @@ print(content)
     生成 [a, b] 范围内的随机浮点数。
 
 - `random.shuffle()`
-    列表随机
+    原列表随机，不返回新列表
     
 ### hashlib
 
@@ -623,19 +655,32 @@ tube 对象函数：
 
 - `p.close()`
     关闭当前线程
-
+- `p.wait_for_close()`
+    等待直到进程结束
+- `p.poll()`    
+    返回进程的退出状态，如果进程仍在运行则返回 None。(搭配 `p.wait_for_close()`)
+- `can_recv()`
+    测是否可读，可用于网络连接
 - `p.clean(timeout=0.05)`
     把已有输出都读掉
 - `cyclic(N)`
     循环字符串（如，baacaadaa），相对重复字符串还可显示对应位置：
     - `cyclic_find("caa")`
         定位特定循环模式的偏移
+    - 流程：
+        - `cyclic` 构建一个足够大而可覆盖返回地址的循环载荷
+        - 发送此载荷，并在 `gdb` 查看崩溃时的 `rsp` 循环值
+        - 复制此 `rsp` 循环值并使用 `cyclic_find` 得到从输入 buf 到返回地址的长度
 
 - `p64(N)`  
     将int包装为小端序的64位bytes
 - `u64()`
     将64位bytes以小端序解包为int
-        
+
+- `p.interactive()`  
+    python程序到此中断，而不是执行后退出，从而可进入/继续在 gdb 中。
+- `p.pid`
+    得到当前进程的 pid
 
 示例：
 ```py
@@ -659,7 +704,7 @@ line = p.recvline()
 - `asm()` 将表示汇编的指令字符串转为实际汇编字节
 - `gdb` 
     或需先运行 `tmux`
-    - `gdb.debug()` 使用gdb调试程序
+    - `gdb.debug(文件路径, gdb脚本, setuid=False, aslr=False)` 使用gdb调试程序
     - `gdb.debug_assembly()` 使用gdb调试汇编
     - `gdb.attach()` 
         ```py
@@ -681,6 +726,43 @@ line = p.recvline()
 - `unhex()` 将十六进制字符串转为原始字节
 - `shellcraft.cat("/flag")`: 
     生成汇编代码（仅为汇编代码，仍需使用 `asm()` 转为机器指令字节）
+- `ELF('/challenge/run')` 创建文件的 ELF 对象
+    - `elf.got[目标函数]` 得到 got 全局偏移表字段 
+    - `elf.plt['open']` 得到 plt 调用入口字段 
+    - `elf.bss(0x30)` 得到数据段 bss 的地址，并预留 0x30 字节的偏移
+    - `elf.symbols['main']` 得到符号 main 的地址
+    - `elf.address` 可设置基地址，得到地址泄露计算并设置基地址，之后可直接使用其字段地址（此基地址 + rop 查找工具定位的目标偏移地址）
+        - 泄露的绝对地址 - 此绝对地址对应的相对文件偏移 = elf 文件的绝对地址。  
+            示例：
+            - 使用泄露的 main 地址设置 elf 基地址       
+                `elf.address = leak_main_addr - elf.symbols['main']` 
+            - 使用泄露的 main 地址设置 elf 基地址   
+
+                ```py
+                # 使用 ldd 查看共享库文件路径
+                lib_elf = ELF("/lib/x86_64-linux-gnu/libc.so.6")
+                # 计算 libc 基址        
+                lib_elf.address = leak_puts_addr - lib_elf.symbols['puts']            
+
+                lib_chmod = lib_elf.symbols['chmod']
+                ``` 
+                - puts 函数设置 rdi 为地址即可泄露信息
+                - environ 保存指向栈的环境变量字符串指针，泄露 lib 地址后即可得到栈地址
+    
+    - 根据字段值搜索对应地址 `elf.search(字段值)` 返回生成器
+
+        ```py
+        it = elf.search(b"puts\x00")   # 生成器
+        addr = next(it)               # 取第一个匹配到的地址（int）
+        ```
+
+- `ROP([ELF1, ELF2...])` 使用设置地址后的 ELF 对象构建 ROP 对象
+    - `rop.find_gadget(['pop rdi', 'ret']).address` 搜索工具并得到其地址
+        - 使用其他 rop 查找工具确认位置存在后再使用 pwntool 的 ROP 对象获取地址而不是手动设置
+        - 注意：部分存在的工具无法使用 ROP 定位
+    - `rop.raw(data)` 将任意数据（整数、字符串、地址）直接追加到当前ROP链的末尾。
+    - `rop.chain()` 将内部构建好的所有ROP数据（通过raw、call等方法添加的）拼接成一个完整的字节流（bytes）
+    - `rop.dump()` 查看当前 rop 的栈布局
 
 ### math
 
@@ -715,6 +797,19 @@ HTTPServer(("0.0.0.0", 9999), H).serve_forever()
     带锁的全局共享状态变量（锁/阻塞/唤醒）
     - `wait(timeout)` 阻塞直到被 `notify_all()` 唤醒或超时。
     - `wait_for(...)` 等待直到条件满足或超时
+
+### dict
+
+- `.items()`
+    返回一个包含所有键值对的迭代器，每个键值对都是一个元组
+
+### match...case...
+
+```py
+match 判断条件:
+    case 条件:
+    case _:
+```
 
 ### 备忘
 
@@ -761,6 +856,25 @@ HTTPServer(("0.0.0.0", 9999), H).serve_forever()
 
 - `.ljust(N, char)`
     使用选定字符左对齐N位
+
+- `>>` 
+    对整数的符号右移，即如果是正数则相当于无符号右移（由于 python int 的无限精度并带符号）
+
+- `rev_list[0x11], rev_list[0x17] =  rev_list[0x17], rev_list[0x11]`
+    列表元素快速交换
+
+- `对象.__name__`  
+    查看对象名称
+    
+- `globals().get(name)` 
+    `globals()[name]` 不存在会 KeyError  
+    从全局变量与函数中查找对应字符串的对象
+
+- `range(start, stop[, step])`
+    范围的开始、结束、步长
+
+- `sorted()`  
+    返回排序后的新列表
 
 ## 参考
 

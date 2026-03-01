@@ -173,6 +173,7 @@
 
     - `《Wireshark数据包分析实战》 Chris Sanders`
         - 作者在 [Github 发布的捕获数据包](https://github.com/chrissanders/packets)
+        - 命令行数据捕获内容暂略
 
 - Web
     - MDN Web开发者教程 [前半部分](https://developer.mozilla.org/en-US/docs/Learn_web_development)
@@ -211,15 +212,20 @@
     1. [pwn.college CSE 365：网络安全导论](https://pwn.college/cse365-f2025/) 公开课程  
         CSE 365 还包括对 pwn.college 平台本身的介绍：
         - 拥有定制的 GPT5 “sensai”。    
-        - 视频 + 文档 + CTF 型靶机，三者融合在模块化的小节中。  
-            视频与幻灯片的部分概念不存在于文档中。
-        - 各种内容持续更新
+        - 模块视频 + 文档 + CTF 型靶机
+            - 视频与幻灯片的部分概念不存在于文档中。       
+        - 公开课进行 Twitch 直播，Youtube 拥有往期视频。（B站拥有 LLM 翻译）
+        - 往期课程无首页链接但可修改URL访问： `cse365-f2025` `cse365-s2025` `cse365-f2024`
+
+        - 使用大部分的基础与橙带道场内容
+        - 当前公开课直播 Youtube 视频为 2024 fall，暂略
         
-        与模块视频不同，B站拥有公开课(直播的youtube视频)的LLM翻译视频。  
-        往期课程无首页链接但可修改URL访问： `cse365-f2025` `cse365-s2025` `cse365-f2024`
+        
 
 - 计算机系统安全
     - [pwn.college CSE 466：计算机系统安全](https://pwn.college/cse466-f2025/) 公开课程  
+        - 使用所有的黄带与绿带道场内容
+        - 当前公开课直播 Youtube 视频为 2025 fall
 
     - `《计算机安全导论：深度实践》`杜文亮
         - 项目资源页面：[SEED](https://www.handsonsecurity.net/resources.html)
