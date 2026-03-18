@@ -1,15 +1,16 @@
 # 设置目录字符串
 file_str = """
-程序安全 Program Security
-逆向工程 Reverse Engineering
-返回导向编程 Return Oriented Programming
-动态分配器误用 Dynamic Allocator Misuse
-程序漏洞利用 Program Exploitation
+引言 Introduction
+沙箱 Sandboxing
+竞争条件 Race Conditions
+内核安全 Kernel Security
+微架构利用 Microarchitecture Exploitation
+系统利用 System Exploitation
 """
 # 将目录字符串拆分为字符串列表，遍历列表创建对应文件
 
 # 设置目录路径
-filepath = '游乐场\\pwn.college\\2.2 Program Security'
+filepath = '游乐场\\pwn.college\\2.3 System Security'
 
 file_list = file_str.split('\n')
 # 去掉前后空白符号

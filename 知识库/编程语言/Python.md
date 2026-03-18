@@ -251,9 +251,29 @@ p = Pixel(65)
 - `os.path.relpath(path, startPath)`
     计算基于起始路径的相对路径
 
+- `os.path.dirname(path)`
+    返回路径名 path 的目录名
+
 - `os.urandom(n)`
     随机字节生成。  
     `secrets.token_bytes(n)` 为对应的安全封装函数
+
+- `os.symlink(src, dst)`
+    创建符号链接
+
+- `os.remove(path)`
+    删除指定路径的文件。如果指定的路径是一个目录，将抛出OSError。
+
+- `os.rename("old_name.txt", "new_name.txt")`
+    重命名文件或目录。src 是原始路径，dst 是新的路径。
+
+- `os.mkdir(path[, mode])`
+    以数字权限模式创建目录（单级目录）
+
+### shutil — 高级文件操作
+
+- `shutil.rmtree(path, ignore_errors=False, onerror=None, *, onexc=None, dir_fd=None)`
+    删除整个目录树；path 必须指向一个目录（但不是指向目录的符号链接）
 
 ### json
 
@@ -620,11 +640,27 @@ print(r.text)
 
 即时编译（Just-In-Time Compilation, JIT）
 
+### 信号
+
+```py
+import signal
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+```
+
+使用 `脚本 | head -n 50` 提取开头时，py 脚本并不退出而是持续 SIGPIPE 异常，此处设置 SIGPIPE 为默认状态从而结束进程
+
+或使用 sed 命令，控制起始与结束
+- `脚本 | sed -n '9000, 10000p'`
+
 ### pwntools
 
 创建 tube 对象：
 - 进程：`p = process(["/challenge/run"], stderr=STDOUT)`
+    - `stdout=DEVNULL` 来自 `from subprocess import DEVNULL`
+    - `stderr=文件对象` 分离标准错误写到文件中，pwntools 默认把 stderr 合并到 stdout
 - 网络：`p = remote("127.0.0.1", 1337)`
+
+
 
 设置timeout并满足时，将抛出异常。使用 `try ... except ...`
 
@@ -638,6 +674,9 @@ tube 对象函数：
     发送一行数据，末尾添加换行符 `\n`（对应接收程序的 `scanf`）
 - `sendlineafter(delim, data, timeout=default)→ str`  
     在获得 `delim` 提示后，发送 `data` 数据
+
+- `send_signal(signal.SIGKILL)`
+    发送信号，可搭配 `signal` 模块的常量
 
 - `recv(n)`：
     最多读 n 字节（可能少于 n），若省略则读取直到超时。设置超时极短或0或与recvuntil搭配使用则不会导致EOF报错
@@ -678,21 +717,79 @@ tube 对象函数：
     将64位bytes以小端序解包为int
 
 - `p.interactive()`  
-    python程序到此中断，而不是执行后退出，从而可进入/继续在 gdb 中。
+    进入交互模式，python程序到此中断，而不是执行后退出，从而可进入/继续在 gdb 中。且持续从 socket/process 读取已到达的数据并打印到屏幕，同时把键盘输入转发给程序。
 - `p.pid`
     得到当前进程的 pid
 
 示例：
 ```py
-from pwn import process
-from subprocess import STDOUT
+# 初始模板
+from pwn import *
+import signal
 
-p = process(["/challenge/run"], stderr=STDOUT)
+# 恢复 py 脚本中 SIGPIPE 的默认行为，从而可被 head 截断
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
-p.sendlineafter(b'Choice? ', b'1')
+# 设置架构
+context.arch = "amd64"
 
-p.recvuntil(b"Result: ")
-line = p.recvline()
+# 设置 tmux 调试
+context.terminal = ["tmux", "splitw", "-h"]
+
+# 日志的详细输出使用 debug，仅错误使用 error
+context.log_level = "debug"
+
+# 文件路径
+file_path_str = "/challenge/toddlerone-level-11-1"
+
+# 网络客户端
+def get_net_client_process():
+    p = remote("127.0.0.1", 1337)
+    return p
+
+# debug 模式与普通模式
+def get_debug_or_process(debug=False):
+    if debug:
+        p = gdb.debug(file_path_str, """
+            display/6i $rip
+            display/4gx $rsp
+            display/6gx $rbp-0x30
+            display/6gx $rbp
+            b* $_base()+0x3310
+            continue
+        """, setuid=False, aslr=True)
+    else:
+        ## 将 stderr 导出到文件
+        # err_log = open('/home/hacker/err.log', 'wb')
+        # p = process([file_path_str], stderr=err_log)
+        p = process([file_path_str])
+        
+    return p
+
+p = get_debug_or_process('')
+p.recvuntil(b'Please input: ')
+```
+
+```py
+# 从命令行传入多种格式的汇编代码，进行反汇编
+from pwn import *
+import sys
+
+context.arch = "amd64"
+
+argv_num = len(sys.argv)
+print("input such: '4d 89 f0' or 4d89f0 or 4d 89 f0 or 0x4d 0x89 0xf0 or '\\x4d \\x89 \\xf0'")
+print("list:", sys.argv)
+
+if argv_num > 1:
+    asm_bytes = bytes.fromhex(''.join(sys.argv[1:]).replace('0x', '').replace('\\x', ''))
+else:
+    asm_bytes = b'\x4d\x89\xf0'
+    print('test bytes', asm_bytes)
+
+disasm_bytes = disasm(asm_bytes)
+
+print(disasm_bytes)
 ```
 
 其他：
@@ -702,6 +799,7 @@ line = p.recvline()
     - `context.arch = 'amd64'`
         设置架构为 64 位 Intel
 - `asm()` 将表示汇编的指令字符串转为实际汇编字节
+- `disasm()` 反汇编
 - `gdb` 
     或需先运行 `tmux`
     - `gdb.debug(文件路径, gdb脚本, setuid=False, aslr=False)` 使用gdb调试程序
@@ -749,13 +847,13 @@ line = p.recvline()
                 - puts 函数设置 rdi 为地址即可泄露信息
                 - environ 保存指向栈的环境变量字符串指针，泄露 lib 地址后即可得到栈地址
     
-    - 根据字段值搜索对应地址 `elf.search(字段值)` 返回生成器
+    - 根据字段值搜索对应地址 `elf.search(字段值)` 返回**生成器**
 
         ```py
         it = elf.search(b"puts\x00")   # 生成器
         addr = next(it)               # 取第一个匹配到的地址（int）
         ```
-
+- 可能需开启地址随机以避免地址不对齐的崩溃
 - `ROP([ELF1, ELF2...])` 使用设置地址后的 ELF 对象构建 ROP 对象
     - `rop.find_gadget(['pop rdi', 'ret']).address` 搜索工具并得到其地址
         - 使用其他 rop 查找工具确认位置存在后再使用 pwntool 的 ROP 对象获取地址而不是手动设置
