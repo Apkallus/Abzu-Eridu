@@ -78,10 +78,9 @@ part_list = ["description", "resources", "challenges"]
 text_list = ["description", "content"]
 
 # 获取模块名称
-
-# 对于网络安全-路径遍历模块的特殊构造
+# 对于一个 yml 中在 modules 包含多个模块，使用索引
 if "modules" in yaml_data:
-    yaml_data = yaml_data["modules"][3]
+    yaml_data = yaml_data["modules"][5]
 
 module_name_str = yaml_data["name"]
 
