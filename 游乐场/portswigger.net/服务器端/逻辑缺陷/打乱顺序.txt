@@ -1,0 +1,39 @@
+### 强制导航避开多因素验证 ###
+https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-simple-bypass
+使用多因素验证，然而使用测试账号时，在第一阶段输入用户名与密码后，强制浏览到账户页面则避开第二阶段的验证码
+
+
+### 强制导航避开余额检查功能 ###
+https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-insufficient-workflow-validation
+设计步骤为：
+添加商品到购物车
+结账
+如余额足够则重定向到购物成功界面
+
+攻击顺序为：
+添加商品到购物车
+强制导航到购物成功界面
+
+
+https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-authentication-bypass-via-flawed-state-machine
+登录的多阶段中使用多个cookie与csrf令牌
+GET /login HTTP/2
+除表单外还得到这一步的cookie与csrf
+
+输入登录信息后与2个服务器状态令牌提交
+POST /login HTTP/2
+得到下一阶段的cookie以及302重定向到下一阶段页面
+
+若按照常规步骤，使用此cookie的302重定向get将得到第二阶段的cookie与csrf，之后将得到经过验证的会话令牌
+GET /role-selector HTTP/2
+POST /role-selector HTTP/2
+
+攻击点为：得到第一阶段的验证cookie令牌后
+不进入第二阶段而是强制浏览到账户页面
+GET /my-account HTTP/2
+此时作为管理员登录
+# 若按照常规步骤，由于302重定向提交了第一阶段的cookie，此cookie随状态进入第二阶段而失效。
+于是使用浏览器在302到第二阶段页面后再进入账户页面则无效。应当使用拦截器控制步骤
+#
+
+@ 示例解决方案在拦截器中丢弃第二阶段的get步骤 @

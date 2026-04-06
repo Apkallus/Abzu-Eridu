@@ -1,0 +1,69 @@
+1.
+发送文件时客户端：
+	Source Port: 55639
+	Destination Port: 80
+
+2.
+gaia.cs.umass.edu (128.119.245.12)
+	发送与接收端口均为80
+
+3.
+建立TCP使用的TCP SYN段的序列号：
+	客户端的 SYN 为 Sequence Number (raw): 4236649187
+	
+将Flags字段中的Syn set即表示此为syn
+若使用选择确认则无法确保建立连接
+
+4.
+服务器的 SYN ACK 为 Sequence Number (raw): 1068969752
+将Flags字段中的 Syn与Acknowledgment置位表示此为SYN ACK
+SYN ACK确认字段的值：
+	cknowledgment number (raw): 4236649188
+将seq值+1得到seq ack的值
+
+5.
+包含HTTP POST头部的TCP分段序列号：
+	Sequence Number (raw): 4236649188
+TCP payload (1448 bytes)
+传输文件大小远超过此段
+
+6.
+包含HTTP POST头部的TCP分段发送时间：
+	Time since first frame in this TCP stream: 0.024047000 seconds]
+对此段的ACK:
+	eq的4236649188 + 有效载荷1448 = 预计收到的4236650636
+	[Time since first frame in this TCP stream: 0.052671000 seconds]
+	[The RTT to ACK the segment was: 0.028624000 seconds]
+
+第二个承载数据的TCP段及其ACK的RTT
+	[The RTT to ACK the segment was: 0.028628000 seconds]
+
+收到第二个承载数据的ACK后，ERTT为：
+	初始ERTT = 0.028624000 
+	新ERTT = 0.028624000*0.875 + 0.028628000*0.125
+
+7.
+前四个承载数据的TCP分组长度均为1514，其中1448为有效载荷
+
+8.
+前四个承载数据的TCP分组中，服务器向客户端通告的最小可用缓冲区空间为
+Window: 249
+Window: 272
+Window: 295
+Window: 317
+[Window size scaling factor: 128]
+窗口*窗口缩放
+最小为 249*128 = [Calculated window size: 31872]
+接收方缓存空间充足
+
+9.
+检查接收方发送冗余ACK
+
+10.
+接收方确认1448字节数据
+
+11.
+吞吐量 = 大小 / 时间
+	= 1448*N / 第一个seq到最后一个seq ack到达
+
+

@@ -1,0 +1,28 @@
+https://portswigger.net/web-security/access-control/lab-unprotected-admin-functionality
+# /robots.txt提供管理功能url，且未保护管理功能url#
+访问 /robots.txt 文件，得到 /administrator-panel 管理面板的url，访问此url进入管理面板
+
+https://portswigger.net/web-security/access-control/lab-unprotected-admin-functionality-with-unpredictable-url
+# 页面js提供管理功能url，且未保护管理功能 #
+访问 /login，得到的响应html中的js脚本内包含对管理员启用的管理面板url，访问此url进入管理面板
+
+https://portswigger.net/web-security/access-control/lab-user-role-controlled-by-request-parameter
+# 使用cookie参数进行权限控制 #
+使用普通账户登录的响应中包含 Set-Cookie: Admin=false; 
+使用代理的匹配和替换功能，将false改为true。此时将出现控制面板
+
+https://portswigger.net/web-security/access-control/lab-user-role-can-be-modified-in-user-profile
+# 未对修改信息的功能进行控制，导致能够修改其它项 #
+@@ 使用更改电子邮件的功能得到响应的json中包含  "roleid": 1
+在更改电子邮件的post中，除默认的email地址外，增加 "roleid": 2 此时获得管理员权限@@
+
+
+https://portswigger.net/web-security/access-control/lab-url-based-access-control-can-be-circumvented
+已知服务器支持 X-Original-URL 方法覆盖原始URL
+直接访问/admin 响应为403。在重复器中编辑url为普通url，添加 X-Original-URL: /admin 访问管理面板
+使用删除功能时同样添加此头部，并将参数写在原始url中
+@ 覆盖时只对路径进行变换，而参数在原始url中传递 @
+
+https://portswigger.net/web-security/access-control/lab-method-based-access-control-can-be-circumvented
+使用提供的管理员账户使用权限变更功能，得到此功能对应的url。
+使用普通账户登录后更改方法为GET，并将原来在post体中的参数转为url参数

@@ -1,0 +1,33 @@
+1.
+第一个UDP数据包编号为5
+承载应用层协议为SSDP
+头部拥有4个字段：
+	udp.srcport
+	udp.dstport
+	udp.length
+	udp.checksum
+
+2.
+每个字段长度均为 4个十六进制数 -> 2字节 -> 16bit
+
+3.
+length字段为头部加载荷的总大小
+2*4=8的头部 + 275的payload = 283字节 即为length的值
+
+4.
+有效载荷可以包含的最大字节数为 2^16字段值的上限 - 2*4 字节的头部大小
+
+5.
+最大可能源端口号为 2^16-1
+
+6.
+查看IP内容，得到 Protocol: UDP (17)
+
+7.
+由于第一个UDP的SSDP数据包无响应，于是转为第一个UDP的DNS及其响应
+第一个包的编号为 15
+	Source Port: 58350
+	Destination Port: 53
+第二个包的编号为17
+	Source Port: 53
+	Destination Port: 58350

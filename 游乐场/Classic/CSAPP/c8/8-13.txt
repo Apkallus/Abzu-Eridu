@@ -1,0 +1,2 @@
+x=3 -> fork -> printf ++x (4) ->printf --x (3)  
+            -> printf --x (2)

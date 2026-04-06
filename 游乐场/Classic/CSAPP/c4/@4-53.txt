@@ -1,0 +1,51 @@
+
+## 关联文件 pipe-nobypass.hcl ##
+pipe- 无旁路 使用暂停处理所有数据相关 直到值通过写回阶段
+修改流水线控制以处理所有可能的数据与控制冒险
+分析各种组合情况
+
+指令    F取指   D译码   E执行   M访存   W写回
+ret     暂停    气泡
+jmp             气泡    气泡
+l/u     暂停    暂停    气泡
+
+# 应当尝试分析三种基本情况的每个阶段
+此处l/u还指其他数据冒险，在无旁路时暂停与气泡直到通过写回阶段
+@# 关注点应当在D阶段 此阶段有译码与气泡的不确定性
+D-ret与 E/M/W-l/u的组合在D译码使用暂停，希望保留ret而不是填充气泡消除
+@@@D+M/W-l/u与 E-jmp的组合在D译码使用气泡，希望消除D-l/u而不是之后恢复
+没有旁路时，数据冒险将从D~E扩展到D~W 此时新增与jmp的组合
+
+ret在译码阶段开始,暂停取指，并在译码插入气泡
+IRET in { D_icode, E_icode, M_icode, W_icode }
+@ 在写入阶段不应当插入气泡 组合逻辑在写入阶段已经到达PC逻辑
+
+IJXX && !e_Cnd在执行阶段开始,暂停取指，并在译码与执行插入气泡
+(IJXX in { E_icode, M_icode } && !e_Cnd)
+@ 在访存阶段不应当插入气泡 组合逻辑在访存阶段已经到达PC逻辑
+
+
+在下一条指令要使用的寄存器还在流水线中计算时出现数据冒险
+l/u valM写入rA 在执行阶段开始,暂停取指与译码，并在执行插入气泡
+(IMRMOVQ in { E_icode, M_icode, W_icode } ||
+IPOPQ in { E_icode, M_icode, W_icode }) &&
+(d_srcA in { E_dstM, M_dstM, W_dstM} ||
+d_srcB in { E_dstM, M_dstM, W_dstM})
+
+IOPQ, IRRMOVQ, IIRMOVQ valE写入rB 同为数据冒险
+(E_icode in { IOPQ, IRRMOVQ, IIRMOVQ, IPUSHQ, ICALL, IPOPQ } ||
+M_icode in { IOPQ, IRRMOVQ, IIRMOVQ, IPUSHQ, ICALL, IPOPQ } ||
+W_icode in { IOPQ, IRRMOVQ, IIRMOVQ, IPUSHQ, ICALL, IPOPQ }) &&
+(d_srcA in { E_dstE, M_dstE, W_dstE} ||
+d_srcB in { E_dstE, M_dstE, W_dstE})
+
+IPUSHQ, ICALL, IPOPQ valE写入rsp 同为数据冒险
+
+######
+@ 单纯复制了 两段数据冒险而没有检查 ! 的逻辑 
+两段数据冒险应当!(a||b) 或者 (!a&&!b)
+而不是(!a||!b)
+
+@跳转在M已经能够将组合逻辑发到f的组合逻辑，无需暂停 此处是否暂停没有影响
+
+@ d_srcA/B != RNONE 的情况没有考虑，在空寄存器的情况下不是冒险

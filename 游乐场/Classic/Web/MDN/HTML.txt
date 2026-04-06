@@ -1,0 +1,21 @@
+https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website/Creating_the_content
+HTML 简要介绍
+入门模块-你的第一个网站-创建内容
+
+https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content
+使用 HTML 构建内容
+核心模块-使用 HTML 构建内容
+
+
+https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content#additional_tutorials
+其他教程
+这些教程不属于学习路径的一部分，但它们仍然很有趣——你应该将它们视为挑战性目标，在完成主要核心文章后选择性地学习。
+
+在 HTML 中包含矢量图形
+矢量图形在许多情况下都非常有用——它们的文件体积小且高度可缩放，因此放大或缩放到大尺寸时不会失真。
+在本文中，我们将向您展示如何在网页中包含一个矢量图形。
+
+***从对象到 iframe——通用嵌入技术
+开发者通常会将图片、视频和音频等媒体嵌入到网页中。
+在本文中，我们稍微偏离常规，探讨一些允许你将多种内容类型嵌入到网页中的元素：<iframe>、<embed> 和 <object> 元素。
+<iframe> 用于嵌入其他网页，而另外两个则允许你嵌入外部资源，如 PDF 文件。

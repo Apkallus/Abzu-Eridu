@@ -1,0 +1,4 @@
+- Privacy Policy
+    - 描述：阅读隐私政策
+    - 指导教程：此挑战需注册与登录账户，登录后访问 账户-隐私与安全-隐私政策
+    - 可直接访问对应 URL ```http://127.0.0.1:3000/#/privacy-security/privacy-policy``` 而跳过注册

