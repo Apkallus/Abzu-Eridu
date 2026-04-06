@@ -1,0 +1,45 @@
+    .pos 0
+    irmovq stack,%rsp # 初始化栈指针
+    call main   # 执行主函数
+    halt    # 终止
+
+    .align 8
+# Source block
+src:
+    .quad 0x00a
+    .quad 0x0b0
+    .quad 0xc00
+# Destination block
+dest:
+    .quad 0x111
+    .quad 0x222
+    .quad 0x333
+
+main:
+    irmovq src,%rdi
+    irmovq dest,%rsi
+    irmovq $3,%rdx
+    call copy_block   # copy_block(src, dest, len=3)
+    ret
+
+# long copy_block(long *src, long *dest, long len)
+# src in %rdi, dest in %rsi, len in %rdx
+copy_block:
+    xorq %rax,%rax
+    irmovq $1,%r11
+    irmovq $8,%r8
+    jmp test
+loop:
+    mrmovq (%rdi),%r9
+    rmmovq %r9,(%rsi)
+    xorq %r9,%rax
+    addq %r8,%rdi
+    addq %r8,%rsi
+    subq %r11,%rdx
+test:
+    andq %rdx,%rdx
+    jne loop
+    ret
+
+    .pos 0x200
+stack:  # Missing end-of-line on final line 最后一行缺少换行符

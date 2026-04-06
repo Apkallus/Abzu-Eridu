@@ -1,0 +1,8 @@
+if(fork()==0){
+    fd=Open("foo.txt",O_RDONLY,0);
+    dup2(fd,0);
+    Close(fd);
+    execve("fstatcheck",argv,envp);
+}
+fork后打开文件描述符，在复制后关闭。
+在execve命令时，描述符fd3被关闭

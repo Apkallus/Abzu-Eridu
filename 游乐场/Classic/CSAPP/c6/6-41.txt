@@ -1,0 +1,18 @@
+640*480像素组
+C=64KB=65536byte
+E=1
+B=4
+S=16384
+
+struct pixel{
+    char r;
+    char g;
+    char b;
+    char a;
+};
+struct pixel buffer[480][640];
+
+行递增
+一个结构元素大小为4*1=4字节
+每块缓存对应一个结构元素
+不命中率1/4

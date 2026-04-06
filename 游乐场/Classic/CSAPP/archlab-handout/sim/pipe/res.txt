@@ -1,0 +1,41 @@
+    将立即数保存到寄存器替代每次将立即数移动到寄存器后再计算
+
+    
+    iaddq $1, %rax
+    使用iaddq指令替代立即数保存到寄存器后再计算
+
+    mrmovq (%rdi), %r10	
+	iaddq $8, %rdi	
+	rmmovq %r10, (%rsi)
+    将更新指针rdi移动到内存指令之间的加载使用的流水线气泡阶段
+
+    iaddq $-1, %rdx
+    jg Loop	
+    将对rdx的算数计算移动到跳转判断前替代andq
+
+    jg Loop			# if so, goto Done:	
+	jmp Done
+    基于总是选择策略
+    将选择分支从不满足循环条件改为满足循环条件
+
+/*
+    是否要改善JXX
+    M_icode == IJXX && !M_Cnd : M_valA;
+    JXX在进入访存阶段时
+    使用valA传送valP的值与M_Cnd控制信号
+    在e阶段转发是否可优化
+    在译码阶段插入气泡，取消执行阶段的气泡
+    # 似乎无法使用 e_Cnd : E_valA          e_valA
+    E_icode == IJXX && !e_Cnd : e_valE;
+    
+    JXX 
+    valC -> valE 
+    valP -> valA -> valM
+    如果使用valE传递valP
+    那么valM与valA应当传递valC
+*/
+
+#	xorq %rax,%rax			# count = 0; # @由于寄存器初始为0 可删掉
+
+## 第五章 5.8循环展开
+如果继续增加展开，由于字符上限，尝试使用四字节的irmovq，代替10字节的iaddq

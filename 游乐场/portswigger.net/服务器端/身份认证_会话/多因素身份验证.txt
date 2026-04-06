@@ -1,0 +1,21 @@
+https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-simple-bypass
+# 可绕过的多重检查 #
+第一阶段得到登录cookie，服务器并未实际检查第二阶段 
+@ 完成两个阶段的登录后，进入验证后的/my-account页面。
+而进行第一阶段账户密码登录，得到更新的cookie。再访问/my-account 直接到账户页面 @
+第一阶段的账户密码登陆后，手动转移到其他URL
+
+https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-broken-logic
+# 服务器使用cookie保存当前登录的用户信息，缺少上下文以至修改第一阶段的cookie可到第二阶段邮件验证其他用户 #
+第一阶段登录的响应中包含用户名在内的cookie，在第二阶段中修改用户名到目标，此时邮件将发送到目标邮箱。
+对邮件验证码进行枚举 
+
+https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-bypass-using-a-brute-force-attack
+# 得到用户名与密码时，使用宏自动登录验证的第一阶段并爆破第二阶段的令牌 #
+验证阶段post /login请求主体中的csrf令牌在get /login得到的响应的主体的隐藏表单中
+login 与 login2各需要一个令牌，在burp对post login2进行爆破前，
+设置burp宏，其中包括get login，post login，get login2：
+获得第一阶段令牌，提交用户名与密码来登录第一阶段，然后获得第二阶段令牌
+此时第二阶段的csrf令牌已更新为当前会话令牌，对post login2进行爆破
+在这里，burp宏自动确定了参数位置，设置时使用运行宏，确保宏在第二阶段post之前运行，
+还要再资源池的并发设置1，确保每个载荷的前后文匹配

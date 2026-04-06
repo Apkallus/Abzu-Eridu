@@ -1,0 +1,38 @@
+    .pos 0
+    irmovq stack,%rsp # 初始化栈指针
+    call main   # 执行主函数
+    halt    # 终止
+
+# 链表
+    .align 8
+ele1:
+    .quad 0x00a
+    .quad ele2
+ele2:
+    .quad 0x0b0
+    .quad ele3
+ele3:
+    .quad 0xc00
+    .quad 0
+
+main:
+    irmovq ele1,%rdi
+    call sum_list   # sum_list(链表头 ele1)
+    ret
+
+# long sum_list(list_ptr ls)
+# ls in %rdi
+sum_list:
+    xorq %rax,%rax  # rax=0
+    jmp test    # goto test
+loop:
+    mrmovq (%rdi),%r8   # +0偏移处读入链表的值到r8
+    addq %r8,%rax   # 累加
+    mrmovq 8(%rdi),%rdi # +8偏移处读取链表地址更新rdi
+test:
+    andq %rdi,%rdi # 检测指针
+    jne loop    # 如果指针不为空继续循环
+    ret
+
+    .pos 0x200
+stack:  # Missing end-of-line on final line 最后一行缺少换行符

@@ -1,0 +1,27 @@
+1.	HTTP/1.1
+2.	en-US,en;q=0.9
+3.	Src: 10.0.0.44 (10.0.0.44), Dst: gaia.cs.umass.edu (128.119.245.12)
+4.	200 OK
+5.	Last-Modified: Sat, 30 Jan 2021 06:59:02 GMT
+6.	Content-Length: 128
+7.	no
+
+8.	no
+9.	yes, 
+10.	yes, If-Modified-Since: Sat, 30 Jan 2021 06:59:02 GMT
+11.	304 Not Modified, no
+
+12.	1, 32
+13.	28
+14.	200 OK
+15.	4
+
+16.	3个HTTP GET
+	1-> Destination Address: gaia.cs.umass.edu (128.119.245.12)
+	2-> Destination Address: gaia.cs.umass.edu (128.119.245.12)
+	3-> Destination Address: hatter.cslash.net (178.79.137.164)
+17.	串行，发送GET的间隔较长
+
+18.	HTTP/1.1 401 Unauthorized\r\n
+19.	Authorization: Basic d2lyZXNoYXJrLXN0dWRlbnRzOm5ldHdvcms=\r\n
+	wireshark-students:network

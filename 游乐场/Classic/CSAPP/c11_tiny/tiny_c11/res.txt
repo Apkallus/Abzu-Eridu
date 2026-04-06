@@ -1,0 +1,11 @@
+./tiny 1234
+
+
+telnet localhost 1234
+
+GET / HTTP/1.1
+GET /cgi-bin/adder?10&1 HTTP/1.1
+HEAD / HTTP/1.1
+HEAD /cgi-bin/adder?10&1 HTTP/1.1
+
+host: localhost 

