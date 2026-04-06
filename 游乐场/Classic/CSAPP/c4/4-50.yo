@@ -1,0 +1,56 @@
+0x000:                      |     .pos 0
+0x000: 30f40002000000000000 |     irmovq stack,%rsp
+0x00a: 801400000000000000   |     call main
+0x013: 00                   |     halt
+                            | 
+0x014:                      | main:
+0x014: 30f7ffffffffffffffff |     irmovq $-1,%rdi
+0x01e: 802800000000000000   |     call switchv
+0x027: 90                   |     ret
+                            | 
+0x028:                      | switchv:
+0x028: 6277                 |     andq %rdi,%rdi
+0x02a: 72c200000000000000   |     jl jmpdef             # 小于零到jmpdef
+0x033: 30f60500000000000000 |     irmovq $5,%rsi
+0x03d: 6176                 |     subq %rdi,%rsi      
+0x03f: 72c200000000000000   |     jl jmpdef             # 超出范围到jmpdef
+                            | 
+0x048: 6277                 |     andq %rdi,%rdi
+0x04a: 737000000000000000   |     je starttab           # 等于0到starttab
+0x053:                      | adrcou:                   
+0x053: c0f20800000000000000 |     iaddq $8,%rdx         # 循环计算地址偏移+8
+0x05d: c0f7ffffffffffffffff |     iaddq $-1,%rdi
+0x067: 765300000000000000   |     jg adrcou
+0x070:                      | starttab:
+0x070: 30f10003000000000000 |     irmovq jumtab,%rcx    # 代码地址
+0x07a: 6021                 |     addq %rdx,%rcx       # 代码地址+偏置
+0x07c: 50810000000000000000 |     mrmovq (%rcx),%r8
+0x086: a08f                 |     pushq %r8
+0x088: 90                   |     ret
+0x089:                      |     jmpzero:
+0x089: 30f0aa0a000000000000 |         irmovq $0xaaa, %rax
+0x093: 70cc00000000000000   |         jmp done
+0x09c:                      |     jmptwoafive:
+0x09c: 30f0bb0b000000000000 |         irmovq $0xbbb, %rax
+0x0a6: 70cc00000000000000   |         jmp done
+0x0af:                      |     jmpthree:
+0x0af: 30f0cc0c000000000000 |         irmovq $0xccc, %rax
+0x0b9: 70cc00000000000000   |         jmp done
+0x0c2:                      |     jmpdef:
+0x0c2: 30f0dd0d000000000000 |         irmovq $0xddd, %rax
+0x0cc:                      | done:
+0x0cc: 90                   |     ret
+                            | 
+0x200:                      |     .pos 0x200
+0x200:                      | stack:
+                            | 
+0x300:                      |     .pos 0x300
+0x300:                      | jumtab: 
+0x300: 8900000000000000     |     .quad jmpzero       # 0
+0x308: c200000000000000     |     .quad jmpdef        # 1
+0x310: 9c00000000000000     |     .quad jmptwoafive   # 2
+0x318: af00000000000000     |     .quad jmpthree      # 3
+0x320: c200000000000000     |     .quad jmpdef        # 4
+0x328: 9c00000000000000     |     .quad jmptwoafive   # 5
+                            | 
+0x330:                      | end:

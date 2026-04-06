@@ -1,0 +1,95 @@
+1. 
+Source Address: 192.168.86.61 (192.168.86.61)
+
+2.
+Time to Live: 1
+
+3.
+Protocol: UDP (17)
+
+4.
+.... 0101 = Header Length: 20 bytes (5)
+
+5.
+Total Length: 56
+有效载荷 56-20=36
+
+6.
+000. .... = Flags: 0x0
+flags字段的
+..0. .... = More fragments: Not set
+显示此为最后一个分片
+
+
+7.
+Identification 用于标识分片的数据报，如分片则有相同值，此处未分片，于是每个数据报的值不同
+Time to Live 逐渐增加跳数
+Header Checksum 由于头部内容变化，于是计算出的校验和也不同
+
+8.
+Version: 4 协议字段
+Header Length 头部字段
+Differentiated Services Field 服务类型
+Flags 
+Fragment Offset
+Protocol: UDP (17)
+Source Address: 192.168.86.61 (192.168.86.61)
+Destination Address: gaia.cs.umass.edu (128.119.245.12)
+
+9.
+标识字段每个数据报+1
+
+10.
+Protocol: ICMP (1)
+
+11.
+仍然增加但不一定+1
+
+12.
+TTL值不同
+
+
+13.
+..1. .... = More fragments: Set 分为多个数据包
+
+14.
+001. .... = Flags: 0x1, More fragments
+flags字段的
+More fragments: Set
+
+15.
+...0 0000 0000 0000 = Fragment Offset: 0
+
+16.
+Total Length: 1500
+
+17.
+...0 0000 1011 1001 = Fragment Offset: 1480
+
+18.
+偏移字段与校验和字段
+
+19.
+..0. .... = More fragments: Not set
+
+
+20.
+Source Address: 2601:193:8302:4620:215c:f5ae:8b40:a27a (2601:193:8302:4620:215c:f5ae:8b40:a27a)
+
+21.
+Destination Address: cdns01.comcast.net (2001:558:feed::1)
+
+22.
+.... 0110 0011 1110 1101 0000 = Flow Label: 0x63ed0
+
+23.
+Payload Length: 37
+
+24.
+Next Header: UDP (17)
+
+25.
+Answer RRs: 1
+
+26.
+youtube.com: type AAAA, class IN, addr 2607:f8b0:4006:815::200e

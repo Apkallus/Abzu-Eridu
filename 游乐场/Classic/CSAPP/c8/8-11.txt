@@ -1,0 +1,4 @@
+fork -> fork -> printf 
+             -> printf
+     -> fork -> printf
+             -> printf

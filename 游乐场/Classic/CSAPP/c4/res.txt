@@ -1,0 +1,10 @@
+指令汇编与测试 yas与yis后为文件名
+../archlab-handout/sim/misc/yas 4-50.ys;
+../archlab-handout/sim/misc/yis 4-50.yo
+
+模拟器 VERSION=版本
+make clean; make VERSION=1w
+
+模拟器测试
+(cd ../y86-code; make testpsim)
+(cd ../ptest; make SIM=../pipe/psim)

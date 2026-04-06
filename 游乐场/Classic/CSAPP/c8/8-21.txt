@@ -1,0 +1,5 @@
+fork -> printf b ------> waitpid -> printf c
+     -> printf a -> exit
+
+a b c
+b a c
