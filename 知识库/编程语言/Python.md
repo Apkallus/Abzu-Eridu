@@ -237,6 +237,12 @@ p = Pixel(65)
 - `sys.stdout.buffer.write()`  
     `sys.stdin.buffer.read()`
     原始字节接口，使用二进制形式读写，类型为 `bytes`，即 `b"foo"`
+- `sys.exit([arg])`  
+    引发一个 `SystemExit` **异常**，表示想要退出解释器。  
+
+    可选参数 `arg` 可以是一个表示退出状态的整数（默认值为 `0`），也可以是其他类型的对象。如果 `arg` 是整数，`0` 表示“成功终止”，任何非零值在 shell 等环境中被视为“异常终止”。大多数系统要求该值在 0–127 范围内，超出范围会导致未定义行为。有些系统为特定的退出码赋予了特定含义，但这些约定通常并不完善；Unix 程序通常使用 `2` 表示命令行语法错误，使用 `1` 表示其他类型的错误。如果传入其他类型的对象，`None` 等价于传入 `0`，而其他任何对象会被打印到 `stderr`，并导致退出码为 `1`。特别地，`sys.exit("some error message")` 是在发生错误时快速退出程序的一种方式。  
+
+    由于 `exit()` 本质上“只是”引发一个异常，因此只有当它从主线程调用且该异常未被捕获时，才会真正退出进程。`try` 语句的 `finally` 子句所指定的清理操作仍然会执行，并且可以在外层代码中捕获这个退出尝试。
 
 ### os
 - ```os.walk()``` 
@@ -275,6 +281,10 @@ p = Pixel(65)
 - `os.mkdir(path[, mode])`
     以数字权限模式创建目录（单级目录）
 
+- `os.open(path, flags, mode=0o777, *, dir_fd=None)`
+    打开文件 path，根据 flags 设置各种标志位，并根据 mode 设置其权限状态。当计算 mode 时，会首先根据当前 umask 值将部分权限去除。本方法返回新文件的描述符。新的文件描述符是 不可继承 的。
+    - 例 `os.open("example.txt", os.O_RDWR)`
+
 - `os.lseek(fd, pos, whence, /)`
     - 对应 python 内置 `open` 函数打开的文件对象中的 `f.seek()`
     将文件描述符 `fd` 的当前位置设置为由 `whence` 调整后的位置 `pos`，并返回相对于文件开头的新位置（以字节为单位）。`whence` 的有效取值包括：
@@ -289,11 +299,60 @@ p = Pixel(65)
     从文件描述符 `fd` 的偏移位置 `offset` 处最多读取 `n` 个字节，且不改变文件偏移量。
     返回包含读取字节的字节串。如果已到达 `fd` 所指向文件的末尾，则返回空字节对象。
 
+- `os.pwrite(fd, str, offset, /)`
+    将 str 中的字节串 (bytestring) 写入文件描述符 fd 的偏移位置 offset 处，保持文件偏移量不变。
+    
+- `os.truncate(path, length)`
+    截断 path 对应的文件，以使其最大为 length 字节。
+    本函数支持 指定文件描述符为参数。
 
-文件描述符的继承:
-每个文件描述符都有一个 "inheritable"（可继承）标志位，该标志位控制了文件描述符是否可以由子进程继承。从 Python 3.4 开始，由 Python 创建的文件描述符**默认是不可继承的**。
+- `os.dup(fd)`
+    得到 fd 的副本
+
 - `os.set_inheritable(fd, inheritable)`
     设置指定文件描述符的“可继承”标志位（为布尔值）。
+
+    文件描述符的继承:
+    每个文件描述符都有一个 "inheritable"（可继承）标志位，该标志位控制了文件描述符是否可以由子进程继承。从 Python 3.4 开始，由 Python 创建的文件描述符**默认是不可继承的**。
+
+- `os.fork()` 
+    创建子进程
+
+    ```py
+
+    print("before fork")
+    pid = os.fork()
+
+    if pid == 0:
+        print("child in")
+        # child
+
+        pass
+
+        print("child out")
+        os._exit(0)
+
+    elif pid > 0:
+        print("parent in")
+        # parent
+
+            pass
+
+        print("parent out, start wait")
+        os.waitpid(pid, 0) # 或子进程持续运行，直到父进程使用 os.kill(pid, 9)
+        print("parent wait end")
+    ```
+- `os.wait()`
+    等待子进程的完成
+
+- `os._exit(n)`
+    以状态码 `n` **退出进程**，不调用清理处理程序，也不刷新 stdio 缓冲区等。
+
+    **注意** 退出的标准方式是 `sys.exit(n)`。`_exit()` 通常只应在 `fork()` 之后的子进程中使用。
+
+    以下退出代码已被定义，可与 `_exit()` 一起使用（尽管并非必须）。这些退出代码通常用于用 Python 编写的系统程序，例如邮件服务器的外部命令投递程序。
+
+
 
 ### shutil — 高级文件操作
 
@@ -677,226 +736,6 @@ signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 或使用 sed 命令，控制起始与结束
 - `脚本 | sed -n '9000, 10000p'`
 
-### pwntools
-
-<https://docs.pwntools.com/>
-
-创建 tube 对象：
-- 进程：`p = process(["/challenge/run"], stderr=STDOUT)`
-    - `stdout=DEVNULL` 来自 `from subprocess import DEVNULL`
-    - `stderr=文件对象` 分离标准错误写到文件中，pwntools 默认把 stderr 合并到 stdout
-    - `close_fds=False` 默认关闭父进程的 fd 而无法继承到子进程，关闭后可传递 fd
-- 网络：`p = remote("127.0.0.1", 1337)`
-
-
-
-设置timeout并满足时，将抛出异常。使用 `try ... except ...`
-
-tube 对象函数：
-- `send()`  
-    发送原始字节（对应接收程序的 `read`）
-    - `shutdown('send')`  
-        发送 EOF 关闭 `send`
-
-- `sendline()`
-    发送一行数据，末尾添加换行符 `\n`（对应接收程序的 `scanf`）
-- `sendlineafter(delim, data, timeout=default)→ str`  
-    在获得 `delim` 提示后，发送 `data` 数据
-
-- `send_signal(signal.SIGKILL)`
-    发送信号，可搭配 `signal` 模块的常量
-
-- `recv(numb=4096, timeout=default)→ bytes`：
-    从管道中接收最多 numb 字节的数据，并在任何数量的数据可用时立即返回。  
-    如果请求在超时秒数之前没有得到满足，所有数据将被缓冲，并返回一个空字符串（''）。
-
-- `recvn(n)`：
-    确保读满 n 字节（不够会等）
-- `recvline(drop=False, timeout=default, keepends=True)→ bytes`  
-    从管道中接收一行数据。  
-    “一行”是指以 `newline` 中设置的字节序列终止的任意字节序列，默认值为 `b'\n'` 。
-    - `keepends` 数据是否包括末尾的换行符
-- `recvall(timeout=Timeout.forever)`
-    尽量把对端输出读到 EOF（进程结束/管道关闭）为止，即如果希望后续继续发送数据可能导致EOF报错
-- `recvuntil(delims, drop=False, timeout=default)→ bytes`
-    接收数据直到遇到其中一个分隔符，分隔符将被消耗。
-    如果在超时秒数内未满足请求，则所有数据将被缓冲，并返回一个空字符串 `''`。
-    可与`recvline`组合，在收到提示数据后再读取。
-- `recvrepeat(timeout=default)→ bytes`
-    接收数据，直到超时或文件结束符（EOF）被达到。
-
-- `p.close()`
-    关闭当前线程
-- `p.wait_for_close()`
-    等待直到进程结束
-- `p.poll()`    
-    返回进程的退出状态，如果进程仍在运行则返回 None。(搭配 `p.wait_for_close()`)
-- `can_recv()`
-    测是否可读，可用于网络连接
-- `p.clean(timeout=0.05)`
-    把已有输出都读掉
-- `cyclic(N)`
-    循环字符串（如，baacaadaa），相对重复字符串还可显示对应位置：
-    - `cyclic_find("caa")`
-        定位特定循环模式的偏移
-    - 流程：
-        - `cyclic` 构建一个足够大而可覆盖返回地址的循环载荷
-        - 发送此载荷，并在 `gdb` 查看崩溃时的 `rsp` 循环值
-        - 复制此 `rsp` 循环值并使用 `cyclic_find` 得到从输入 buf 到返回地址的长度
-
-- `p64(N)` `p8()`
-    将int包装为小端序的64位bytes
-- `u64()`
-    将64位bytes以小端序解包为int
-
-- `p.interactive()`  
-    进入交互模式，python程序到此中断，而不是执行后退出，从而可进入/继续在 gdb 中。且持续从 socket/process 读取已到达的数据并打印到屏幕，同时把键盘输入转发给程序。
-- `p.pid`
-    得到当前进程的 pid
-
-示例：
-```py
-# 初始模板
-from pwn import *
-import signal
-
-# 恢复 py 脚本中 SIGPIPE 的默认行为，从而可被 head 截断
-signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-
-# 设置架构
-context.arch = "amd64"
-
-# 设置 tmux 调试
-context.terminal = ["tmux", "splitw", "-h"]
-
-# 日志的详细输出使用 debug，仅错误使用 error
-context.log_level = "debug"
-
-# 文件路径
-file_path_str = "/challenge/toddlerone-level-11-1"
-
-# 网络客户端
-def get_net_client_process():
-    p = remote("127.0.0.1", 1337)
-    return p
-
-# debug 模式与普通模式
-def get_debug_or_process(debug=False):
-    if debug:
-        p = gdb.debug(file_path_str, """
-            display/6i $rip
-            display/4gx $rsp
-            display/6gx $rbp-0x30
-            display/6gx $rbp
-            b* $_base()+0x3310
-            continue
-        """, setuid=False, aslr=True)
-    else:
-        ## 将 stderr 导出到文件
-        # err_log = open('/home/hacker/err.log', 'wb')
-        # p = process([file_path_str], stderr=err_log)
-        p = process([file_path_str])
-        
-    return p
-
-p = get_debug_or_process('')
-p.recvuntil(b'Please input: ')
-```
-
-```py
-# 从命令行传入多种格式的汇编代码，进行反汇编
-from pwn import *
-import sys
-
-context.arch = "amd64"
-
-argv_num = len(sys.argv)
-print("input such: '4d 89 f0' or 4d89f0 or 4d 89 f0 or 0x4d 0x89 0xf0 or '\\x4d \\x89 \\xf0'")
-print("list:", sys.argv)
-
-if argv_num > 1:
-    asm_bytes = bytes.fromhex(''.join(sys.argv[1:]).replace('0x', '').replace('\\x', ''))
-else:
-    asm_bytes = b'\x4d\x89\xf0'
-    print('test bytes', asm_bytes)
-
-disasm_bytes = disasm(asm_bytes)
-
-print(disasm_bytes)
-```
-
-其他：
-- `context.log_level = "debug"` 显示收发的字节，虽然此时不必将接收字节打印，但没有接收的部分不会被显示
-- `from pwn import xor` 处理python原生不支持的bytes之间异或
-- `pwnlib.context` — 设置运行时变量
-    - `context.arch = 'amd64'`
-        设置架构为 64 位 Intel
-- `asm()` 将表示汇编的指令字符串转为实际汇编字节
-    - `;` 语句分隔
-    - `//` 注释
-- `disasm()` 反汇编
-- `gdb` 
-    或需先运行 `tmux`
-    - `gdb.debug(文件路径, gdb脚本, setuid=False, aslr=False)` 使用gdb调试程序
-    - `gdb.debug_assembly()` 使用gdb调试汇编
-    - `gdb.attach()` 
-        ```py
-        gdb.attach(p, gdbscript="""
-        set disassembly-flavor intel
-        display/3i $rip
-        display/3i $rsp
-        b *main+0
-        c
-        """)
-        ```
-- `SigreturnFrame()` 构建信号帧
-    例：
-    ```py
-    frame = SigreturnFrame()
-    frame.rax = 0
-    frame.rip = 0x0000
-    ```
-- `unhex()` 将十六进制字符串转为原始字节
-- `shellcraft.cat("/flag")`: 
-    生成汇编代码（仅为汇编代码，仍需使用 `asm()` 转为机器指令字节）
-- `ELF('/challenge/run')` 创建文件的 ELF 对象
-    - `elf.got[目标函数]` 得到 got 全局偏移表字段 
-    - `elf.plt['open']` 得到 plt 调用入口字段 
-    - `elf.bss(0x30)` 得到数据段 bss 的地址，并预留 0x30 字节的偏移
-    - `elf.symbols['main']` 得到符号 main 的地址
-    - `elf.address` 可设置基地址，得到地址泄露计算并设置基地址，之后可直接使用其字段地址（此基地址 + rop 查找工具定位的目标偏移地址）
-        - 泄露的绝对地址 - 此绝对地址对应的相对文件偏移 = elf 文件的绝对地址。  
-            示例：
-            - 使用泄露的 main 地址设置 elf 基地址       
-                `elf.address = leak_main_addr - elf.symbols['main']` 
-            - 使用泄露的 main 地址设置 elf 基地址   
-
-                ```py
-                # 使用 ldd 查看共享库文件路径
-                lib_elf = ELF("/lib/x86_64-linux-gnu/libc.so.6")
-                # 计算 libc 基址        
-                lib_elf.address = leak_puts_addr - lib_elf.symbols['puts']            
-
-                lib_chmod = lib_elf.symbols['chmod']
-                ``` 
-                - puts 函数设置 rdi 为地址即可泄露信息
-                - environ 保存指向栈的环境变量字符串指针，泄露 lib 地址后即可得到栈地址
-    
-    - 根据字段值搜索对应地址 `elf.search(字段值)` 返回**生成器**
-
-        ```py
-        it = elf.search(b"puts\x00")   # 生成器
-        addr = next(it)               # 取第一个匹配到的地址（int）
-        ```
-- 可能需开启地址随机以避免地址不对齐的崩溃
-- `ROP([ELF1, ELF2...])` 使用设置地址后的 ELF 对象构建 ROP 对象
-    - `rop.find_gadget(['pop rdi', 'ret']).address` 搜索工具并得到其地址
-        - 使用其他 rop 查找工具确认位置存在后再使用 pwntool 的 ROP 对象获取地址而不是手动设置
-        - 注意：部分存在的工具无法使用 ROP 定位
-    - `rop.raw(data)` 将任意数据（整数、字符串、地址）直接追加到当前ROP链的末尾。
-    - `rop.chain()` 将内部构建好的所有ROP数据（通过raw、call等方法添加的）拼接成一个完整的字节流（bytes）
-    - `rop.dump()` 查看当前 rop 的栈布局
-
 ### math
 
 - `math.ceil()`  向上取整
@@ -968,12 +807,39 @@ for t in threads_list:
 - `dictionary.get(key, default)`
     通过键获取字典中的值。如果键存在于字典中，将返回对应的值；如果键不存在，将返回指定的默认值。
 
+### list
+
+- `list.remove(value)`
+    按值删除元素
+- `list.index()`
+    获取第一个匹配索引
+- `list.insert()`
+    列表插入
+    
 ### match...case...
 
 ```py
 match 判断条件:
     case 条件:
     case _:
+```
+
+### dataclasses 
+
+<https://docs.pythonlang.cn/3/library/dataclasses.html>
+
+```py
+from dataclasses import dataclass
+
+@dataclass
+class InventoryItem:
+    """Class for keeping track of an item in inventory."""
+    name: str
+    unit_price: float
+    quantity_on_hand: int = 0
+
+    def total_cost(self) -> float:
+        return self.unit_price * self.quantity_on_hand
 ```
 
 ### 备忘
@@ -1028,6 +894,12 @@ match 判断条件:
 - `rev_list[0x11], rev_list[0x17] =  rev_list[0x17], rev_list[0x11]`
     列表元素快速交换
 
+- 列表排序并需保持索引时，构建元组后使用匿名函数排序
+
+- 匿名函数，默认从小到大排序，false < true
+    - `test_list.sort(key=lambda x: (x < 5, x))`
+        元素 >= 5 为第一组，元素 < 5 为第二组
+
 - `对象.__name__`  
     查看对象名称
     
@@ -1040,6 +912,9 @@ match 判断条件:
 
 - `sorted()`  
     返回排序后的新列表
+
+- 在现存函数添加默认参数作为 flag，以添加新功能的同时，保持旧调用运行
+    - 或拆分为多个函数，而不是添加 flag
 
 ## 参考
 
