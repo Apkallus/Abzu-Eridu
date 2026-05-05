@@ -80,9 +80,10 @@ part_list = ["description", "resources", "challenges"]
 text_list = ["description", "content"]
 
 # 获取模块名称
-# 对于一个 yml 中在 modules 包含多个模块，使用索引
+# 对于一个 yml 中在 modules 包含多个模块，手动使用索引
 if "modules" in yaml_data:
-    yaml_data = yaml_data["modules"][5]
+    print("yml 中在 modules 包含多个模块，手动使用索引，或之后修改为遍历索引")
+    yaml_data = yaml_data["modules"][0]
 
 module_name_str = yaml_data["name"]
 

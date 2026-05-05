@@ -1,16 +1,15 @@
 # 设置目录字符串
 file_str = """
-引言 Introduction
-沙箱 Sandboxing
-竞争条件 Race Conditions
-内核安全 Kernel Security
-微架构利用 Microarchitecture Exploitation
-系统利用 System Exploitation
+格式化字符串漏洞利用 Format String Exploits  
+文件结构漏洞利用 File Struct Exploits  
+利用原语 Exploitation Primitives  
+动态分配器利用 Dynamic Allocator Exploitation  
+内核利用 Kernel Exploitation
 """
 # 将目录字符串拆分为字符串列表，遍历列表创建对应文件
 
 # 设置目录路径
-filepath = '游乐场\\pwn.college\\2.3 System Security'
+filepath = '游乐场\\pwn.college\\2.4 Software Exploitation'
 
 file_list = file_str.split('\n')
 # 去掉前后空白符号

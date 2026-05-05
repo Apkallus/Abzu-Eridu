@@ -101,7 +101,7 @@ struct cred *prepare_kernel_cred(struct task_struct *daemon)
 	if (daemon)
 		old = get_task_cred(daemon);
 	else
-		old = get_cred(&init_cred);
+		old = get_cred(&init_cred); // 使用 init_cred 为模板创建 0 凭证
 ```
 
 参数 daemon：
@@ -113,6 +113,38 @@ struct cred *prepare_kernel_cred(struct task_struct *daemon)
 	mov rax, 0xffffffff81089660
 	call rax
 	```
+
+tips:
+- `init_task` 本身为内核的一个全局符号，当得到内核函数地址时，此结构地址同时得到
+- 函数功能为使用传入的任务结构，准备新凭证，旧版函数在参数为0时，最终使用的是 `init_cred` 凭证。那么另一种方向是直接得到 `init_cred` 本身
+
+### init_cred
+
+```c
+/*
+ * The initial credentials for the initial task
+ */
+struct cred init_cred = {
+	.usage			= ATOMIC_INIT(4),
+	.uid			= GLOBAL_ROOT_UID,
+	.gid			= GLOBAL_ROOT_GID,
+	.suid			= GLOBAL_ROOT_UID,
+	.sgid			= GLOBAL_ROOT_GID,
+	.euid			= GLOBAL_ROOT_UID,
+	.egid			= GLOBAL_ROOT_GID,
+	.fsuid			= GLOBAL_ROOT_UID,
+	.fsgid			= GLOBAL_ROOT_GID,
+	.securebits		= SECUREBITS_DEFAULT,
+	.cap_inheritable	= CAP_EMPTY_SET,
+	.cap_permitted		= CAP_FULL_SET,
+	.cap_effective		= CAP_FULL_SET,
+	.cap_bset		= CAP_FULL_SET,
+	.user			= INIT_USER,
+	.user_ns		= &init_user_ns,
+	.group_info		= &init_groups,
+	.ucounts		= &init_ucounts,
+};
+```
 
 ### commit_creds - 将新凭证安装到当前任务
 
@@ -135,7 +167,6 @@ mov rdi, rax
 mov rax, 0xffffffff81089310
 call rax
 ```
-
 
 ### ioctl - 处理 IOCTL 请求
 
@@ -672,4 +703,351 @@ struct task_struct *pid_task(struct pid *pid, enum pid_type type)
 	}
 	return result;
 }
+```
+
+
+### kmem_cache_create - 创建一个 kmem 缓存
+
+```c
+/**
+ * @__name: 字符串，在 /proc/slabinfo 中用于标识该缓存。
+ * @__object_size: 该缓存中创建对象的大小。
+ * @__args: 可选参数，参见 &struct kmem_cache_args。传入 %NULL
+ *          表示所有参数均使用默认值。
+ *
+ * 目前实现为一个宏，通过 ``_Generic()`` 调用新版本函数或旧版本函数。
+ *
+ * 新版本有 4 个参数：
+ * ``kmem_cache_create(name, object_size, args, flags)``
+ *
+ * 具体实现参见 __kmem_cache_create_args()。
+ *
+ * 旧版本有 5 个参数：
+ * ``kmem_cache_create(name, object_size, align, flags, ctor)``
+ *
+ * align 和 ctor 参数分别对应 &struct kmem_cache_args 中的相应字段。
+ *
+ * 上下文：不能在中断内调用，但可以被中断。
+ *
+ * 返回：成功时返回指向缓存的指针，失败时返回 NULL。
+ */
+#define kmem_cache_create(__name, __object_size, __args, ...)           \
+	_Generic((__args),                                              \
+		struct kmem_cache_args *: __kmem_cache_create_args,	\
+		void *: __kmem_cache_default_args,			\
+		default: __kmem_cache_create)(__name, __object_size, __args, __VA_ARGS__)
+```
+
+tips:
+- 创建命名专用对象池
+- `__object_size` 设置每个对象的大小而不是堆本身的大小
+
+### kmem_cache_alloc - 分配一个对象
+
+```c
+/**
+ * @cachep: 要从中分配的缓存。
+ * @flags: 参见 kmalloc()。
+ *
+ * 从该缓存中分配一个对象。
+ * 如需向 flags 中添加 __GFP_ZERO，可参见 kmem_cache_zalloc() 快捷方式。
+ *
+ * 返回：指向新对象的指针，若出错则返回 %NULL
+ */
+void *kmem_cache_alloc_noprof(struct kmem_cache *cachep,
+			      gfp_t flags) __assume_slab_alignment __malloc;
+#define kmem_cache_alloc(...)
+```
+
+tips:
+- 从命名专用对象池中分配对象
+
+### kmem_cache_free - 释放一个对象
+
+```c
+/**
+ * @s: 之前分配该对象时所用的缓存。
+ * @x: 之前分配的对象指针。
+ *
+ * 释放一个先前从此缓存中分配的对象。
+ */
+void kmem_cache_free(struct kmem_cache *s, void *x)
+{
+	struct slab *slab;
+
+	slab = virt_to_slab(x);
+
+	if (IS_ENABLED(CONFIG_SLAB_FREELIST_HARDENED) ||
+	    kmem_cache_debug_flags(s, SLAB_CONSISTENCY_CHECKS)) {
+
+		/*
+		* 在这些情况下，故意泄漏该对象，因为继续执行将过于危险。
+		*/
+		if (unlikely(!slab || (slab->slab_cache != s))) {
+			warn_free_bad_obj(s, x);
+			return;
+		}
+	}
+
+	trace_kmem_cache_free(_RET_IP_, x, s);
+	slab_free(s, slab, x, _RET_IP_);
+}
+EXPORT_SYMBOL(kmem_cache_free);
+```
+
+tips:
+- 释放对象池中的对象，回到对象池
+
+### freelist_ptr_encode & freelist_ptr_decode - 内核空闲链表加固的编码解码
+
+https://elixir.bootlin.com/linux/v6.7.9/source/mm/slub.c#L374
+
+```c
+/*
+ * freeptr_t 代表一个 SLUB 空闲链表指针。如果启用了 CONFIG_SLAB_FREELIST_HARDENED，
+ * 该指针可能会被编码，并且不可直接解引用。
+ */
+typedef struct { unsigned long v; } freeptr_t;
+
+/*
+ * 返回空闲链表指针 (ptr)。启用硬化时，该指针会通过将指针存放的地址与每个缓存的
+ * 随机数进行异或运算来混淆。
+ */
+
+static inline freeptr_t freelist_ptr_encode(const struct kmem_cache *s,
+					    void *ptr, unsigned long ptr_addr)
+{
+	unsigned long encoded;
+
+#ifdef CONFIG_SLAB_FREELIST_HARDENED
+	encoded = (unsigned long)ptr ^ s->random ^ swab(ptr_addr);
+#else
+	encoded = (unsigned long)ptr;
+#endif
+	return (freeptr_t){.v = encoded};
+}
+
+static inline void *freelist_ptr_decode(const struct kmem_cache *s,
+					freeptr_t ptr, unsigned long ptr_addr)
+{
+	void *decoded;
+
+#ifdef CONFIG_SLAB_FREELIST_HARDENED
+	decoded = (void *)(ptr.v ^ s->random ^ swab(ptr_addr));
+#else
+	decoded = (void *)ptr.v;
+#endif
+	return decoded;
+}
+```
+
+### work_for_cpu_fn - 工具函数
+
+参数 rdi 为指针的单函数调用 func(ptr) ，转指针所指结构的设置参数 rdi 与函数的调用 ptr->func(ptr->rdi)
+
+```c
+struct work_for_cpu {
+	struct work_struct work;
+	long (*fn)(void *);
+	void *arg;
+	long ret;
+};
+
+static void work_for_cpu_fn(struct work_struct *work)
+{
+	struct work_for_cpu *wfc = container_of(work, struct work_for_cpu, work);
+
+	wfc->ret = wfc->fn(wfc->arg);
+}
+```
+
+```log
+(remote) gef➤  disass work_for_cpu_fn
+Dump of assembler code for function work_for_cpu_fn:
+   0xffffffff810a5570 <+0>:     endbr64
+   0xffffffff810a5574 <+4>:     push   rbx
+   0xffffffff810a5575 <+5>:     mov    rbx,rdi
+   0xffffffff810a5578 <+8>:     mov    rdi,QWORD PTR [rdi+0x28]
+   0xffffffff810a557c <+12>:    mov    rax,QWORD PTR [rbx+0x20]
+   0xffffffff810a5580 <+16>:    call   0xffffffff81ebe160 <__x86_indirect_thunk_array>
+   0xffffffff810a5585 <+21>:    mov    QWORD PTR [rbx+0x30],rax
+   0xffffffff810a5589 <+25>:    pop    rbx
+   0xffffffff810a558a <+26>:    ret
+   0xffffffff810a558b <+27>:    int3
+   0xffffffff810a558c <+28>:    int3
+   0xffffffff810a558d <+29>:    int3
+   0xffffffff810a558e <+30>:    int3
+```
+
+## kmalloc_trace
+
+```c
+void *kmalloc_trace(struct kmem_cache *s, gfp_t gfpflags, size_t size)
+```
+
+tips:
+- 从通用缓存池中分配对象
+
+## kmalloc_caches
+
+```c
+extern struct kmem_cache *
+kmalloc_caches[NR_KMALLOC_TYPES][KMALLOC_SHIFT_HIGH + 1];
+```
+
+tips:
+- 通用缓存池结构
+
+## ksys_msgsnd
+
+```c
+long ksys_msgsnd(int msqid, struct msgbuf __user *msgp, size_t msgsz,
+		 int msgflg)
+{
+	long mtype;
+
+	if (get_user(mtype, &msgp->mtype))
+		return -EFAULT;
+	return do_msgsnd(msqid, mtype, msgp->mtext, msgsz, msgflg);
+}
+```
+
+## do_msgsnd
+
+```c
+static long do_msgsnd(int msqid, long mtype, void __user *mtext,
+		size_t msgsz, int msgflg)
+{
+...
+	msg = load_msg(mtext, msgsz);
+...
+}
+```
+
+## load_msg
+
+```c
+struct msg_msg *load_msg(const void __user *src, size_t len)
+{
+...
+	msg = alloc_msg(len);
+...
+	copy_from_user(msg + 1, src, alen)
+...
+}
+```
+
+## alloc_msg
+
+```c
+static struct msg_msg *alloc_msg(size_t len)
+{
+...
+	alen = min(len, DATALEN_MSG);
+	msg = kmalloc(sizeof(*msg) + alen, GFP_KERNEL_ACCOUNT);
+...
+}
+```
+
+## ksys_msgrcv
+
+```c
+long ksys_msgrcv(int msqid, struct msgbuf __user *msgp, size_t msgsz,
+		 long msgtyp, int msgflg)
+{
+	return do_msgrcv(msqid, msgp, msgsz, msgtyp, msgflg, do_msg_fill);
+}
+```
+
+## do_msgrcv
+
+```c
+static long do_msgrcv(int msqid, void __user *buf, size_t bufsz, long msgtyp, int msgflg,
+	       long (*msg_handler)(void __user *, struct msg_msg *, size_t))
+{
+...
+	list_del(&msg->m_list);
+...
+}
+```
+
+## list_del
+
+```c
+/**
+ * list_del - deletes entry from list.
+ * @entry: the element to delete from the list.
+ * Note: list_empty() on entry does not return true after this, the entry is
+ * in an undefined state.
+ */
+static inline void list_del(struct list_head *entry)
+{
+	__list_del_entry(entry);
+	entry->next = LIST_POISON1;
+	entry->prev = LIST_POISON2;
+}
+```
+
+
+## struct pipe_buffer - Linux 内核管道缓冲区
+
+```c
+/**
+ * struct pipe_buffer - Linux 内核管道缓冲区
+ * @page: 包含管道缓冲区数据的物理页
+ * @offset: 数据在 @page 中的偏移量
+ * @len: 数据在 @page 中的长度
+ * @ops: 与此缓冲区关联的操作集。参见 @pipe_buf_operations。
+ * @flags: 管道缓冲区标志。见上文。
+ * @private: 由 ops 拥有的私有数据。
+ **/
+struct pipe_buffer {
+	struct page *page;
+	unsigned int offset, len;
+	const struct pipe_buf_operations *ops;
+	unsigned int flags;
+	unsigned long private;
+};
+```
+
+## pipe_buf_operations
+
+```c
+struct pipe_buf_operations {
+
+	int (*confirm)(struct pipe_inode_info *, struct pipe_buffer *);
+
+	void (*release)(struct pipe_inode_info *, struct pipe_buffer *);
+
+	bool (*try_steal)(struct pipe_inode_info *, struct pipe_buffer *);
+
+	bool (*get)(struct pipe_inode_info *, struct pipe_buffer *);
+};
+```
+
+## user_key_payload
+
+```c
+/*
+ * 用于类型为 "user" 或 "logon" 的密钥的负载
+ * - 一旦填充并附加到密钥：
+ *   - 负载结构是不变的，不能被修改，只能被替换
+ *   - 必须使用 RCU 机制或持有 key 信号量 时读取负载
+ *   - 只有在对 key 信号量进行写锁定 时才能替换负载
+ * - key 的数据长度是实际数据的长度，不包括负载包装
+ */
+struct user_key_payload {
+	struct rcu_head	rcu;		/* RCU 析构器 */
+	unsigned short	datalen;	/* 此数据的长度 */
+	char		data[] __aligned(__alignof__(u64)); /* 实际数据 */
+};
+```
+
+## callback_head
+
+```c
+struct callback_head {
+	struct callback_head *next;
+	void (*func)(struct callback_head *head);
+} __attribute__((aligned(sizeof(void *))));
 ```
