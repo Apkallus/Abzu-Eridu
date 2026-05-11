@@ -1,0 +1,6 @@
+1.	TCP HTTP TLSv1.2
+2 .	0.028885
+3.	128.119.245.12
+
+4.	Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0
+5.	80

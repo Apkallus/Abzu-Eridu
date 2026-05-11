@@ -1,0 +1,6 @@
+foo6的main是全局符号
+bar6的main是未初始化的弱全局符号
+链接时main将指向foo6的main
+但在bar6中仍作为char
+于是printf时，打印的是*(char *)main
+即main作为地址的一个字节，为main开始指令的第一个字节

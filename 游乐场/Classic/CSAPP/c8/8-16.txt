@@ -1,0 +1,2 @@
+counter=1 -> fork -> wait -----------> printf ++counter (2)
+                  -> counter-- ->exit       

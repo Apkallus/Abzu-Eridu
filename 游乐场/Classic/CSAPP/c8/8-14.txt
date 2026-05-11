@@ -1,0 +1,3 @@
+fork -> return -> printf
+     -> fork -> printf -> exit
+             -> printf -> exit

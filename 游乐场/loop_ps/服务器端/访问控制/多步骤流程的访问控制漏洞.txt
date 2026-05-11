@@ -1,0 +1,8 @@
+https://portswigger.net/web-security/access-control/lab-multi-step-process-with-no-access-control-on-one-step
+使用示例的管理员账户登录，设置权限需多步骤：
+进入管理面板页面-选择用户-点击提权或降权按钮 
+post的url为 /admin-roles  
+post体参数为 username=carlos&action=upgrade
+点击确认操作按钮
+post体参数为 action=upgrade&confirmed=true&username=carlos 新增了confirmed参数
+发送到重复器，更新为本身账户的cookie到报头、用户名到post体参数

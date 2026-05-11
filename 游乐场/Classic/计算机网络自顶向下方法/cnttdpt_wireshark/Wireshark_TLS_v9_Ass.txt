@@ -1,0 +1,81 @@
+1.
+第一个TCP SYN 编号为17
+
+2.
+TCP连接的建立先于TLS
+
+
+3.
+TLS客户端问候数据包编号 28
+
+4.
+TLSv1.2 Record Layer: Handshake Protocol: Client Hello
+
+5.
+Cipher Suites (17 suites)
+
+6.
+Random Bytes: 4b909a780b955b1a679367e8af0312ec2362979794c50c162089004b
+
+7.
+防止重放攻击并参与密匙计算
+
+
+8.
+TLS服务器问候数据包编号32
+
+9.
+Cipher Suite: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (0xc02f)
+
+10.
+Random Bytes: 5c08b35ca6b696fcd26eaf9a275f67f37730fa82d5a570809ef8ab9f
+同客户端
+
+
+11.
+服务器公钥证书数据包编号为37
+
+12.13. 颁发者（Issuer） 持有者（Subject）
+证书链
+RDNSequence item: 1 item (id-at-commonName=www.cs.umass.edu)
+RDNSequence item: 1 item (id-at-commonName=InCommon RSA Server CA)
+
+RDNSequence item: 1 item (id-at-commonName=InCommon RSA Server CA)
+RDNSequence item: 1 item (id-at-commonName=USERTrust RSA Certification Authority)
+
+RDNSequence item: 1 item (id-at-commonName=USERTrust RSA Certification Authority)
+RDNSequence item: 1 item (id-at-commonName=USERTrust RSA Certification Authority)
+
+14.
+signature (sha256WithRSAEncryption)
+
+15.
+modulus: 0x00b39e7296158da80176a2f1035c7c61f06120f9852aad0d20d4931a30842fecec1b8724…
+
+16.
+客户端未联系CA来核实CA本身
+@@操作系统或浏览器内置了根CA证书
+
+17.
+编号同样为37
+
+18.
+TLS消息的数据编号为39
+
+19.
+客户端不对服务器发送其公钥或公钥证书
+
+
+20.21.
+在服务器问候阶段决定的 Cipher Suite: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (0xc02f)
+
+22.
+第一个TLS数据包为41
+
+23.
+HTTP GET
+
+24.
+358 与 403 数据包为TLS预警
+405 为 TCP FIN ACK
+应当为358

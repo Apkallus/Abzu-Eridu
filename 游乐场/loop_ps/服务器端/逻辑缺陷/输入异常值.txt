@@ -1,0 +1,31 @@
+https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-high-level
+注入点在添加到购物车功能
+POST /cart HTTP/2
+消息体为
+productId=1&redir=PRODUCT&quantity=1
+
+常规操作时，添加商品后在购物车中使用商品数量减少的-按钮，在商品数量为0时将商品从购物车移除
+然而使用拦截服务器发送负数商品数量时，购物车数量与金额为对应负数
+于是将其他商品设置负数
+productId=2&redir=PRODUCT&quantity=-20
+再将目标商品设置正数
+productId=1&redir=PRODUCT&quantity=1
+
+
+https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-low-level
+在攻击器中持续添加商品，并设置宏访问购物车页面，监控商品价格溢出为负数
+接近负数转正数时，减少添加商品数量
+第一次转换金额仍高于100，添加其他商品使用相同方法控制价格到100内
+@ 根据int极值，以及商品的美分价格表示，直接计算出总价接近0所需的单次商品添加操作的次数，然后再添加第二类商品微调 @
+
+
+https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-inconsistent-handling-of-exceptional-input
+@@ 使用超长字符串注册后登录，显示电子邮件地址被截短，构造邮件地址使得截短后为管理员邮件地址 @@
+# 注册时邮件长度无限制，读取资料时截短地址。
+应用权限不是注册时设置在资料中，而是读取截短后的邮件地址来确认是否为管理员地址。
+#
+
+
+
+
+

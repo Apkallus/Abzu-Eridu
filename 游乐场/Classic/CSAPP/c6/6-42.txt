@@ -1,0 +1,17 @@
+640*480像素组
+C=64KB=65536byte
+E=1
+B=4
+S=16384
+
+struct pixel{
+    char r;
+    char g;
+    char b;
+    char a;
+};
+struct pixel buffer[480][640];
+
+将结构指针转换为字符指针
+按照字符单个写入，成为步长为1的列偏移模式
+不命中为冷不命中 1/4

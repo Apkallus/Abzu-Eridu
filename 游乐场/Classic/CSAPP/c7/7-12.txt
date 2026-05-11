@@ -1,0 +1,14 @@
+refaddr = ADDR(s) + r.offset
+        = 0x4004e0 + 0xa
+        = 0x4004ea
+
+A.
+0x4004f8-4-0x4004ea = 0xa
+
+
+
+refaddr = ADDR(s) + r.offset
+        = 0x4004d0 + 0xa
+        = 0x4004da
+B.
+0x400500-4-0x4004da = 0x22

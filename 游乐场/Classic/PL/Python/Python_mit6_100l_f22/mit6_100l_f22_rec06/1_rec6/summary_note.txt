@@ -1,0 +1,15 @@
+https://docs.python.org/3/library/stdtypes.html#mutable-sequence-types
+
+在Python中，b = b + [2]和b += [2]的行为不同
+
+b = b + [2] ：
+创建一个新的列表，将b的内容和[2]合并。
+
+b += [2] 或 b.extend([2]) ：
+这个操作是在原地修改b，直接在b的末尾添加2。
+不会创建新的列表
+
+或
+s = s + t：总是创建新序列
+s += t：对于可变序列（如列表）原地修改，等效于 s.extend(t)
+

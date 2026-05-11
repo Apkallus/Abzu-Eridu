@@ -1,0 +1,3 @@
+gcc p.o libx.a
+gcc p.o libx.a liby.a libx.a
+gcc libx.a liby.a libx.a libz.a 

@@ -1,0 +1,12 @@
+https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter
+# 使用客户端可控内容作为访问控制：用户名 #
+此处id的参数使用用户名，更改url中id的参数为目标用户名后，以目标账户登录
+
+https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter
+# 使用客户端可控内容作为访问控制：GUID，且GUID在其他功能中泄露 #
+此处id的参数使用GUID
+找到目标用户发表的文章，网站根据用户索引其发表文章的功能中使用其GUID，使用此GUID登录
+
+https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-data-leakage-in-redirect
+此处id的参数使用用户名，更改url中id的参数为目标用户名，
+然而此处302重定向到登录页面的同时，在302响应主体中包含了敏感信息

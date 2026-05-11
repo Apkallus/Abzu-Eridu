@@ -1,0 +1,49 @@
+## 任务是修改设计，使得在任何周期内，
+两个可能的（valE 和 valM）寄存器写入操作中只有一个发生。
+这需要特别处理 popq 指令。
+总体策略：IPOPQ 通过流水线，被视为栈指针增加，但不增加 PC。
+在重新取指令时，修改取出的 icode 以指示一个“ IPOP2”指令，
+该指令从内存中读取。
+这需要修改 f_icode 的定义以及许多其他更改。
+需要更改的相关位置由以“1W”关键字开始的注释指示。
+
+
+wordsig IPOP2	'I_POP2'
+
+iaddq $8,%rsp       -> IPOPQ
+mrmovq -8(%rsp),rA  -> IPOP2
+
+## 1W: 为当前指令提供 PC 值访问权限
+wordsig f_pc	'f_pc'               
+
+在D译码阶段发现ipopq时，暂停F取指与D译码阶段
+下个周期ipopq D->E  
+暂停的ipopq更改D_icode为ipop2
+// 是否能够简单处理而无需暂停
+// f_pc 保存当前指令地址，检测到pop指令时在F寄存器保存此值
+
+
+## Fetch Stage ## 
+## 1W: 要将 ipopq 分成两个周期，需要能够修改 icode 的值，
+## 以便第二次获取时它将是 IPOP2。
+// D_icode == IPOPQ : IPOP2;
+//!!// 错误在于将新增条件放在了默认条件后，导致其失效
+
+## Predict next value of PC ##
+word f_predPC = 
+	## 1W: 想要重新获取一次 popq
+// f_icode == IPOPQ : f_pc;
+
+## Decode Stage ##
+## W1: 策略。 popq rA 的解码应与 iaddq $8, %rsp 的解码相同
+## pop2 rA 的解码与 mrmovq -8(%rsp), rA 的解码相同
+
+## Write back stage ##
+## 1W: 针对这个问题，
+## 我们引入一个多路复用器，
+## 将 valE 和 valM 合并为一个值，
+## 写入寄存器端口 E。
+
+## Pipeline Register Control ##
+bool D_bubble =
+	# 1W: 这种情况会改变

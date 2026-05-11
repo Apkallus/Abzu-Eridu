@@ -1,0 +1,43 @@
+include<stdio.h>
+include<string.h>
+include<stdlib.h>
+int main(void){
+	
+	FILE *fp;
+	long int filestart,rowend;
+	int size=sizeof(char);
+	if((fp=fopen("x12-5f.txt","r"))==NULL){
+		perror("open error");
+		exit(0);
+	}
+	
+	char ch,afor[4]="for",afile[4],res[30];
+	filestart=rowend=ftell(fp);
+	while(!feof(fp)){
+		ch=fgetc(fp);
+		if(ch!=EOF){
+			if(ch=='\n'){
+				rowend=ftell(fp);
+			}
+			if(ch==afor[0]){
+				fseek(fp,-size,SEEK_CUR);
+				fgets(afile,4,fp);
+				printf("%s\n",afile);
+				if(strcmp(afile,afor)==0){
+					fseek(fp,rowend-filestart,SEEK_SET);
+					fgets(res,30,fp);
+					printf("%s\n",res);
+				}else{
+					fseek(fp,-size*2,SEEK_CUR);
+				}
+			}
+		}
+	}
+	
+	
+	if(fclose(fp)){
+		perror("close error");
+		exit(0);
+	}
+	return 0;
+}

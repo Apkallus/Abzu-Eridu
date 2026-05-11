@@ -1,0 +1,7 @@
+printf Hello -> fork -> printf 0 -> waitpid ------------> printf 2 -> printf bye
+                     -> printf 1 -> printf bye -> exit 2
+
+
+Hello   1   bye 0   2  bye
+Hello   1 0  bye    2  bye
+Hello  0 1   bye    2  bye

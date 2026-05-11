@@ -1,0 +1,41 @@
+1.
+Source Address: 192.168.1.101 (192.168.1.101)
+Destination Address: blockcerts.ust.hk (143.89.14.34)
+
+2.
+ICMP由IP承载，但不是运输层协议
+
+3.
+Type: 8 (Echo (ping) request)
+Code: 0
+校验和、ID、序号、数据
+校验和、ID、序号 均为2字节
+
+4.
+Type: 0 (Echo (ping) reply)
+Code: 0
+三个字段同样为2字节
+
+
+5.
+Source Address: 192.168.1.101 (192.168.1.101)
+Destination Address: 138.96.146.2 (138.96.146.2)
+
+6.
+当发送UDP数据包，协议号也为UDP
+
+7.
+结构相同
+
+8.
+返回了对应的IP报头及其中的ICMP请求
+
+9.
+类型为Type: 0 (Echo (ping) reply)
+且不返回IP包
+此时到达了目的主机
+
+10.
+略
+
+

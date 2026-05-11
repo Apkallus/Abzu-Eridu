@@ -1,0 +1,70 @@
+1. 
+DHCP使用 Protocol: UDP (17) 
+
+2.
+Source Address: 0.0.0.0 (0.0.0.0)
+使用保留地址
+
+3.
+Destination Address: 255.255.255.255 (255.255.255.255)
+使用保留的广播地址
+
+4.
+Transaction ID: 0x56f415ed
+
+5.
+略
+
+6.
+Transaction ID: 0x56f415ed 与查询id值相同
+
+7.
+Source Address: 192.168.86.1 (192.168.86.1)
+
+8.
+Destination Address: MacBook-Pro-6.local (192.168.86.65)
+
+9.
+Parameter Request List Item: (1) Subnet Mask 子网掩码
+Parameter Request List Item: (121) Classless Static Route 无类别静态路由
+Parameter Request List Item: (3) Router 默认网关
+Parameter Request List Item: (6) Domain Name Server 
+Parameter Request List Item: (15) Domain Name 
+Parameter Request List Item: (119) Domain Search 域名搜索列表
+Parameter Request List Item: (252) Private/Proxy autodiscovery Web代理自动发现
+Parameter Request List Item: (95) LDAP [TODO:RFC3679] 
+Parameter Request List Item: (44) NetBIOS over TCP/IP Name Server WINS服务器
+Parameter Request List Item: (46) NetBIOS over TCP/IP Node Type 节点类型
+
+10.
+Source Port: 68
+Destination Port: 67
+
+11.
+Source Address: 0.0.0.0 (0.0.0.0)
+
+12.
+Destination Address: 255.255.255.255 (255.255.255.255)
+
+13.
+Transaction ID: 0x56f415ed 匹配之前的id值
+
+14.
+与发现消息中的参数请求列表相同
+
+15.
+Source Address: 192.168.86.1 (192.168.86.1)
+
+16.
+Destination Address: MacBook-Pro-6.local (192.168.86.65)
+
+17.
+Your (client) IP address: MacBook-Pro-6.local (192.168.86.65)
+
+18.
+Option: (51) IP Address Lease Time
+IP Address Lease Time: 1 day (86400)
+
+19.
+Option: (3) Router
+Router: 192.168.86.1 (192.168.86.1)

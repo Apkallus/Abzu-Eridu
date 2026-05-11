@@ -1,0 +1,214 @@
+                            | #######################################################################
+                            | # Test for copying block of size 4;
+                            | #######################################################################
+0x000:                      | 	.pos 0
+0x000: 30f4c003000000000000 | main:	irmovq Stack, %rsp  	# Set up stack pointer
+                            | 
+                            | 	# Set up arguments for copy function and then invoke it
+0x00a: 30f20400000000000000 | 	irmovq $4, %rdx		# src and dst have 4 elements
+0x014: 30f61803000000000000 | 	irmovq dest, %rsi	# dst array
+0x01e: 30f7e802000000000000 | 	irmovq src, %rdi	# src array
+0x028: 803200000000000000   | 	call ncopy		 
+0x031: 00                   | 	halt			# should halt with num nonzeros in %rax
+0x032:                      | StartFun:
+                            | #/* $begin ncopy-ys */
+                            | ##################################################################
+                            | # ncopy.ys - Copy a src block of len words to dst.
+                            | # Return the number of positive words (>0) contained in src.
+                            | #
+                            | # Include your name and ID here.
+                            | #
+                            | # Describe how and why you modified the baseline code.
+                            | #
+                            | ##################################################################
+                            | # Do not modify this portion
+                            | # Function prologue.
+                            | # %rdi = src, %rsi = dst, %rdx = len
+0x032:                      | ncopy:
+                            | 
+                            | ##################################################################
+                            | #	make VERSION=ful
+                            | #	(cd ../ptest; make SIM=../pipe/psim TFLAGS=-i)
+                            | #	../misc/yas ncopy.ys; ./check-len.pl < ncopy.yo 字符上限
+                            | #	./benchmark.pl
+                            | #	./correctness.pl
+                            | # You can modify this portion
+                            | #	Average CPE	8.07	10循环展开+2循环展开+剩余
+                            | #	Score	48.6/60.0
+                            | #	Average CPE	8.07	9循环展开+2循环展开+剩余
+                            | #	Score	48.7/60.0
+                            | #	Average CPE	8.01	...将2循环展开+剩余的跳转到测试再跳转复制条件到开始 
+                            | #	Score	49.9/60.0	优化小数组
+                            | 
+0x032: c0f2f7ffffffffffffff | 	iaddq $-9, %rdx	# 9个循环展开因子
+0x03c: 757400000000000000   | 	jge Eloopa	# 如果不超过循环因子则展开
+0x045: c0f20700000000000000 | 	iaddq $7, %rdx	# 2个循环展开因子	+9 -2
+0x04f: 752802000000000000   | 	jge Eloopb
+0x058: c0f20200000000000000 | 	iaddq $2, %rdx	# 剩余
+0x062: 76bd02000000000000   | 	jg Loop
+0x06b: 70e602000000000000   | 	jmp Done
+                            | 
+0x074:                      | Eloopa:
+0x074: 50870000000000000000 | 	mrmovq (%rdi), %r8
+0x07e: 50970800000000000000 | 	mrmovq 8(%rdi), %r9
+0x088: 50a71000000000000000 | 	mrmovq 16(%rdi), %r10
+0x092: 50b71800000000000000 | 	mrmovq 24(%rdi), %r11
+0x09c: 50c72000000000000000 | 	mrmovq 32(%rdi), %r12
+0x0a6: 50d72800000000000000 | 	mrmovq 40(%rdi), %r13
+0x0b0: 50e73000000000000000 | 	mrmovq 48(%rdi), %r14
+0x0ba: 50173800000000000000 | 	mrmovq 56(%rdi), %rcx
+0x0c4: 50374000000000000000 | 	mrmovq 64(%rdi), %rbx
+                            | 
+0x0ce: 40860000000000000000 | 	rmmovq %r8, (%rsi)
+0x0d8: 40960800000000000000 | 	rmmovq %r9, 8(%rsi)
+0x0e2: 40a61000000000000000 | 	rmmovq %r10, 16(%rsi)
+0x0ec: 40b61800000000000000 | 	rmmovq %r11, 24(%rsi)
+0x0f6: 40c62000000000000000 | 	rmmovq %r12, 32(%rsi)
+0x100: 40d62800000000000000 | 	rmmovq %r13, 40(%rsi)
+0x10a: 40e63000000000000000 | 	rmmovq %r14, 48(%rsi)
+0x114: 40163800000000000000 | 	rmmovq %rcx, 56(%rsi)
+0x11e: 40364000000000000000 | 	rmmovq %rbx, 64(%rsi)
+                            | 
+0x128: c0f74800000000000000 | 	iaddq $72, %rdi
+0x132: c0f64800000000000000 | 	iaddq $72, %rsi
+                            | 
+0x13c: 6288                 | 	andq %r8, %r8			
+0x13e: 715101000000000000   | 	jle ENposa				
+0x147: c0f00100000000000000 | 	iaddq $1, %rax				
+0x151:                      | ENposa:	
+0x151: 6299                 | 	andq %r9, %r9			
+0x153: 716601000000000000   | 	jle ENposb				
+0x15c: c0f00100000000000000 | 	iaddq $1, %rax				
+0x166:                      | ENposb:	
+0x166: 62aa                 | 	andq %r10, %r10			
+0x168: 717b01000000000000   | 	jle ENposc				
+0x171: c0f00100000000000000 | 	iaddq $1, %rax				
+0x17b:                      | ENposc:	
+0x17b: 62bb                 | 	andq %r11, %r11			
+0x17d: 719001000000000000   | 	jle ENposd				
+0x186: c0f00100000000000000 | 	iaddq $1, %rax				
+0x190:                      | ENposd:	
+0x190: 62cc                 | 	andq %r12, %r12			
+0x192: 71a501000000000000   | 	jle ENpose				
+0x19b: c0f00100000000000000 | 	iaddq $1, %rax				
+0x1a5:                      | ENpose:	
+0x1a5: 62dd                 | 	andq %r13, %r13			
+0x1a7: 71ba01000000000000   | 	jle ENposf				
+0x1b0: c0f00100000000000000 | 	iaddq $1, %rax				
+0x1ba:                      | ENposf:	
+0x1ba: 62ee                 | 	andq %r14, %r14			
+0x1bc: 71cf01000000000000   | 	jle ENposg				
+0x1c5: c0f00100000000000000 | 	iaddq $1, %rax	
+0x1cf:                      | ENposg:	
+0x1cf: 6211                 | 	andq %rcx, %rcx			
+0x1d1: 71e401000000000000   | 	jle ENposh				
+0x1da: c0f00100000000000000 | 	iaddq $1, %rax
+0x1e4:                      | ENposh:	
+0x1e4: 6233                 | 	andq %rbx, %rbx			
+0x1e6: 71f901000000000000   | 	jle ETest				
+0x1ef: c0f00100000000000000 | 	iaddq $1, %rax	
+                            | 
+0x1f9:                      | ETest:
+0x1f9: c0f2f7ffffffffffffff | 	iaddq $-9, %rdx
+0x203: 757400000000000000   | 	jge Eloopa
+                            | 
+0x20c:                      | ELoopaEnd: # rdi rsi rdx rax
+0x20c: c0f20700000000000000 | 	iaddq $7, %rdx	#	+9 -2
+                            | #	iaddq $-2, %rdx	
+0x216: 752802000000000000   | 	jge Eloopb	
+0x21f: 70a102000000000000   | 	jmp EloopbEnd
+                            | 
+0x228:                      | Eloopb:
+0x228: 50870000000000000000 | 	mrmovq (%rdi), %r8
+0x232: 50970800000000000000 | 	mrmovq 8(%rdi), %r9
+                            | 
+0x23c: 40860000000000000000 | 	rmmovq %r8, (%rsi)
+0x246: 40960800000000000000 | 	rmmovq %r9, 8(%rsi)
+                            | 
+0x250: c0f71000000000000000 | 	iaddq $16, %rdi
+0x25a: c0f61000000000000000 | 	iaddq $16, %rsi
+                            | 
+0x264: 6288                 | 	andq %r8, %r8			
+0x266: 717902000000000000   | 	jle ENposba				
+0x26f: c0f00100000000000000 | 	iaddq $1, %rax				
+0x279:                      | ENposba:	
+0x279: 6299                 | 	andq %r9, %r9			
+0x27b: 718e02000000000000   | 	jle ETestb				
+0x284: c0f00100000000000000 | 	iaddq $1, %rax	
+                            | 				
+0x28e:                      | ETestb:
+0x28e: c0f2feffffffffffffff | 	iaddq $-2, %rdx
+0x298: 752802000000000000   | 	jge Eloopb
+                            | 
+0x2a1:                      | EloopbEnd:
+0x2a1: c0f20200000000000000 | 	iaddq $2, %rdx
+0x2ab: 76bd02000000000000   | 	jg Loop					# 基于总是选择策略 第一次选择分支改变为循环开始
+0x2b4: 70e602000000000000   | 	jmp Done		
+                            | 
+0x2bd:                      | Loop:	
+0x2bd: 50570000000000000000 | 	mrmovq (%rdi), %rbp		# read val from src...	
+                            | # 在拥有2次展开的情况下 最后一次即为结束,而无需更新指针
+                            | #	iaddq $8, %rdi			# src++ 将更新指针rdi移动到间加载使用的流水线气泡阶段
+0x2c7: 40560000000000000000 | 	rmmovq %rbp, (%rsi)		# ...and store it to dst
+0x2d1: 6255                 | 	andq %rbp, %rbp			# val <= 0? 
+0x2d3: 71e602000000000000   | 	jle Npos				# if so, goto Npos:
+0x2dc: c0f00100000000000000 | 	iaddq $1, %rax			# count++	
+0x2e6:                      | Npos:	
+                            | # 在拥有2次展开的情况下 最后一次即为结束,而无需测试条件与跳转
+                            | #	iaddq $8, %rsi			# dst++
+                            | #	iaddq $-1, %rdx			# len--	# 将对rdx的算数计算移动到跳转判断前替代andq
+                            | #	jg Loop					# if so, goto Loop:
+                            | 
+                            | ##################################################################
+                            | # Do not modify the following section of code
+                            | # Function epilogue.
+0x2e6:                      | Done:
+0x2e6: 90                   | 	ret
+                            | ##################################################################
+                            | # Keep the following label at the end of your function
+0x2e7:                      | End:
+                            | #/* $end ncopy-ys */
+0x2e7:                      | EndFun:
+                            | 
+                            | ###############################
+                            | # Source and destination blocks 
+                            | ###############################
+0x2e8:                      | 	.align 8
+0x2e8:                      | src:
+0x2e8: 0100000000000000     | 	.quad 1
+0x2f0: feffffffffffffff     | 	.quad -2
+0x2f8: 0300000000000000     | 	.quad 3
+0x300: fcffffffffffffff     | 	.quad -4
+0x308: fadebc0000000000     | 	.quad 0xbcdefa # This shouldn't get moved
+                            | 
+0x310:                      | 	.align 16
+0x310:                      | Predest:
+0x310: fadebc0000000000     | 	.quad 0xbcdefa
+0x318:                      | dest:
+0x318: abefcd0000000000     | 	.quad 0xcdefab
+0x320: abefcd0000000000     | 	.quad 0xcdefab
+0x328: abefcd0000000000     | 	.quad 0xcdefab
+0x330: abefcd0000000000     | 	.quad 0xcdefab
+0x338:                      | Postdest:
+0x338: bcfade0000000000     | 	.quad 0xdefabc
+                            | 
+0x340:                      | .align 8
+                            | # Run time stack
+0x340: 0000000000000000     | 	.quad 0
+0x348: 0000000000000000     | 	.quad 0
+0x350: 0000000000000000     | 	.quad 0
+0x358: 0000000000000000     | 	.quad 0
+0x360: 0000000000000000     | 	.quad 0
+0x368: 0000000000000000     | 	.quad 0
+0x370: 0000000000000000     | 	.quad 0
+0x378: 0000000000000000     | 	.quad 0
+0x380: 0000000000000000     | 	.quad 0
+0x388: 0000000000000000     | 	.quad 0
+0x390: 0000000000000000     | 	.quad 0
+0x398: 0000000000000000     | 	.quad 0
+0x3a0: 0000000000000000     | 	.quad 0
+0x3a8: 0000000000000000     | 	.quad 0
+0x3b0: 0000000000000000     | 	.quad 0
+0x3b8: 0000000000000000     | 	.quad 0
+                            | 
+0x3c0:                      | Stack:

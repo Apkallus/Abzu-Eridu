@@ -1,0 +1,4 @@
+https://portswigger.net/research/splitting-the-email-atom
+对应lab
+电子邮件地址解析差异
+https://portswigger.net/web-security/logic-flaws/examples/lab-logic-flaws-bypassing-access-controls-using-email-address-parsing-discrepancies

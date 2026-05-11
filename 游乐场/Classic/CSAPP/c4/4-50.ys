@@ -1,0 +1,56 @@
+    .pos 0
+    irmovq stack,%rsp
+    call main
+    halt
+
+main:
+    irmovq $-1,%rdi
+    call switchv
+    ret
+
+switchv:
+    andq %rdi,%rdi
+    jl jmpdef             # 小于零到jmpdef
+    irmovq $5,%rsi
+    subq %rdi,%rsi        # 5-rdi
+    jl jmpdef             # rdi>5 超出范围到jmpdef
+
+    andq %rdi,%rdi
+    je starttab           # 等于0到starttab
+adrcou:                   
+    iaddq $8,%rdx         # rdi>0循环计算地址偏移+8
+    iaddq $-1,%rdi
+    jg adrcou
+starttab:
+    irmovq jumtab,%rcx    # 代码地址表基址
+    addq %rdx,%rcx        # 基址+偏置
+    mrmovq (%rcx),%r8     # 取得代码表所在位置保存的代码地址
+    pushq %r8
+    ret
+    jmpzero:
+        irmovq $0xaaa, %rax
+        jmp done
+    jmptwoafive:
+        irmovq $0xbbb, %rax
+        jmp done
+    jmpthree:
+        irmovq $0xccc, %rax
+        jmp done
+    jmpdef:
+        irmovq $0xddd, %rax
+done:
+    ret
+
+    .pos 0x200
+stack:
+
+    .pos 0x300
+jumtab: 
+    .quad jmpzero       # 0
+    .quad jmpdef        # 1
+    .quad jmptwoafive   # 2
+    .quad jmpthree      # 3
+    .quad jmpdef        # 4
+    .quad jmptwoafive   # 5
+
+end:

@@ -1,0 +1,127 @@
+[{
+    "username": "",
+    "email": "J12934@juice-sh.op",
+    "password": "3c2abc04e4a6ea8f1327d0aae3714b7d",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "accountant@juice-sh.op",
+    "password": "963e10f92a70b4b463220cb4c5d636dc",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "admin@juice-sh.op",
+    "password": "0192023a7bbd73250516f069df18b500",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "amy@juice-sh.op",
+    "password": "030f05e45e30710c3ad3c32f00de0473",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "bender@juice-sh.op",
+    "password": "0c36e517e3fa95aabf1bbffc6744a4ef",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "bjoern@juice-sh.op",
+    "password": "7f311911af16fa8f418dd1a3051d6810",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "bjoern@owasp.org",
+    "password": "9283f1b2e9669749081963be0462e466",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "chris.pike@juice-sh.op",
+    "password": "10a783b9ed19ea1c67c3a27699f0095b",
+    "deletedAt": "2025-12-13 03:56:16.705 +00:00"
+}, {
+    "username": "",
+    "email": "ciso@juice-sh.op",
+    "password": "861917d5fa5f1172f931dc700d81a8fb",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "demo",
+    "password": "fe01ce2a7fbac8fafaed7c982a04e229",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "jim@juice-sh.op",
+    "password": "e541ca7ecf72b8d1286474fc613e5e45",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "mc.safesearch@juice-sh.op",
+    "password": "b03f4b0ba8b458fa0acdc02cdb953bc8",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "morty@juice-sh.op",
+    "password": "f2f933d0bb0ba057bc8e33b8ebd6d9e8",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "support@juice-sh.op",
+    "password": "3869433d74e3d0c86fd25562f836bc82",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "test2@js.org",
+    "password": "cc83733cb0af8b884ff6577086b87909",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "test3@js.org",
+    "password": "fc2baa1a20b4d5190b122b383d7449fd",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "test@js.org",
+    "password": "fc2baa1a20b4d5190b122b383d7449fd",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "testing@juice-sh.op",
+    "password": "b616a64605a07941fbd31868aea3b54b",
+    "deletedAt": null
+}, {
+    "username": "",
+    "email": "uvogin@juice-sh.op",
+    "password": "05f92148b4b60f7dacd04cceebb8f1af",
+    "deletedAt": null
+}, {
+    "username": "E=ma²",
+    "email": "emma@juice-sh.op",
+    "password": "402f1c4a75e316afec5a6ea63147f739",
+    "deletedAt": null
+}, {
+    "username": "SmilinStan",
+    "email": "stan@juice-sh.op",
+    "password": "e9048a3f43dd5e094ef733f3bd88ea64",
+    "deletedAt": null
+}, {
+    "username": "bkimminich",
+    "email": "bjoern.kimminich@gmail.com",
+    "password": "6edd9d726cbdc873c539e41ae8757b8c",
+    "deletedAt": null
+}, {
+    "username": "evmrox",
+    "email": "ethereum@juice-sh.op",
+    "password": "2c17c6393771ee3048ae34d6b380c5ec",
+    "deletedAt": null
+}, {
+    "username": "j0hNny",
+    "email": "john@juice-sh.op",
+    "password": "00479e957b6b42c459ee5746478e4d45",
+    "deletedAt": null
+}, {
+    "username": "wurstbrot",
+    "email": "wurstbrot@juice-sh.op",
+    "password": "9ad5b0492bbe528583e128d2a8941de4",
+    "deletedAt": null,
+    "totpSecret": "IFTXE3SPOEYVURT2MRYGI52TKJ4HC3KH"
+}]

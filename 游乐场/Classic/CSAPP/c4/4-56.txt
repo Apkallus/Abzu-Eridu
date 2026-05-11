@@ -1,0 +1,33 @@
+valC<valP   后向跳转到valC      向之前的指令跳转
+valP>=valC  前向不跳转到valP    向下一条指令跳转
+
+如果无法直接使用比较符号或算数符号
+得将valC与valP传输到E执行阶段计算
+并使用条件码来判断是否是错误传送
+
+f_predPC
+分支预测时后向跳转选择valC
+f_icode == IJXX && f_ifun != 0 && f_valC < f_valP : f_valC;
+
+
+e_valA
+对于前向不跳转预测错误时传递valC
+E_icode == IJXX && E_ifun != 0 && E_valC >= E_valA && e_Cnd : E_valC;
+
+由于在取指转发时还要再根据valC与valP的值进行判断，存在两种情况
+于是不应当使用4-55的e_valA合并为一个值
+应当使用寄存器valE保存valC的值
+
+E
+valC -> aluA
+0 -> aluB
+
+分支预测错误时的转发与控制使用同样逻辑，虽然是不同阶段的寄存器
+
+bool D_bubble =
+(E_icode == IJXX && E_ifun != 0 && E_valC >= E_valA && e_Cnd) ||
+(E_icode == IJXX && E_ifun != 0 && E_valC < E_valA && !e_Cnd) ||
+
+word f_pc = 
+M_icode == IJXX && M_ifun != 0 && M_valE >= M_valA && M_Cnd : M_valE;
+M_icode == IJXX && M_ifun != 0 && M_valE < M_valA && !M_Cnd : M_valA;

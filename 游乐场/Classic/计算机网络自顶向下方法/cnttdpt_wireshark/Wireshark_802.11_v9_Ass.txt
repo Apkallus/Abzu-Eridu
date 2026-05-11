@@ -1,0 +1,76 @@
+1.
+SSID: "30 Munroe St"
+SSID: "linksys12"
+
+2.
+Current Channel: 6
+Current Channel: 6
+
+3.
+Beacon Interval: 0.102400 [Seconds]
+Beacon Interval: 0.102400 [Seconds]
+
+4.
+Source address: CiscoLinksys_f7:1d:51 (00:16:b6:f7:1d:51)
+Source address: LinksysGroup_67:22:94 (00:06:25:67:22:94)
+
+5.
+Destination address: Broadcast (ff:ff:ff:ff:ff:ff)
+
+6.
+BSS Id: CiscoLinksys_f7:1d:51 (00:16:b6:f7:1d:51)
+
+7.
+Tag: Supported Rates 1(B), 2(B), 5.5(B), 11(B), [Mbit/sec]
+Tag: Extended Supported Rates 6(B), 9, 12(B), 18, 24(B), 36, 48, 54, [Mbit/sec]
+
+
+
+8.SYN @@
+Receiver address: CiscoLinksys_f7:1d:51 (00:16:b6:f7:1d:51) 接收地址 接入点
+Transmitter address: Intel_d1:b6:4f (00:13:02:d1:b6:4f) 发送地址 无线主机
+Destination address: CiscoLinksys_f4:eb:a8 (00:16:b6:f4:eb:a8) 逻辑目的地址 第一跳路由器
+
+Source Address: 192.168.1.109 (192.168.1.109)
+Destination Address: gaia.cs.umass.edu (128.119.245.12)
+
+9.
+web服务器
+
+10.SYN ACK
+Receiver address: 91:2a:b0:49:b6:4f (91:2a:b0:49:b6:4f) 主机
+Transmitter address: CiscoLinksys_f7:1d:51 (00:16:b6:f7:1d:51) 接入点
+Source address: CiscoLinksys_f4:eb:a8 (00:16:b6:f4:eb:a8) 第一跳路由器
+
+
+11.
+IP层级
+1733	49.583615	192.168.1.109	192.168.1.1	DHCP	390	DHCP Release  - Transaction ID 0xea5a526
+
+802.11层级
+1735	49.609617	Intel_d1:b6:4f	CiscoLinksys_f7:1d:51	802.11	54	Deauthentication, SN=1605, FN=0, Flags=........C
+
+
+12.
+Authentication Algorithm: Open System (0) 开放系统认证
+
+13.
+Authentication SEQ: 0x0001
+
+14.
+Status code: Successful (0x0000)
+
+15.
+Authentication SEQ: 0x0002
+
+
+16.
+Tag: Supported Rates 1(B), 2(B), 5.5(B), 11(B), 6(B), 9, 12(B), 18, [Mbit/sec]
+
+17.
+Status code: Successful (0x0000)
+
+18.
+Tag: Extended Supported Rates 24(B), 36, 48, 54, [Mbit/sec] 无线主机
+Tag: Extended Supported Rates 6(B), 9, 12(B), 18, 24(B), 36, 48, 54, [Mbit/sec] AP
+最大扩展速率匹配

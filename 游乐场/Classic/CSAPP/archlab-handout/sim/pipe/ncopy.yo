@@ -1,0 +1,155 @@
+                            | #/* $begin ncopy-ys */
+                            | ##################################################################
+                            | # ncopy.ys - Copy a src block of len words to dst.
+                            | # Return the number of positive words (>0) contained in src.
+                            | #
+                            | # Include your name and ID here.
+                            | #
+                            | # Describe how and why you modified the baseline code.
+                            | #
+                            | ##################################################################
+                            | # Do not modify this portion
+                            | # Function prologue.
+                            | # %rdi = src, %rsi = dst, %rdx = len
+0x000:                      | ncopy:
+                            | 
+                            | ##################################################################
+                            | #	make VERSION=ful
+                            | #	(cd ../ptest; make SIM=../pipe/psim TFLAGS=-i)
+                            | #	../misc/yas ncopy.ys; ./check-len.pl < ncopy.yo 字符上限
+                            | #	./benchmark.pl
+                            | #	./correctness.pl
+                            | # You can modify this portion
+                            | #	Average CPE	8.07	10循环展开+2循环展开+剩余
+                            | #	Score	48.6/60.0
+                            | #	Average CPE	8.07	9循环展开+2循环展开+剩余
+                            | #	Score	48.7/60.0
+                            | #	Average CPE	8.01	...将2循环展开+剩余的跳转到测试再跳转复制条件到开始 
+                            | #	Score	49.9/60.0	优化小数组
+                            | 
+0x000: c0f2f7ffffffffffffff | 	iaddq $-9, %rdx	# 9个循环展开因子
+0x00a: 754200000000000000   | 	jge Eloopa	# 如果不超过循环因子则展开
+0x013: c0f20700000000000000 | 	iaddq $7, %rdx	# 2个循环展开因子	+9 -2
+0x01d: 75f601000000000000   | 	jge Eloopb
+0x026: c0f20200000000000000 | 	iaddq $2, %rdx	# 剩余
+0x030: 768b02000000000000   | 	jg Loop
+0x039: 70db02000000000000   | 	jmp Done
+                            | 
+0x042:                      | Eloopa:
+0x042: 50870000000000000000 | 	mrmovq (%rdi), %r8
+0x04c: 50970800000000000000 | 	mrmovq 8(%rdi), %r9
+0x056: 50a71000000000000000 | 	mrmovq 16(%rdi), %r10
+0x060: 50b71800000000000000 | 	mrmovq 24(%rdi), %r11
+0x06a: 50c72000000000000000 | 	mrmovq 32(%rdi), %r12
+0x074: 50d72800000000000000 | 	mrmovq 40(%rdi), %r13
+0x07e: 50e73000000000000000 | 	mrmovq 48(%rdi), %r14
+0x088: 50173800000000000000 | 	mrmovq 56(%rdi), %rcx
+0x092: 50374000000000000000 | 	mrmovq 64(%rdi), %rbx
+                            | 
+0x09c: 40860000000000000000 | 	rmmovq %r8, (%rsi)
+0x0a6: 40960800000000000000 | 	rmmovq %r9, 8(%rsi)
+0x0b0: 40a61000000000000000 | 	rmmovq %r10, 16(%rsi)
+0x0ba: 40b61800000000000000 | 	rmmovq %r11, 24(%rsi)
+0x0c4: 40c62000000000000000 | 	rmmovq %r12, 32(%rsi)
+0x0ce: 40d62800000000000000 | 	rmmovq %r13, 40(%rsi)
+0x0d8: 40e63000000000000000 | 	rmmovq %r14, 48(%rsi)
+0x0e2: 40163800000000000000 | 	rmmovq %rcx, 56(%rsi)
+0x0ec: 40364000000000000000 | 	rmmovq %rbx, 64(%rsi)
+                            | 
+0x0f6: c0f74800000000000000 | 	iaddq $72, %rdi
+0x100: c0f64800000000000000 | 	iaddq $72, %rsi
+                            | 
+0x10a: 6288                 | 	andq %r8, %r8			
+0x10c: 711f01000000000000   | 	jle ENposa				
+0x115: c0f00100000000000000 | 	iaddq $1, %rax				
+0x11f:                      | ENposa:	
+0x11f: 6299                 | 	andq %r9, %r9			
+0x121: 713401000000000000   | 	jle ENposb				
+0x12a: c0f00100000000000000 | 	iaddq $1, %rax				
+0x134:                      | ENposb:	
+0x134: 62aa                 | 	andq %r10, %r10			
+0x136: 714901000000000000   | 	jle ENposc				
+0x13f: c0f00100000000000000 | 	iaddq $1, %rax				
+0x149:                      | ENposc:	
+0x149: 62bb                 | 	andq %r11, %r11			
+0x14b: 715e01000000000000   | 	jle ENposd				
+0x154: c0f00100000000000000 | 	iaddq $1, %rax				
+0x15e:                      | ENposd:	
+0x15e: 62cc                 | 	andq %r12, %r12			
+0x160: 717301000000000000   | 	jle ENpose				
+0x169: c0f00100000000000000 | 	iaddq $1, %rax				
+0x173:                      | ENpose:	
+0x173: 62dd                 | 	andq %r13, %r13			
+0x175: 718801000000000000   | 	jle ENposf				
+0x17e: c0f00100000000000000 | 	iaddq $1, %rax				
+0x188:                      | ENposf:	
+0x188: 62ee                 | 	andq %r14, %r14			
+0x18a: 719d01000000000000   | 	jle ENposg				
+0x193: c0f00100000000000000 | 	iaddq $1, %rax	
+0x19d:                      | ENposg:	
+0x19d: 6211                 | 	andq %rcx, %rcx			
+0x19f: 71b201000000000000   | 	jle ENposh				
+0x1a8: c0f00100000000000000 | 	iaddq $1, %rax
+0x1b2:                      | ENposh:	
+0x1b2: 6233                 | 	andq %rbx, %rbx			
+0x1b4: 71c701000000000000   | 	jle ETest				
+0x1bd: c0f00100000000000000 | 	iaddq $1, %rax	
+                            | 
+0x1c7:                      | ETest:
+0x1c7: c0f2f7ffffffffffffff | 	iaddq $-9, %rdx
+0x1d1: 754200000000000000   | 	jge Eloopa
+                            | 
+0x1da:                      | ELoopaEnd: # rdi rsi rdx rax
+0x1da: c0f20700000000000000 | 	iaddq $7, %rdx	#	+9 -2
+                            | #	iaddq $-2, %rdx	
+0x1e4: 75f601000000000000   | 	jge Eloopb	
+0x1ed: 706f02000000000000   | 	jmp EloopbEnd
+                            | 
+0x1f6:                      | Eloopb:
+0x1f6: 50870000000000000000 | 	mrmovq (%rdi), %r8
+0x200: 50970800000000000000 | 	mrmovq 8(%rdi), %r9
+                            | 
+0x20a: 40860000000000000000 | 	rmmovq %r8, (%rsi)
+0x214: 40960800000000000000 | 	rmmovq %r9, 8(%rsi)
+                            | 
+0x21e: c0f71000000000000000 | 	iaddq $16, %rdi
+0x228: c0f61000000000000000 | 	iaddq $16, %rsi
+                            | 
+0x232: 6288                 | 	andq %r8, %r8			
+0x234: 714702000000000000   | 	jle ENposba				
+0x23d: c0f00100000000000000 | 	iaddq $1, %rax				
+0x247:                      | ENposba:	
+0x247: 6299                 | 	andq %r9, %r9			
+0x249: 715c02000000000000   | 	jle ETestb				
+0x252: c0f00100000000000000 | 	iaddq $1, %rax	
+                            | 				
+0x25c:                      | ETestb:
+0x25c: c0f2feffffffffffffff | 	iaddq $-2, %rdx
+0x266: 75f601000000000000   | 	jge Eloopb
+                            | 
+0x26f:                      | EloopbEnd:
+0x26f: c0f20200000000000000 | 	iaddq $2, %rdx
+0x279: 768b02000000000000   | 	jg Loop					# 基于总是选择策略 第一次选择分支改变为循环开始
+0x282: 70db02000000000000   | 	jmp Done		
+                            | 
+0x28b:                      | Loop:	
+0x28b: 50570000000000000000 | 	mrmovq (%rdi), %rbp		# read val from src...	
+0x295: c0f70800000000000000 | 	iaddq $8, %rdi			# src++ 将更新指针rdi移动到间加载使用的流水线气泡阶段
+0x29f: 40560000000000000000 | 	rmmovq %rbp, (%rsi)		# ...and store it to dst
+0x2a9: 6255                 | 	andq %rbp, %rbp			# val <= 0? 
+0x2ab: 71be02000000000000   | 	jle Npos				# if so, goto Npos:
+0x2b4: c0f00100000000000000 | 	iaddq $1, %rax			# count++	
+0x2be:                      | Npos:	
+0x2be: c0f60800000000000000 | 	iaddq $8, %rsi			# dst++
+0x2c8: c0f2ffffffffffffffff | 	iaddq $-1, %rdx			# len--	# 将对rdx的算数计算移动到跳转判断前替代andq
+0x2d2: 768b02000000000000   | 	jg Loop					# if so, goto Loop:
+                            | 
+                            | ##################################################################
+                            | # Do not modify the following section of code
+                            | # Function epilogue.
+0x2db:                      | Done:
+0x2db: 90                   | 	ret
+                            | ##################################################################
+                            | # Keep the following label at the end of your function
+0x2dc:                      | End:
+                            | #/* $end ncopy-ys */

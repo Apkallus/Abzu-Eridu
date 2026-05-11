@@ -1,0 +1,29 @@
+A. x
+
+T          x
+S    x x x x
+Uo o x 
+Lo
+Ho 
+  
+   H L U S T
+
+B. o
+
+T          o
+S          o
+U          o
+L        o o
+Ho o o o o
+
+   H L U S T
+
+C. x
+
+T          x
+S    x x x x
+U    x
+L    x
+H    o
+   o o
+   H L U S T

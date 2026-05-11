@@ -1,0 +1,24 @@
+
+## 关联lab seq对iaddq的实现 ##
+
+iaddq V,rB
+取指
+icode:ifun <- M1[PC]
+rA:rB <- M1[PC+1]
+valC <- M8[PC+2]
+valP <- PC+10
+
+译码
+valB <- R[rB]
+
+执行
+valE <- valC+valB
+Set CC
+
+访存
+
+写回
+R[rB] <- valE
+
+更新PC
+PC <- valP

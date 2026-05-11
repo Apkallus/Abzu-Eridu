@@ -1,0 +1,49 @@
+之前的模拟器在条件转移时使用总是选择分支策略
+此处要修改条件转移为不选择分支 -> valP
+并使无条件转移与call为选择分支 -> valC
+得到跳转目标地址valC,并送到流水线寄存器M，从错误预测恢复
+
+
+
+之前F时为valC，预测错误时传送valP -> valA到D
+现在条件转移F时为valP，错误时传送valC到D
+
+D阶段无D_ifun 继续传递到E
+
+E阶段将条件跳转的valC -> e_valA -> M_valA
+由M_valA返回
+
+
+
+word f_predPC
+f_icode == ICALL : f_valC;
+f_icode == IJXX && f_ifun == 0 : f_valC;
+1 : f_valP;
+
+word d_valA
+D_icode == IJXX && D_ifun == 0 : D_valP;
+D_icode == IJXX : D_valC;
+但 D阶段不存在 D_ifun
+于是要移动到E阶段
+
+E_valC -> e_valA -> M_valA
+word e_valA = [
+	E_icode == IJXX && E_ifun != 0 : E_valC;
+	1 : E_valA;
+];
+无法使用e_valA传递valC #!!#
+
+尝试算数单元
+E_valC -> aluA
+0 -> aluB
+valC -> valE
+但E_valE无法传播逻辑到PC预测 #!!#
+@@  e_valA与E_valE都能够传播到PC预测，应当修改转发到PC的逻辑
+@@ 并且在跳转策略变化后更改预测错误的流水线控制
+@@ 在总是不选择时，之前的跳转预测失败，就是现在的预测跳转正确
+@@ 应当修改取指阶段 f_pc 
+@@ 在转发来源使用valA -> valM时修改逻辑
+@@ 如果使用valC -> valE 修改转发源与逻辑
+@@ 以及流水线暂停与气泡的逻辑
+bool D_bubble =
+(E_icode == IJXX && E_ifun != 0 && e_Cnd) ||

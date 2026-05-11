@@ -1,0 +1,43 @@
+Using default tracefiles in /media/sf_C_program/CSAPP/malloclab-handout/traces/
+Measuring performance with gettimeofday().
+
+Testing mm malloc
+Reading tracefile: amptjp-bal.rep
+Checking mm_malloc for correctness, efficiency, and performance.
+Reading tracefile: cccp-bal.rep
+Checking mm_malloc for correctness, efficiency, and performance.
+Reading tracefile: cp-decl-bal.rep
+Checking mm_malloc for correctness, efficiency, and performance.
+Reading tracefile: expr-bal.rep
+Checking mm_malloc for correctness, efficiency, and performance.
+Reading tracefile: coalescing-bal.rep
+Checking mm_malloc for correctness, efficiency, and performance.
+Reading tracefile: random-bal.rep
+Checking mm_malloc for correctness, efficiency, and performance.
+Reading tracefile: random2-bal.rep
+Checking mm_malloc for correctness, efficiency, and performance.
+Reading tracefile: binary-bal.rep
+Checking mm_malloc for correctness, efficiency, and performance.
+Reading tracefile: binary2-bal.rep
+Checking mm_malloc for correctness, efficiency, and performance.
+Reading tracefile: realloc-bal.rep
+Checking mm_malloc for correctness, ERROR [trace 9, line 7]: mm_realloc did not preserve the data from old block
+Reading tracefile: realloc2-bal.rep
+Checking mm_malloc for correctness, ERROR [trace 10, line 7]: mm_realloc did not preserve the data from old block
+
+Results for mm malloc:
+trace  valid  util     ops      secs  Kops
+ 0       yes   98%    5694  0.000246 23118
+ 1       yes   96%    5848  0.000233 25131
+ 2       yes   99%    6648  0.000283 23483
+ 3       yes   99%    5380  0.000160 33625
+ 4       yes   66%   14400  0.000230 62663
+ 5       yes   93%    4800  0.000271 17686
+ 6       yes   90%    4800  0.000281 17058
+ 7       yes   55%   12000  0.000340 35346
+ 8       yes   51%   24000  0.000856 28044
+ 9        no     -       -         -     -
+10        no     -       -         -     -
+Total            -       -         -     -
+
+Terminated with 2 errors

@@ -1,0 +1,48 @@
+https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Environment_setup/Installing_software#installing_a_local_web_server
+vscode插件：
+live preview - 实时预览
+作为本地web服务器
+处理 HTML 文件时，点击“显示预览”按钮，在单独的标签页中打开实时示例。
+
+https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Environment_setup/Code_editors#exploring_vs_code_extensions
+vscode插件：
+Prettier - 代码格式化器
+在设置中
+找到 Editor: Default Formatter 选项，并从关联的下拉菜单中选择 Prettier - Code formatter 选项。
+找到 Editor: Format On Save 选项，通过点击其复选框来启用它。
+
+https://learn.microsoft.com/en-us/windows/wsl/install
+在windows上运行linux终端
+
+https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Environment_setup/Command_line#installing_prettier
+Prettier 在操作系统的安装与命令行使用
+
+https://zhuanlan.zhihu.com/p/680438613
+Ubuntu安装最新版的Node.js
+
+https://zhuanlan.zhihu.com/p/409663962
+imagemagick 调整图像大小
+sudo apt install imagemagick
+convert {input} {actions} {output}
+convert firefox2-origin.png -resize 256x firefox2.png
+其中 256x 为宽度256,高度自动
+若为 x256 为宽度自动，高度256
+
+使用GIMP或其他图像处理工具，将图片转为webp格式，减少大小
+
+将 Google Fonts 的官方域名 fonts.googleapis.com 替换为 fonts.font.im
+
+Inkscape 矢量图形编辑器
+https://inkscape.org/
+
+
+表单语言与模板与本地服务器
+https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Sending_and_retrieving_form_data
+
+
+
+
+
+
+
+

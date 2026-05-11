@@ -1,0 +1,31 @@
+A.
+whereis libm.a
+libm.a: /usr/lib/x86_64-linux-gnu/libm.a /usr/lib32/libm.a
+
+:/usr/lib/x86_64-linux-gnu$ ar t libm.a
+ar: libm.a: file format not recognized
+
+:/usr/lib/x86_64-linux-gnu$ file libm.a
+libm.a: ASCII text
+
+:/usr/lib/x86_64-linux-gnu$ cat libm.a
+/* GNU ld script
+*/
+OUTPUT_FORMAT(elf64-x86-64)
+GROUP ( /usr/lib/x86_64-linux-gnu/libm-2.39.a /usr/lib/x86_64-linux-gnu/libmvec.a )
+
+##  wc -l 是一个用于统计文件中行数的命令。它会输出文件中的行数，并显示在终端上。
+:/usr/lib/x86_64-linux-gnu$ ar t libm-2.39.a | wc -l
+801
+
+B.
+.debug与.line在以-g选项时才能得到
+
+C.
+:/$ whereis gcc
+gcc: /usr/bin/gcc /usr/lib/gcc /usr/libexec/gcc /usr/share/gcc /usr/share/man/man1/gcc.1.gz
+
+:/$ ldd /usr/bin/gcc
+	linux-vdso.so.1 (0x000071b8ef2ef000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000071b8ef000000)
+	/lib64/ld-linux-x86-64.so.2 (0x000071b8ef2f1000)

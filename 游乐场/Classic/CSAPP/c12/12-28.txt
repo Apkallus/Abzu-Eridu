@@ -1,0 +1,27 @@
+VT           o
+VS           o
+PT           o
+PS        o  o
+    o  o  o 
+    PS PT VS VT
+
+VT           o
+VS           o
+PT           o
+PS           o
+    o  o  o  o
+    PS PT VT VS 
+
+VS           o
+VT           o
+PT           o
+PS        o  o
+    o  o  o
+    PS PT VS VT
+
+VS           o
+VT           o
+PT           o
+PS           o
+    o  o  o  o
+    PS PT VT VS 

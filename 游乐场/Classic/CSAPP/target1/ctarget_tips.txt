@@ -1,0 +1,93 @@
+4.1 级别 1
+在阶段 1 中，你不需要注入新代码。相反，你的利用字符串将重定向程序，使其执行现有的过程。
+在 CTARGET 中，函数 test 调用了 getbuf 函数，test 的 C 代码如下：
+1 void test()
+2 {
+3     int val;
+4     val = getbuf();
+5     printf("No exploit. Getbuf returned 0x%x\n", val);
+6 }
+
+当 getbuf 执行其返回语句（getbuf 函数的第 5 行）时，程序通常会在 test 函数内恢复执行（此函数的第 5 行）。
+我们想要改变这种行为。在 ctarget 文件中，有一个名为 touch1 的函数，其 C 表示如下：
+1 void touch1()
+2 {
+3     vlevel = 1; /* 验证协议的一部分 */
+4     printf("Touch1!: You called touch1()\n");
+5     validate(1);
+6     exit(0);
+7 }
+
+你的任务是让 CTARGET 在 getbuf 执行返回语句时，执行 touch1 的代码，而不是返回到 test 函数。
+注意，你的利用字符串可能也会破坏与本阶段没有直接关系的栈的部分，但这不会产生问题，因为 touch1 会直接使程序退出。
+
+一些建议：
+	为设计此级别的利用字符串所需的所有信息，都可以通过查看 CTARGET 的反汇编版本来确定。使用 objdump -d 命令获取反汇编版本。
+	思路是放置 touch1 起始地址的字节表示，以便 getbuf 代码末尾的 ret 指令将控制权转移到 touch1。
+	注意字节顺序。
+	你可能想用 GDB 单步执行 getbuf 的最后几条指令，确保其按预期执行。
+	buf 在 getbuf 栈帧中的位置取决于编译时常量 BUFFER_SIZE 的值，以及 GCC 使用的分配策略。
+	你需要查看反汇编代码来确定其位置。
+
+
+4.2 级别 2
+阶段 2 涉及在利用字符串中注入少量代码。
+在 ctarget 文件中，有一个名为 touch2 的函数，其 C 表示如下：
+1 void touch2(unsigned val)
+2 {
+3     vlevel = 2; /* 验证协议的一部分 */
+4     if (val == cookie) {
+5         printf("Touch2!: You called touch2(0x%.8x)\n", val);
+6         validate(2);
+7     } else {
+8         printf("Misfire: You called touch2(0x%.8x)\n", val);
+9         fail(2);
+10     }
+11     exit(0);
+12 }
+你的任务是让 CTARGET 执行 touch2 的代码，而不是返回到 test 函数。
+然而，在这种情况下，你必须让 touch2 认为你已经将你的 cookie 作为参数传递给了它。
+
+一些建议：
+	你需要以某种方式放置注入代码地址的字节表示，使得 getbuf 代码末尾的 ret 指令将控制权转移到注入代码。
+	记住，函数的第一个参数是通过寄存器 % rdi 传递的。
+	注入的代码应该将寄存器设置为你的 cookie，然后使用 ret 指令将控制权转移到 touch2 的第一条指令。
+	不要在利用代码中尝试使用 jmp 或 call 指令。这些指令的目标地址编码很难制定。
+	即使不是从调用返回，也使用 ret 指令进行所有的控制权转移。
+	有关如何使用工具生成指令序列的字节级表示，请参阅附录 B 中的讨论。
+
+4.3 级别 3
+阶段 3 同样涉及代码注入攻击，但这次需要传递一个字符串作为参数。
+在 ctarget 文件中，有 hexmatch 和 touch3 函数，其 C 表示如下：
+1 /* 将字符串与无符号值的十六进制表示进行比较 */
+2 int hexmatch(unsigned val, char *sval)
+3 {
+4     char cbuf[110];
+5     /* 使检查字符串的位置不可预测 */
+6     char *s = cbuf + random() % 100;
+7     sprintf(s, "%.8x", val);
+8     return strncmp(sval, s, 9) == 0;
+9 }
+
+10 void touch3(char *sval)
+11 {
+12     vlevel = 3; /* 验证协议的一部分 */
+13     if (hexmatch(cookie, sval)) {
+14         printf("Touch3!: You called touch3(\"%s\")\n", sval);
+15         validate(3);
+16     } else {
+17         printf("Misfire: You called touch3(\"%s\")\n", sval);
+18         fail(3);
+19     }
+20     exit(0);
+21 }
+你的任务是让 CTARGET 执行 touch3 的代码，而不是返回到 test 函数。
+你必须让 touch3 认为你已经将你的 cookie 的字符串表示作为参数传递给了它。
+一些建议：
+	你需要在利用字符串中包含你的 cookie 的字符串表示。
+	该字符串应由八个十六进制数字（从最高有效位到最低有效位排列）组成，且没有前导 “0x”。
+	记住，在 C 语言中，字符串表示为一系列字节，后跟一个值为 0 的字节。
+	在任何 Linux 机器上输入 “man ascii”，可以查看所需字符的字节表示。
+	注入的代码应该将寄存器 % rdi 设置为该字符串的地址。
+	当调用 hexmatch 和 strncmp 函数时，它们会将数据压入栈中，覆盖 getbuf 使用的缓冲区所在的部分内存。
+	因此，你需要注意放置 cookie 字符串表示的位置。

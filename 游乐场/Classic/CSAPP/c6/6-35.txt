@@ -1,0 +1,25 @@
+sizeof(int)==4
+src->0
+dst->64
+E=1
+直写 写分配
+B=16
+C=128
+S=8
+
+for i
+    for j
+    dst[j][i] = src[i][j]
+
+足够放下两个数组
+dst
+s0 m h h h
+s1 m h h h
+s2 m h h h
+s3 m h h h
+
+src
+s4 m h h h
+s5 m h h h
+s6 m h h h
+s7 m h h h

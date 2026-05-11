@@ -1,0 +1,67 @@
+1.
+Source: cics-cscf-003.cs.umass.edu (c4:41:1e:75:b1:52)
+
+2.
+Destination: gw-vlan-2471.cs.umass.edu (00:1e:c1:7e:d9:01)
+如果不在同一子网内，此目的MAC为路由器
+
+3.
+Type: IPv4 (0x0800)
+
+4.
+14+20+34 
+
+
+5.
+Source: gw-vlan-2471.cs.umass.edu (00:1e:c1:7e:d9:01)
+除非服务器在同一子网内，否则此为路由器的MAC
+
+6.
+Destination: cics-cscf-003.cs.umass.edu (c4:41:1e:75:b1:52)
+此为本主机MAC
+
+7.
+Type: IPv4 (0x0800)
+
+8.
+14+20+32+8+1+3+1
+
+9.
+[4 Reassembled TCP Segments (4861 bytes): #131(1448), #132(1448), #133(1448), #134(517)]
+
+
+
+10.
+8个
+
+11.
+IP地址 物理地址 类型
+
+12.
+Source: gw-vlan-2471.cs.umass.edu (00:1e:c1:7e:d9:01)
+
+13.
+Destination: Broadcast (ff:ff:ff:ff:ff:ff)
+广播地址
+
+14.
+Type: ARP (0x0806)
+
+
+15.
+0x13 从0计数
+
+16.
+Opcode: request (1)
+
+17.
+Sender IP address: gw-vlan-2471.cs.umass.edu (128.119.247.1)
+
+18.
+Target IP address: cicspc-us-103.cs.umass.edu (128.119.247.77)
+
+19. 20. 
+略
+
+21.
+接收到广播后，对应IP地址的节点发送ARP响应，其他节点则丢弃

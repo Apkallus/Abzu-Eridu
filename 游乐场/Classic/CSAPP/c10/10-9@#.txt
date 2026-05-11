@@ -1,0 +1,6 @@
+if(fork()==0){
+    fd=Open("foo.txt",O_RDONLY,0);
+    dup2(fd,0);
+    Close(fd);
+    execve("fstatcheck",argv,envp);
+}

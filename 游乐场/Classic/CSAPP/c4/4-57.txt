@@ -1,0 +1,42 @@
+
+原版加载使用冒险
+E_icode in { IMRMOVQ, IPOPQ } 
+    && E_dstM in  {d_srcA, d_srcB };
+在执行阶段时,从内存加载值到寄存器的指令
+发现在译码阶段的指令即将使用还未读取的寄存器
+
+内存旁路版加载使用冒险
+E_icode in { IMRMOVQ, IPOPQ } 
+    && 
+    (
+    D_icode == IOPQ 
+    && E_dstM in  {d_srcA, d_srcB }
+    ||
+    D_icode in { IRMMOVQ, IMRMOVQ ,IPUSHQ, IPOPQ, ICALL, IRET}
+    && E_dstM == d_srcB 
+    ||
+    D_icode == IRRMOVQ && E_dstM == d_srcA
+    );
+IMRMOVQ, IPOPQ都将内存值移动到寄存器
+R[rA] <- valM
+内存旁路版将值转发到E阶段的不做算数计算的valA中
+如果下一条指令在执行阶段不读取当前的E_dstM做计算
+那么没有冲突并将值保存到M_valA
+
+在执行阶段
+OPq 要用两个寄存器，都冲突
+rrmovq 单使用valA<-R[rA] ---
+rmmovq 使用valB<-R[rB] 访存使用valA +++
+mrmovq 单使用valB<-R[rB] --- 
+push   使用valB<-R[rB] 访存使用valA +++
+popq   使用valB<-R[rB] 访存使用valA +++
+call   单使用valB<-R[rB] ---
+ret    使用valB<-R[rB] 访存使用valA +++
+
+修改流水线加载冒险控制逻辑
+以及内存旁路转发逻辑
+
+## 没有区分流水线控制与转发
+这两个操作是在不同阶段，不能简单复制
+但没有影响测试结果
+最后发现没有完全设置数据冲突的逻辑

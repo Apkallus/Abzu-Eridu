@@ -1,0 +1,52 @@
+1.
+Source Address: 192.168.10.11 (192.168.10.11)
+Source Port: 53924
+
+Destination Address: 138.76.29.8 (138.76.29.8)
+Destination Port: 80
+
+2.
+0.030672101 HTTP/1.1 200 OK  (text/html)
+
+3.
+Source Address: 138.76.29.8 (138.76.29.8)
+Source Port: 80
+
+Destination Address: 192.168.10.11 (192.168.10.11)
+Destination Port: 53924
+
+4.
+0.027356291	GET / HTTP/1.1 
+
+5.
+Source Address: 10.0.1.254 (10.0.1.254)
+Source Port: 53924
+
+Destination Address: 138.76.29.8 (138.76.29.8)
+Destination Port: 80
+
+6.
+源ip地址不同，此处使用了相同源端口号
+
+7.
+HTTP的字段无变化，TCP字段的校验和变化
+
+8.
+Time to Live: 64 -1到63
+校验和变化
+源ip变化
+
+9.
+0.030625966	HTTP/1.1 200 OK  (text/html)
+
+10.
+Source Address: 138.76.29.8 (138.76.29.8)
+Source Port: 80
+
+Destination Address: 10.0.1.254 (10.0.1.254)
+Destination Port: 53924
+
+11.
+源的ip与port为服务器
+目的ip与port为客户端
+此时NAT以及修改后发送到客户端

@@ -1,0 +1,22 @@
+    length = vec_length(u)
+    sum = 0
+
+    for(i = 0; i < length; i++){
+        sum = sum + udata[i] OP vdata[i]
+    }
+    *dest = sum
+
+xmm1                            xmm0
+load_udata      load_vdata       |
+    *              <-            |
+    ->                           +
+                                 |
+                                xmm0
+
+xmm1为保存临时值的寄存器
+xmm0为循环寄存器
+关键路径为xmm0进行的+操作
+
+对于double，CPE下界为浮点+，为3
+对于整数，CPE下界为整数+，为1
+进行*操作的寄存器在循环间无数据相关，于是CPE取决于有数据相关的+

@@ -1,0 +1,9 @@
+fork ->         fork -> printf 1
+                     -> printf 0
+     -> atexit  fork -> printf 1 -> printf 2
+                     -> printf 0 -> printf 2
+A O
+B X
+C O
+D X
+E O

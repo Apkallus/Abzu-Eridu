@@ -1,0 +1,40 @@
+1.
+nslookup www.iitb.ac.in
+
+Server:		127.0.0.53
+Address:	127.0.0.53#53
+
+Non-authoritative answer:
+Name:	www.iitb.ac.in
+Address: 103.21.124.133
+
+======================
+nslookup -type=NS www.iitb.ac.in
+
+Server:		127.0.0.53
+Address:	127.0.0.53#53
+
+Non-authoritative answer:
+*** Can't find www.iitb.ac.in: No answer
+
+Authoritative answers can be found from:
+iitb.ac.in
+	origin = dns1.iitb.ac.in
+	mail addr = postmaster.iitb.ac.in
+	serial = 2013071001
+	refresh = 16384
+	retry = 2048
+	expire = 1048576
+	minimum = 3960
+----------
+nslookup dns1.iitb.ac.in
+Server:		127.0.0.53
+Address:	127.0.0.53#53
+
+Non-authoritative answer:
+Name:	dns1.iitb.ac.in
+Address: 103.21.125.129
+
+3. UDP
+
+

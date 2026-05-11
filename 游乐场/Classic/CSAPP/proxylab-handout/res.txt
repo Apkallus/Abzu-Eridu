@@ -1,0 +1,105 @@
+动态计算程序adder使用c11的
+
+./tiny 1234
+./proxy 1235
+
+
+telnet localhost 1234
+telnet localhost 1235
+
+GET / HTTP/1.1
+GET /cgi-bin/adder?10&1 HTTP/1.1
+
+GET / HTTP/1.1
+Host: localhost:1234
+Proxy-Connection: alive
+Connection: alive
+User-Agent: shell
+zz: zz
+
+curl -v --proxy http://localhost:1235 http://localhost:1234/home.html
+./driver.sh
+
+A.
+编写代理服务器
+对客户端与服务器的转发
+
+第一部分 实现顺序代理
+处理 HTTP/1.0 GET
+监听并从客户端读取并解析请求
+如果有效，则建立连接到web服务器
+再将服务器响应转发到客户端
+
+现代浏览器生成HTTP/1.1请求
+代理应将其转发为HTTP/1.0
+
+请求头
+始终发送HOST头      
+Connection: close
+Proxy-Connection: close
+其他请求头原样转发
+
+端口号
+如请求中包含端口应当发送到此端口而不是默认的80端口
+
+四部分
+作为服务器 读取目标客户端请求
+    修改报头，并从host头得到服务器ip与端口
+作为客户端 转发请求到目标服务器
+    使用得到的ip与端口连接服务器，转发修改后的客户端报头到服务器
+作为客户端 接收目标服务器响应
+    保存服务器响应报头，并从报头的Content-Length得到body的大小
+作为服务器 将响应转发到目标客户端
+    发送服务器到客户端的报头与body
+
+每读取一次客户端请求就处理并转发到服务器
+或在读取所有客户端请求后，再转发到服务器
+
+strstr或许要使用不分大小写的函数替代
+
+也解析GET的ip与端口,并且将URL转为URI
+
+B.
+处理多个并发请求
+使用预线程
+
+C.
+!!!! expel_to_cache() is_exist()
+    这两个函数在使用for循环遍历时直接使用全局变量指针，
+    导致链表添加重复项或者链表头到NULL的死循环
+    
+用结构存储缓存，其中包含 名称/类型/大小/上次访问时间/文件数据
+Content-type
+Content-length
+
+struct cache {
+    char file_url[MAXLINE];
+    char type[MAXLINE];
+    char length[MAXLINE];
+    long last;
+    struct cache *next;
+} *cache_link_ptr;
+
+全局变量cache_link_ptr指针，指向代理缓存池
+
+将客户端发送的目标服务器的IP/port/URI字符串连接的URL作为名称
+虽然可能不要求，但不分辨服务器将导致发送其他进程的文件到客户端
+
+如不在代理缓冲中且不超出大小限制，先发送到客户端，再写入代理缓冲
+
+如果代理缓存了文件，则直接发送到客户端而没有与服务器的连接，
+发送后返回
+与服务器连接则表示此文件不存在于代理缓存中
+在与服务器连接的过程处理代理缓存
+
+除代理缓冲区外，每个活动连接分配一个活动缓冲区
+代理缓冲区+活动连接数量*最大缓冲对象
+当活动缓冲对象超过则最大缓冲对象则丢弃，
+没有超过则活动缓冲保存在代理缓冲区内
+
+LRU驱逐策略，最近最少使用
+只需大致接近，那么简单的使用全局变量，保存到结构后每次+1
+作为读取时的更新，将其区分于写入缓存的写
+驱逐时，遍历缓存结构访问index，
+每次遍历驱逐前几个index而不是只搜索最小值，直到足够存放
+

@@ -1,0 +1,18 @@
+640*480像素组
+C=64KB=65536byte
+E=1
+B=4
+S=16384
+
+struct pixel{
+    char r;
+    char g;
+    char b;
+    char a;
+};
+struct pixel buffer[480][640];
+
+将结构指针转换为int指针
+按照int单个写入，成为步长为1的列偏移模式
+相对单个char来说不命中为冷不命中 1/4
+int与一块缓存大小相同，写的总次数/4 虽然不命中总次数相同，但不命中率为 100%

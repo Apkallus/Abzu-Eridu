@@ -1,0 +1,12 @@
+pip list
+pip install --upgrade pip -i https://mirrors.aliyun.com/pypi/simple/
+
+
+pip install numpy -i https://mirrors.aliyun.com/pypi/simple/
+pip install matplotlib -i https://mirrors.aliyun.com/pypi/simple/
+pip install pandas  -i https://mirrors.aliyun.com/pypi/simple/
+pip install scikit-learn  -i https://mirrors.aliyun.com/pypi/simple/
+
+pip uninstall numpy
+
+sudo ln -s /usr/bin/python3 /usr/bin/python

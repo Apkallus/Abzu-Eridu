@@ -1,0 +1,5 @@
+https://portswigger.net/web-security/access-control/lab-user-id-controlled-by-request-parameter-with-password-disclosure
+# 使用客户端可控内容作为访问控制：用户名。
+使用隐藏表单明文传递敏感参数 #
+在账户页面响应的更改密码的隐藏表单中保存着当前密码，
+此处id的参数使用用户名，更改url中id的参数为可能的管理员名称，从隐藏表单得到管理员密码

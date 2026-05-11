@@ -1,0 +1,15 @@
+- Mint the Honey Pot
+    - 描述：通过从蜜蜂天堂收集 BEEs 来铸造 Honey Pot NFT。
+    - 在 ```main.js``` 中找到路由 ```bee-haven```
+        也存在于照片墙的描述中
+    - 访问 ```http://127.0.0.1:3000/#/bee-haven```
+        - 或在图片墙发现相关路由
+            ```Welcome to the Bee Haven (/#/bee-haven)🐝 (© evmrox)```
+    - 虽然多次看到 
+        ```Please connect your Web3 wallet first.```
+        ```Please install a Web3 wallet like MetaMask to proceed.```
+        按照示例解决方案，此时应当安装对应扩展
+        - 安装 MetaMask 扩展
+        - 注册钱包，领取测试币。
+            解决方案及部分网站需实际拥有以太坊余额才可领取。
+            此处使用

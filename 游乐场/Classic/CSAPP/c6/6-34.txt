@@ -1,0 +1,27 @@
+sizeof(int)==4
+src->0
+dst->64
+E=1
+直写 写分配
+B=16
+C=32
+S=2
+
+for i
+    for j
+    dst[j][i] = src[i][j]
+
+每个数组内12不冲突
+1x3 2x4
+
+dst [j][i]
+s0 m m m m
+s1 m m m m
+s0 m m m m
+s1 m m m m
+
+src [i][j]
+s0 m m h m
+s1 m h m h
+s0 m m h m
+s1 m h m h 

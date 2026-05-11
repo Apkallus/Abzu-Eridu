@@ -1,0 +1,5 @@
+https://portswigger.net/web-security/access-control/lab-referer-based-access-control
+使用示例的管理员账户登录：
+权限设置url为 /admin-roles?username=wiener&action=upgrade
+发送到重复器更新为本账户用户名与cookie
+@ 根据是否使用Referer头以及不同写入不同位置后应用程序的响应来判断是否基于Referer进行访问 @
