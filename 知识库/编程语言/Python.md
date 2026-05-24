@@ -1,5 +1,15 @@
 ## 
 
+### venv — 创建虚拟环境
+
+```sh
+python -m venv 虚拟环境路径
+
+source 虚拟环境路径/bin/activate # 激活虚拟环境
+```
+
+当从虚拟环境内部使用时，像 pip 这样的常用安装工具将把 Python 包安装到虚拟环境中，而无需显式告知。
+
 ### 进制编码
 
 Python 有两种类字符串常量：`str` 字符串（表示为 `"asdf"`）和 `bytes` 字节串（表示为 `b"asdf"`）。
@@ -361,12 +371,16 @@ p = Pixel(65)
 
 ### json
 
+`import json`
+
 - `json.dumps()`  
     将python对象转为json格式的字符串，产生自带引号的字符串
 
-- `json.loads()`  
-    将json内容转为python对象
-
+- `json.load(fp, ...)`  
+    将文件中的 json 内容反序列化转为 python 对象
+- `json.loads(s, ...)`
+    将 s (一个包含 JSON 的 str, bytes 或 bytearray 实例) 反序列化为 Python 对象。
+    
 ### frontmatter
 - <https://python-frontmatter.readthedocs.io/en/latest/>
 - ```frontmatter.load()```

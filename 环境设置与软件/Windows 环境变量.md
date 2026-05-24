@@ -1,0 +1,1 @@
+`echo %USERDOMAIN%` 查看域名

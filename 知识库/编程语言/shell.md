@@ -24,3 +24,4 @@ readarray [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quant
 
 - `"${BIN_FILES[@]}"` 
     展开数组元素
+- `alias 别名=指令名称` 在 .bashrc 将常用长串指令设置为别名

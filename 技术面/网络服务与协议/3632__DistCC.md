@@ -1,0 +1,3 @@
+
+MSF
+- `msf > use exploit/unix/misc/distcc_exec`

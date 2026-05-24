@@ -1,0 +1,174 @@
+$ nmap -T4 -Pn -A -n -v 192.168.56.10
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-05-17 16:30 +0800
+NSE: Loaded 158 scripts for scanning.
+NSE: Script Pre-scanning.
+Initiating NSE at 16:30
+Completed NSE at 16:30, 0.00s elapsed
+Initiating NSE at 16:30
+Completed NSE at 16:30, 0.00s elapsed
+Initiating NSE at 16:30
+Completed NSE at 16:30, 0.00s elapsed
+Initiating Connect Scan at 16:30
+Scanning 192.168.56.10 [1000 ports]
+Discovered open port 135/tcp on 192.168.56.10
+Discovered open port 80/tcp on 192.168.56.10
+Discovered open port 445/tcp on 192.168.56.10
+Discovered open port 3389/tcp on 192.168.56.10
+Discovered open port 53/tcp on 192.168.56.10
+Discovered open port 139/tcp on 192.168.56.10
+Discovered open port 5986/tcp on 192.168.56.10
+Discovered open port 636/tcp on 192.168.56.10
+Discovered open port 389/tcp on 192.168.56.10
+Discovered open port 593/tcp on 192.168.56.10
+Discovered open port 88/tcp on 192.168.56.10
+Discovered open port 464/tcp on 192.168.56.10
+Discovered open port 3269/tcp on 192.168.56.10
+Discovered open port 5985/tcp on 192.168.56.10
+Discovered open port 3268/tcp on 192.168.56.10
+Completed Connect Scan at 16:30, 2.32s elapsed (1000 total ports)
+Initiating Service scan at 16:30
+Scanning 15 services on 192.168.56.10
+Completed Service scan at 16:31, 49.79s elapsed (15 services on 1 host)
+NSE: Script scanning 192.168.56.10.
+Initiating NSE at 16:31
+Completed NSE at 16:31, 8.27s elapsed
+Initiating NSE at 16:31
+Completed NSE at 16:31, 0.14s elapsed
+Initiating NSE at 16:31
+Completed NSE at 16:31, 0.00s elapsed
+Nmap scan report for 192.168.56.10
+Host is up (0.0026s latency).
+Not shown: 985 closed tcp ports (conn-refused)
+PORT     STATE SERVICE       VERSION
+53/tcp   open  domain        Simple DNS Plus
+80/tcp   open  http          Microsoft IIS httpd 10.0
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|_  Potentially risky methods: TRACE
+|_http-title: IIS Windows Server
+|_http-server-header: Microsoft-IIS/10.0
+88/tcp   open  kerberos-sec  Microsoft Windows Kerberos (server time: 2026-05-17 08:30:51Z)
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: sevenkingdoms.local, Site: Default-First-Site-Name)
+|_ssl-date: 2026-05-17T08:31:43+00:00; 0s from scanner time.
+| ssl-cert: Subject: commonName=kingslanding.sevenkingdoms.local
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:<unsupported>, DNS:kingslanding.sevenkingdoms.local
+| Issuer: commonName=SEVENKINGDOMS-CA
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2026-05-17T08:12:57
+| Not valid after:  2027-05-17T08:12:57
+| MD5:     0ee3 b1ed 930b 064e 2593 2fe5 0a21 21bd
+| SHA-1:   426d 4883 6bea 63e2 fe56 0ff4 23a2 0c4d c85d ede4
+|_SHA-256: 6c2e 28de 9347 247d fc83 a579 5917 d3ac 2039 d768 8710 2e5d 3247 fec8 ccb1 22b0
+445/tcp  open  microsoft-ds?
+464/tcp  open  kpasswd5?
+593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: sevenkingdoms.local, Site: Default-First-Site-Name)
+|_ssl-date: 2026-05-17T08:31:43+00:00; 0s from scanner time.
+| ssl-cert: Subject: commonName=kingslanding.sevenkingdoms.local
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:<unsupported>, DNS:kingslanding.sevenkingdoms.local
+| Issuer: commonName=SEVENKINGDOMS-CA
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2026-05-17T08:12:57
+| Not valid after:  2027-05-17T08:12:57
+| MD5:     0ee3 b1ed 930b 064e 2593 2fe5 0a21 21bd
+| SHA-1:   426d 4883 6bea 63e2 fe56 0ff4 23a2 0c4d c85d ede4
+|_SHA-256: 6c2e 28de 9347 247d fc83 a579 5917 d3ac 2039 d768 8710 2e5d 3247 fec8 ccb1 22b0
+3268/tcp open  ldap          Microsoft Windows Active Directory LDAP (Domain: sevenkingdoms.local, Site: Default-First-Site-Name)
+| ssl-cert: Subject: commonName=kingslanding.sevenkingdoms.local
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:<unsupported>, DNS:kingslanding.sevenkingdoms.local
+| Issuer: commonName=SEVENKINGDOMS-CA
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2026-05-17T08:12:57
+| Not valid after:  2027-05-17T08:12:57
+| MD5:     0ee3 b1ed 930b 064e 2593 2fe5 0a21 21bd
+| SHA-1:   426d 4883 6bea 63e2 fe56 0ff4 23a2 0c4d c85d ede4
+|_SHA-256: 6c2e 28de 9347 247d fc83 a579 5917 d3ac 2039 d768 8710 2e5d 3247 fec8 ccb1 22b0
+|_ssl-date: 2026-05-17T08:31:43+00:00; 0s from scanner time.
+3269/tcp open  ssl/ldap
+|_ssl-date: 2026-05-17T08:31:43+00:00; 0s from scanner time.
+| ssl-cert: Subject: commonName=kingslanding.sevenkingdoms.local
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:<unsupported>, DNS:kingslanding.sevenkingdoms.local
+| Issuer: commonName=SEVENKINGDOMS-CA
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2026-05-17T08:12:57
+| Not valid after:  2027-05-17T08:12:57
+| MD5:     0ee3 b1ed 930b 064e 2593 2fe5 0a21 21bd
+| SHA-1:   426d 4883 6bea 63e2 fe56 0ff4 23a2 0c4d c85d ede4
+|_SHA-256: 6c2e 28de 9347 247d fc83 a579 5917 d3ac 2039 d768 8710 2e5d 3247 fec8 ccb1 22b0
+3389/tcp open  ms-wbt-server Microsoft Terminal Services
+| rdp-ntlm-info: 
+|   Target_Name: SEVENKINGDOMS
+|   NetBIOS_Domain_Name: SEVENKINGDOMS
+|   NetBIOS_Computer_Name: KINGSLANDING
+|   DNS_Domain_Name: sevenkingdoms.local
+|   DNS_Computer_Name: kingslanding.sevenkingdoms.local
+|   DNS_Tree_Name: sevenkingdoms.local
+|   Product_Version: 10.0.17763
+|_  System_Time: 2026-05-17T08:31:35+00:00
+|_ssl-date: 2026-05-17T08:31:43+00:00; 0s from scanner time.
+| ssl-cert: Subject: commonName=kingslanding.sevenkingdoms.local
+| Issuer: commonName=kingslanding.sevenkingdoms.local
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2026-05-16T08:09:58
+| Not valid after:  2026-11-15T08:09:58
+| MD5:     00c4 3491 795b 18a8 09df 8d34 63e5 de7b
+| SHA-1:   7d15 cbcd 4812 864f b16b ea21 090f 0718 e456 2aaf
+|_SHA-256: 2262 2ebc 9190 698c e2f9 c9b7 6951 d705 671b 9742 36dd cf9c 6250 e857 7f3f 4c92
+5985/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-title: Not Found
+|_http-server-header: Microsoft-HTTPAPI/2.0
+5986/tcp open  ssl/wsmans?
+| tls-alpn: 
+|   h2
+|_  http/1.1
+|_ssl-date: 2026-05-17T08:31:43+00:00; 0s from scanner time.
+| ssl-cert: Subject: commonName=VAGRANT
+| Subject Alternative Name: DNS:VAGRANT, DNS:vagrant
+| Issuer: commonName=VAGRANT
+| Public Key type: rsa
+| Public Key bits: 4096
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2026-05-16T01:01:27
+| Not valid after:  2029-05-15T01:01:27
+| MD5:     7aa4 340d cc06 03c8 dd5d 7c5d 571d 9152
+| SHA-1:   9c02 c9cd ca67 503e dccf 07a3 b6dc 5d90 48ec 727d
+|_SHA-256: af33 6eb1 c13d c577 3279 e393 734b 7ac6 d0f3 5cef daac 81d8 4847 a216 947e f8d2
+Service Info: Host: KINGSLANDING; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb2-security-mode: 
+|   3.1.1: 
+|_    Message signing enabled and required
+| nbstat: NetBIOS name: KINGSLANDING, NetBIOS user: <unknown>, NetBIOS MAC: 00:0c:29:60:01:d2 (VMware)
+| Names:
+|   KINGSLANDING<00>     Flags: <unique><active>
+|   SEVENKINGDOMS<00>    Flags: <group><active>
+|   SEVENKINGDOMS<1c>    Flags: <group><active>
+|   KINGSLANDING<20>     Flags: <unique><active>
+|_  SEVENKINGDOMS<1b>    Flags: <unique><active>
+| smb2-time: 
+|   date: 2026-05-17T08:31:35
+|_  start_date: N/A
+
+NSE: Script Post-scanning.
+Initiating NSE at 16:31
+Completed NSE at 16:31, 0.00s elapsed
+Initiating NSE at 16:31
+Completed NSE at 16:31, 0.00s elapsed
+Initiating NSE at 16:31
+Completed NSE at 16:31, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 60.84 seconds

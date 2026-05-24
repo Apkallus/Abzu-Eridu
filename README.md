@@ -29,9 +29,9 @@ emoji:
 ### 文档
 
 - 速查手册
-    - [HackTricks wiki](https://book.hacktricks.wiki/)
+    - [HackTricks wiki](https://book.hacktricks.wiki/) 📌
         - 实战化攻防技巧百科，覆盖渗透全流程各类服务与场景。
-    - [Hacker Recipes](https://www.thehacker.recipes/)
+    - [Hacker Recipes](https://www.thehacker.recipes/) 📌
         - 按“配方”组织的攻击路径手册，侧重红队与内网渗透流程。
     - [OWASP 速查表系列](https://cheatsheetseries.owasp.org/)
         - 开发/防御向的 Web 安全最佳实践速查文档。
@@ -45,11 +45,11 @@ emoji:
 - 攻防框架
     - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/)
         - Web 应用程序黑盒测试框架与细节
-    - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 🔍
+    - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 🔍📌
     - [OWASP 移动安全测试指南](https://owasp.org/www-project-mobile-security-testing-guide/)
     - [OWASP 固件安全测试方法](https://github.com/scriptingxss/owasp-fstm)
     - MITRE ATT&CK
-    - NIST SP 800-115
+    - NIST SP 800-115 ♾️
     - OSSTMM v3
 
 ### 靶场
@@ -75,7 +75,8 @@ emoji:
     - https://github.com/zhuifengshaonianhanlu/pikachu
      
 - 网络主机
-    - [PwnTillDawn Online](https://online.pwntilldawn.com/) 网络靶场🔍
+    - [PwnTillDawn Online](https://online.pwntilldawn.com/) 网络靶场 📌
+        - 使用 openvpn 进行靶机连接，需使用有效 vpn 后再尝试连接
     - [VulnHub](https://www.vulnhub.com/) 本地靶机库 🔍
     - [Metasploitable3](https://github.com/rapid7/metasploitable3) 本地靶机 🔍
     - [vulhub 基于 docker 的靶场](https://github.com/vulhub/vulhub) 🔍
@@ -94,6 +95,13 @@ emoji:
     - [vulnerable-AD](https://github.com/safebuffer/vulnerable-AD)
     - [BadBlood](https://github.com/davidprowe/BadBlood)
     - [GOAD](https://github.com/Orange-Cyberdefense/GOAD) 🔍
+    - NetExec
+        - lab https://github.com/Pennyw0rth/NetExec-Lab
+        - 工具 https://github.com/Pennyw0rth/NetExec
+            - 使用说明 https://www.netexec.wiki/
+
+- 云
+    - http://flaws2.cloud 
 
 ### 图书/可用
 
@@ -113,7 +121,7 @@ emoji:
 - [MDN Web 文档](https://developer.mozilla.org/en-US/docs/Web) （不同于 MDN 开发者教程）
 - [sqlcourse](http://www.sqlcourse.com/)
 - [Microsoft Learn](https://learn.microsoft.com/zh-cn/security/)
-
+    
 ### 弃
 
 图书：
@@ -196,7 +204,7 @@ emoji:
         - 命令行数据捕获内容暂略
 
 - Web
-    1. MDN Web开发者教程 [前半部分](https://developer.mozilla.org/en-US/docs/Learn_web_development)
+    - [MDN Web开发者教程](https://developer.mozilla.org/en-US/docs/Learn_web_development)
         - 包含教程、讲解与挑战，其合作伙伴 Scrimba 拥有对应的交互式教程
             教程扩展部分不在侧边栏中，使用对应模块介绍页的链接进入
 
@@ -206,9 +214,6 @@ emoji:
         - 包含[主题文档与对应 lab](https://portswigger.net/web-security/all-topics) 还有[研究](https://portswigger.net/research)，以及 [Burp 工具文档](https://portswigger.net/burp/documentation/contents)。   
             除工具文档外，主题文档、lab也对应 Burp 的各种功能与插件的实际使用。 
             按主题组织的高质量资料，值得反复查看。
-
-    3. MDN Web开发者教程 [后半部分](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions)
-
 
     4. [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) 靶机
         - 项目拥有挑战的对应指南 [Pwning OWASP Juice Shop](https://pwning.owasp-juice.shop/companion-guide/latest/index.html)，不包含知识文档
@@ -263,26 +268,62 @@ emoji:
             - 内容：
                 - 软件安全部分：简要的核心概念。
                 - web 安全部分：陈旧且简略。
-                - 网络安全部分：包含基础概念、工具命令与代码模板。
+                - 网络安全部分：包含基础概念、工具命令与代码模板，作为本书的核心。
                 - 实验粗糙，仅阅读说明。略过问题集
             - 重点是网络安全部分，之后或许返回查看代码模板，或许查看英文第三版新章节
 
-- 网络服务主机与内网
-    - 靶场
-        - [PwnTillDawn Online](https://online.pwntilldawn.com/) 
+- ⚠️ 中断 ⚠️
+      
+    - 《渗透测试高手》（Advanced Penetration Testing）-  Wil Allsopp 
+        - 从钓鱼到C2开始，缺乏前期侦察
 
-    - 流程
-        - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 
-        - NIST SP 800-115
+    - 《渗透测试实战 第三版》（The Hacker Playbook 3）-  Peter Kim 
+        - 简略的工具介绍
 
-    - 图书
-        - 《渗透测试 完全初学者指南》（Penetration Testing: A Hands-On Introduction to Hacking）- Georgia Weidman
-        - 《渗透测试实战 第三版》（The Hacker Playbook 3）-  Peter Kim 
-        - 《灰帽黑客 第六版》（Gray Hat Hacking）- HARPER
+- 网络渗透与后渗透
 
-    - 内网
-        - 《渗透测试高手》（Advanced Penetration Testing）-  Wil Allsopp 
-        - GOAD
+    - metasploit 攻击框架系列 
+        - 工具 https://github.com/rapid7/metasploit-framework
+        - 教程 https://www.offsec.com/metasploit-unleashed/introduction/
+        - 文档 
+            - https://docs.rapid7.com/metasploit/
+            - https://docs.metasploit.com/
+        - 图书 `Metasploit: The Penetration Tester’s Guide, 2nd Edition`
+            - 无专用靶场，主要使用陈旧的 metasploitable3，除 MSSQL 外无配置说明
+            - 代码示例为32位架构
+            - 对渗透测试各阶段进行简要介绍，以及过程中在 MSF 对应的模块与几个额外工具
+            - 略过10无线
+        - 靶机 https://github.com/rapid7/metasploitable3
+            - 并非开箱即用：陈旧的靶机与设置文档，链接失效，缺失环境设置说明
+        - 模块与漏洞仓库 https://www.rapid7.com/db
+    
+    - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/Main_Page) 📌
+        - [PTES 技术指南](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 
+
+    - 《灰帽黑客 第六版》（Gray Hat Hacking）- HARPER
+        - 部分实验基于无法使用的云 [lab](https://github.com/GrayHatHacking/GHHv6)
+        - 内容：
+            - 前两部分包含简要的编程与系统概念，简略的工具介绍，对渗透测试与红队的概述。
+            - 之后为核心部分，但仍然简略，之后或需使用扩展阅读与同主题材料再次阅读
+            - 略过章节：IDA Pro、威胁狩猎、虚拟机部分
+
+    - 渗透百科速查
+        - [HackTricks wiki](https://book.hacktricks.wiki/) 
+            - 实战化攻防技巧百科，覆盖渗透全流程各类服务与场景。
+        - [Hacker Recipes](https://www.thehacker.recipes/) 
+            - 按“配方”组织的攻击路径手册，侧重红队与内网渗透流程。
+
+    - 框架
+        - MITRE ATT&CK
+        - NIST SP 800-115 
+
+    - windows
+        - 《深入解析Windows操作系统 第7版》(Windows Internals, Part 1 / Part 2)
+        - MSDN 的 AD 文档
+    - 网络
+        - 《Network Security Assessment (3rd Edition)》 – Chris McNab
+        - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis
+            - 对应靶场 https://github.com/R3dy/capsulecorp-pentest
 
 ## 文档与靶场内容版权
 

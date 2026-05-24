@@ -1,0 +1,71 @@
+获取凭证
+- llmnr 与 nbns
+	- 概念
+		- 当dns解析失败时，windows使用这两种协议在本地广播寻找对应主机，对应主机将发送响应。
+	- 攻击：尝试响应
+- windows主机通信的身份验证
+	- Kerberos
+	- 证书
+	- netntlm
+		- 前身为 lm：使用分段哈希而易受破解
+		- ntlmv1：
+			- 服务器返回随机数
+			- 客户端使用此随机数计算hash发送
+			- 服务器验证是否匹配
+			- 攻击：控制服务器提供自定义静态随机数，彩虹表爆破得到口令hash
+		- ntlmv2：
+			- 服务器与客户端各生成一个随机数
+- Responder工具进行响应攻击
+	- 设置参数
+		- 网络接口
+		- wpad 自动查找web代理协议：当攻击者直连互联网时设置本机为代理，当攻击者使用代理时或产生异常。
+		- fingerprint：获取主机信息
+	- 启动监听
+		- 获取ntlm的hash
+			- v2格式为：
+				user::DOMAIN:server_challenge:response_blob
+		- 从Responder导出hash
+		- 使用john破解得到口令
+- winexe 工具
+	- 介绍：在linux上对windows系统的远程管理工具
+	- 方式：对 IPC$ 进程通信共享，使用命名管道创建管理服务，远程连接到此管理服务
+	- 流程
+		- smbclient 
+			- -U使用之前得到的凭证 
+				`<DOMAIN>/<USERNAME>%<PASSWORD>` 
+			- `-L <IP ADDRESS>`列出共享，查看是否存在 IPC$ 共享
+		- winexe 连接并打开交互shell
+			- -U使用凭证
+			- --uninstall 启用退出时卸载功能
+			- `//<IP ADDRESS>` 设置ip地址
+			- 应用程序名称，执行指定应用程序
+			- --system 创建服务时显式使用SYSTEM身份
+- wmi工具
+	- 概念
+		- windows管理规范访问系统配置信息
+		- 使用 wmi查询语言 wql，语法类似sql
+	- wql
+		- 类 win32_logonsession
+			- LogonType 登录类型
+				- 使用映射表查看编号对应信息
+				- 其中2与10的交互式类型或保存可用凭据
+			- LogonId 会话id
+		- 类 win32_loggedonuser。查看用户信息
+	- pth-wmic 查询工具
+		- 在 win32_logonsession 对象内查询会话类型与id
+		- 保存会话类型为2或10的id
+		- 在 win32_loggedonuser 对象查询用户信息
+			- 查找域用户
+	- impacket-wmiexec 执行工具
+		- 创建后门用户 
+			- net user 创建新用户
+			- net localgroup 添加到本地管理员组
+- winrm 
+	- 概念：windows 远程管理协议，基于web连接的简单对象访问协议 soap
+	- evil-winrm 交互工具
+		- 设置用户密码地址后连接得到shell
+		- 设置二进制目录与脚本目录以携带代码
+			- 脚本无法自动加载，使用shell中的menu查看已加载脚本
+		- 对于 ams 系统，Invoke-RestMethod 尝试连接到标准端点以获取用户数据
+		- Invoke-Binary 使用携带的二进制文件获取信息
+			- 内存转储口令hash
