@@ -73,6 +73,7 @@ emoji:
     - www.cyberstrikelab.com 需短信注册
     - http://vulnstack.qiyuanxuetang.net/vuln/
     - https://github.com/zhuifengshaonianhanlu/pikachu
+    - https://echoctf.red
      
 - 网络主机
     - [PwnTillDawn Online](https://online.pwntilldawn.com/) 网络靶场 📌
@@ -110,6 +111,8 @@ emoji:
 
 - Security Engineering: A Guide to Building Dependable Distributed Systems 3rd Edition, by Ross Anderson (Author)   
     <https://www.cl.cam.ac.uk/archive/rja14/book.html>
+
+- 《Web Application Security: Exploitation and Countermeasures for Modern Web Applications》- Andrew Hoffman
 
 ### 未拥有
 
@@ -203,7 +206,7 @@ emoji:
         - 作者在 [Github 发布的捕获数据包](https://github.com/chrissanders/packets)
         - 命令行数据捕获内容暂略
 
-- Web
+- Web 应用程序渗透
     - [MDN Web开发者教程](https://developer.mozilla.org/en-US/docs/Learn_web_development)
         - 包含教程、讲解与挑战，其合作伙伴 Scrimba 拥有对应的交互式教程
             教程扩展部分不在侧边栏中，使用对应模块介绍页的链接进入
@@ -280,7 +283,7 @@ emoji:
     - 《渗透测试实战 第三版》（The Hacker Playbook 3）-  Peter Kim 
         - 简略的工具介绍
 
-- 网络渗透与后渗透
+- 网络渗透 & 后渗透 & Web 应用程序渗透
 
     - metasploit 攻击框架系列 
         - 工具 https://github.com/rapid7/metasploit-framework
@@ -290,22 +293,38 @@ emoji:
             - https://docs.metasploit.com/
         - 图书 `Metasploit: The Penetration Tester’s Guide, 2nd Edition`
             - 无专用靶场，主要使用陈旧的 metasploitable3，除 MSSQL 外无配置说明
-            - 代码示例为32位架构
-            - 对渗透测试各阶段进行简要介绍，以及过程中在 MSF 对应的模块与几个额外工具
-            - 略过10无线
+            - 内容
+                - 代码示例为32位架构
+                - 对渗透测试各阶段进行简要介绍，以及过程中在 MSF 对应的模块与少量额外工具
+                - 略过：10无线
+            - 若尝试在某阶段使用 MSF 则结合其他材料进行特定章节阅读
         - 靶机 https://github.com/rapid7/metasploitable3
             - 并非开箱即用：陈旧的靶机与设置文档，链接失效，缺失环境设置说明
         - 模块与漏洞仓库 https://www.rapid7.com/db
-    
-    - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/Main_Page) 📌
-        - [PTES 技术指南](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 
 
     - 《灰帽黑客 第六版》（Gray Hat Hacking）- HARPER
         - 部分实验基于无法使用的云 [lab](https://github.com/GrayHatHacking/GHHv6)
         - 内容：
             - 前两部分包含简要的编程与系统概念，简略的工具介绍，对渗透测试与红队的概述。
-            - 之后为核心部分，但仍然简略，之后或需使用扩展阅读与同主题材料再次阅读
+            - 之后为核心内容，但仍然简略。
             - 略过章节：IDA Pro、威胁狩猎、虚拟机部分
+        - 或需使用扩展阅读与同主题材料再次阅读
+
+    - 《Network Security Assessment (3rd Edition)》 – Chris McNab
+        - [图书代码](https://resources.oreilly.com/examples/9780596006112/)
+        - 内容：
+            - 前3章提供概念速览，之后为核心的网络渗透部分
+                - 或需创建类似第3章的文档索引页以导航到各主题
+                - 部分协议/工具/命令示例已过时，提取框架概念
+        
+    - 《Bug Bounty Bootcamp》 - Vickie Li
+        - 结合 OWASP 系列资源、《黑客攻防技术宝典：Web实战篇》与PortSwigger 资源构建 Web 应用程序渗透实践框架
+
+    
+    - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 
+
+    - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/Main_Page) 
+        - [PTES 技术指南](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 
 
     - 渗透百科速查
         - [HackTricks wiki](https://book.hacktricks.wiki/) 
@@ -321,7 +340,7 @@ emoji:
         - 《深入解析Windows操作系统 第7版》(Windows Internals, Part 1 / Part 2)
         - MSDN 的 AD 文档
     - 网络
-        - 《Network Security Assessment (3rd Edition)》 – Chris McNab
+
         - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis
             - 对应靶场 https://github.com/R3dy/capsulecorp-pentest
 
