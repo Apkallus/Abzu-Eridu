@@ -317,14 +317,14 @@ emoji:
                 - 或需创建类似第3章的文档索引页以导航到各主题
                 - 部分协议/工具/命令示例已过时，提取框架概念
         
-    - 《Bug Bounty Bootcamp》 - Vickie Li
-        - 结合 OWASP 系列资源、《黑客攻防技术宝典：Web实战篇》与PortSwigger 资源构建 Web 应用程序渗透实践框架
+    - 《Bug Bounty Bootcamp》 - Vickie Li 📌
+        - 整合 OWASP WSTG、《黑客攻防技术宝典：Web实战篇》与 PortSwigger 构建 Web 应用程序渗透实践框架
 
-    
+    - [hacker101](https://ctf.hacker101.com/ctf)
+
+    - 使用 PTES、灰帽黑客、Network Security Assessment 构建渗透测试的从侦察开始到后渗透之前的阶段
+
     - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 
-
-    - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/Main_Page) 
-        - [PTES 技术指南](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 
 
     - 渗透百科速查
         - [HackTricks wiki](https://book.hacktricks.wiki/) 
@@ -337,7 +337,7 @@ emoji:
         - NIST SP 800-115 
 
     - windows
-        - 《深入解析Windows操作系统 第7版》(Windows Internals, Part 1 / Part 2)
+        - 《深入解析Windows操作系统 第7版》(Windows Internals, Part 1/2)
         - MSDN 的 AD 文档
     - 网络
 

@@ -2,6 +2,16 @@
 
 使用左侧边栏搜索命令
 
+## 各种功能
+
+- [别名](https://learn.microsoft.com/zh-cn/powershell/scripting/learn/shell/using-aliases?view=powershell-7.6)
+
+    创建别名
+    ```powershell
+    Set-Alias -Name np -Value Notepad.exe
+    Set-Alias -Name cmpo  -Value Compare-Object
+    ```
+Set-Alias -Name burp -Value "E:\App\BurpSuite\jre\bin\java -jar E:\App\BurpSuite\BurpKeygenCN.jar"
 ## 目录文件操作
 
 - `ls X:\`

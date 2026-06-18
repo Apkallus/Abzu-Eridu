@@ -94,6 +94,8 @@ class cimg:
 
 ### subprocess 子进程管理
 
+https://docs.python.org/3/library/subprocess.html
+
 subprocess 模块允许你生成新的进程，连接它们的输入、输出、错误管道，并且获取它们的返回码。
 
 推荐的调用子进程的方式是在任何它支持的用例中使用 run() 函数。对于更进阶的用例，也可以使用底层的 Popen 接口。
@@ -148,7 +150,10 @@ if b"pwn.college" in p.stdout:
 
 - `time.sleep(t)`
     挂起进程
-
+- `time.localtime()`
+    时间元组
+- `time.strftime("%Y-%m-%d %H:%M:%S", 时间元组)`
+    格式化时间字符串
 
 ### collections
 
@@ -218,6 +223,9 @@ p = Pixel(65)
 
 - `os.mkdir(path[, mode])`
     以数字权限模式创建目录（单级目录）
+
+- `os.makedirs()`
+    创建多级目录，并可设置 `exist_ok=True` 以忽略目录已存在的报错
 
 - `os.open(path, flags, mode=0o777, *, dir_fd=None)`
     打开文件 path，根据 flags 设置各种标志位，并根据 mode 设置其权限状态。当计算 mode 时，会首先根据当前 umask 值将部分权限去除。本方法返回新文件的描述符。新的文件描述符是 不可继承 的。
@@ -290,24 +298,15 @@ p = Pixel(65)
 
     以下退出代码已被定义，可与 `_exit()` 一起使用（尽管并非必须）。这些退出代码通常用于用 Python 编写的系统程序，例如邮件服务器的外部命令投递程序。
 
-
+- `os.environ` 查看环境变量
+    - `os.environ['SUDO_USER']`
 
 ### shutil — 高级文件操作
 
 - `shutil.rmtree(path, ignore_errors=False, onerror=None, *, onexc=None, dir_fd=None)`
     删除整个目录树；path 必须指向一个目录（但不是指向目录的符号链接）
 
-### json
 
-`import json`
-
-- `json.dumps()`  
-    将python对象转为json格式的字符串，产生自带引号的字符串
-
-- `json.load(fp, ...)`  
-    将文件中的 json 内容反序列化转为 python 对象
-- `json.loads(s, ...)`
-    将 s (一个包含 JSON 的 str, bytes 或 bytearray 实例) 反序列化为 Python 对象。
     
 ### frontmatter
 - <https://python-frontmatter.readthedocs.io/en/latest/>
@@ -423,6 +422,12 @@ tips:
 
 - `.zfill(N)`
     补前导0到N
+
+- `.center(长度, 字符)`
+    使用指定的字符（默认为空格）作为填充字符，使字符串居中对齐
+
+- `.find(字符)` `.rfind(字符)`
+    从左到右，从右到左。查找字符索引，找不到则返回 -1
 
 #### f-string
 
@@ -760,7 +765,32 @@ for t in threads_list:
     获取第一个匹配索引
 - `list.insert()`
     列表插入
-    
+- `list.extend(seq)`
+    在列表末尾一次性追加另一个序列中的多个值
+- `.map(lambad)`
+    map函数可以将一个函数应用于列表的每一个元素，从而生成一个新的列表
+
+### itertools 
+
+https://docs.python.org/3/library/itertools.html
+
+- `itertools.chain()` 函数将嵌套列表展开为一个平铺列表
+- `itertools.product(*iterables, repeat=1)`
+    生成迭代器的所有组合，懒加载
+
+### ipaddress
+
+https://docs.python.org/3/library/ipaddress.html#ipaddress.collapse_addresses
+
+- `ipaddress.ip_network(, strict=False)`
+    转化为库对象，当主机位不对齐时取消默认的严格模式 `strict` 
+
+- `ipobj.hosts()`
+    返回排除头尾后的可用 IP。遍历 ipobj 得到全部 IP
+
+- `ipaddress.collapse_addresses(addresses)`
+    设置 IP 对象后去重复
+
 ### match...case...
 
 ```py
@@ -768,8 +798,39 @@ match 判断条件:
     case 条件:
     case _:
 ```
+### 模块
 
-### dataclasses 
+- `__name__ == '__main__'`
+    区分直接执行与作为模块导入
+
+    <https://docs.python.org/3/library/__main__.html>
+
+    - 当导入一个 Python 模块或包时， `__name__` 会被设置为该模块或包的名称。
+    - 如果该模块在顶层代码环境中执行，则其 `__name__` 设置为字符串 `'__main__' ` 
+
+
+
+### logging - 日志打印
+
+https://docs.python.org/3/library/logging.html
+
+```py
+import logging
+
+# 若省略 filename 则仅控制台输出
+logging.basicConfig(
+    filename='myapp.log', # 输出文件
+    level=logging.INFO, # 日志级别
+    format='%(asctime)s - %(levelname)s - %(message)s', # 日志格式
+    datefmt='%Y-%m-%d %H:%M:%S' # 时间格式
+)
+logging.debug("调试信息")   # 仅在 level 为 DEBUG 时输出
+logging.info("info")   
+logging.warning("warning") 
+logging.error("error")   
+```
+
+### dataclasses - 设置类模板复用
 
 <https://docs.pythonlang.cn/3/library/dataclasses.html>
 
@@ -830,6 +891,9 @@ class InventoryItem:
 
 - `[::-1]` 反转
 
+- `dict_c = {**dict_a, **dict_b}` 
+    字典展开，1个`*`为key展开，2个为键值对展开
+
 - `.ljust(N, char)`
     使用选定字符左对齐N位
 
@@ -860,6 +924,55 @@ class InventoryItem:
 
 - 在现存函数添加默认参数作为 flag，以添加新功能的同时，保持旧调用运行
     - 或拆分为多个函数，而不是添加 flag
+
+- `:=` 
+    象牙运算符，同时进行赋值与运算
+    ```py
+    if (n := len(lst)) > 0:
+        print(n)
+    ```
+
+- `sum([[a,b], [c,d]], [空列表])` 
+    进行列表加法，得到浅层列表扩展效果 `[空列表] + [a,b] + [c,d] = [a,b,c,d]`
+
+
+## 各种格式文件数据解析
+
+### json
+
+`import json`
+
+- `json.dumps()`  
+    将python对象转为json格式的字符串，产生自带引号的字符串
+
+- `json.load(fp, ...)`  
+    将文件中的 json 内容反序列化转为 python 对象
+- `json.loads(s, ...)`
+    将 s (一个包含 JSON 的 str, bytes 或 bytearray 实例) 反序列化为 Python 对象。
+
+### xml 
+
+```python
+import xml.etree.ElementTree as ET
+
+tree = ET.parse(file_str) # 解析文件数据到对象
+root = tree.getroot() # 得到根节点
+
+for host in root.findall('host'): # 遍历所有 host 节点
+    # 在 status 节点得到得到 state 字段
+    state = host.find("status").get("state") 
+```
+
+### csv
+
+```py
+with open(f'{file_str}.csv', 'w', encoding='utf-8') as f:
+    # 使用文件句柄与 csv 头部设置字典写入对象
+    writer = csv.DictWriter(f, fieldnames=['addr', 'state', 'name'])
+    # 写入头部与数据
+    writer.writeheader()
+    writer.writerows(data_list)
+```
 
 ## 参考
 
