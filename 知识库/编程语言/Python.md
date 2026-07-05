@@ -115,23 +115,24 @@ if b"pwn.college" in p.stdout:
 ```
 
 
-### asyncio - 异步协程（协作式切换）
+### asyncio - 异步协程
 
-- `class asyncio.Semaphore(value=1)`  
-    信号量：限制同一时刻最多允许多少个任务“进入临界区”
+https://docs.python.org/zh-cn/3.14/library/asyncio-task.html#coroutine
 
-    使用 `Semaphore` 的推荐方式是通过 `async with` 语句（异步上下文管理器）。:
-    如果内部计数器的值大于零，则将其减一并立即返回 True。 如果其值为零，则会等待直到 release() 并调用并返回 True。
+async 设置未兑现操作，await 等待操作完成
+
+- `asyncio.Semaphore(value=1)`  
+    设置协程任务信号量
+
     ```py
     sem = asyncio.Semaphore(10)
 
-    # ... 稍后
+    # 使用信号量同步
     async with sem:
-        # 操作共享的资源
+        # 同步执行的内容
     ```
 - `create_task()`
-    将协程对象创建并调度为一个任务来执行，返回一个 Task 对象。
-    通常设置“任务数≈信号量”
+    立即执行协程，并返回一个 Task 对象。
 
 - `await gather()`  
     聚合多个协程或 Future 对象的结果，返回一个汇总结果的 Future 对象。协程会被自动包装成 Future 并调度到事件循环中执行，但不保证调度顺序与传入顺序一致。
@@ -145,6 +146,30 @@ if b"pwn.college" in p.stdout:
     - `writer` 用 `writer.write(...)` + `await writer.drain()` 写入    
         - `writer.close()`  发起关闭
         - `await writer.wait_closed()` 等待关闭真正完成（缓冲刷出/FIN 发送/传输层状态清理等）
+
+- `asyncio.run()`
+    运行协程函数
+
+### aiohttp - 异步网络模块
+
+https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientSession
+
+- `aiohttp.ClientSession()` 
+    创建客户端异步网络对象，之后传递此对象使用其方法即进行异步网络通信
+
+- `async ClientSession.get()`
+    创建未实现的网络请求
+
+- `await ClientResponse.json()`
+    等待响应
+
+```py
+async with aiohttp.ClientSession() as net_session:
+
+
+async with net_session.get(api_str) as response:
+    response_json = await response.json()
+```
 
 ###  time
 
@@ -767,8 +792,11 @@ for t in threads_list:
     列表插入
 - `list.extend(seq)`
     在列表末尾一次性追加另一个序列中的多个值
-- `.map(lambad)`
-    map函数可以将一个函数应用于列表的每一个元素，从而生成一个新的列表
+
+### 迭代器操作
+
+- `map(lambad 元素: 元素操作, 迭代器)`
+    map函数可以将一个函数应用于每一个元素，从而生成一个新的列表
 
 ### itertools 
 

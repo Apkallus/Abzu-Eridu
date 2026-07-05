@@ -43,13 +43,13 @@ emoji:
 - 漏洞库
     - Exploit-DB
 - 攻防框架
-    - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/)
+    - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/) 📌
         - Web 应用程序黑盒测试框架与细节
     - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 🔍📌
     - [OWASP 移动安全测试指南](https://owasp.org/www-project-mobile-security-testing-guide/)
     - [OWASP 固件安全测试方法](https://github.com/scriptingxss/owasp-fstm)
     - MITRE ATT&CK
-    - NIST SP 800-115 ♾️
+    - NIST SP 800-115 
     - OSSTMM v3
 
 ### 靶场
@@ -108,16 +108,21 @@ emoji:
 
 - 《API 攻防》（Hacking APIs） — Corey Ball
 - 《攻击网络协议》（Attacking Network Protocols） — James Forshaw
+- 《深入解析Windows操作系统 第7版》(Windows Internals, Part 1/2)
+- 《黑客之道：漏洞发掘的艺术》- Jon Erickson
 
 - Security Engineering: A Guide to Building Dependable Distributed Systems 3rd Edition, by Ross Anderson (Author)   
     <https://www.cl.cam.ac.uk/archive/rja14/book.html>
 
-- 《Web Application Security: Exploitation and Countermeasures for Modern Web Applications》- Andrew Hoffman
+- 《Ethical Hacking: A Hands-on Introduction to Breaking In》 - Daniel G. Graham
+
+- 《From Day Zero to Zero Day》- Eugene Lim
+
+- 《Penetration Testing Azure for Ethical Hackers》 - David Okeyode, Karl Fosaaen
 
 ### 未拥有
 
 - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis
-- 《Network Security Assessment (3rd Edition)》 – Chris McNab
 
 ### 开发文档
 
@@ -311,54 +316,25 @@ emoji:
         - 或需使用扩展阅读与同主题材料再次阅读
 
     - 《Network Security Assessment (3rd Edition)》 – Chris McNab
-        - [图书代码](https://resources.oreilly.com/examples/9780596006112/)
+        - [图书代码示例](https://resources.oreilly.com/examples/9780596006112/)
         - 内容：
             - 前3章提供概念速览，之后为核心的网络渗透部分
                 - 或需创建类似第3章的文档索引页以导航到各主题
                 - 部分协议/工具/命令示例已过时，提取框架概念
-        
-    - 《Bug Bounty Bootcamp》 - Vickie Li 📌
-        - 整合 OWASP WSTG、《黑客攻防技术宝典：Web实战篇》与 PortSwigger 构建 Web 应用程序渗透实践框架
 
-    - [hacker101](https://ctf.hacker101.com/ctf)
+    - Web 应用程序渗透    
 
-    - 使用 PTES、灰帽黑客、Network Security Assessment 构建渗透测试的从侦察开始到后渗透之前的阶段
+        - 《Bug Bounty Bootcamp》 - Vickie Li
+            
+        - 《Web Application Security: Exploitation and Countermeasures for Modern Web Applications》- Andrew Hoffman
+            - 暂略第三部分：防御
 
-    - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 
+        - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
 
-    - 渗透百科速查
-        - [HackTricks wiki](https://book.hacktricks.wiki/) 
-            - 实战化攻防技巧百科，覆盖渗透全流程各类服务与场景。
-        - [Hacker Recipes](https://www.thehacker.recipes/) 
-            - 按“配方”组织的攻击路径手册，侧重红队与内网渗透流程。
 
-    - 框架
-        - MITRE ATT&CK
-        - NIST SP 800-115 
+    - [hacker101](https://ctf.hacker101.com/ctf) 
 
-    - windows
-        - 《深入解析Windows操作系统 第7版》(Windows Internals, Part 1/2)
-        - MSDN 的 AD 文档
-    - 网络
+    - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 📅
 
-        - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis
-            - 对应靶场 https://github.com/R3dy/capsulecorp-pentest
-
-## 文档与靶场内容版权
-
-### :book: 署名共享
-
-- OWASP 
-    <https://owasp.org/about/#licensing>
-
-- HackTricks    
-    <https://book.hacktricks.wiki/en/welcome/hacktricks-values-and-faq.html#license>
-
-- pwn.college   
-    <https://pwn.college/>
-    
-### :copyright: 版权声明许可
-
-- MITRE    
-    <https://attack.mitre.org/resources/legal-and-branding/terms-of-use/#license>   
-    > © 2025 The MITRE Corporation. This work is reproduced and distributed with the permission of The MITRE Corporation.   
+    - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis 📅
+        - 对应靶场 https://github.com/R3dy/capsulecorp-pentest

@@ -98,3 +98,17 @@ net localgroup [<GroupName> <Name> […] {/add |  /delete} [/domain]
 
 atips：
 - 需交互式 shell，而 meterpreter 不满足
+
+## Netstat - 网络状态
+
+- `-a`	显示所有活动的 TCP 连接数以及计算机正在侦听的 TCP 和 UDP 端口。
+
+- `-n`	显示活动的 TCP 连接数，但是，地址和端口号以数字表示，并且不会尝试确定名称。
+
+- `-o`	显示活动的 TCP 连接数，并包括每个连接的进程 ID (PID)。 可以在 Windows 任务管理器的“进程”选项卡上基于 PID 找到应用程序。 
+
+例
+- `netstat -ano`
+
+atips
+- `-n` 选项显示数字而不解析名称，从而大幅提高查询速度

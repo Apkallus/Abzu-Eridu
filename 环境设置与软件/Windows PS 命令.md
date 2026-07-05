@@ -2,6 +2,9 @@
 
 使用左侧边栏搜索命令
 
+[命令拆分多行](https://www.delftstack.com/zh/howto/powershell/powershell-multiline-command/)
+- `` ` `` 反引号使用多行命令
+
 ## 各种功能
 
 - [别名](https://learn.microsoft.com/zh-cn/powershell/scripting/learn/shell/using-aliases?view=powershell-7.6)
