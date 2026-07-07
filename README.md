@@ -120,8 +120,6 @@ emoji:
 
 - 《Penetration Testing Azure for Ethical Hackers》 - David Okeyode, Karl Fosaaen
 
-### 未拥有
-
 - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis
 
 ### 开发文档
@@ -330,6 +328,7 @@ emoji:
             - 暂略第三部分：防御
 
         - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
+            - 虽然出版日期相对较新，然而列举工具大部分均停止更新，且包含大量商业工具，接近广告
 
 
     - [hacker101](https://ctf.hacker101.com/ctf) 

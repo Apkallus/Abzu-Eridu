@@ -233,6 +233,9 @@ p = Pixel(65)
 - `os.path.dirname(path)`
     返回路径名 path 的目录名
 
+- `os.path.abspath(path)`
+    返回路径名 path 的规范化绝对化版本。
+
 - `os.urandom(n)`
     随机字节生成。  
     `secrets.token_bytes(n)` 为对应的安全封装函数
@@ -826,7 +829,7 @@ match 判断条件:
     case 条件:
     case _:
 ```
-### 模块
+### 特殊变量
 
 - `__name__ == '__main__'`
     区分直接执行与作为模块导入
@@ -837,6 +840,8 @@ match 判断条件:
     - 如果该模块在顶层代码环境中执行，则其 `__name__` 设置为字符串 `'__main__' ` 
 
 
+- `__file__`
+    当前文件路径
 
 ### logging - 日志打印
 
@@ -875,6 +880,30 @@ class InventoryItem:
     def total_cost(self) -> float:
         return self.unit_price * self.quantity_on_hand
 ```
+
+### pathlib
+
+<https://docs.python.org/3/library/pathlib.html>
+
+- `/`
+    斜杠运算符用于创建子路径
+
+- `Path(文件路径)`
+    初始化路径对象
+- `Path.absolute()`
+    将路径设为绝对路径，不进行规范化或解析符号链接。返回一个新的路径对象
+- `PurePath.parent`
+    路径的逻辑父级
+- `PurePath.is_absolute()`
+    返回路径是否为绝对路径。
+- `Path.is_file(*, follow_symlinks=True)`
+    如果路径指向的是普通文件，则返回 True 。如果路径无效、无法访问或缺失，或者指向的不是普通文件，则返回 False 可以使用 Path.stat() 来区分这些情况。
+
+    此方法通常会跟随符号链接；要排除符号链接，请添加参数 `follow_symlinks=False`
+
+示例：
+- `Path(__file__).absolute().parent`
+    获取当前文件所在目录
 
 ### 备忘
 

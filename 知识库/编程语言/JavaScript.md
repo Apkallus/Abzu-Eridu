@@ -124,12 +124,25 @@ Vehicle.prototype.原型对象 = function() {
 
 Promise：对象在给定函数完成后调用下一个函数（调用链）
 
+在异步对象的作用域内，使用回调函数 resolve, reject 分别指定正常（继续传递）与异常（触发 catch）的条件
+
 ```js
-const promise = new Promise((参数) => {
-  函数a();
-}).then((参数) => {
-  函数b();
+// resolve, reject 为 Promise 的正常/异常回调函数
+const promise = new Promise((resolve, reject) => {
+  函数a(function(参数a) {
+    // 处理正常/异常状态
+    if (参数a) { return resolve(参数a); }
+    return reject();
+  });
+}).then((参数a) => {
+  return new Promise((resolve, reject) => {
+    函数b(参数a, function(参数b) {
+      if (参数b) { return resolve(参数b); }
+      return reject();
+    });
+  });
 }).catch((err) => {
+  // 接收异常状态
   console.log('an error occurred!');
 });
 ```
@@ -269,9 +282,52 @@ window.__agent = true;
 - `'A'.repeat(重复次数)`
   构造重复字符串
 
+### fs - 文件系统
+
+https://nodejs.org/api/fs.html
+
+- `filehandle.createReadStream([options])`
+  创建文件读取流
+
+### 流
+
+- `readable.pipe()` 
+  添加可写属性到可读对象上，并切换到流模式
+
+### 事件
+
+- `.on(事件名称, 回调函数)`
+  发生事件时执行预设函数
+
+### csv-parser - csv 处理库
+
+https://www.npmjs.com/package/csv-parser
+
+```js
+const csv = require('csv-parser')
+const fs = require('fs')
+const results = [];
+
+fs.createReadStream('data.csv')
+  .pipe(csv())
+  .on('data', (data) => results.push(data))
+  .on('end', () => {
+    console.log(results);
+    // [
+    //   { NAME: 'Daffy Duck', AGE: '24' },
+    //   { NAME: 'Bugs Bunny', AGE: '22' }
+    // ]
+  });
+```
+
 ### 其他
 
 - `setTimeout(函数, 时间)`
   延迟执行函数
 - `setInterval(函数, 时间)`
   定时执行函数
+
+- `require('模块名称')`
+  导入模块
+
+- 双 `!!` 运算符判断是否为已定义
