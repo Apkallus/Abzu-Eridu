@@ -6,9 +6,13 @@
 python -m venv 虚拟环境路径
 
 source 虚拟环境路径/bin/activate # 激活虚拟环境
+
+deactivate # 退出当前虚拟环境
 ```
 
 当从虚拟环境内部使用时，像 pip 这样的常用安装工具将把 Python 包安装到虚拟环境中，而无需显式告知。
+
+若使用旧版 python 的虚拟环境，需安装 `python3.x-venv` 组件
 
 ### 进制编码
 

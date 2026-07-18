@@ -1,7 +1,7 @@
 图书：
 - https://eloquentjavascript.net/
 
-### 变量
+## 变量
 
 如果不包含 `var`、`let` 或 `const` 这样的关键字，您定义的任何变量都会被提升到全局作用域。这意味着作为全局作用域子对象的任何其他对象都能访问该变量。
 
@@ -25,7 +25,7 @@ console.log(age);
 console.log(window.age);
 ```
 
-### 函数
+## 函数
 
 在 JavaScript 中，函数是对象。这意味着它们可以使用上一节中的变量和标识符进行赋值和重新赋值。
 
@@ -52,7 +52,7 @@ const a = function() {};
 (function() {})();
 ```
 
-### 上下文
+## 上下文
 
 在函数之间共享上下文：
 
@@ -87,7 +87,7 @@ soup.hasGarlic1 = function() { console.log(this.garlic); } // true
 soup.hasGarlic2 = () => { console.log(this.garlic); } // false
 ```
 
-### 原型继承
+## 原型继承
 
 JavaScript 并不真正支持类，而是在 JavaScript 原型系统之上通过一些抽象来模拟类的功能。在原型继承系统中，如 JavaScript，创建的任何对象都有一个名为 `prototype` 的属性附加到它上面。`prototype` 属性附带一个 `constructor` 属性，指向拥有该原型的函数。这意味着任何对象都可以用来实例化新对象，因为构造函数指向包含原型的对象，而原型包含构造函数。
 
@@ -120,7 +120,7 @@ Vehicle.prototype.原型对象 = function() {
 原型对象.方法b(); // 动态添加的存在的方法
 ```
 
-### 异步
+## 异步
 
 Promise：对象在给定函数完成后调用下一个函数（调用链）
 
@@ -158,11 +158,11 @@ const 函数对象 = async function() {
 函数对象();
 ```
 
-### 浏览器 DOM
+## 浏览器 DOM
 
 DOM 是用于在现代 Web 浏览器中管理状态的层次化表示数据。`window` 对象是最顶层标准对象之一。
 
-### ```atob()```与```btoa()``` 
+## ```atob()```与```btoa()``` 
 [mdn文档](https://mdn.org.cn/en-US/docs/Web/API/Window/atob)：
 
 ```typescript
@@ -176,7 +176,7 @@ component: ScoreBoardComponent
     
 > Window 接口的 atob() 方法解码使用 Base64 编码的数据字符串。使用 Window.btoa() 方法编码和传输可能导致通信问题的数据，然后传输它并使用 atob() 方法再次解码数据。
 
-### 阻止当前页面及同源的其他页面修改本地 localStorage 的特定字段
+## 阻止当前页面及同源的其他页面修改本地 localStorage 的特定字段
 
 如果仅在单个页面设置，需监测其他页面。
 若对所有页面生效则只需第一段阻止本页面存储。
@@ -203,7 +203,7 @@ window.addEventListener('storage', (event) => {
 在当前页面添加存储事件监听器，当其他页面的存储事件触时清空拦截字段的值（清空后值为 `null`，添加条件判断避免死循环）。
 
 
-### 选择所有编辑链接，将跳转替换为复制链接地址到粘贴板，并阻止跳转
+## 选择所有编辑链接，将跳转替换为复制链接地址到粘贴板，并阻止跳转
 
 ```js
 const edit_links = document.querySelectorAll("a.github-edit-link");
@@ -217,7 +217,7 @@ edit_links.forEach(link => {
 });
 ```
 
-### fetch
+## fetch
 
 <https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch>
 
@@ -234,7 +234,7 @@ if (!response.ok) {
 
 ```
 
-### setInterval
+## setInterval
 
 setInterval方法用于按照指定的时间间隔重复调用函数或执行代码片段。
 
@@ -254,7 +254,7 @@ setInterval方法用于按照指定的时间间隔重复调用函数或执行代
 </script>
 ```
 
-### JSON
+## JSON
 
 
 - `JSON.parse(jsonString)`
@@ -263,7 +263,27 @@ setInterval方法用于按照指定的时间间隔重复调用函数或执行代
 - `JSON.stringify(value, replacer, space)` 
     用于将 JavaScript 值（对象、数组、原始类型等）转换为 JSON 格式字符串
 
-### 其他
+## URL
+
+```js
+// 将 URL 字符串设置为 URL 对象
+const url = new URL(location);
+
+// 从 URL 对象的搜索参数中访问 csrf 的值
+const csrf = url.searchParams.get('csrf');
+```
+
+## document
+
+创建元素并添加到 DOM
+
+```js
+const form = document.createElement('form');
+form.method = 'post';
+document.documentElement.append(form);
+```
+
+## 其他
 
 在 `window` 全局作用域设置 `__` 双下划线自定义属性名，避免重复执行后续js代码。
 自定义属性名初始为 undefined（假值）。
@@ -277,29 +297,29 @@ window.__agent = true;
     对字符串进行 URI 编码
 
 
-### 字符串
+## 字符串
 
 - `'A'.repeat(重复次数)`
   构造重复字符串
 
-### fs - 文件系统
+## fs - 文件系统
 
 https://nodejs.org/api/fs.html
 
 - `filehandle.createReadStream([options])`
   创建文件读取流
 
-### 流
+## 流
 
 - `readable.pipe()` 
   添加可写属性到可读对象上，并切换到流模式
 
-### 事件
+## 事件
 
 - `.on(事件名称, 回调函数)`
   发生事件时执行预设函数
 
-### csv-parser - csv 处理库
+## csv-parser - csv 处理库
 
 https://www.npmjs.com/package/csv-parser
 
@@ -320,7 +340,9 @@ fs.createReadStream('data.csv')
   });
 ```
 
-### 其他
+
+
+## 其他
 
 - `setTimeout(函数, 时间)`
   延迟执行函数
@@ -331,3 +353,9 @@ fs.createReadStream('data.csv')
   导入模块
 
 - 双 `!!` 运算符判断是否为已定义
+
+- `top`
+  顶层页面
+
+- `tabindex`
+  tabindexglobal 属性允许开发者使 HTML 元素可聚焦

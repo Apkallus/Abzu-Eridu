@@ -14,7 +14,7 @@
     Set-Alias -Name np -Value Notepad.exe
     Set-Alias -Name cmpo  -Value Compare-Object
     ```
-Set-Alias -Name burp -Value "E:\App\BurpSuite\jre\bin\java -jar E:\App\BurpSuite\BurpKeygenCN.jar"
+
 ## 目录文件操作
 
 - `ls X:\`
@@ -75,3 +75,23 @@ Set-Alias -Name burp -Value "E:\App\BurpSuite\jre\bin\java -jar E:\App\BurpSuite
 
 - `Get-Acl`
     cmdlet 获取表示文件或资源的安全描述符的对象。 安全描述符包含资源的访问控制列表（ACL）。 ACL 指定用户和用户组有权访问资源的权限。
+
+## 网络
+
+### TCP
+
+`Get-NetTCPSetting`
+- 查看 TCP 设置
+- 示例：
+    - `Get-NetTCPSetting | Select SettingName, CongestionProvider`
+        查看项目名称及其拥塞控制算法
+
+## 对象
+
+- `Select-Object` `select`
+    选择对象特定属性，`,` 逗号分隔多项 
+
+## 格式
+
+- `Format-Table`
+    表格形式
