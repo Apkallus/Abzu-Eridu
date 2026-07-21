@@ -321,7 +321,7 @@ emoji:
                 - 部分协议/工具/命令示例已过时，提取框架概念
 
     - Web 应用程序渗透 📌
-        与 OWASP WSTG 与 PortSwigger 一起，并行回顾+阅读  
+        与 OWASP WSTG 、PortSwigger、《黑客攻防技术宝典：Web实战篇》 一起，并行回顾/阅读/归档  
 
         - 《Bug Bounty Bootcamp》 - Vickie Li
             
@@ -331,6 +331,7 @@ emoji:
         - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
             - 虽然出版日期相对较新，然而前几章列举工具大多停止更新
 
+        各材料的内容结构近似
 
     - [hacker101](https://ctf.hacker101.com/ctf) 📅
 

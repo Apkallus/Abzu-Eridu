@@ -55,62 +55,6 @@ if(store) {
 - 载荷 `<script>alert()</script>` 成功弹窗
 - 普通载荷即在 `select option` 标签内触发 JS 代码执行，而无需关闭上下文标签
 
-## innerHTML 汇无法执行 script，但可触发 svg onload
-
-探测
-```html
-<h1>
-<span>
-    0 search results for '
-</span>
-<span id="searchMessage">
-</span>
-<span>
-    '
-</span>
-</h1>
-
-<script>
-function doSearchQuery(query) {
-    document.getElementById('searchMessage').innerHTML = query;
-}
-var query = (new URLSearchParams(window.location.search)).get('search');
-if(query) {
-    doSearchQuery(query);
-}
-</script>
-```
-- 源 `window.location.search`，参数 `search`
-- 汇 `.innerHTML`
-- 上下文 `<span>位置</span>`
-
-攻击
-- 载荷 `<svg onload=alert()>`，成功弹窗
-    - 浏览器渲染
-        ```html
-        <span id="searchMessage">
-            <svg onload="alert()"></svg>
-        </span>
-        ```
-
-- 载荷 `<img src onerror=alert()>`，成功弹窗
-    - 浏览器渲染
-        ```html
-        <span id="searchMessage">
-            <img src="" onerror="alert()">
-        </span>
-        ```
-        
-- 载荷 `<script>alert()</script>` 弹窗失败，脚本未执行
-    - 浏览器渲染
-        ```html
-        <span id="searchMessage">
-            <script>
-                alert()
-            </script>
-        </span>
-        ```
-
 ## jQuery `$()` 同时作为选择器与解释器，顶级页面可修改子框架 src 属性而不受同源策略访问子框架 DOM 的限制
 
 [`$()` 不仅作为元素选择器，还作为 HTML 解释器来创建元素](https://bugs.jquery.com/ticket/11290/) 
@@ -399,6 +343,25 @@ input 元素 value 值变化事件
 - 不设置 `action` 属性
 - 设置空字符串 `action=""` 
 
+设置内容类型
+```html
+<form enctype="multipart/form-data">
+```
+
+## oauth
+
+oauth 身份验证为一系列在应用程序与验证服务器之间的设置状态的重定向操作
+- → 当受害者已登录时，从攻击者页面顶级导航到应用程序的 oauth 登录端点
+    - 虽然顶级导航的目标并非当前步骤，而是创建之后步骤的顶级导航上下文
+- ← 应用程序返回的页面包含对 oauth 服务器的客户端重定向，以及验证参数
+- → 浏览器访问 oauth 服务器时携带之前通过验证的 oauth 服务器的 cookie
+    - 当前步骤为顶级导航上下文的实际使用步骤，需在 get 中携带 cookie
+- ← oauth 服务器使用服务器端重定向到应用程序的回调端点，快速返回保存的会话状态而不再重新验证
+- → 浏览器使用回调参数密钥访问应用程序的回调端点
+- ← 应用程序设置新 cookie
+
+此处的关键在于浏览器保存着 oauth 服务器中的已通过验证的 cookie（顶级导航），应用程序的 cookie 在此场景下无关（是否存在，是否被发送）。应用程序的回调端点仅使用 url 的查询参数密钥进行确认
+
 ## 其他
 
 - 注入的 `<body>` 虽然标签被浏览器去掉而不显示在 DOM 中，但实际上载荷仍可执行，似乎合并到原始 body 中
@@ -422,3 +385,29 @@ input 元素 value 值变化事件
 - HTML 元素设置 id 
     - id 为字符串时，使用 `window[设置id]` 访问
     - id 为全局变量，使用 `window.id` 或 `id` 访问
+
+`target` 属性
+- 设置打开/提交链接的位置（上下文） `<a>` `<form>` 同时更新 `window.name`
+    - `<iframe>` 的 name（用于 CSRF 隐藏表单导航操作）
+    - 关键字 
+        - `_blank` 新标签页
+        - `_self` 默认，当前上下文
+        - `_parent`
+        - `_top`
+        - `_unfencedTop`
+- 若值不对应组件或关键字：打开新标签页，并使用值设置 `window.name` 而用于悬空窃取
+
+- `pushState(state, unused, url)`
+    将一个条目添加到浏览器的会话历史记录堆栈中。
+    - `url` 
+        设置浏览器窗口显示的 url 为此参数，并设置到历史记录中。但不立即加载此 url
+
+- URL 重定向
+    - 在末尾添加 `/` 或导致服务器端重定向到去除此反斜杠
+        - `foo/bar/` => `foo/bar`
+
+- 客户端路径遍历
+    - `window.location = '/blog/' + 拼接内容对象`
+        - 此时拼接内容若设置遍历序列 `../../` 将被浏览器进行规范化，突破客户端 JS 代码的固定路径限制。可用于客户端重定向
+
+- `window.open()`打开新窗口需手动交互
