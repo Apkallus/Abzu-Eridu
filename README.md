@@ -320,8 +320,8 @@ emoji:
                 - 或需创建类似第3章的文档索引页以导航到各主题
                 - 部分协议/工具/命令示例已过时，提取框架概念
 
-    - Web 应用程序渗透 📌
-        与 OWASP WSTG 、PortSwigger、《黑客攻防技术宝典：Web实战篇》 一起，并行回顾/阅读/归档  
+    - Web 应用程序渗透 📌 
+        与 OWASP WSTG 、PortSwigger、《黑客攻防技术宝典：Web实战篇》 一起，并发回顾/阅读/归档  
 
         - 《Bug Bounty Bootcamp》 - Vickie Li
             
@@ -329,9 +329,9 @@ emoji:
             - 暂略第三部分：防御
 
         - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
-            - 虽然出版日期相对较新，然而前几章列举工具大多停止更新
+            - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
 
-        各材料的内容结构近似
+        各材料的内容结构近似，并发阅读过程中能够简单发现过时/错误描述。选定一本书为骨架，读完一章/小节后查看其他材料的同主题章节。
 
     - [hacker101](https://ctf.hacker101.com/ctf) 📅
 
