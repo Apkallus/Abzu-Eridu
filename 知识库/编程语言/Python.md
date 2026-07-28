@@ -3,7 +3,7 @@
 ### venv — 创建虚拟环境
 
 ```sh
-python -m venv 虚拟环境路径
+python3 -m venv 虚拟环境路径
 
 source 虚拟环境路径/bin/activate # 激活虚拟环境
 
@@ -701,6 +701,17 @@ print(r.text)
     使用post的 json 参数并传入字典以发送 json 数据
 
 返回对象使用 `r.json()` 转为python对象
+
+#### requests.Response
+
+- `elapsed`: `datetime.timedelta`
+    请求发送到响应到达之间经过的时间（以 timedelta 表示）。此属性专门衡量从发送请求的第一个字节到完成解析标头所花费的时间。因此，它不受读取响应内容或 stream 关​​键字参数值的影响。
+
+
+### datetime
+
+- `timedelta.total_seconds()`
+    返回时间区间包含的总秒数。
 
 ### Numba 性能库
 
