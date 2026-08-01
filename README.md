@@ -217,9 +217,13 @@ emoji:
     - `《黑客攻防技术宝典：Web实战篇》 Dafydd Stuttard / Marcus Pinto`
         - 拥有知识架构以及部分过时的内容，但结合作者的 PortSwigger Academy 仍值得阅读。
     - [PortSwigger Web Security Academy](https://portswigger.net/web-security)  文档与 lab
-        - 包含[主题文档与对应 lab](https://portswigger.net/web-security/all-topics) 还有[研究](https://portswigger.net/research)，以及 [Burp 工具文档](https://portswigger.net/burp/documentation/contents)。   
-            除工具文档外，主题文档、lab也对应 Burp 的各种功能与插件的实际使用。 
-            按主题组织的高质量资料，值得反复查看。
+        - 包含
+            - [主题文档与对应 lab](https://portswigger.net/web-security/all-topics) 
+            - [研究文章](https://portswigger.net/research)
+            - [Burp 工具文档](https://portswigger.net/burp/documentation/contents)  
+            - 各种速查表 
+
+        - 按主题组织的高质量资料，值得反复查看。
 
     4. [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) 靶机
         - 项目拥有挑战的对应指南 [Pwning OWASP Juice Shop](https://pwning.owasp-juice.shop/companion-guide/latest/index.html)，不包含知识文档

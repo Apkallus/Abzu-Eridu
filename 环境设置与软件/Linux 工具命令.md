@@ -274,6 +274,11 @@ man 是系统的手册分页程序。
 	
 #### Alien - 跨平台包转换工具
 
+#### rbenv - ruby 版本管理器
+
+- 安装自定义版本
+	`rbenv install 2.7.6`
+
 ### 系统控制
 
 #### systemctl - 控制 systemd 系统和服务管理器  
@@ -1033,6 +1038,9 @@ xxd -r[evert] [options] [infile [outfile]]
 
 - `-d, --decode`
 	解码数据。
+
+- `-w, --wrap=COLS`
+	设置换行字符数量，默认76。设置0禁用换行
 
 ### 查看 & 选择
 
@@ -2360,7 +2368,11 @@ nc（或 netcat）工具可用于各种涉及 TCP 或 UDP 的任务。它可以�
 - `file ...`
 	要处理的文件或文件列表。如果没有指定文件，则使用标准输入。
 
-
+例
+- 使用 sha1 哈希签名
+	```sh
+	echo -n 'str' | openssl dgst -sha1 -hmac '密钥'
+	```
 
 #### hashcat
 
