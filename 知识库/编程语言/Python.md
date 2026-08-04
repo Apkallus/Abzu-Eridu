@@ -756,6 +756,8 @@ HTTPServer(("0.0.0.0", 9999), H).serve_forever()
 
 ### threading
 
+https://docs.python.org/3/library/threading.html
+
 `from threading import Condition`
 
 - `threading.Condition`：
@@ -777,6 +779,10 @@ HTTPServer(("0.0.0.0", 9999), H).serve_forever()
 
     如果子类重写了构造函数，则必须确保在处理线程之前调用基类构造函数（`Thread.__init__()`）。
 
+- `Event` 对象，线程间通信。
+    实现事件对象的类。事件对象管理一个内部标识，调用 `set()` 方法可将其设置为 `true`。调用 `clear()` 方法可将其设置为 `false`。调用 `wait()` 方法将进入阻塞直到标识为 true。这个标识初始时为 `false`（即，初始时阻塞）。
+    - 使用此对象也可实现创建所有任务后同时执行
+
 ```py
 import threading
 
@@ -791,6 +797,12 @@ for t in threads_list:
 for t in threads_list:
     t.join()
 ```
+
+### concurrent.futures - threading 的包装库
+
+https://docs.python.org/zh-cn/3.14/library/concurrent.futures.html
+
+
 
 ### dict
 

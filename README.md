@@ -290,7 +290,7 @@ emoji:
     - 《渗透测试实战 第三版》（The Hacker Playbook 3）-  Peter Kim 
         - 简略的工具介绍
 
-- 网络渗透 & 后渗透 & Web 应用程序渗透
+- 网络渗透 & 后渗透
 
     - metasploit 攻击框架系列 
         - 工具 https://github.com/rapid7/metasploit-framework
@@ -324,22 +324,25 @@ emoji:
                 - 或需创建类似第3章的文档索引页以导航到各主题
                 - 部分协议/工具/命令示例已过时，提取框架概念
 
-    - Web 应用程序渗透 📌 
-        与 OWASP WSTG 、PortSwigger、《黑客攻防技术宝典：Web实战篇》 一起，并发回顾/阅读/归档  
+- Web 应用程序渗透 📌 
+    
+    与 OWASP WSTG 、PortSwigger、《黑客攻防技术宝典：Web实战篇》 一起，并发回顾/阅读/归档  
 
-        - 《Bug Bounty Bootcamp》 - Vickie Li
-            
-        - 《Web Application Security: Exploitation and Countermeasures for Modern Web Applications》- Andrew Hoffman
-            - 暂略第三部分：防御
+    - 《Bug Bounty Bootcamp》 - Vickie Li
+        
+    - 《Web Application Security: Exploitation and Countermeasures for Modern Web Applications》- Andrew Hoffman
+        - 暂略第三部分：防御
 
-        - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
-            - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
+    - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
+        - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
 
-        各材料的内容结构近似，并发阅读过程中能够简单发现过时/错误描述。选定一本书为骨架，读完一章/小节后查看其他材料的同主题章节。
+    各材料的内容结构近似，并发阅读过程中能够简单发现过时/错误描述。选定一本书为骨架，读完一章/小节后查看其他材料的同主题章节。
 
     - [hacker101](https://ctf.hacker101.com/ctf) 📅
 
-    - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 📅
+- TBD 📅
 
-    - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis 📅
+    - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 
+
+    - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis 
         - 对应靶场 https://github.com/R3dy/capsulecorp-pentest
