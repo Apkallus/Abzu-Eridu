@@ -141,15 +141,6 @@ emoji:
 - 《漏洞管理实战》（Practical Vulnerability Management） — Andrew Magnusson
 - 《计算机安全导论》（Computer Security Fundamentals） — Chuck Easttom
 
-平台：
-- hackerdna.com
-- tryhackme.com
-- hackthebox.com
-- pentesterlab.com
-- ine.com
-- hack.zkaq.cn
-- yunjing.ichunqiu.com
-
 ### 公开课
 
 - [pwn.college CSE 598: 应用漏洞研究](https://pwn.college/cse598-avr-f2024/) 公开课程 ❓
