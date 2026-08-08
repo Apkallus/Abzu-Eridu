@@ -6,6 +6,8 @@
 
 ## 概述
 
+https://cwe.mitre.org/data/definitions/97.html
+
 Web 服务器通常允许开发人员在静态 HTML 页面中添加少量动态代码，而无需使用完整的服务器端或客户端语言。此功能由[服务器端包含（SSI）](https://owasp.org/www-community/attacks/Server-Side_Includes_%28SSI%29_Injection)提供。
 
 服务器端包含是 Web 服务器在将页面提供给用户之前解析的指令。当仅需要执行非常简单的任务时，它们是编写 CGI 程序或使用服务器端脚本语言嵌入代码的替代方案。常见的 SSI 实现提供包含外部文件、设置和打印 Web 服务器 CGI 环境变量，或执行外部 CGI 脚本或系统命令的指令（命令）。

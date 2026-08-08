@@ -327,7 +327,7 @@ emoji:
     - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
         - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
 
-    各材料的内容结构近似，并发阅读过程中能够简单发现过时/错误描述。选定一本书为骨架，读完一章/小节后查看其他材料的同主题章节。
+    各材料的内容结构近似且相互引用，并发阅读过程中能够简单发现过时/错误描述。选定一本书为骨架，读完一章/小节后查看其他材料的同主题章节。
 
     - [hacker101](https://ctf.hacker101.com/ctf) 📅
 
