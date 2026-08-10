@@ -359,3 +359,6 @@ fs.createReadStream('data.csv')
 
 - `tabindex`
   tabindexglobal 属性允许开发者使 HTML 元素可聚焦
+
+- `/Alfresco-CSRFToken=([^;]*)/.exec(document.cookie)[1]`
+  对 cookie 应用正则表达式捕获组，并选择第一个匹配

@@ -21,10 +21,26 @@ function move_uploaded_file(string $from, string $to): bool
 当 from 文件有效时，上传到 to 路径
 
 
-#### unlink()
+#### unlink() - 删除文件
 
 ```php
 function unlink(string $filename, ?resource $context = null): bool
 ```
 
-删除 filename 文件
+删除 filename 文件，如果文件是符号链接，将会删除符号链接。
+
+#### symlink() - 创建符号链接
+
+```php
+function symlink(string $target, string $link): bool
+```
+
+symlink() creates a symbolic link to the existing target with the specified name link. 
+
+#### readlink() - 读取符号链接指向的路径
+
+```php
+function readlink(string $path): string|false
+```
+
+Returns the contents of the symbolic link path or false on error. 
