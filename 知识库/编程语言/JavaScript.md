@@ -340,7 +340,10 @@ fs.createReadStream('data.csv')
   });
 ```
 
+## 正则表达式
 
+`String.prototype.match()`
+- 返回值：一个 `Array`，其内容取决于全局标志 (`g`) 的存在与否，如果没有找到匹配项，则返回 `null`。
 
 ## 其他
 
