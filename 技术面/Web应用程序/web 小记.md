@@ -375,6 +375,33 @@ oauth 身份验证为一系列在应用程序与验证服务器之间的设置�
 
 此处的关键在于浏览器保存着 oauth 服务器中的已通过验证的 cookie（顶级导航），应用程序的 cookie 在此场景下无关（是否存在，是否被发送）。应用程序的回调端点仅使用 url 的查询参数密钥进行确认
 
+## iframe
+
+`contentWindow` 属性返回 HTMLIFrameElement 的只读 Window 对象。
+
+如果与 iframe 父级同源，那么父级页面可以访问 iframe 的文档以及内部 DOM
+
+用法：
+- 子框架多次重定向到攻击者同源时，从子框架当前 URL 提取信息（hash 片段）
+
+`window.parent` 属性返回当前窗口的直接父窗口，而 `window.top` 返回窗口对象层次结构中的最顶层窗口。
+
+`Window.self` 返回对 window 对象本身的引用。
+
+比较 `Window.self` 与 `window.top` 是否相同来区分父页面与子框架
+
+## message
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage
+
+`window.postMessage()` 跨源通信。
+
+```js
+otherWindow.postMessage(message, targetOrigin, [transfer]);
+```
+- `targetOrigin`
+    通过窗口的 origin 属性来指定哪些窗口能接收到消息事件，其值可以是字符串"*"（表示无限制）或者一个 URI。
+
 ## 其他
 
 - 注入的 `<body>` 虽然标签被浏览器去掉而不显示在 DOM 中，但实际上载荷仍可执行，似乎合并到原始 body 中

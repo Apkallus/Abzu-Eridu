@@ -2379,8 +2379,41 @@ nc（或 netcat）工具可用于各种涉及 TCP 或 UDP 的任务。它可以�
 
 #### hashcat
 
-[文档](https://hashcat.net/wiki/doku.php?id=frequently_asked_questions#how_do_i_install_hashcat)
+[文档](https://hashcat.net/wiki/doku.php?id=hashcat)
 
+```log
+Options Short / Long           | Type | Description                                          | Example
+
+-m, --hash-type                | Num  | Hash-type, references below (otherwise autodetect)   | -m 1000
+
+-a, --attack-mode              | Num  | Attack-mode, see references below                    | -a 3
+
+-H, --hash-info                |      | Show information for each hash-mode                  | -H or -HH
+	--example-hashes           |      | Alias of --hash-info                                 |
+
+--show                     |      | Compare hashlist with potfile; show cracked hashes
+
+
+-D, --opencl-device-types      | Str  | OpenCL device-types to use, separated with commas    | -D 1
+-O, --optimized-kernel-enable  |      | Enable optimized kernels (limits password length)    |
+```
+
+- `-a` 攻击模式默认 0
+- `-m` hash 类型编号，对应 JWT 在 hashcat 中的编号
+- `-D 1` 显式设置设备编号，避免出现设备内存分配不足的异常
+
+异常信息
+```log
+* Device #1: Not enough allocatable device memory or free host memory for mapping.
+```
+- `hashcat -a 0 -m 16500 -D 1 jwt.txt jwt.secrets.list` 
+	显式指定设备进行 JWT 秘密暴破
+	- JWT 秘密格式
+		`<jwt>:<identified-secret>`
+
+示例
+- `hashcat -H | grep JWT -B 2 -A 25`
+	搜索 JWT 对应的 hash 类型编码，此处为 `#16500`
 
 #### ssh - OpenSSH SSH 客户端（远程登录程序）
 

@@ -327,11 +327,11 @@ emoji:
     - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
         - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
 
-    各材料的内容结构近似且相互引用，并发阅读过程中能够简单发现过时/错误描述。选定一本书为骨架，读完一章/小节后查看其他材料的同主题章节。
-
-    - [hacker101](https://ctf.hacker101.com/ctf) 📅
+    各材料的内容结构近似且相互引用，并发阅读过程中能够简单发现过时/错误描述。选定拥有清晰结构的书为初始骨架，读完一章/小节后查看其他材料的同主题章节。此时，WSTG 这类零散的百科类文档可被整合到/重构骨架。
 
 - TBD 📅
+
+    - [hacker101](https://ctf.hacker101.com/ctf) 
 
     - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 
 
