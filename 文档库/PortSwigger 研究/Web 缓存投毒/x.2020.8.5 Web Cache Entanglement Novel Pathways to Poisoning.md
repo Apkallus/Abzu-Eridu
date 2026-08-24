@@ -1,0 +1,1 @@
+https://portswigger.net/research/web-cache-entanglement

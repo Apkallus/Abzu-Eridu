@@ -477,6 +477,14 @@ tips:
 例：
 - `f"{int_number:#x}"` 以拥有 `0x` 前缀的十六进制打印数字
 
+#### format 格式字符串
+
+```py
+target_host = 127.1
+
+'Host: {target_host}'.format(target_host=target_host)
+```
+
 ### PyCryptoDome
 
 <https://pycryptodome.readthedocs.io/en/latest/>

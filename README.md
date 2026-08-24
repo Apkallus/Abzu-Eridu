@@ -128,19 +128,6 @@ emoji:
 - [sqlcourse](http://www.sqlcourse.com/)
 - [Microsoft Learn](https://learn.microsoft.com/zh-cn/security/)
     
-### 弃
-
-图书：
-- 《Web 之困》The Tangled Web — Michal Zalewski
-- 《信息安全原理与实践 (第2版)》（Information Security: Principles and Practice）- Mark Stamp
-- 《渗透测试实践指南》（The Basics of Hacking and Penetration Testing） — Patrick
-- 《信息安全完全参考手册》（Information Security: The Complete Reference） — Mark Rhodes-Ousley
-- 《黑客大曝光 : Web应用程序安全》(Hacking Exposed Web Applications)
-- 《黑客大曝光》（Hacking Exposed）
-- 《开发者的web安全戒律》（Web Security for Developers） — Malcolm McDonald
-- 《漏洞管理实战》（Practical Vulnerability Management） — Andrew Magnusson
-- 《计算机安全导论》（Computer Security Fundamentals） — Chuck Easttom
-
 ### 公开课
 
 - [pwn.college CSE 598: 应用漏洞研究](https://pwn.college/cse598-avr-f2024/) 公开课程 ❓
@@ -328,6 +315,10 @@ emoji:
         - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
 
     各材料的内容结构近似且相互引用，并发阅读过程中能够简单发现过时/错误描述。选定拥有清晰结构的书为初始骨架，读完一章/小节后查看其他材料的同主题章节。此时，WSTG 这类零散的百科类文档可被整合到/重构骨架。
+
+    之后或需尝试使用各种自动化工具以快速进行初始探测，结合 lab 记录的步骤确认可自动化的部分
+
+    研究文档本身即可直接作为或提取内容到主题，类似 portswigger 发布研究后创建对应主题材料
 
 - TBD 📅
 

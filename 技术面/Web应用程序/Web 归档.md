@@ -26,11 +26,4 @@
 
 ## 待阅读
 
-- 反序列化
-    https://www.elttam.com/blog/ruby-deserialization
-
-    https://devcraft.io/2021/01/07/universal-deserialisation-gadget-for-ruby-2-x-3-x.html
-
-- URL
-    https://blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf
-
+文档库中的大量研究与文章

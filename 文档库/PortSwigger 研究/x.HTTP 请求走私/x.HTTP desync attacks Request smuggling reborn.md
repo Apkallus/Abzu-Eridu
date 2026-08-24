@@ -1,0 +1,1 @@
+https://portswigger.net/research/http-desync-attacks-request-smuggling-reborn

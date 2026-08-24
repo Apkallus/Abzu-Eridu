@@ -234,6 +234,9 @@ if (!response.ok) {
 
 ```
 
+- `redirect: 'manual'`
+  不追踪重定向
+
 ## setInterval
 
 setInterval方法用于按照指定的时间间隔重复调用函数或执行代码片段。
