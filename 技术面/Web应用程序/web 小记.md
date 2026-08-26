@@ -418,6 +418,13 @@ function parse_data(event) {
 window.addEventListener("message", parse_data);
 ```
 
+## HTML 动态插入
+
+script 与 innerHTML 动态插入 
+- [w3 文档](https://www.w3.org/TR/2008/WD-html5-20080610/dom.html#dynamic0)
+    - 在 `innerHTML` 小节中找到显式说明
+        `Note: script elements inserted using innerHTML do not execute when they are inserted.`
+
 ## 其他
 
 - 注入的 `<body>` 虽然标签被浏览器去掉而不显示在 DOM 中，但实际上载荷仍可执行，似乎合并到原始 body 中
