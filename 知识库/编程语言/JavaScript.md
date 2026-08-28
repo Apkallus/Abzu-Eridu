@@ -327,6 +327,9 @@ https://nodejs.org/api/fs.html
 - `filehandle.createReadStream([options])`
   创建文件读取流
 
+- `unlink(文件路径字符串)`
+  删除文件
+
 ## 流
 
 - `readable.pipe()` 
@@ -358,10 +361,60 @@ fs.createReadStream('data.csv')
   });
 ```
 
-## 正则表达式
+## String
 
-`String.prototype.match()`
-- 返回值：一个 `Array`，其内容取决于全局标志 (`g`) 的存在与否，如果没有找到匹配项，则返回 `null`。
+- `String.prototype.split(separator[, limit])`
+  接受一个模式，通过搜索模式将字符串分割成一个有序的子串列表，将这些子串放入一个数组，并返回该数组。
+
+- `String.prototype.match(regexp)`
+  返回值：一个 `Array`，其内容取决于全局标志 (`g`) 的存在与否，如果没有找到匹配项，则返回 `null`。
+
+## Array
+
+- `Array.prototype.shift()`
+  从数组中删除第一个元素，并返回该元素的值。此方法更改数组的长度。
+
+## Object
+
+- `Object.defineProperty(obj, prop, descriptor)` 潜在攻击工具属性的防御型方法
+  直接在一个对象上定义一个新属性，或修改其现有属性，并返回此对象。
+
+- `Object.freeze()` 防御型静态方法
+  使一个对象被冻结。冻结对象可以防止扩展，并使现有的属性不可写入和不可配置。（完全阻止）
+
+- `Object.seal()` 防御型静态方法
+  密封一个对象。密封一个对象会阻止其扩展并且使得现有属性不可配置。只要现有属性的值是可写的，它们仍然可以更改。（部分阻止）
+
+- `Object.create()` 防御型静态方法
+  以一个现有对象作为原型，创建一个新对象。
+
+## Map
+
+- `Map.prototype.get()` 防御型方法
+  返回该 map 中的指定元素。不包含继承属性
+
+## Set
+
+- `Set.prototype.has()` 防御型方法
+  返回一个布尔值来指示对应的值是否存在于该集合中。不包含继承属性
+
+## 语句和声明
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements
+
+- `debugger` 语句
+  调用任何可用的调试功能，例如设置断点。如果没有调试功能可用，则此语句不会产生任何效果。
+
+## Web API
+
+https://developer.mozilla.org/zh-CN/docs/Web/API
+
+### console
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/console
+
+- `console.trace()` 静态方法
+  将堆栈追踪信息输出到控制台
 
 ## 其他
 
@@ -383,3 +436,6 @@ fs.createReadStream('data.csv')
 
 - `/Alfresco-CSRFToken=([^;]*)/.exec(document.cookie)[1]`
   对 cookie 应用正则表达式捕获组，并选择第一个匹配
+
+- `(+val + '') === val`
+  预期的数字型字符串，`+val`隐式类型转换到数字，`+ ''`再隐式类型转换到字符串。确保变量类型为数字型字符串

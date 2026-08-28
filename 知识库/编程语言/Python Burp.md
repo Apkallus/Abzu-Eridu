@@ -47,6 +47,9 @@ Param Miner
 - issues 显示的请求响应内容可能不匹配。需在 issues 或扩展的输出界面报告简略探测结果时，于 logger 中搜索对应项目以查看实际请求响应，或手动测试
 - 选择“Add static/dynamic cache buster”和“Include cache busters in headers”选项。然后，它会自动在你使用 Burp 手动测试工具发送的任何请求中，将缓存破坏器添加到常见的键控头中。
 
+浏览器 DOM 插件
+- 使用功能后新窗口对应特定功能开关，若在查看汇的窗口继续其他 lab，或导致由于设置仅聚焦汇（隐藏源），导致无任何发现
+
 参数：
 
 ```py

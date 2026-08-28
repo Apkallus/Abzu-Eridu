@@ -1,0 +1,1 @@
+https://portswigger.net/research/widespread-prototype-pollution-gadgets

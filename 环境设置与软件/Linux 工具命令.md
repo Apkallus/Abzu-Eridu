@@ -978,6 +978,11 @@ vim [options] -q [errorfile]
 
 vim 是一个向上兼容 Vi 的文本编辑器。它可以用来编辑各种纯文本文件。它特别适用于编辑程序。
 
+https://github.com/vim/vim/blob/5ab969f719bb09555e90e8dff8c94fc37bcbf2ae/runtime/doc/usr_21.txt#L52
+
+- `:!{command}`
+	执行 shell 命令
+
 #### emacs
 
 开源文本编辑器
@@ -2103,8 +2108,11 @@ iptables 可以使用扩展包匹配模块。这些模块有两种加载方式�
 [手册](https://curl.se/docs/manpage.html)
 
 参数
-- ```-d, --data <data>```
+- `-d, --data <data>`
     以 POST 方法发送 data
+	- `@filename` 从文件读取
+		- `@-` 从标准输入读取
+
 - ```-I, --head```
 	Fetch the headers only.
 - ```-k, --insecure```
@@ -3079,6 +3087,12 @@ rmmod 是一个简单的程序，用于从内核中移除一个模块或多个�
 
 - `-f` 
 	读取指定文件的每一行并尝试解析为日期。（信息泄露）
+
+## 待归档
+
+### xargs - 从标准输入构建和执行命令行
+
+`xargs` 从标准输入读取条目，条目以空格（可用双引号、单引号或反斜杠进行保护）或换行符分隔，然后执行命令（默认为 `echo`）一次或多次，并将初始参数后跟从标准输入读取的条目作为参数传递。标准输入中的空行将被忽略。
 
 ## 参考
 

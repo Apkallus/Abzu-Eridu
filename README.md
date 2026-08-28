@@ -43,7 +43,7 @@ emoji:
 - 漏洞库
     - Exploit-DB
 - 攻防框架
-    - [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/) 📌
+    - [OWASP WSTG Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/) ♾️
         - Web 应用程序黑盒测试框架与细节
     - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 🔍📌
     - [OWASP 移动安全测试指南](https://owasp.org/www-project-mobile-security-testing-guide/)
@@ -316,7 +316,7 @@ emoji:
 
     各材料的内容结构近似且相互引用，并发阅读过程中能够简单发现过时/错误描述。选定拥有清晰结构的书为初始骨架，读完一章/小节后查看其他材料的同主题章节。此时，WSTG 这类零散的百科类文档可被整合到/重构骨架。
 
-    之后或需尝试使用各种自动化工具以快速进行初始探测，结合 lab 记录的步骤确认可自动化的部分
+    之后或需尝试使用各种自动化工具以快速进行初始探测，结合 lab 记录的步骤确认可自动化的部分，类似 portswigger 的原型污染主题同时介绍手动与自动步骤
 
     研究文档本身即可直接作为或提取内容到主题，类似 portswigger 发布研究后创建对应主题材料
 
