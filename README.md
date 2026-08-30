@@ -154,8 +154,8 @@ emoji:
         - 公开课视频 [B站](https://www.bilibili.com/video/BV1iW411d7hd/)，缺最后一个视频
         - 学习者发布的家庭作业答案 [dreamanddead](https://dreamanddead.github.io/CSAPP-3e-Solutions/) 与 [PaladinChendi](https://github.com/PaladinChendi/CSAPP)，在尽力后查看
         - 学习方式：教材与章节内练习1次 + 公开课视频 + 教材与章节内练习第二次 + 章节后家庭作业与 lab    
-            作者提到学习这本书的方式是多次阅读，并且其组织教材结构的抽象化模型聚焦方法在知识学习上很有启发性。  
-            值得再次重温，网络旁注的扩展部分也有不少内容。
+            - 作者提到学习这本书的方式是多次阅读，并且其组织教材结构的抽象化模型聚焦方法在知识学习上很有启发性。  
+            - 值得再次重温，网络旁注的扩展部分也有不少内容。
 
 - 网络
     1. `《Python编程导论》 John V. Guttag` 公开课
@@ -163,15 +163,15 @@ emoji:
         - 教材作者在 [Github 公布的教材代码](https://github.com/guttag/Intro-to-Computation-and-Programming)
         - 公开课视频 [B站](https://www.bilibili.com/video/BV1rr421G7nM)
         - 学习方法：图书 + 公开课视频与题目。视频包含大量基本代码讲解。
-            公开课仅对应教材的前半部分。中文翻译版是旧版，新版代码间作者的 Github 仓库。    
-            第一次接触到了橡皮鸭调试法，虽然之后我与 LLM 进行争论。 
-            聚焦于基础语法，信息密度低，有些瞌睡。
+            - 公开课仅对应教材的前半部分。中文翻译版是旧版，新版代码间作者的 Github 仓库。    
+            - 第一次接触到了橡皮鸭调试法，虽然之后我与 LLM 进行争论。 
+            - 聚焦于基础语法，信息密度低，有些瞌睡。
 
     2. `《Python for Everybody》 Charles Severance` 公开课程
         - 公开课程[主页](https://www.py4e.com/)，包含在线可下载教材、视频与自动题目
         - 公开课程B站视频 [CS自学社区](https://www.bilibili.com/video/BV1vGbAeYEpz) 与 [中英字幕课程](https://www.bilibili.com/video/BV1b7LwzCEPo)
         - 学习方法：在线课程教材 + 视频 + 自动题目。视频有多个版本，且其中也包含代码讲解。  
-            不深入但还是覆盖了一些正则表达式、网络编程、数据库的内容。
+            - 不深入但还是覆盖了一些正则表达式、网络编程、数据库的内容。
 
     - `《计算机网络 自顶向下方法》 James F·Kurose / Keith W. Ross` 公开课程
         - 公开课程[主页](https://gaia.cs.umass.edu/kurose_ross/index.php)  
@@ -180,8 +180,8 @@ emoji:
         - 教材对应的[出版社页面](https://media.pearsoncmg.com/ph/esm/ecs_kurose_compnetwork_8/cw/content/self-assessment-mc/self-assessment-mc.php)包含 互动式动画、选择题/判断题
         - 公开课视频 [B站](https://www.bilibili.com/video/BV1mb4y1d7K7/)，在课程页面查看教材作者之后新增的视频
         - 学习方法：教材紧密结合课程网站的各项资源。    
-            作者的课程网站包含大量内容，且随新版发布更新。  
-            英文第八版的泄露习题答案可被搜索下载，但不完全对应中文习题。
+            - 作者的课程网站包含大量内容，且随新版发布更新。  
+            - 英文第八版的泄露习题答案可被搜索下载，但不完全对应中文习题。
 
     - `《Wireshark数据包分析实战》 Chris Sanders`
         - 作者在 [Github 发布的捕获数据包](https://github.com/chrissanders/packets)
@@ -190,7 +190,7 @@ emoji:
 - Web 应用程序渗透
     - [MDN Web开发者教程](https://developer.mozilla.org/en-US/docs/Learn_web_development)
         - 包含教程、讲解与挑战，其合作伙伴 Scrimba 拥有对应的交互式教程
-            教程扩展部分不在侧边栏中，使用对应模块介绍页的链接进入
+            - 教程扩展部分不在侧边栏中，使用对应模块介绍页的链接进入
 
     - `《黑客攻防技术宝典：Web实战篇》 Dafydd Stuttard / Marcus Pinto`
         - 拥有知识架构以及部分过时的内容，但结合作者的 PortSwigger Academy 仍值得阅读。
@@ -206,19 +206,19 @@ emoji:
     4. [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) 靶机
         - 项目拥有挑战的对应指南 [Pwning OWASP Juice Shop](https://pwning.owasp-juice.shop/companion-guide/latest/index.html)，不包含知识文档
         - 综合型靶机，在按主题分类的 PortSwigger 后拥有连贯视角，有一些新奇的挑战。 
-            然而由于其性质，无法与 OWASP WSTG 指南一起构建实践框架。
+            - 然而由于其性质，无法与 OWASP WSTG 指南一起构建实践框架。
 
     5. [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/) 文档
         - 项目主页的排版：标题缺少锚点，并且目录为静态侧边栏。
-            直接查看 [Github 文档](https://github.com/OWASP/wstg/tree/master/document)。并且可在 LLM 中直接使用文档的md代码翻译。   
-            附录部分的工具、推荐文档等内容也值得查看。  
-            Github 项目中拥有对应的 Checklist 检查清单。
+            - 直接查看 [Github 文档](https://github.com/OWASP/wstg/tree/master/document)。并且可在 LLM 中直接使用文档的md代码翻译。   
+            - 附录部分的工具、推荐文档等内容也值得查看。  
+            - Github 项目中拥有对应的 Checklist 检查清单。
 
     6. [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
         - 基于 Java，挑战与小节文档在同一页面而非独立环境，教学型SQL，项目 wiki 的文档缺乏信息。    
-            材料质量不一，包含有争议的概念，但一些内容仍值得查看。    
+            - 材料质量不一，包含有争议的概念，但一些内容仍值得查看。    
             模块中介绍 ZAP 的使用，[ZAP 工具文档](https://www.zaproxy.org/docs/) 。 
-            [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)，[IYS 的解决方案](https://inventyourshit.com/labs/webgoat/)
+            - [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)，[IYS 的解决方案](https://inventyourshit.com/labs/webgoat/)
 
 - 二进制
     1. [pwn.college CSE 365：网络安全导论](https://pwn.college/cse365-f2025/) 公开课程  
@@ -304,21 +304,24 @@ emoji:
 
 - Web 应用程序渗透 📌 
     
-    与 OWASP WSTG 、PortSwigger、《黑客攻防技术宝典：Web实战篇》 一起，并发回顾/阅读/归档  
+    - 材料：
+        - 《Bug Bounty Bootcamp》 - Vickie Li
+            
+        - 《Web Application Security: Exploitation and Countermeasures for Modern Web Applications》- Andrew Hoffman
+            - 暂略第三部分：防御
 
-    - 《Bug Bounty Bootcamp》 - Vickie Li
-        
-    - 《Web Application Security: Exploitation and Countermeasures for Modern Web Applications》- Andrew Hoffman
-        - 暂略第三部分：防御
+        - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
+            - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
+    
+    - 方法：
+        - 与 OWASP WSTG 、PortSwigger、《黑客攻防技术宝典：Web实战篇》 一起，并发回顾/阅读/归档  
 
-    - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
-        - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
+    - 分析：    
+        - 各材料的内容结构近似且相互引用，并发阅读过程中能够简单发现过时/错误描述。选定拥有清晰结构的书为初始骨架，读完一章/小节后查看其他材料的同主题章节。此时，WSTG 这类零散的百科类文档可被整合到/重构骨架。
 
-    各材料的内容结构近似且相互引用，并发阅读过程中能够简单发现过时/错误描述。选定拥有清晰结构的书为初始骨架，读完一章/小节后查看其他材料的同主题章节。此时，WSTG 这类零散的百科类文档可被整合到/重构骨架。
+        - 之后或需尝试使用各种自动化工具以快速进行初始探测，结合 lab 记录的步骤确认可自动化的部分，类似 portswigger 的原型污染主题同时介绍手动与自动步骤
 
-    之后或需尝试使用各种自动化工具以快速进行初始探测，结合 lab 记录的步骤确认可自动化的部分，类似 portswigger 的原型污染主题同时介绍手动与自动步骤
-
-    研究文档本身即可直接作为或提取内容到主题，类似 portswigger 发布研究后创建对应主题材料
+        - 研究文档本身即可直接作为或提取内容到主题，类似 portswigger 发布研究后创建对应主题材料
 
 - TBD 📅
 
