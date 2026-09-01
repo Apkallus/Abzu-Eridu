@@ -1,3 +1,5 @@
+- [术语表](https://git-scm.com/docs/gitglossary/zh_HANS-CN)
+
 - github 文件下载镜像
     - <https://github.akams.cn/>
     - <https://git.yylx.win/>
@@ -74,6 +76,28 @@
         git push origin 分支名
         ```
     8. 在 Github 仓库页面查看与合并分支
+
+- 查看版本控制信息
+    - 文档
+        - [Git 内部原理 - Git 引用](https://git-scm.com/book/zh/v2/Git-内部原理-Git-引用)
+        
+    - `git log`  
+        显示提交日志
+
+    - `git cat-file`
+        提供仓库对象的内容或详细信息
+        - `-t`
+            不显示内容，而是显示由 `<对象>` 标识的对象类型。
+        - `-p`
+            根据 `<对象>` 的类型漂亮地打印其内容。
+
+    - `git show [<options>] [<object>…​]`  
+        显示各种类型的对象
+        - 对于提交，它显示日志信息和文本差异
+
+    - `git ls-tree` 
+        列出树对象的内容
+
 - 其他命令
     - 从索引与工作树中移除文件
         ```sh
@@ -102,10 +126,6 @@
             切换分支
         - `git checkout <commit> <filename>` or `git checkout <filename>`  
             恢复文件的不同版本
-    - `git log`  
-        显示提交日志
-    - `git show`  
-        显示一个或多个对象（blob、树、标签和提交）。
     - `git-reset`
         重置当前HEAD到指定的状态。若遇到提交后的错误，使用此命令与提交 hash 重置 head 与暂存区
 
@@ -129,3 +149,4 @@
         - **`--hard`**  
         用 `<提交>` 中的版本覆盖所有文件和目录，并且可能会覆盖未跟踪的文件。不在 `<提交>` 中的已跟踪文件会被删除，以使工作树与 `<提交>` 完全一致。同时更新暂存区以匹配新的 HEAD，因此没有任何内容会被暂存。
     - `git diff` 输出两个文件之间差异
+

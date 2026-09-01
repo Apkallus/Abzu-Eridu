@@ -1,6 +1,8 @@
 图书：
 - https://eloquentjavascript.net/
 
+使用 MDN 分类方式归档更新
+
 ## 变量
 
 如果不包含 `var`、`let` 或 `const` 这样的关键字，您定义的任何变量都会被提升到全局作用域。这意味着作为全局作用域子对象的任何其他对象都能访问该变量。
@@ -449,6 +451,24 @@ newWebSocket.onmessage = function(evt) {
     });
 };
 ```
+
+### element
+
+- `element.outerHTML` 属性
+  获取描述元素（包括其后代）的序列化 HTML 片段。它也可以设置为用从给定字符串解析的节点替换元素。
+
+- `element.innerHTML` 属性
+  设置或获取 HTML 语法表示的元素的后代。
+
+### URLSearchParams
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams
+
+- `URLSearchParams()` 构造函数
+  创建并返回一个新的 URLSearchParams 对象。
+
+- `URLSearchParams.toString()`
+  返回查询参数组成的字符串，可直接使用在 URL 上。
 
 ## 其他
 
