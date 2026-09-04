@@ -113,4 +113,20 @@ navigator.clipboard.writeText(out_str).catch(()=>{
     console.log(out_str);
 });
 ```
+## HTML 参考
 
+### HTML 元素参考
+
+#### iframe
+
+https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/iframe
+
+`sandbox` 控制 `<iframe>` 中的内容的限制。该属性的值可以为空以应用所有限制，也可以为空格分隔的标记以解除特定的限制：
+- `allow-forms` 点击劫持启用
+    允许页面提交表单。
+
+- `allow-scripts` 点击劫持启用
+    允许页面运行脚本（但不能创建弹窗）
+
+- `allow-top-navigation` 点击劫持不设置以应对框架破坏
+    允许资源导航顶级（即名称为 `_top` 的）浏览上下文。

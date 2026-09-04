@@ -470,6 +470,20 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams
 - `URLSearchParams.toString()`
   返回查询参数组成的字符串，可直接使用在 URL 上。
 
+## 表达式和运算符
+
+### instanceof
+
+`instanceof` 运算符用于检测构造函数的 `prototype` 属性是否出现在某个实例对象的原型链上。其返回值是一个布尔值。可以通过 `Symbol.hasInstance` 来自定义该运算符的行为。
+
+## 数据类型和数据结构
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Data_structures
+
+### 原始值
+
+除了 `Object` 以外，所有的类型都定义了不可变的、在语言最底层直接表示的值。我们将这些类型的值称为原始值。原始值是一种既非对象也无方法或属性的数据。
+
 ## 其他
 
 - `setTimeout(函数, 时间)`
