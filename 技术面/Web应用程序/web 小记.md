@@ -397,6 +397,11 @@ oauth 身份验证为一系列在应用程序与验证服务器之间的设置�
 - `window.frames`   引用嵌入的iframe
 - `window.parent`   引用当前iframe的父窗口
 
+示例：XSS 同源加载子框架后提交表单（此时携带凭证且包含 csrf 令牌）
+```html
+<iframe src=同源URL onload=this.contentDocument.forms[1].submit()>
+```
+
 ## postMessage —— 在不同来源的页面之间发送数据
 
 https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage

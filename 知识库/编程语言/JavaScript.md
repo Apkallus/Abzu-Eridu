@@ -219,25 +219,6 @@ edit_links.forEach(link => {
 });
 ```
 
-## fetch
-
-<https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch>
-
-
-- `response.ok` 判断状态
-```js
-if (!response.ok) {
-  if (response.status === 404) {
-    console.log('请求的资源不存在');
-  } else if (response.status === 500) {
-    console.log('服务器内部错误');
-  }
-}
-
-```
-
-- `redirect: 'manual'`
-  不追踪重定向
 
 ## XMLHttpRequest
 
@@ -418,6 +399,51 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/console
 - `console.trace()` 静态方法
   将堆栈追踪信息输出到控制台
 
+
+### fetch
+
+<https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch>
+
+- `response.ok` 判断状态
+```js
+if (!response.ok) {
+  if (response.status === 404) {
+    console.log('请求的资源不存在');
+  } else if (response.status === 500) {
+    console.log('服务器内部错误');
+  }
+}
+
+```
+
+- `redirect: 'manual'`
+  不追踪重定向
+
+示例
+```js
+// 携带凭证，获取页面 csrf 令牌
+fetch('/my-account', {credentials: 'include'})
+    .then(response => response.text())
+    .then(text => {
+        console.log('text', text);
+        // 使用 HTML DOM 解析响应文本
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+        // 使用浏览器开发者攻击的 JS 元素选择器快速定位元素，获取 csrf 令牌
+        const csrf_token = doc.querySelector('#delete-account-form > input[type=hidden]').value;
+        console.log('csrf_token', csrf_token);
+        // 携带凭证，并发送 csrf 令牌
+        fetch('/my-account/delete', {
+            method: 'POST',
+            mode: 'no-cors',
+            credentials: 'include',
+            body: new URLSearchParams({
+                'csrf': csrf_token
+            })
+        });
+    }); 
+```
+
 ### WebSocket
 
 https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
@@ -469,6 +495,28 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams
 
 - `URLSearchParams.toString()`
   返回查询参数组成的字符串，可直接使用在 URL 上。
+
+### DOMParser
+
+DOMParser 接口提供了从字符串解析 XML 或 HTML 源代码为 DOM Document 对象的能力。
+
+构造函数
+- `DOMParser()`
+  创建一个新的 DOMParser 对象。
+
+实例方法
+- `parseFromString(input, mimeType)`
+  解析包含 HTML 或 XML 的输入，并返回一个 Document 对象，该对象的 `contentType` 属性与 `mimeType` 参数匹配。
+
+### HTMLIFrameElement
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLIFrameElement
+
+`HTMLIFrameElement` 接口提供了除 `HTMLElement` 之外的一些特殊属性和方法（当然也包括了继承自 `HTMLElement` 的部分）。这些方法用于操作内联 `frame` 元素的布局和展示。
+
+属性
+- `contentDocument`
+  如果 `iframe` 及其父文档处于同源，则返回一个 `Document`（即嵌套浏览上下文中的活动文档），否则返回 `null`。
 
 ## 表达式和运算符
 

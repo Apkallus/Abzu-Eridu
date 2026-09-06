@@ -78,6 +78,12 @@ CASE
 END
 ```
 
+删除
+```sql
+DELETE FROM table_name
+WHERE condition;
+```
+
 ## 引用
 
 - [w3schools SQL](https://www.w3schools.com/SQL)
