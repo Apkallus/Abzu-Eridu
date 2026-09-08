@@ -304,7 +304,7 @@ emoji:
 
 - Web 应用程序渗透 📌 
     
-    - 材料：
+    - 图书材料：
         - 《Bug Bounty Bootcamp》 - Vickie Li
             
         - 《Web Application Security: Exploitation and Countermeasures for Modern Web Applications》- Andrew Hoffman
@@ -324,9 +324,15 @@ emoji:
 
         - 研究文档本身即可直接作为或提取内容到主题，类似 portswigger 发布研究后创建对应主题材料
 
-- TBD 📅
+    - [hacker101](https://www.hacker101.com/)
+        - 小型靶场 [hacker101 ctf](https://ctf.hacker101.com/) 
+        - [各种资源导航](https://www.hacker101.com/resources)
+        - [教学视频](https://www.hacker101.com/videos)
+        - 分析
+            - 在过程中构造速查/检查表，快速映射注入点与探测项到对应主题
 
-    - [hacker101](https://ctf.hacker101.com/ctf) 
+
+- TBD 📅
 
     - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 
 

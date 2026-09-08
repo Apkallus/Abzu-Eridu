@@ -121,12 +121,49 @@ navigator.clipboard.writeText(out_str).catch(()=>{
 
 https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/iframe
 
-`sandbox` 控制 `<iframe>` 中的内容的限制。该属性的值可以为空以应用所有限制，也可以为空格分隔的标记以解除特定的限制：
-- `allow-forms` 点击劫持启用
-    允许页面提交表单。
+属性
+- `sandbox` 
+    控制 `<iframe>` 中的内容的限制。该属性的值可以为空以应用所有限制，也可以为空格分隔的标记以解除特定的限制：
+    - `allow-forms` 点击劫持启用
+        允许页面提交表单。
 
-- `allow-scripts` 点击劫持启用
-    允许页面运行脚本（但不能创建弹窗）
+    - `allow-scripts` 点击劫持启用
+        允许页面运行脚本（但不能创建弹窗）
 
-- `allow-top-navigation` 点击劫持不设置以应对框架破坏
-    允许资源导航顶级（即名称为 `_top` 的）浏览上下文。
+    - `allow-top-navigation` 点击劫持不设置以应对框架破坏
+        允许资源导航顶级（即名称为 `_top` 的）浏览上下文。
+
+- `srcdoc`
+    要嵌入的内联 HTML，会覆盖 `src` 属性。
+
+#### form 表单元素
+
+https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/form
+
+属性
+- `action` JS 伪协议注入点
+    处理表单提交的 URL。这个值可被 `<button>`、`<input type="submit">` 或 `<input type="image">` 元素上的 `formaction` 属性覆盖。
+
+#### button
+
+属性
+- `formaction` JS 伪协议注入点
+    表示程序处理 `button` 提交信息的 URI。如果指定了，将重写 `button` 表单拥有者的`action`属性。
+
+#### SVG
+
+##### `<use>` 废弃的 JS 数据注入点
+
+https://developer.mozilla.org/zh-CN/docs/Web/SVG/Reference/Element/use
+
+从 SVG 文档中获取节点，并将它们复制到其他地方。其效果与将这些节点深度克隆到一个不可导出的 DOM 中，然后粘贴到 use 元素所在的位置相同，这与克隆的模版元素类似。
+
+- 使用方法：hash 符号后接元素id `<use href="#元素id"`
+
+- 安全演化：出于安全原因，在 `href` 属性中使用数据 URI 加载资源已被弃用。这适用于 `<use href="data:...`，以及使用 `set` 或 `setAttribute` 方法设置 `href` 的情况。
+
+#### a 锚元素
+
+属性
+- `target`
+    该属性指定在何处显示链接的 URL，作为浏览上下文的名称 `name`（标签、窗口或 `<iframe>`）。拥有特殊含义关键词

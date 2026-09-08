@@ -118,6 +118,13 @@ if b"pwn.college" in p.stdout:
     print(f"response: {p.stdout}")
 ```
 
+#### 较旧的高阶 API
+
+```py
+subprocess.check_output(args, *, stdin=None, stderr=None, shell=False, cwd=None, encoding=None, errors=None, universal_newlines=None, timeout=None, text=None, **other_popen_kwargs)
+```
+- 附带参数运行命令并返回其输出。
+
 
 ### asyncio - 异步协程
 
@@ -433,57 +440,7 @@ tips:
     将一个文件写入归档，内容为 data。 zinfo_or_arcname 可以是它在归档中将被给予的名称，或者是 ZipInfo 的实例。
     即，设置归档内文件名及其数据。
 
-### string
 
-- 字符集
-    - `string.ascii_letters` 大小写字母
-    - `string.digits` 数字
-    - `string.punctuation` 标点符号
-    - `string.printable` 可打印字符
-    
-
-- `string.replace(old, new[, count])`  
-    使用字串new替换字串old  
-    count设置替换次数，若未指定则替换所有
-
-- `chr()`  
-    将ascii转为字符
-
-- `.encode()`
-    字符串转为bytes
-
-- `.zfill(N)`
-    补前导0到N
-
-- `.center(长度, 字符)`
-    使用指定的字符（默认为空格）作为填充字符，使字符串居中对齐
-
-- `.find(字符)` `.rfind(字符)`
-    从左到右，从右到左。查找字符索引，找不到则返回 -1
-
-#### f-string
-
-`f'...{val:08b}...'`
-
-格式说明 `:`  
-`:[[fill]align][sign][#][0][width][grouping_option][.precision][type]`
-- `0`：如果不够 8 位，用 0 在左侧补齐。
-- `8`：宽度为 8 个字符。
-
-进制：
-- `b`：以二进制形式输出，只包含 0/1。
-- `x`:十六进制
-
-例：
-- `f"{int_number:#x}"` 以拥有 `0x` 前缀的十六进制打印数字
-
-#### format 格式字符串
-
-```py
-target_host = 127.1
-
-'Host: {target_host}'.format(target_host=target_host)
-```
 
 ### PyCryptoDome
 
@@ -1068,6 +1025,68 @@ with open(f'{file_str}.csv', 'w', encoding='utf-8') as f:
     # 写入头部与数据
     writer.writeheader()
     writer.writerows(data_list)
+```
+
+## 内置类型
+
+https://docs.python.org/zh-cn/3.14/library/stdtypes.html
+
+### string
+
+- 字符集
+    - `string.ascii_letters` 大小写字母
+    - `string.digits` 数字
+    - `string.punctuation` 标点符号
+    - `string.printable` 可打印字符
+    
+
+- `string.replace(old, new[, count])`  
+    使用字串new替换字串old  
+    count设置替换次数，若未指定则替换所有
+
+- `chr()`  
+    将ascii转为字符
+
+- `.encode()`
+    字符串转为bytes
+
+- `.zfill(N)`
+    补前导0到N
+
+- `.center(长度, 字符)`
+    使用指定的字符（默认为空格）作为填充字符，使字符串居中对齐
+
+- `.find(字符)` `.rfind(字符)`
+    从左到右，从右到左。查找字符索引，找不到则返回 -1
+
+```py
+str.rsplit(sep=None, maxsplit=-1)
+```
+- 返回字符串中单词的列表，使用 `sep` 作为分隔符。如果指定了 `maxsplit`，则最多进行 `maxsplit` 次分割，且从**最右侧**开始。如果 `sep` 未指定或为 `None`，则任何空白字符都是分隔符。除了从右侧开始分割外，`rsplit()` 的行为与 `split()` 相同，详见下文。
+
+
+#### f-string
+
+`f'...{val:08b}...'`
+
+格式说明 `:`  
+`:[[fill]align][sign][#][0][width][grouping_option][.precision][type]`
+- `0`：如果不够 8 位，用 0 在左侧补齐。
+- `8`：宽度为 8 个字符。
+
+进制：
+- `b`：以二进制形式输出，只包含 0/1。
+- `x`:十六进制
+
+例：
+- `f"{int_number:#x}"` 以拥有 `0x` 前缀的十六进制打印数字
+
+#### format 格式字符串
+
+```py
+target_host = 127.1
+
+'Host: {target_host}'.format(target_host=target_host)
 ```
 
 ## 参考

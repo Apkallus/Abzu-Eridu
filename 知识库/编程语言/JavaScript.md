@@ -518,6 +518,13 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLIFrameElement
 - `contentDocument`
   如果 `iframe` 及其父文档处于同源，则返回一个 `Document`（即嵌套浏览上下文中的活动文档），否则返回 `null`。
 
+### Window
+
+- `open(url, target, windowFeatures)` 方法
+  用指定的名称 `name` 将指定的资源加载到新的或已存在的浏览上下文（标签、窗口或 iframe）中。
+  - `target`
+    一个不含空格的字符串，用于指定加载资源的浏览上下文的名称 `name`。
+
 ## 表达式和运算符
 
 ### instanceof

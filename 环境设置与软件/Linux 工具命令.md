@@ -201,6 +201,25 @@ man 是系统的手册分页程序。
 - `--no-cache-dir` 
 	禁用缓存
 
+#### pip
+
+https://pip.pypa.io/en/stable/cli/pip
+
+General Options
+
+- `--trusted-host <hostname>`
+	将此主机或 `host:port` 对标记为**受信任**，即使它没有有效证书或未启用 HTTPS。
+	（环境变量：`PIP_TRUSTED_HOST`）
+
+##### pip_install
+
+Options
+
+- `-r`, `--requirement <file>`
+	从给定的 requirements 文件中安装。文件或 URL 可以是 pip 的 requirements.txt 格式或 pylock.toml 格式（pylock.toml 支持为实验性）。此选项可多次使用。
+	（环境变量：`PIP_REQUIREMENT`）
+
+
 #### rpm
 
 `rpm` 是一个强大的软件包管理器，可用于构建、安装、查询、验证、更新和卸载单个软件包。一个软件包由一个文件归档和用于安装和卸载归档文件的元数据组成。元数据包括辅助脚本、文件属性以及关于软件包的描述信息。软件包有两种类型：二进制软件包，用于封装要安装的软件；以及源代码软件包，包含生成二进制软件包所需的源代码和构建方法（配方）。
@@ -310,15 +329,28 @@ BusyBox 将许多常用 UNIX 工具的微型版本组合成一个单一的小型
 #### env
 
 ```sh
-env [选项]... [-] [NAME=VALUE]... [命令 [参数]...]
+env [OPTION]... [-] [NAME=VALUE]... [COMMAND [ARG]...]
 ```
 在环境中将每个 NAME 设置为 VALUE，并运行 COMMAND。
 单独使用等同于 `-i`。
 通过运行不带任何选项或参数（即输入数据）的 env 命令，可以看到当前用户的所有当前环境变量及其值，包括 PATH 变量中的所有目录
 
-参数：
-- `-i, --ignore-environment`  
+- `-i, --ignore-environment`
 	以空环境开始
+	- `env -i PATH=/usr/bin:/bin`
+		在“干净环境”下，确保只从系统目录找到工具链组件
+
+#### set
+
+- 无参数时查看环境变量
+
+#### printenv —— 打印环境变量
+
+```sh
+printenv [OPTION] [VARIABLE]...
+```
+
+查看特定或全部环境变量
 
 #### which
 
@@ -411,6 +443,9 @@ which 接受一个或多个参数。对于它的每个参数，它会向标准�
 
 递归地总结每个文件（目录）的磁盘使用情况。
 
+- `-c`, `--total`
+    整合为总大小
+	
 - `-h, --human-readable`
 	以人类可读的格式打印大小（例如，1K 234M 2G）
 
@@ -1266,8 +1301,17 @@ SETs 是用字符字符串指定的。大多数字符表示它们自己。解释
    all upper case letters
 
 例：
-- 字符串大写转小写
-	`tr [:upper:] [:lower:]`
+
+```sh
+# 删除换行
+tr -d '\n'
+
+# 修改换行为空格
+tr '\n' ' '
+
+# 字符串大写转小写
+tr [:upper:] [:lower:]
+```
 
 
 ### jq - 命令行 JSON 处理器
@@ -2536,30 +2580,6 @@ nsenter 命令在命令行选项中指定的命名空间中执行程序。如果
 - `-m, --mount[=file]`
 	进入挂载命名空间。如果没有指定文件，则进入目标进程的挂载命名空间。如果指定了文件，则进入文件指定的挂载命名空间。
 
-### docker
-
-`docker run -d -p 127.0.0.1:3000:3000 getting-started`
-[文档](https://docs.docker.com/get-started/workshop/02_our_app/)
-
-- `docker run`
-	运行容器，并指定镜像的名称
-- `-p HOST:CONTAINER`
-	用于在主机和容器之间创建端口映射，其中 HOST 是主机上的地址， CONTAINER 是容器上的端口
-
-- `-ps`
-	显示正在运行的容器。要查看所有容器，使用 --all （或 -a ）标志
-- `docker exec [OPTIONS] CONTAINER COMMAND [ARG...]` 
-	运行中的容器中执行新命令，[文档](https://docs.docker.com/reference/cli/docker/container/exec/)
-	- `-i, --interactive`
-		即使未附加也保持 STDIN 打开
-	- `-t, --tty`		
-		分配伪终端
-	- `-u, --user`
-		Username or UID，使用 `-u root` 或 `-u 0`以root权限进入
-	
-	例，`docker exec -u root -it 容器名或ID /bin/bash`
-
-
 ### qemu-img
 
 
@@ -2624,17 +2644,6 @@ strace -c [ -D ] [ -eexpr ] ... [ -Ooverhead ] [ -Ssortby ] [ command [ arg ... 
 ltrace [-CdfhiLrStttV] [-a column] [-e expr] [-l filename] [-n nr] [-o filename] [-p pid] ... [-s strsize] [-u username] [-X extern] [-x extern] ... [--align=column] [--debug] [--demangle] [--help] [--indent=nr] [--library=filename] [--output=filename] [--version] [command [arg ...]]
 ```
 运行指定的命令直到退出。它会拦截并记录执行过程中调用的**动态库调用**以及接收到的信号。它还可以拦截并打印程序执行的系统调用。
-
-### 设置环境
-
-#### env - 在修改后的环境中运行程序
-
-`env [OPTION]... [-] [NAME=VALUE]... [COMMAND [ARG]...]`
-
-- `-i, --ignore-environment`
-	以空环境开始
-	- `env -i PATH=/usr/bin:/bin`
-		在“干净环境”下，确保只从系统目录找到工具链组件
 
 ### 编译
 
