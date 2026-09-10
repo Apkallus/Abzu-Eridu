@@ -25,7 +25,7 @@
 
 ### FROM
 
-```docker
+```dockerfile
 FROM [--platform=<platform>] <image>[@<digest>] [AS <name>]
 ```
     
@@ -33,7 +33,7 @@ FROM [--platform=<platform>] <image>[@<digest>] [AS <name>]
 
 ### WORKDIR
 
-```docker
+```dockerfile
 WORKDIR /path/to/workdir
 ```
 
@@ -43,7 +43,7 @@ WORKDIR /path/to/workdir
 
 `RUN` 指令将执行任何命令，在当前镜像之上创建一个新层。新增的层将在 Dockerfile 的下一步中使用。`RUN` 有两种形式：
 
-```docker
+```dockerfile
 # Shell form:
 RUN [OPTIONS] <command> ...
 # Exec form:
@@ -54,7 +54,7 @@ RUN [OPTIONS] [ "<command>", ... ]
 
 `ADD` 指令有两种形式。当路径中包含空格时，必须使用后一种形式。
 
-```docker
+```dockerfile
 ADD [OPTIONS] <src> ... <dest>
 ADD [OPTIONS] ["<src>", ... "<dest>"]
 ```
@@ -62,3 +62,16 @@ ADD [OPTIONS] ["<src>", ... "<dest>"]
 `ADD` 指令用于从 `<src>` 复制新文件或目录，并将其添加到镜像文件系统中的 `<dest>` 路径。文件或目录可以从构建上下文、远程 URL 或 Git 仓库复制。
 
 `ADD` 与 `COPY` 指令功能相似，但用途略有不同。详细了解 [`ADD` 与 `COPY` 的区别](https://docs.docker.com/build/building/best-practices/#add-or-copy)。
+
+
+### COPY
+
+`COPY` 指令有两种形式。后一种形式适用于包含空格的路径。
+
+```dockerfile
+COPY [OPTIONS] <src> ... <dest>
+COPY [OPTIONS] ["<src>", ... "<dest>"]
+```
+
+`COPY` 指令用于从 `<src>` 复制新文件或目录，并将其添加到镜像文件系统中的 `<dest>` 路径。文件或目录可以从构建上下文、构建阶段、命名上下文或镜像中复制。
+

@@ -26,7 +26,30 @@ SQL 语言的一些核心功能在流行的数据库平台中以相同的方式�
 - Oracle
     `'字符串a' || '字符串b'`
 
+## 字符串连接函数
+
+- MySQL
+    ```sql
+    -- 普通字符串连接
+    CONCAT(str1,str2,...)
+    
+    -- 使用分隔符的字符串连接
+    CONCAT_WS(分隔符,str1,str2,...)
+    ```
+
 ## 组字符串聚合
+
+- MySQL
+    ```sql
+    GROUP_CONCAT([DISTINCT] expr [,expr ...]
+                [ORDER BY {unsigned_integer | col_name | expr}
+                    [ASC | DESC] [,col_name ...]]
+                [SEPARATOR str_val])
+    ```
+    - 分隔符需添加 `SEPARATOR` 前缀，即
+        ```sql
+        GROUP_CONCAT(列字符串表达式 SEPARATOR 分隔符)
+        ```
 
 - PostgreSQL
     ```sql

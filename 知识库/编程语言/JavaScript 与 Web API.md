@@ -392,6 +392,11 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements
 
 https://developer.mozilla.org/zh-CN/docs/Web/API
 
+### History
+
+- `back()` 方法
+  使浏览器在会话历史中后退一页。
+
 ### console
 
 https://developer.mozilla.org/zh-CN/docs/Web/API/console
