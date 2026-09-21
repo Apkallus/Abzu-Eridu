@@ -369,8 +369,7 @@ p = Pixel(65)
 - `r"内容"`  
     正则表达式使用反斜杠字符 ('\') 表示特殊形式或是允许在使用特殊字符时不引发它们的特殊含义。即，正则表达式使用反斜杠的字面量。  
     `r`前缀确保反斜杠不必做任何特殊处理。 因此 r"\n" 表示包含 '\' 和 'n' 两个字符的字符串。
-- `re.compile(pattern, flags=0)`
-    将正则表达式保存到对象中复用
+
 - `re.escape(pattern)`  
     在 pattern 中转义特殊字符。
 - `flags`
@@ -613,8 +612,10 @@ print(resp_body)
 
 - `parse.quote()`  
     URL 编码
+    - python 2 对应函数 `urllib.quote(string[, safe])`
 - `parse.unquote()`
     URL 解码
+    - python 2 对应函数 `urllib.unquote(string)`
 
 #### urllib.response
 
@@ -1084,11 +1085,93 @@ str.rsplit(sep=None, maxsplit=-1)
 #### format 格式字符串
 
 ```py
-target_host = 127.1
-
-'Host: {target_host}'.format(target_host=target_host)
+format(value, format_spec='', /)
 ```
 
-## 参考
+示例
+- 
+    ```py
+    target_host = 127.1
 
-https://geek-docs.com/python
+    'Host: {target_host}'.format(target_host=target_host)
+    ```
+
+### int
+
+```py
+int.bit_count()
+```
+- 返回整数的绝对值的二进制表示中 1 的个数。也被称为 population count。示例:
+
+## 内置函数
+
+https://docs.python.org/zh-cn/3.14/library/functions.html
+
+### next
+
+```py
+next(iterator, /)
+next(iterator, default, /)
+```
+
+通过调用 `iterator` 的 `__next__()` 方法获取下一个元素。如果迭代器耗尽，则返回给定的 `default`，如果没有默认值则触发 `StopIteration。`
+
+## The Python standard library
+
+### 文本处理服务
+
+#### re --- 正则表达式操作
+
+https://docs.python.org/zh-cn/3/library/re.html
+
+
+##### 正则表达式语法
+
+特殊字符有：
+- `?`
+    对它前面的正则式匹配 0 到 1 次重复。
+
+- `*?`, `+?`, `??`
+    在数量限定符之后添加 `?` 将使其以 非贪婪 或 最小 风格来执行匹配；
+
+##### 匹配对象
+
+匹配对象总是有一个布尔值 `True`。如果没有匹配的话 `match()` 和 `search()` 返回 `None` 
+
+```py
+# 使用 if 快速判断是否匹配
+match = re.search(pattern, string)
+if match:
+    process(match)
+```
+
+```py
+class re.Match
+```
+- 由成功的 `match` 和 `search` 所返回的匹配对象。
+
+```py
+Match.group([group1, ...])
+```
+- 返回一个或者多个匹配的子组。 如果只有一个参数，结果就是一个字符串；如果有多个参数，结果就是一个元组且其中每项都对应一个参数。 
+
+```py
+Match.__getitem__(g)
+```
+- 索引匹配，等价于 `m.group(g)`
+> burp 的扩展增强插件无法使用切片，仅可的使用 `.group(g)`
+> - 猜测由于 jpython 或 python 2.x
+
+##### 模块内容
+
+###### 函数
+
+```py
+re.compile(pattern, flags=0)
+```
+- 将正则表达式模式编译为一个 `正则表达式对象`，可以被用于通过这个对象的方法 `match()`, `search()` 以及如下所述的其他方法进行匹配。
+
+```py
+re.search(pattern, string, flags=0)
+```
+- 扫描整个 `string` 查找正则表达式 `pattern` 产生匹配的第一个位置，并返回相应的 `Match`。如果字符串中没有与模式匹配的位置则返回 `None`

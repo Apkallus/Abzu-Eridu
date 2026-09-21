@@ -117,6 +117,16 @@ navigator.clipboard.writeText(out_str).catch(()=>{
 
 ### HTML 元素参考
 
+#### pre —— 预定义格式文本
+
+在该元素中的文本通常按照原文件中的编排，以等宽字体的形式展现出来，文本中的空白符（比如空格和换行符）都会显示出来。
+- 可用来格式化回显在乱码中的 php 载荷输出
+
+#### hr —— 水平分割线主题分割
+
+表示段落级元素之间的主题转换
+- 可用来格式化回显在乱码中的 php 载荷输出
+
 #### iframe
 
 https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/iframe

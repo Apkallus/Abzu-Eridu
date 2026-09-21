@@ -1,6 +1,26 @@
 文档
 - [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP)
 
+## 常用头部
+
+IP
+```
+X-Forwarded-For
+X-Originating-IP
+X-Remote-IP
+X-Remote-Addr
+X-Client-IP
+```
+
+HOST/IP
+```
+X-Forwarded-Host
+X-Host
+X-Forwarded-Server
+X-HTTP-Host-Override
+Forwarded
+```
+
 ## HTTP 标头
 
 ### X-Frame-Options 点击劫持防护

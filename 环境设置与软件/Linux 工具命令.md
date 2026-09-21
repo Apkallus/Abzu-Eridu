@@ -26,6 +26,19 @@ man 是系统的手册分页程序。
 
 ### 包管理工具
 
+#### Cargo ———— Rust 的包管理器
+
+##### cargo-install —— 下载并安装 Rust 库
+
+https://doc.rust-lang.org/cargo/commands/cargo-install.html
+
+```sh
+cargo install [options] crate[@version]…
+cargo install [options] --path path
+cargo install [options] --git url [crate…]
+cargo install [options] --list
+```
+
 #### apt-get – APT 包管理实用工具 – 命令行界面
 
 **概要**  
@@ -215,10 +228,12 @@ General Options
 
 Options
 
-- `-r`, `--requirement <file>`
+- `-r, --requirement <file>`
 	从给定的 requirements 文件中安装。文件或 URL 可以是 pip 的 requirements.txt 格式或 pylock.toml 格式（pylock.toml 支持为实验性）。此选项可多次使用。
 	（环境变量：`PIP_REQUIREMENT`）
 
+- `-i, --index-url <url>`
+	设置包目录 URL
 
 #### rpm
 
@@ -323,6 +338,18 @@ busybox <applet> [arguments...]  # or
 ```
 
 BusyBox 将许多常用 UNIX 工具的微型版本组合成一个单一的小型可执行文件。它为 GNU coreutils、util-linux 等工具提供了极简的替代品。BusyBox 中的工具通常比其功能齐全的 GNU 同类工具拥有更少的选项；然而，所包含的选项提供了预期的功能，并且行为非常类似于 GNU 版本。
+
+### 系统信息
+
+#### uname —— 打印架构信息
+
+```sh
+uname [OPTION]...
+```
+
+参数
+- `-a, --all`
+	打印所有信息
 
 ### 环境
 
@@ -918,6 +945,9 @@ bzip2recover filename
 
 #### unzip - 解压 zip 归档文件
 
+- `-l` 显示归档文件
+- `-v` 显示归档文件详细信息
+
 #### tar
 
 `tar [OPTION...] [FILE]...`
@@ -1432,6 +1462,11 @@ ps [选项]
 
 `ps -ef` 和 `ps aux` 默认会根据终端宽度截断命令列表， 传递两次 `w` 参数（如 `ps -efww` 或 `ps auxww`）来禁用截断。
 
+示例
+```sh
+ps aux
+```
+
 #### kill
 
 ```sh
@@ -1764,6 +1799,14 @@ tmux 是一个终端复用器：它允许创建、访问和控制多个终端，
 
 ### 身份信息
 
+#### w —— 显示当前登录用户及其操作
+
+```sh
+w [option ...] [user]
+```
+
+#### last —— 登录历史记录
+
 #### id
 
 ```sh
@@ -1997,6 +2040,14 @@ visudo 以安全的方式编辑 sudoers 文件，类似于 vipw(8)。visudo 锁�
 ## 网络 & 安全工具
 
 ### 状态信息 & 配置
+
+#### service —— 运行初始化脚本
+
+```sh
+service --status-all
+```
+
+`service --status-all` runs all init scripts, in alphabetical order, with the `status` command. 
 
 #### ip - 显示/操作路由、设备、策略路由和隧道
 
@@ -2428,44 +2479,6 @@ nc（或 netcat）工具可用于各种涉及 TCP 或 UDP 的任务。它可以�
 	```sh
 	echo -n 'str' | openssl dgst -sha1 -hmac '密钥'
 	```
-
-#### hashcat
-
-[文档](https://hashcat.net/wiki/doku.php?id=hashcat)
-
-```log
-Options Short / Long           | Type | Description                                          | Example
-
--m, --hash-type                | Num  | Hash-type, references below (otherwise autodetect)   | -m 1000
-
--a, --attack-mode              | Num  | Attack-mode, see references below                    | -a 3
-
--H, --hash-info                |      | Show information for each hash-mode                  | -H or -HH
-	--example-hashes           |      | Alias of --hash-info                                 |
-
---show                     |      | Compare hashlist with potfile; show cracked hashes
-
-
--D, --opencl-device-types      | Str  | OpenCL device-types to use, separated with commas    | -D 1
--O, --optimized-kernel-enable  |      | Enable optimized kernels (limits password length)    |
-```
-
-- `-a` 攻击模式默认 0
-- `-m` hash 类型编号，对应 JWT 在 hashcat 中的编号
-- `-D 1` 显式设置设备编号，避免出现设备内存分配不足的异常
-
-异常信息
-```log
-* Device #1: Not enough allocatable device memory or free host memory for mapping.
-```
-- `hashcat -a 0 -m 16500 -D 1 jwt.txt jwt.secrets.list` 
-	显式指定设备进行 JWT 秘密暴破
-	- JWT 秘密格式
-		`<jwt>:<identified-secret>`
-
-示例
-- `hashcat -H | grep JWT -B 2 -A 25`
-	搜索 JWT 对应的 hash 类型编码，此处为 `#16500`
 
 #### ssh - OpenSSH SSH 客户端（远程登录程序）
 

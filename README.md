@@ -10,6 +10,12 @@ emoji:
 - 🔍 待查看
 - ❓ 未定
 
+文件名：
+- `x` 未完成，并暂停
+- `p` 部分完成，并暂停
+- `i` 有趣的挑战
+- `__` 主题描述
+
 ## 资源池
 
 ### 文档与靶场
@@ -339,5 +345,7 @@ emoji:
     - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis 
         - 对应靶场 https://github.com/R3dy/capsulecorp-pentest
 
+    - 二进制回顾
     - 云渗透
     - API 攻击
+    - 移动渗透

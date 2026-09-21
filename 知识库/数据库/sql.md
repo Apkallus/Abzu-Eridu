@@ -103,6 +103,7 @@
 - `1 != 2`
 
 `%` 通配符
+`_` 单字符匹配
 
 `substr(some_column, start, length)` 会从 `some_column` 列的第 `start` 个字符开始（第一个字符的位置是 `1`）提取 `length` 个字符。
 
