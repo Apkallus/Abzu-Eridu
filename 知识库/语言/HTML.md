@@ -143,6 +143,8 @@ https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/iframe
     - `allow-top-navigation` 点击劫持不设置以应对框架破坏
         允许资源导航顶级（即名称为 `_top` 的）浏览上下文。
 
+- `src`
+    被嵌入的页面的 URL 地址。使用 `about:blank` 值可以嵌入一个遵从同源策略的空白页。
 - `srcdoc`
     要嵌入的内联 HTML，会覆盖 `src` 属性。
 

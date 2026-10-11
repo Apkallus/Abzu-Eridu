@@ -209,9 +209,9 @@ eyJhbGciOiJub25lIn0.ew0KICAiYWRtaW4iIDogInRydWUiLA0KICAiaWF0IiA6IDE2MDgxMjg1NjYs
 
 现在我们可以替换Cookie中的令牌，并再次执行重置操作。需要注意的一点是，需要在末尾添加一个`.`，否则令牌无效。
 
-## 8. 代码审查
+## 8. 代码审计
 
-现在让我们进行代码审查，并尝试思考使用 `alg: none` 的攻击方式。我们使用以下令牌：
+现在让我们进行代码审计，并尝试思考使用 `alg: none` 的攻击方式。我们使用以下令牌：
 
 ```
 eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlciI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.
@@ -267,7 +267,7 @@ try {
 
 代码片段1验证失败而抛出异常，代码片段2无验证而进入管理员代码路径
 
-## 9. 代码审查（2）
+## 9. 代码审计（2）
 
 与之前情况相同，但这次我们仅移除签名部分，保持算法不变。
 ```text
@@ -534,7 +534,7 @@ JKU 是 JWT 规范的一部分，它允许 JWT 消费者动态获取验证令牌
 *   **签名验证**：确保服务器正确验证 JWT 签名，并拒绝签名无效或被篡改的令牌。
 *   **JWT 验证**：仔细验证和清理所有 JWT 声明，以防止注入攻击和未经授权的访问。
 *   **审计与监控**：定期审计 JWT 使用情况，监控可疑活动，并实施异常检测机制。
-*   **安全测试**：定期执行安全测试，包括渗透测试和代码审查，以识别和修复潜在漏洞。
+*   **安全测试**：定期执行安全测试，包括渗透测试和代码审计，以识别和修复潜在漏洞。
 
 ## 16. 动手尝试...
 

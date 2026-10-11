@@ -23,6 +23,7 @@
         - theme 主题设置 dark
         - 自定义字体大小 18
         - 页面缩放 125%
+    - > [!warning] 或导致异常、渲染不完全
 - Network 网络选项
     - Connections
         - SOCKS proxy 设置 burp 连接到的代理

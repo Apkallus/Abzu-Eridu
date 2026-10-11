@@ -23,15 +23,27 @@ HTTP 自定义头
     - 在 burp - tools - proxy - http match and replace rules 添加 http 请求头：match 留空，replace 填入自定义头部
     - 勾选“仅添加到范围内项目”
 
+[地址信息](https://prepedu.com/zh-hant/blog/read-street-addresses-in-english)
+- City
+    市，省
+- Street address
+    街道地址：小区名，行政区划街道（Subdistrict），行政区划（District）
+- Second address line
+    详细地址
+
 ## 核心工具
 
-速查/载荷表
+速查载荷表
 - [PayloadsAllTheThings](https://swisskyrepo.github.io/PayloadsAllTheThings/)
+
+wiki
+- [hacktricks](https://hacktricks.wiki/)
 
 代码格式化
 - [beautifier.io](https://beautifier.io/)
-- [beautifytools](https://beautifytools.com/xml-beautifier.php)
 - burp 的格式化复制有时将破坏格式（丢失缩进），普通复制或效果更佳
+- [formatter.org](https://formatter.org/python-formatter)
+- [beautifytools](https://beautifytools.com/xml-beautifier.php)
 
 SQL 自动化
 - [sqlmap](https://github.com/sqlmapproject/sqlmap/wiki/Usage)
@@ -47,15 +59,102 @@ hash
     - 工具页面
         - 以 hashcat 格式提取 zip 文件的 hash ，且包含 hashcat 对应类型
         - hash 类型识别
+        - hash 彩虹表功能不可用
 - [md5.gromweb](https://md5.gromweb.com/)
     - 仅限 MD5
 
 解除混淆
 - [webcrack](https://github.com/j4k0xb/webcrack)
-    - 使用 npm 按照或使用[在线版](https://webcrack.netlify.app/)
+    - 使用 npm 安装或使用[在线版](https://webcrack.netlify.app/)
 
 DNS 重绑定测试
 - [taviso/rbndr](https://lock.cmpxchg8b.com/rebinder.html)
+
+加密识别与解密
+- [dcode.fr](https://www.dcode.fr/cipher-identifier)
+- [payloadplayground.com](https://payloadplayground.com/tools/cipher-decoder)
+- [待测试：ciphey](https://github.com/bee-san/ciphey)
+
+编码识别与解码
+- [hackvertor](https://github.com/hackvertor/hackvertor)
+    - burp 拥有对应插件
+- [待测试：CyberChef](https://gchq.github.io/CyberChef/)
+
+`.js.map` SourceMap 还原
+- [sourcemapper](https://github.com/denandz/sourcemapper)
+    - 完整还原代码，包含 JS 注释。而工具 shuji 重组结构，且注释丢失。
+
+本地 XSS lab
+- 服务器
+    - 在文件所在目录 `python -m http.server 5500`
+    - vscode 插件 live server
+- 协作服务器
+    - `ncat -l 9999`
+
+- 或之后使用 python 脚本配置详细条目
+
+随机序列预测
+- [v8_rand_buster](https://github.com/d0nutptr/v8_rand_buster)
+
+正则表达式
+- [regex-vis 可视化工具](https://regex-vis.com/)
+
+wasm 
+- 浏览器开发者工具栏
+    - 查看文本格式
+- [wabt](https://webassembly.github.io/wabt/demo/)
+    - 文本 <=> 二进制相互转换
+    - 未尝试：github 项目拥有反编译到 c 的工具 `wasm2c`
+- 未尝试：[Ghidra 插件 ghidra-wasm-plugin](https://github.com/garrettgu10/ghidra-wasm-plugin)
+
+HTTP 连通性测试
+- [httpbin](https://httpbin.org/)
+- [testserver](https://testserver.host/)
+
+GraphQL 可视化工具
+- [graphql-visualizer](http://nathanrandal.com/graphql-visualizer/) 
+    - 丢失数据
+- https://apis.guru/graphql-voyager/
+    - 丢失数据
+
+版本
+- git diff 快速查看文件差异
+- burp 比较器查看文件与字节差异
+
+sha1 碰撞
+- [alf.nu jpg 转 pdf](https://alf.nu/SHA1)
+
+## 字典
+
+字典载荷
+- 模糊测试
+    - 同时拥有 `../` 与 `..\` 两种类型，且包含无文件的目录载荷
+        - 对应不同后端类型
+        - 测试目录索引
+    - 包含 SQLi 的通配符 `%`
+    - [500 SecLists - Fuzzing](https://github.com/danielmiessler/SecLists/blob/master/Fuzzing/UnixAttacks.fuzzdb.txt) 
+        - 可用，但长时间未更新
+
+- api 字典
+    - 拥有 `sessions`
+    - 组合路径探测
+        - [300 SecLists - api - api-endpoints.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/api/api-endpoints.txt)
+
+    - 单元素
+        - [1万 SecLists - api - api-endpoints-res.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/api/api-endpoints-res.txt)
+        
+    - 多元素
+        - [1000 SecLists - api - objects](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/api/objects.txt)
+      
+      
+- 用户名与密码
+    - 用户名
+        - [1万 SecLists - Usernames - names.txt](https://github.com/danielmiessler/SecLists/blob/master/Usernames/Names/names.txt)
+    
+    - 密码
+        - 大型密码仅用来本地暴破
+        - [10万 SecLists - Passwords - 100k-most-used-passwords-NCSC.tx](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/100k-most-used-passwords-NCSC.txt)
+
 
 ## 记录
 
@@ -89,167 +188,11 @@ DNS 重绑定测试
 
 - 文件
     - 泄露的源码与配置文件
-    - 代码审查
+    - 代码审计
     - 载荷构造
     - 收集已知文件名，之后分析命名风格
         - 前后缀
         - 可能的功能
-
-
-------------
-``````md
-<!-- 记录格式 -->
-
-## 侦察
-
-访问首页
-- 响应
-    - 功能端点
-    - 信息端点
-    - 静态资源端点
-    - 兴趣点
-
-功能端点a
-- 访问功能端点请求
-    - 响应
-        - 分析
-        
-- 使用功能请求
-    - 响应
-        - 分析
-            - 参数设置
-            - 功能作用
-            - 与其他端点的联系
-            - 兴趣点
-
-信息端点a
-- 请求
-    - 响应
-        - 分析
-            - 信息结构与类型分析
-            - 兴趣点
-
-
-## 功能探测
-
-普通功能a
-- 请求
-    - 响应
-        - 端点与参数
-        - 兴趣点
-- 提交普通表单
-- 提交异常表单
-- 测试表单
-
-功能b
-- 触发页面代码或表单
-    - 端点与参数
-    - 兴趣点
-- 关联 JS 代码
-- 汇点渲染
-- 探测
-    - 普通测试
-    - 构造载荷
-
-访问`端点c`，响应
-- 响应内容
-    - 分析
-
-## 功能端点摘要
-
-主页
-- 功能
-    - 功能描述
-    - 与其他端点的关联
-- 参数 GET/POST
-    - 参数格式/类型/功能
-- 测试
-    - 发现
-        - 内容
-            - 使用上下文特化字典
-            - 使用侦察得到的列表
-            - 使用已知命名风格
-            - 是否携带凭证
-        - 类型
-            - [ ] 单文件/目录暴破
-            - [ ] 路径遍历
-            - [ ] 模糊测试
-    - 参数挖掘
-        - [ ] HTTP 方法测试
-        - [ ] 请求头测试
-        - [ ] URL 查询参数测试
-        - [ ] POST 请求体参数测试
-- 探测
-    - 发现a
-        - [ ] 测试a
-
-端点a
-- 功能与参数
-    - GET 功能a
-        - 参数a
-        - 参数b
-            - [ ] 参数测试
-    - POST 功能b
-    - POST 功能c
-    - PUT 功能d
-
-- 探测
-
-特异目录
-- 探测
-    - [ ] 目录暴破
-
-## 兴趣点
-
-重定向模式
-- 示例端点
-
-会话 cookie 功能
-- 设置 cookie
-    - cookie a
-    - cookie b
-- 移除测试
-- cookie 作用分析
-
-获取信息的端点a
-- 响应
-    ```pa
-    代码片段
-    ```
-    - 分析
-
-访问失败的端点b
-- 响应
-    ```pa
-    响应片段
-    ```
-    - 分析
-        - 当前权限
-        - [ ] 状态变更后的再次访问
-
-侦察端点/参数/片段
-- 获取的用户名列表
-- 获取的特异数据
-
-## 错误信息
-
-泄露
-- 代码片段
-- 版本
-- 参数与格式
-
-## 文件
-
-`文件名`
-```
-文件数据
-```
-- 分析
-- [ ] 测试
-- 载荷构造
-
-``````
-------------
 
 ## tips
 
@@ -297,38 +240,43 @@ DNS 重绑定测试
     - 拥有其中2个元素即得到另一个，得到明文与 hash 时暴破得到盐，明文与盐可互换
 
 - 文件路径结构与网络查询结构在相对路径且无参数时很相似
+- 识别版本后寻找特定[载荷](https://github.com/swisskyrepo/PayloadsAllTheThings)或字典
 
-## 字典
+- 查询代码库，以 v8 功能示例
+    - 当前组件文档 v8
+    - 主调组件文件 node.js
+    - 使用组件文档 edge
+- 浏览代码库时
+    - 文档：函数结构、参数、示例
+    - 指南：功能介绍与导航
+    - 头文件：函数声明与注释说明、结构类型说明
+    - 源码：所有内容
+    - 使用 llm 快速追踪函数调用
 
-字典载荷
-- 模糊测试
-    - 同时拥有 `../` 与 `..\` 两种类型，且包含无文件的目录载荷
-        - 对应不同后端类型
-        - 测试目录索引
-    - 包含 SQLi 的通配符 `%`
-    - [500 SecLists - Fuzzing](https://github.com/danielmiessler/SecLists/blob/master/Fuzzing/UnixAttacks.fuzzdb.txt) 
-        - 可用，但长时间未更新
+- 登录表单
+    - 用户
+        - 注册用户
+        - 目标用户
+    - 用户名：有效/无效
+    - 密码：有效/无效
 
-- api 字典
-    - 拥有 `sessions`
-    - 组合路径探测
-        - [300 SecLists - api - api-endpoints.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/api/api-endpoints.txt)
+- JS 带外时尝试多种载荷，有时 `fetch` 或 `navigator.sendBeacon` 这类请求失败，而 `location` 与 `new Image().src` 成功
 
-    - 单元素
-        - [1万 SecLists - api - api-endpoints-res.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/api/api-endpoints-res.txt)
-        
-    - 多元素
-        - [1000 SecLists - api - objects](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/api/objects.txt)
-      
-      
-- 用户名与密码
-    - 用户名
-        - [1万 SecLists - Usernames - names.txt](https://github.com/danielmiessler/SecLists/blob/master/Usernames/Names/names.txt)
-    
-    - 密码
-        - 大型密码仅用来本地暴破
-        - [10万 SecLists - Passwords - 100k-most-used-passwords-NCSC.tx](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/100k-most-used-passwords-NCSC.txt)
+- 代码审计
+    - 若分支判断使用不同函数，查阅文档以分析差异
 
+- SQL 注入后的分支判断，尝试使得前后匹配
+    - 尝试提取之前的值，各种表
+    - 尝试设置注入值以完全覆盖，排序
+    - 尝试控制之前的值，随机种子
+
+- 寻找语言特异值，并查看特异计算结果
+    - JS 
+        `0 -0 NaN Infinity -Infinity`
+
+- 当文档不足够详细时，源码的注释甚至可能包含更多信息
+
+- 预测载荷的解码顺序，对载荷执行多重/多类编码，或使用编码不敏感的载荷
 
 ## 命令，之后重温二进制时合并
 
@@ -354,6 +302,9 @@ DNS 重绑定测试
     # 用户组
     id
 
+    # sudo 权限
+    sudo -ll
+
     # 用户表
     cat /etc/passwd
 
@@ -374,6 +325,7 @@ DNS 重绑定测试
 
     # 查看环境变量
     env
+    cat /proc/self/environ
 
     # 文件挂载
     cat /etc/fstab
@@ -402,68 +354,124 @@ DNS 重绑定测试
     ls -al /etc/cron*
     ```
 
-## 检查表
+## 编码模式，之后合并
 
-侦察：
-- 信息结构与类型
-    - 例如提取用户名/邮件/id列表
-- 端点、文件名、参数、类型
-- 凭证暴破触点
-- 端点（缺乏参数 400）
-- 客户端保存状态的逻辑缺陷
-- 新发现功能后递归侦察与探测
+- deflate_compress
+    - 格式：`.` + base64URL(deflate编码)
 
-输入参数:
-- 位置
-    - URL 查询参数
-    - 请求体参数
-        - 资源
-        - 登录
-        - 功能
-    - REST 风格路径参数
-    - cookie 
-    - Host 头与覆盖头
-    - HTTP 方法
-    - IP 覆盖头
-    - 参数挖掘
-- 类型
-    - 服务器端注入
-        - SQL 注入
-            - 额外，猜测编号映射的资源，暴破资源名
-        - 操作系统命令注入
-    - 客户端
-        - 反射型 XSS
-    - 访问控制
-        - 不安全的对象访问
-    - 请求走私
-    - 错误信息
-        - 设置类型不匹配或移除参数
-        - 设置类型匹配但错误的参数
-    - HOST 头注入
-    - 服务器端请求伪造
-    - 逻辑漏洞
-        - 客户端返回数据，服务器不保存状态
+- JSFuck —— JS 动态代码构建
+    - 格式：
+        - 由字符集 `-~[]<>` 组成的运行时动态构建代码（`Function()`），末尾通常拥有 `()` 以实际执行
+    - 解码：
+        - 浏览器开发者工具中设置断点，逐步执行，浏览器将在运行时解码
+        - 浏览器开发者工具中选中末尾调用符号 `()` 前的代码后，右键在控制台执行（或复制后在控制台/本地构造）。此时仅构建而不执行函数
+    - 工具：
+        - [JSFuck](https://jsfuck.com/)
+        - [jscrew](https://www.jscrew.it/) 
 
-存储型内容
-- 反射
-    - 存储型 XSS
-- 渲染
-    - 服务器端模板注入
+## 特异文件、目录，之后合并
 
-资源或令牌序列分析
-- 分析命名风格，推测可能资源名称（分隔符/驼峰）
-- 编码
-- hash
-    - hash 明文/盐值分析
-- JWT
-- 递增，特异序号
+- apache
+    ```log
+    # 目录级配置文件
+    .htaccess
+    ```
 
-URL 带外
-- 探测
-- 泄露文件内容
-- 加载文件执行
-- GET 服务器端请求伪造
+- macOS
+    ```log
+    # 目录属性文件
+    .DS_Store
+    ```
 
-逻辑
-- 用户a设置、读取用户b的信息
-    - 识别关联的有效参数，移除噪音参数
+- web
+    ```log
+    # web 目录
+    /www/html/*
+
+## 错误信息，之后合并
+
+- PostgreSQL 
+    ```log
+    pq: syntax error at or near 
+    ```
+
+
+## 载荷构造
+
+- 混淆
+    - 编码
+    - 动态代码构建
+    - 大小写
+    - 空白符
+    - Unicode 空白、相近字符
+    - 注释、成对引号
+- 字段访问
+    - 点 `.`
+    - 索引 `[]`
+- 参数
+    - 列表型 `foo[]=bar`
+
+## 版本依赖
+
+应用目录下 `/package.json`
+- `"devDependencies"`
+
+## 代码审计
+
+流程
+- 从源到汇，追踪用户输入
+- 查看过程中对输入的限制，如长度、字串
+- 查看传递/拼接到函数或语句：
+    - SQL 查询
+    - 命令执行
+        - `system` / `exec` / `shell_exec` / `passthru` / `popen` / `proc_open`
+    - 文件读取
+        - `readFileSync` / `file_get_contents` / `fopen` / `include` / `require`
+
+条件判断或限制
+- 参数
+    - 类型转换
+    - 重复参数到列表型参数 `a=1&a=2` `a[]=1` 元素精确匹配
+        - 绕过单参数比较
+    - 空值
+    - 严格比较与宽松比较
+
+- 数字：特异值、计算，及其字符串形式
+    - 极值：最大最小数
+    - 正负无穷：`Infinity` / `-Infinity`
+    - 正负零：`0` / `-0`
+    - NaN
+    - null / undefined
+    - 科学计数法：`1e3` / `0e1`
+        - 绕过数字长度检查
+        - 魔术哈希 `0e`，以0为底时数值为0
+
+- 字符串
+    - 大小写敏感
+    - 编码解码顺序
+        - 绕过检测
+        - 保存下一阶段载荷
+    - 被转义
+    - 超长截断
+    - Unicode 混淆
+
+服务器配置与组件
+- 配置
+  - 工作目录
+  - URL 转发
+  - 本地文件
+- 规则覆盖
+- 组件解析差异
+  - 分隔符
+  - 前后缀去除
+  - 检查-使用顺序
+
+
+文档查询
+- 教程，快速得到基础语法
+- 参考，查看方法、函数细节
+- 更新日志，快速得到旧版缺陷
+- 规范
+
+反混淆
+- 不可见 Unicode 字符作为参数或值

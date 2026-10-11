@@ -1,0 +1,54 @@
+[官网手册](https://www.php.net/manual/zh/)
+[社区安全](https://github.com/armourinfosec/Secure-PHP-Development/tree/main/Security)
+
+## 配置
+
+https://www.php.net/manual/en/ini.core.php
+
+- `cgi.fix_pathinfo` `bool`
+
+    为 CGI 提供真正的 `PATH_INFO`/`PATH_TRANSLATED` 支持。PHP 之前的行为是将 `PATH_TRANSLATED` 设置为 `SCRIPT_FILENAME`，并且不解析 `PATH_INFO` 是什么。关于 `PATH_INFO` 的更多信息，请参阅 CGI 规范。将此选项设置为 1 将使 PHP CGI 修复其路径以符合规范。设置为 0 将使 PHP 恢复之前的行为。此选项默认开启。您应修改您的脚本以使用 `SCRIPT_FILENAME` 而非 `PATH_TRANSLATED`。
+
+    > 即，此处默认设置：当路径文件不存在时的向前回溯的文件查找行为
+
+
+## 附录 
+
+https://www.php.net/manual/zh/appendices.php
+
+### php.ini 配置
+
+https://www.php.net/manual/zh/ini.core.php
+
+语言选项
+- `disable_functions string`
+    -  此指令允许禁用某些函数。它接受逗号分隔的函数名列表作为参数。 从 PHP 8.0.0 开始，禁用函数会删除其定义，允许用户重新定义它。 在 PHP 8.0.0 之前，禁用函数只是阻止函数被调用。
+    - 此指令仅能禁用 内置函数。不能影响用户自定义函数。 
+
+- `expose_php bool`
+    - 确定是否向外界公开服务器上安装了 PHP，在 HTTP 标头中包含 PHP 版本号（例如：`X-Powered-By: PHP/5.3.7`）。
+
+路径和目录
+- `include_path string`
+
+    - 指定 `require`、`include`、`fopen()`、`file()`、`readfile()` 和 `file_get_contents()` 函数在其中查找文件的目录列表，格式类似于系统的 PATH `环境变量:目录列表`，在 Unix 中使用冒号分隔，在 Windows 中使用分号分隔。 
+    - 示例 
+        ```ini
+        # Unix include_path
+        include_path=".:/php/includes"
+
+        # Windows include_path
+        include_path=".;c:\php\includes"
+        ```
+
+- `open_basedir string`
+    - 将 PHP 可以访问的文件限制在指定的目录树中，包括文件本身。 
+    - 默认设置是允许打开所有文件。 
+
+### 版本差异
+
+[从 PHP 7.4.x 移植到 PHP 8.0.x](https://www.php.net/manual/zh/migration80.incompatible.php)
+
+官网手册的附录中显式标注版本差异，快速查看
+- 严格与非严格模式 `==` `===`
+- 类型转换

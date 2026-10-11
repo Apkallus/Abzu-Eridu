@@ -112,3 +112,56 @@ atips：
 
 atips
 - `-n` 选项显示数字而不解析名称，从而大幅提高查询速度
+
+## Microsoft.PowerShell.Management
+
+### Rename-Item —— 重命名 PowerShell 提供程序命名空间中的项
+
+https://learn.microsoft.com/zh-cn/powershell/module/microsoft.powershell.management/rename-item?view=powershell-7.6
+
+`Rename-Item` cmdlet 更改指定项的名称。 此 cmdlet 不会影响正在重命名的项的内容。
+
+不能使用 `Rename-Item` 来移动项，例如通过指定路径以及新名称。 若要移动和重命名项，请使用 `Move-Item` cmdlet。
+
+不能用于 `Rename-Item` 替换现有项，例如重命名 `log_new.txt` 为 `log_current.txt` 已存在的项 `log_current.txt` 。 若要替换现有项，请将 `Move-Item` cmdlet 与 **Force** 参数一起使用。
+
+示例
+- 重命名文件
+  ```powershell
+  Rename-Item -Path "C:\logfiles\daily_file.txt" -NewName "monday_file.txt"
+  ```
+
+
+PowerShell 包含以下与 `Rename-Item`相关的别名：
+
+- 所有平台：
+    - `ren`
+    - `rni`
+
+## Microsoft.PowerShell.Utility
+
+### Invoke-WebRequest —— 从 Internet 上的网页中获取内容
+
+https://learn.microsoft.com/zh-cn/powershell/module/microsoft.powershell.utility/invoke-webrequest?view=powershell-7.6
+
+`Invoke-WebRequest` cmdlet 将 HTTP 和 HTTPS 请求发送到网页或 Web 服务。 它将分析响应并返回链接、图像和其他重要 HTML 元素的集合。
+
+PowerShell 3.0 中引入了此 cmdlet。
+
+示例
+- 下载文件
+  ```powershell
+  Invoke-WebRequest -Uri "https://example.com/file.zip" -OutFile "C:\Downloads\file.zip"
+  ```
+
+## BitsTransfer
+
+### Start-BitsTransfer —— Creates a BITS transfer job
+
+https://learn.microsoft.com/en-us/powershell/module/bitstransfer/start-bitstransfer
+
+示例
+- Example 1: Create a BITS transfer job that downloads a file
+  ```powershell
+  PS C:\> Start-BitsTransfer -Source "http://server01/servertestdir/testfile1.txt" -Destination "c:\clienttestdir\testfile1.txt"
+  ```

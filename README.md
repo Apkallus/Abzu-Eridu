@@ -1,6 +1,6 @@
 # Abzu-Eridu
 
-未记录的实用知识与技巧终将失去，未抽象为核心概念与复用模板并归纳到主题文档的概念与技巧终将失去。
+markdown
 
 emoji:
 - 🌟 核心资源
@@ -9,14 +9,31 @@ emoji:
 - 📅 之后
 - 🔍 待查看
 - ❓ 未定
+- ⏸️ 搁置
+- 🎯 兴趣点
+- ⚔️ 工具
 
-文件名：
-- `x` 未完成，并暂停
-- `p` 部分完成，并暂停
-- `i` 有趣的挑战
-- `__` 主题描述
+文件目录名：
+- `o` 进行中
+- `x` 终止
+- `p` 暂停，待恢复
+- `__` 描述
+- 格式
+    - `p.暂停标记.原序号. 原文件名`
+        - 恢复并完成后删除开头标记
+    - 文件标记传递到目录
+
+类型
+- 二进制利用
+- 网络渗透
+- web 应用程序渗透
+- 云渗透
+
 
 ## 资源池
+
+导航中的导航
+- [awesome-hacking](https://github.com/hack-with-github/awesome-hacking)
 
 ### 文档与靶场
 
@@ -28,13 +45,14 @@ emoji:
 - 二进制漏洞
     - [pwn.college](https://pwn.college/) 🌟 ♾️
         - 模块文档 + 模块视频 + 靶机（+ ASU 直播公开视频）
-    - [ost2.fyi](https://ost2.fyi/) 🔍
+    - [ost2.fyi](https://ost2.fyi/) 
     - [Malwareunicorn.org](https://malwareunicorn.org/#/) ❓
         - 恶意代码逆向
 
 ### 文档
 
-- 速查手册
+- 速查手册、载荷示例
+    - [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings) ♾️
     - [HackTricks wiki](https://book.hacktricks.wiki/) 📌
         - 实战化攻防技巧百科，覆盖渗透全流程各类服务与场景。
     - [Hacker Recipes](https://www.thehacker.recipes/) 📌
@@ -43,16 +61,18 @@ emoji:
         - 开发/防御向的 Web 安全最佳实践速查文档。
     - [OWASP Community](https://owasp.org/www-community/)
         - 社区维护的 Web 安全知识与漏洞分类参考库。
-    - [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
-        - 按漏洞分类整理的常用 payload 与利用技巧合集。
+
+        - 按漏洞分类的常用 payload 与技巧合集。
+    - [二进制挑战文档](https://guyinatuxedo.github.io/index.html)
 
 - 漏洞库
     - Exploit-DB
 - 攻防框架
     - [OWASP WSTG Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/) ♾️
         - Web 应用程序黑盒测试框架与细节
-    - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 🔍📌
-    - [OWASP 移动安全测试指南](https://owasp.org/www-project-mobile-security-testing-guide/)
+
+    - [PTES 渗透测试执行标准](http://www.pentest-standard.org/index.php/PTES_Technical_Guidelines) 📌
+    - ~~[OWASP 移动安全测试指南](https://github.com/OWASP/mastg)~~
     - [OWASP 固件安全测试方法](https://github.com/scriptingxss/owasp-fstm)
     - MITRE ATT&CK
     - NIST SP 800-115 
@@ -63,52 +83,65 @@ emoji:
 - web应用程序
     - [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/)
         - 本地靶场，单应用集成多挑战，前后端都基于 JavaScript 开发。
+    - [Hacker101 CTF](https://ctf.hacker101.com/)
+
     - OWASP Node.js Goat
     - PentesterLab
     - OWASP Damn Vulnerable Serverless
     - [Damn Vulnerable GraphQL Application](https://github.com/digininja/DVWA)
     
+    
 
 - 综合
-    - [Root Me](https://www.root-me.org/) 🔍
-    - [RingZer0 Team Online CTF](https://ringzer0ctf.com/) 🔍
-    - Hacker101 CTF
-    - CTFlearn
-    - picoCTF
-    - vulfocus.cn
-    - www.cyberstrikelab.com 需短信注册
+    - [Root Me](https://www.root-me.org/?lang=en) ♾️
+    - [picoCTF -> CyLab Security Academy](https://cylabacademy.org) ♾️
+    - [hackropole](https://hackropole.fr/en/) 本地 docker 靶场 ♾️
+
     - http://vulnstack.qiyuanxuetang.net/vuln/
     - https://github.com/zhuifengshaonianhanlu/pikachu
-    - https://echoctf.red
+
+    - [thehackerslabs](https://labs.thehackerslabs.com/) 本地靶场 ⏸️
+        - 三分之一靶机使用会员
+    - [RingZer0 Team Online CTF](https://ringzer0ctf.com/) 本地/在线靶场 ⏸️
+        - 部分挑战缺乏分类
+    - [echoctf](https://echoctf.red) openvpn 网络靶场 ⏸️
      
 - 网络主机
-    - [PwnTillDawn Online](https://online.pwntilldawn.com/) 网络靶场 📌
-        - 使用 openvpn 进行靶机连接，需使用有效 vpn 后再尝试连接
-    - [VulnHub](https://www.vulnhub.com/) 本地靶机库 🔍
-    - [Metasploitable3](https://github.com/rapid7/metasploitable3) 本地靶机 🔍
-    - [vulhub 基于 docker 的靶场](https://github.com/vulhub/vulhub) 🔍
-        - 基于 Docker 的漏洞环境合集，用于本地快速复现各类 CVE。
-    - [hackmyvm.eu](https://hackmyvm.eu/) 本地靶机库 🔍
+    - [VulnHub](https://www.vulnhub.com/) 本地靶场
+    - [Metasploitable3](https://github.com/rapid7/metasploitable3) 本地靶机 
+    - [vulhub](https://github.com/vulhub/vulhub) docker 本地靶场
+    - [hackmyvm.eu](https://hackmyvm.eu/) 本地靶场
+    - [PwnTillDawn Online](https://online.pwntilldawn.com/) openvpn 网络靶场 ⏸️       
 
 - 系统与二进制
     - [Exploit Education](https://exploit.education/)
-    - OverTheWire
+    - OverTheWire 
     - ropemporium
+    - https://crackmes.one/
 
 - 密码
     - [Cryptopals](https://cryptopals.com/) ❓
+    - https://mysterytwister.org/
     
-- AD环境构建：
+- 集群：
     - [vulnerable-AD](https://github.com/safebuffer/vulnerable-AD)
     - [BadBlood](https://github.com/davidprowe/BadBlood)
-    - [GOAD](https://github.com/Orange-Cyberdefense/GOAD) 🔍
+    - [GOAD](https://github.com/Orange-Cyberdefense/GOAD) 
     - NetExec
         - lab https://github.com/Pennyw0rth/NetExec-Lab
         - 工具 https://github.com/Pennyw0rth/NetExec
             - 使用说明 https://www.netexec.wiki/
+    - https://github.com/madhuakula/kubernetes-goat
 
 - 云
-    - http://flaws2.cloud 
+    - [导航](https://github.com/iknowjason/Awesome-CloudSec-Labs)
+    - http://flaws.cloud/ 与 http://flaws2.cloud 
+    - [wiz](https://www.wiz.io/ctf) 云复合靶场
+
+- 开源情报侦察
+    - [gralhix](https://gralhix.com/list-of-osint-exercises/)
+    - [diverctf](https://diverctf.org/en.html)
+    - [Bellingcat](https://challenge.bellingcat.com/) 
 
 ### 图书/可用
 
@@ -336,16 +369,51 @@ emoji:
         - [教学视频](https://www.hacker101.com/videos)
         - 分析
             - 在过程中构造速查/检查表，快速映射注入点与探测项到对应主题
+            - portswigger 这类拥有教学文档的专项靶场中，能够高效学习并实践主题内容，过程中对特定主题构建“侦察-探测-利用”的工作流；而 hacker101 这类模拟场景、主题未知的复合靶场仅当基于主题文档并构建完整循环工作流时有效。
+                - 当前所有 web 靶场均可用
 
+    - [picoCTF -> CyLab Security Academy](https://cylabacademy.org)
+        - [综述文档](https://primer.cylabacademy.org/)
+        - [资源](https://learn.cylabacademy.org/resources)
+            - 视频
+            - 主题简略文档
+        - [挑战库](https://learn.cylabacademy.org/library)
+            - 综合挑战库，包含web应用、加密、逆向工程、取证、二进制、LLM
+            - 仅包含根主题，缺乏子主题分类
+            - 挑战较新，使用现代技术栈。运行在 AWS EC2，每个挑战使用单独 docker
+            - 挑战拥有 hint
+        - 使用方式：
+            - 学习路径并不涵盖所有挑战，也并非按照主题与子主题组织。直接在挑战库中按主题索引，当前专注于 web应用主题，按照难度进行
+            
+    - [Root Me](https://www.root-me.org/?lang=en)
+        - 资源
+            - [陈旧文档](https://repository.root-me.org/)
+        - 综合靶场，包含编程、网络、web应用、加密、取证、程序应用
+            - 挑战持续更新，但频率下降，最早的挑战发布于几十年前。使用多用户服务器，部分挑战开启容器后重定向到对应端口
+            - 挑战页面或拥有关联文档资源，以及在完成后解锁的其他挑战者的解决方案
+        - 使用方式：
+            - 中文缺失文档，使用 en
+            - 主题使用挑战名称进行分类，但不完全。当前专注于 web应用主题，按照难度进行
+
+    - [hackropole](https://hackropole.fr/en/)
+        - 在线追踪进度，使用本地 docker 靶机的综合靶场，包含加密、取证、硬件、二进制、逆向、web
+            - 作为年度 CTF 归档靶场，使用流行技术栈且持续更新
+            - 提供文件的挑战均为代码审计型
+            - 挑战页面拥有解决方案，且 docker 型靶机在黑盒缺乏思路时转为白盒。靶场说明中标注挑战无需暴破
+            - 仅包含根主题，缺乏子主题分类
 
 - TBD 📅
+
+    - 《API 攻防》（Hacking APIs） — Corey Ball
+
+    - 二进制回顾
+    
+    - 基于 AWS 的云渗透
 
     - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 
 
     - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis 
         - 对应靶场 https://github.com/R3dy/capsulecorp-pentest
 
-    - 二进制回顾
-    - 云渗透
-    - API 攻击
-    - 移动渗透
+
+

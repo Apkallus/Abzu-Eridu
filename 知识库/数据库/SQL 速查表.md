@@ -15,6 +15,9 @@ SQL 语言的一些核心功能在流行的数据库平台中以相同的方式�
 
 - [portswigger](https://portswigger.net/web-security/sql-injection/cheat-sheet)
 
+文档
+- [sqlite](https://sqlite.org/docs.html)
+
 ## 字符串连接
 
 - PostgreSQL
@@ -50,6 +53,10 @@ SQL 语言的一些核心功能在流行的数据库平台中以相同的方式�
         ```sql
         GROUP_CONCAT(列字符串表达式 SEPARATOR 分隔符)
         ```
+- sqlite
+    ```sql
+    GROUP_CONCAT(列字符串表达式, 分隔符)
+    ```
 
 - PostgreSQL
     ```sql
@@ -101,6 +108,51 @@ SELECT schema_name FROM information_schema.schemata
         SELECT table_name FROM user_tables;
         SELECT table_name, column_name FROM user_tab_columns;
         ```
+- SQLite 
+    - 查询表名
+        ```sql
+        SELECT name FROM sqlite_master WHERE type = 'table'
+        ```
+    - 查询列名
+        ```sql
+        SELECT name FROM pragma_table_info('表名')
+        ```
+
+## 查询函数结构
+
+- PostgreSQL
+    ```sql
+    SELECT prosrc FROM pg_proc WHERE proname='函数名'
+    ```
+
+## 查询当前语句
+
+- PostgreSQL
+    ```sql
+    SELECT query FROM pg_stat_activity WHERE pid=pg_backend_pid()
+    ```
+
+## 导出数据
+
+- PostgreSQL
+    ```sql
+    database_to_xml(false, true, '')
+    ```
+    - 导出当前数据库为 XML，需转换为 text 格式（`::text`）后搜索
+
+## 动态执行 SQL 查询
+
+- PostgreSQL
+    ```sql
+    query_to_xml(
+        'SELECT * FROM ' || (
+            SELECT 表名 
+            FROM information_schema.tables 
+            WHERE table_name ~ 'table.{33}'
+        )
+        , false, true, '')
+    ```
+    - 已知表名模式，查询元数据表得到表名字符串后，动态凭借为函数参数。执行后导出结果为 XML 格式
 
 ## 版本
 
@@ -115,6 +167,8 @@ SELECT schema_name FROM information_schema.schemata
 - PostgreSQL：
     `version()`
 
+- SQLite 
+    `sqlite_version()`
 
 ## SELECT
 
@@ -138,6 +192,11 @@ SELECT schema_name FROM information_schema.schemata
     SELECT CASE WHEN (条件语句) THEN TO_CHAR(1/0) ELSE NULL END FROM dual
     ```
 
+## 长度
+
+- sqlite
+    `LENGTH()`
+
 ## 字符串子串
 
 - Oracle 	
@@ -148,6 +207,13 @@ SELECT schema_name FROM information_schema.schemata
     `SUBSTRING('foobar', 4, 2)`
 - MySQL 	
     `SUBSTRING('foobar', 4, 2) `
+- sqlite
+    `SUBSTR()`
+
+## 字符转 ASCII 数字
+
+- sqlite
+    `unicode()`
 
 ## 延迟响应
 
@@ -274,4 +340,10 @@ SELECT schema_name FROM information_schema.schemata
 
 - 似乎**语句**无法添加外括号且应当在顶层，而函数/子查询作为**表达式**有时应当添加外括号
 
+- 字符串拼接时，之后的 SELECT 需添加括号
+    ```sql
+    SELECT '124' || (SELECT 'abc')
+    ```
+
 - 使用 `LIKE '*admin*'` 宽泛搜索可能的目标
+

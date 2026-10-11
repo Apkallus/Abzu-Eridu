@@ -526,7 +526,7 @@ uid=0(root) gid=0(root) groups=0(root)
 
 正如本文所示，对 Ruby 标准库的深入了解在构建反序列化 gadget 链方面非常有用。未来工作还有很多机会，包括使技术覆盖 Ruby 1.8 和 1.9 版本，以及处理 Ruby 进程以命令行参数 `--disable-all` 调用的情况。还可以研究其他 Ruby 实现，如 JRuby 和 Rubinius。
 
-已经有一些关于[模糊测试 Ruby C 扩展](https://schd.ws/hosted_files/bsidessf2018/de/Fuzzing_Ruby_C_Extensions.pdf)和[使用 AFL-Fuzz 打破 Ruby 的 Unmarshal](https://medium.com/fuzzstation/breaking-rubys-unmarshal-with-afl-fuzz-6b5f72b581d5) 的研究。完成这项调查后，似乎还有充足的机会进行进一步研究，包括对如下所示的 `marshal_load` 方法的原生代码实现进行手动代码审查：
+已经有一些关于[模糊测试 Ruby C 扩展](https://schd.ws/hosted_files/bsidessf2018/de/Fuzzing_Ruby_C_Extensions.pdf)和[使用 AFL-Fuzz 打破 Ruby 的 Unmarshal](https://medium.com/fuzzstation/breaking-rubys-unmarshal-with-afl-fuzz-6b5f72b581d5) 的研究。完成这项调查后，似乎还有充足的机会进行进一步研究，包括对如下所示的 `marshal_load` 方法的原生代码实现进行手动代码审计：
 
 **图-22：在 C 中实现的 `marshal_load` 实例**
 

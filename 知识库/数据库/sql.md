@@ -9,6 +9,13 @@
     FROM table_name
     WHERE condition
     ```
+
+- 排序
+    ```sql
+    SELECT * FROM table_name
+    ORDER BY column ASC|DESC; 
+    ```
+
 - 更新已有表
 
     ```sql

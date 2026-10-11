@@ -1,0 +1,148 @@
+# 语言参考 
+
+https://www.php.net/manual/zh/langref.php
+
+## 概述
+
+### 名称解析规则
+
+https://www.php.net/manual/zh/language.namespaces.rules.php
+
+命名空间名称定义
+
+- 非限定名称（Unqualified name）：名称中不包含命名空间分隔符的标识符，例如 `Foo`
+- 限定名称（Qualified name）：名称中含有命名空间分隔符的标识符，例如 `Foo\Bar`
+- 完全限定名称（Fully qualified name）：名称中包含命名空间分隔符，并以命名空间分隔符开始的标识符，例如 `\Foo\Bar`。`namespace\Foo` 也是一个完全限定名称。
+- 相对名称（Relative name）：这是个以 `namespace` 开头的标识符，例如 `namespace\Foo\Bar`。
+
+## 类型
+
+https://www.php.net/manual/zh/language.types.string.php
+
+### 数字字符串
+
+如果一个 PHP `string` 可以被解释为 `int` 或 `float` 类型，则它被视为数字字符串。 
+
+> 注意:
+> 任何包含字母 `E` 周围是数字的字符串都将视为以科学计数法表示的数字。这会产生意想不到的效果。 
+
+```php
+<?php
+var_dump("0D1" == "000"); // false，“0D1”不是科学计数法
+var_dump("0E1" == "000"); // true，“0E1”是 0 * (10 ^ 1)，即 0
+var_dump("2E1" == "020"); // true，“2E1”是 2 * (10 ^ 1)，即 20
+?>
+```
+
+`0e` 以0为底的科学计数法均为0，CTF 中用来绕过 md5 匹配
+
+### String 字符串 
+
+一个字符串 `string` 就是由一系列的字符组成，其中每个字符等同于一个字节。这意味着 PHP 只能支持 256 的字符集，因此不支持 Unicode 。
+
+单引号
+- 单引号内除转义符 `\` 外，特殊字符失去含义，成为普通字符
+
+双引号
+- 拥有特殊字符解析
+- 变量会被解析，详见变量插值。 
+
+#### 字符串插值
+
+当字符串用双引号或 heredoc 结构定义时，其中的变量可以进行替换。 
+
+基本语法
+- 如果遇到一个美元符号（`$`），后面的字符会被解释为变量名，然后替换为变量的值。 
+    ```php
+    echo "He drank some $juice juice." . PHP_EOL;
+    ```
+- 如果无法形成有效的变量名，美元符号会保持原样。
+- 使用数组时，数组键必须是无引号的，因此不能用基本语法将常量作为键来引用。
+
+高级（大括号）语法
+- 高级语法允许使用任意访问器对*变量*进行插值。 
+- 使用普通的表达式写法，然后用大括号 `{` 和 `}` 包围。这种语法只有 `{$` 紧随结构才会被识别
+    ```php
+    // 大括号无效，输出 This is { fantastic}
+    echo "This is { $great}";
+
+    // 大括号有效，输出 This is fantastic
+    echo "This is {$great}";
+    ```
+
+### include 表达式包含并运行指定文件
+
+```php
+// 本地
+include 'vars.php';
+
+// URL
+include 'http://www.example.com/file.php?foo=1&bar=2';
+```
+
+被包含文件先按参数给出的路径寻找，如果没有给出目录（只有文件名）时则按照 `include_path` 指定的目录寻找。如果在 `include_path` 下没找到该文件则 `include` 最后才在调用脚本文件所在的目录和当前工作目录下寻找。如果最后仍未找到文件则 `include` 结构会发出一条 `E_WARNING` ；这一点和 `require` 不同，后者会发出一个 `E_ERROR` 。
+
+## 预定义变量
+
+https://www.php.net/manual/zh/reserved.variables.php
+
+### $GLOBALS — 引用全局作用域中可用的全部变量
+
+关联数组 array，包含当前脚本内定义成全局范围的所有变量的引用。 数组的键就是变量的名字。 
+
+### $_GET — 查询字符串变量
+
+通过 URL 参数（也称为查询字符串）传递给当前脚本的变量（关联数组）。注意，只要存在查询字符串，就会填充此数组，无论 HTTP 请求方法为何。 
+
+注意:
+
+- `$_GET` 中的值会自动通过 `urldecode()` 解码。 
+
+### $_POST — 来自 HTTP POST 请求的表单数据
+
+当 HTTP POST 请求的 Content-Type 是 `application/x-www-form-urlencoded` 或 `multipart/form-data` 时，会将变量以关联数组形式传入当前脚本。 
+
+### $_SERVER — 服务器和执行环境信息
+
+`$_SERVER` 是一个包含了诸如头信息（header）、路径（path）、以及脚本位置（script locations）等信息的 array。
+
+信息列表内容
+
+- `'QUERY_STRING'`
+    query string（查询字符串），如果有的话，通过它进行页面访问。
+    - 注意，不拥有 `$_GET` 的字段 URL 解码
+
+
+### $_SESSION —— Session 变量
+
+当前脚本可用 `SESSION` 变量的数组。更多关于如何使用的信息，参见 [`Session` 函数] 文档。 
+
+## 函数
+
+### 🎯 可变函数
+
+https://www.php.net/manual/zh/functions.variable-functions.php
+
+PHP 支持可变函数的概念。这意味着如果一个变量名后有圆括号，PHP 将寻找与变量的值同名的函数，并且尝试执行它。
+
+> 存在可变函数调用时，覆盖变量后即执行函数
+
+## 常量
+
+### 语法 
+
+https://www.php.net/manual/zh/language.constants.syntax.php
+
+可以使用 `const` 关键字或 `define()` 函数两种方法来定义一个常量。函数 `define()` 允许将常量定义为一个表达式，而 `const` 关键字有一些限制
+
+```php
+<?php
+# 使用 define 函数
+define("CONSTANT", "Hello world.");
+echo CONSTANT; // 输出 "Hello world."
+echo Constant; // 抛出错误：未定义的常量 "Constant"
+
+# 使用 const 关键字
+const ANOTHER_CONST = Goodbye World';
+?>
+```

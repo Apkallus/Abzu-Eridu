@@ -1,0 +1,291 @@
+# Python built-ins reference
+
+## 内置类型
+
+https://docs.python.org/3.14/builtins/stdtypes.html
+
+以下章节描述了解释器内置的标准类型。
+
+主要的内置类型是数值、序列、映射、类、实例和异常。
+
+一些集合类是可变的。添加、删除或就地重新排列其成员的方法，以及不返回特定项的方法，永远不会返回集合实例本身，而是返回 `None`。
+
+一些操作由多种对象类型支持；特别是，几乎所有的对象都可以进行相等性比较、真值测试，以及转换为字符串（使用 `repr()` 函数或稍有不同的 `str()` 函数）。当对象由 `print()` 函数写出时，会隐式使用后者。
+
+### 真值测试
+
+任何对象都可以进行真值测试，用于 `if` 或 `while` 条件，或作为下面布尔运算的操作数。
+
+默认情况下，一个对象被认为是真，除非其类定义了返回 `False` 的 `__bool__()` 方法，或返回零的 `__len__()` 方法（当以该对象调用时）。[1] 如果其中一个方法在调用时引发异常，则异常会被传播，该对象没有真值（例如 `NotImplemented`）。以下是被视为假的大多数内置对象：
+
+- 定义为假的常量：`None` 和 `False`
+- 任何数值类型的零：`0`、`0.0`、`0j`、`Decimal(0)`、`Fraction(0, 1)`
+- 空序列和集合：`''`、`()`、`[]`、`{}`、`set()`、`range(0)`
+
+具有布尔结果的操作和内置函数总是对假返回 `0` 或 `False`，对真返回 `1` 或 `True`，除非另有说明。（重要的例外：布尔运算 `or` 和 `and` 总是返回其操作数之一。）
+
+### 布尔运算 — `and`、`or`、`not`
+
+以下是布尔运算，按优先级升序排列：
+
+| 运算 | 结果 | 备注 |
+| --- | --- | --- |
+| `x or y` | 如果 *x* 为真，则为 *x*，否则为 *y* | (1) |
+| `x and y` | 如果 *x* 为假，则为 *x*，否则为 *y* | (2) |
+| `not x` | 如果 *x* 为假，则为 `True`，否则为 `False` | (3) |
+
+备注：
+
+1. 这是一个短路运算符，因此只有当第一个参数为假时才会对第二个参数求值。
+2. 这是一个短路运算符，因此只有当第一个参数为真时才会对第二个参数求值。
+3. `not` 的优先级低于非布尔运算符，因此 `not a == b` 被解释为 `not (a == b)`，而 `a == not b` 是语法错误。
+
+### Text Sequence Type — str
+
+- `string.replace(old, new[, count])`  
+    使用字串new替换字串old  
+    count设置替换次数，若未指定则替换所有
+
+- `.zfill(N)`
+    补前导0到N
+
+- `.center(长度, 字符)`
+    使用指定的字符（默认为空格）作为填充字符，使字符串居中对齐
+
+- `.find(字符)` `.rfind(字符)`
+    从左到右，从右到左。查找字符索引，找不到则返回 -1
+
+```py
+str.rsplit(sep=None, maxsplit=-1)
+```
+- 返回字符串中单词的列表，使用 `sep` 作为分隔符。如果指定了 `maxsplit`，则最多进行 `maxsplit` 次分割，且从**最右侧**开始。如果 `sep` 未指定或为 `None`，则任何空白字符都是分隔符。除了从右侧开始分割外，`rsplit()` 的行为与 `split()` 相同，详见下文。
+
+#### String Methods
+
+##### str.encode()
+
+```py
+str.encode(encoding='utf-8', errors='strict')
+```
+
+返回编码为 `bytes` 的字符串。
+
+- `encoding` 默认为 `'utf-8'`；可能的值参见 [标准编码]。
+    - ctf 常用 ASCII 的 `latin-1`
+- `errors` 控制编码错误的处理方式。如果为 `'strict'`（默认值），则引发 `UnicodeError` 异常。其他可能的值有 `'ignore'`、`'replace'`、`'xmlcharrefreplace'`、`'backslashreplace'`，以及通过 `codecs.register_error()` 注册的任何其他名称。详情参见 [错误处理程序]。
+
+出于性能原因，除非实际发生编码错误、启用了 [Python 开发模式] 或使用了 [调试构建]，否则不会检查 `errors` 值的有效性。例如：
+
+```python
+>>> encoded_str_to_bytes = 'Python'.encode()
+>>> type(encoded_str_to_bytes)
+<class 'bytes'>
+>>> encoded_str_to_bytes
+b'Python'
+```
+
+**版本 3.1 中的变更**：增加了对关键字参数的支持。
+
+**版本 3.9 中的变更**：现在会在 [Python 开发模式] 和 [调试模式] 中检查 `errors` 参数的值。
+
+
+### int
+
+```py
+int.bit_count()
+```
+- 返回整数的绝对值的二进制表示中 1 的个数。也被称为 population count。示例:
+
+
+- `int.to_bytes()`   
+    将数字转为字节，设置长度与大小端序（也可用 `struct` 包）
+    ```py
+    def to_bytes(self, length: int, byteorder: str, *, signed: bool=...) -> bytes
+    ```
+    - 默认 unsigned，负数将报错。使用 `signed=True` 参数以正负补码形式
+    
+- `int.from_bytes(test_bytes, byteorder='little')`
+    将bytes转为int
+
+
+## Binary Sequence Types —— bytes, bytearray, memoryview
+
+用于操作二进制数据的核心内置类型是 `[bytes]` 和 `[bytearray]`。它们由 `[memoryview]` 支持，后者使用 `[缓冲区协议]` 访问其他二进制对象的内存，而无需进行复制。
+
+`[array]` 模块支持高效存储基本数据类型，例如 32 位整数和 IEEE754 双精度浮点值。
+
+### Bytes Objects —— 字节对象
+
+`[bytes]` 对象是单个字节的不可变序列。由于许多主流二进制协议基于 ASCII 文本编码，字节对象提供了若干仅在处理 ASCII 兼容数据时有效的方法，并在其他多方面与字符串对象密切相关。
+
+> ```python
+> class bytes(source=b'')
+> class bytes(source, encoding, errors='strict')
+> ```
+
+首先，字节字面量的语法与字符串字面量大致相同，只是添加了 `b` 前缀：
+
+- 单引号：
+  ```python
+  b'still allows embedded "double" quotes'
+  ```
+- 双引号：
+  ```python
+  b"still allows embedded 'single' quotes"
+  ```
+- 三引号：
+  ```python
+  b'''3 single quotes'''
+  b"""3 double quotes"""
+  ```
+
+字节字面量中只允许 ASCII 字符（无论声明的源代码编码是什么）。任何大于 127 的二进制值都必须使用适当的转义序列输入到字节字面量中。
+
+与字符串字面量一样，字节字面量也可以使用 `r` 前缀来禁用转义序列处理。有关各种形式的字节字面量（包括支持的转义序列）的更多信息，请参见 `[字符串和字节字面量]`。
+
+虽然字节字面量和表示基于 ASCII 文本，但字节对象实际上表现得像不可变的整数序列，序列中的每个值都被限制为 `0 <= x < 256`（试图违反此限制将触发 `[ValueError]`）。这样做是故意的，以强调虽然许多二进制格式包含基于 ASCII 的元素，并且可以有效地使用一些面向文本的算法进行操作，但任意二进制数据通常并非如此（盲目地将文本处理算法应用于非 ASCII 兼容的二进制数据格式通常会导致数据损坏）。
+
+除了字面量形式外，还可以通过多种其他方式创建字节对象：
+
+- 指定长度的零填充字节对象：
+  ```python
+  bytes(10)
+  ```
+- 从整数可迭代对象：
+  ```python
+  bytes(range(20))
+  ```
+- 通过缓冲区协议复制现有二进制数据：
+  ```python
+  bytes(obj)
+  ```
+
+另请参见内置的 `[bytes]`。
+
+由于 2 个十六进制数字恰好对应一个字节，十六进制数字是描述二进制数据的常用格式。因此，`bytes` 类型有一个额外的类方法来读取该格式的数据：
+
+> ```python
+> classmethod fromhex(string, /)
+> ```
+
+此 `bytes` 类方法返回一个 bytes 对象，并解码给定的字符串对象。该字符串必须每字节包含两个十六进制数字，ASCII 空白字符将被忽略。
+
+```python
+>>> bytes.fromhex('2Ef0 F1f2  ')
+b'.\xf0\xf1\xf2'
+```
+
+**版本 3.7 中的变更**：`bytes.fromhex()` 现在跳过字符串中的所有 ASCII 空白字符，而不仅仅是空格。
+
+**版本 3.14 中的变更**：`bytes.fromhex()` 现在接受 ASCII `bytes` 和 `[类字节对象]` 作为输入。
+
+存在一个反向转换函数，用于将 bytes 对象转换为其十六进制表示形式。
+
+> ```python
+> hex(*, bytes_per_sep=1)
+> hex(sep, bytes_per_sep=1)
+> ```
+
+返回一个字符串对象，其中包含实例中每个字节的两个十六进制数字。
+
+```python
+>>> b'\xf0\xf1\xf2'.hex()
+'f0f1f2'
+```
+
+如果希望十六进制字符串更易读，可以指定单字符分隔符 `sep` 参数以包含在输出中。默认情况下，该分隔符将包含在每个字节之间。第二个可选的 `bytes_per_sep` 参数控制间隔。正值从右侧计算分隔符位置，负值从左侧计算。
+
+```python
+>>> value = b'\xf0\xf1\xf2'
+>>> value.hex('-')
+'f0-f1-f2'
+>>> value.hex('_', 2)
+'f0_f1f2'
+>>> b'UUDDLRLRAB'.hex(' ', -4)
+'55554444 4c524c52 4142'
+```
+
+**版本 3.5 中新增。**
+
+**版本 3.8 中的变更**：`bytes.hex()` 现在支持可选的 `sep` 和 `bytes_per_sep` 参数，以在十六进制输出的字节之间插入分隔符。
+
+由于 bytes 对象是整数序列（类似于元组），对于 bytes 对象 `b`，`b[0]` 将是整数，而 `b[0:1]` 将是长度为 1 的 bytes 对象。（这与文本字符串相反，文本字符串的索引和切片都会产生长度为 1 的字符串。）
+
+bytes 对象的表示使用字面量格式（`b'...'`），因为它通常比例如 `bytes([46, 46, 46])` 更有用。您可以始终使用以下方式将 bytes 对象转换为整数列表：
+
+```python
+list(b)
+```
+
+---
+---
+
+## 内置函数
+
+https://docs.python.org/zh-cn/3.14/library/functions.html
+
+
+#### format() 格式化
+
+```py
+format(value, format_spec='', /)
+```
+
+将值转换为由 `format_spec` 控制的“格式化”表示形式。`format_spec` 的解释取决于 `value` 参数的类型；不过，大多数内置类型都使用一种标准的格式化语法：[格式规范迷你语言]。
+
+默认的 `format_spec` 为空字符串，其效果通常与调用 `[str(value)]` 相同。
+
+对 `format(value, format_spec)` 的调用会被转换为 `type(value).__format__(value, format_spec)`，这在查找值的 `[__format__()]` 方法时会绕过实例字典。
+
+如果方法查找到达 `[object]` 且 `format_spec` 非空，或者 `format_spec` 或返回值不是字符串，则会引发 `[TypeError]` 异常。
+
+在 3.4 版本发生变更：如果 `format_spec` 不是空字符串，`object().__format__(format_spec)` 会引发 `[TypeError]`。
+
+
+示例
+
+```py
+# 设置模板字符串
+template = 'Host: {target_host}'
+# 填充模板字符串
+template.format(target_host="localhost")
+```
+
+### `ord(c)` —— 转字符为 Unicode 码
+
+对表示单个 Unicode 字符的字符串，返回代表它 Unicode 码点的整数。这是 `chr()` 的逆函数。
+
+例如 
+```py
+ord('a') # 整数 97
+ord('€') # 返回 8364 
+```
+
+### `class int([x])` —— 转为选定进制的 int 对象
+
+```py
+class int(x, base=10)
+```
+
+返回一个基于数字或字符串 `x` 构造的整数对象，或者在未给出参数时返回 0。 
+
+默认的 `base` 为 10。 允许的基数为 0 和 2--36。 对于基数 2, -8 和 -16 来说字符串前面还能加上可选的 `0b/0B`, `0o/0O` 或 `0x/0X` 前缀，就像代码中的整数字面值那样。 
+
+### next
+
+```py
+next(iterator, /)
+next(iterator, default, /)
+```
+
+通过调用 `iterator` 的 `__next__()` 方法获取下一个元素。如果迭代器耗尽，则返回给定的 `default`，如果没有默认值则触发 `StopIteration。`
+
+### chr()
+
+```py
+chr(codepoint, /)
+```
+
+返回表示具有指定 Unicode 码点的字符的字符串。例如，`chr(97)` 返回字符串 `'a'`，而 `chr(8364)` 返回字符串 `'€'`。这是 `[ord()]` 的逆操作。
+
+参数的有效范围是从 0 到 1,114,111（十六进制的 `0x10FFFF`）。如果超出该范围，将引发 `[ValueError]`。

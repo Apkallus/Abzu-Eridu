@@ -313,6 +313,18 @@ Options
 - 安装自定义版本
 	`rbenv install 2.7.6`
 
+#### yarn
+
+https://classic.yarnpkg.com/en/docs/usage
+
+Adding a dependency
+
+```sh
+yarn add [package]
+yarn add [package]@[version]
+yarn add [package]@[tag]
+```
+
 ### 系统控制
 
 #### systemctl - 控制 systemd 系统和服务管理器  
@@ -445,6 +457,12 @@ which 接受一个或多个参数。对于它的每个参数，它会向标准�
 	enclose entry names in double quotes
 - `-b, --escape`
 	print C-style escapes for nongraphic characters
+
+#### tree - 以树状形式列出目录内容
+
+```sh
+tree [-adfghilnopqrstuvxACDFNS] [-L level [-R]] [-H baseHREF] [-T title] [-o filename] [--nolinks] [-P pattern] [-I pattern] [--inodes] [--device] [--noreport] [--dirsfirst] [--version] [--help] [--filelimit #] [directory ...] 
+```
 
 #### cd （内建）
 
@@ -1132,7 +1150,7 @@ xxd -r[evert] [options] [infile [outfile]]
 
 参数
 - `-n, --lines=K`
-	输出最后 K 行，而不是最后 10 行；或使用-n +K 输出从第 K 行开始的行
+	输出最后 K 行，而不是最后 10 行
 
 #### cat 
 
@@ -1256,6 +1274,10 @@ General Output Control:
 - `-q, --quiet, --silent` 安静模式；不将任何内容写入标准输出。如果找到任何匹配项，即使检测到错误，也会立即以零状态退出。另请参阅 -s 或 --no-messages 选项。  
 	可用来在脚本的条件表达式中根据返回值判断是否找到。
 
+File and Directory Selection
+`-a, --text`
+    Process a binary file as if it were text; this is equivalent to the --binary-files=text option. 
+
 ####  rsync - a fast, versatile, remote (and local) file-copying tool
 
 `rsync -av --exclude='*bzImage*' --exclude='*vmlinux*' /challenge/ "$MY_COPY_DIR"`
@@ -1283,7 +1305,10 @@ Sed 是一个流编辑器。流编辑器用于对输入流（文件或来自管�
 示例：
 - `sed '' /flag`
 - `sed -n 'p' /flag`
-- `sed -n '9000, 10000p' file`
+```sh
+# 打印文件的 10-20 行
+sed -n '10, 20p' file
+```
 
 #### ed red
 
@@ -1343,8 +1368,30 @@ tr '\n' ' '
 tr [:upper:] [:lower:]
 ```
 
+#### tac - 反向连接并打印文件
 
-### jq - 命令行 JSON 处理器
+```sh
+tac [OPTION]... [FILE]...
+```
+
+将每个 FILE 写入标准输出，最后一行在前。如果没有 FILE，或 FILE 为 -，则读取标准输入。
+
+> 文件末尾需空行：无空行则最后两个元素拼接
+
+长选项的强制参数对短选项也是强制的。
+
+- **`-b`**, **`--before`**
+  将分隔符附加在前面而不是后面
+- **`-r`**, **`--regex`**
+  将分隔符解释为正则表达式
+- **`-s`**, **`--separator`**=*STRING*
+  使用 STRING 作为分隔符而不是换行符
+- **`--help`**
+  显示此帮助并退出
+- **`--version`**
+  输出版本信息并退出
+
+#### jq - 命令行 JSON 处理器
 
 https://github.com/jqlang/jq
 
@@ -1422,6 +1469,11 @@ seq [OPTION]... FIRST INCREMENT LAST
 参数：
 - `-a, --append`  
 	追加到给出的文件，而不是覆盖
+
+示例
+```sh
+echo 'test' | tee file.txt
+```
 
 #### mkfifo （命名管道）
 
@@ -1659,6 +1711,46 @@ Crontab 配置
 参数
 - `-l` 列出
 - `-e` 编辑
+
+### shell
+
+#### sh
+
+```sh
+sh [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
+	[command_file [argument...]]
+
+sh -c [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
+	command_string [command_name [argument...]]
+
+sh -s [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
+	[argument...]
+```
+
+选项
+- `-c`
+	- 从 `command_string` 操作数读取命令。将特殊参数 `0`（参见第 2.5.2 节“特殊参数”）的值设置为 `command_name` 操作数的值，并将位置参数（`$1`、`$2` 等）依次设置为其余参数操作数的值。不从标准输入读取任何命令。
+
+
+示例
+```sh
+sudo sh -c "多条命令"
+```
+
+#### bash
+
+```sh
+bash [options] [command_string | file]
+```
+
+- `-c`
+
+	- 如果指定了 `-c` 选项，则从第一个非选项参数 `command_string` 中读取命令。如果 `command_string` 之后还有参数，则第一个参数会被赋值给 `$0`，其余参数则会被依次赋值给位置参数。对 `$0` 的赋值会设置 shell 的名称，该名称将用于警告和错误消息。
+
+示例
+```sh
+sudo bash -c "多条命令"
+```
 
 ### 终端多路复用
 
@@ -1903,15 +1995,39 @@ ls -l /usr/bin/su
 参数
 - `-c` 执行命令
 
-#### sudo
+#### sudo —— 以其他用户的身份执行命令
 
-`sudo [...] file`
+https://linux.die.net/man/8/sudo
+
+```sh
+sudo -h | -K | -k | -V
+
+sudo -v [-AknS] [-g group name | #gid] [-p prompt] [-u user name | #uid]
+
+sudo -l[l] [-AknS] [-g group name | #gid] [-p prompt] [-U user name] [-u user name | #uid] [command]
+
+sudo [-AbEHnPS] [-C fd] [-g group name | #gid] [-p prompt] [-r role] [-t type] [-u user name | #uid] [VAR=value] -i | -s [command]
+
+sudoedit [-AnS] [-C fd] [-g group name | #gid] [-p prompt] [-u user name | #uid] file ... 
+```
 
 `sudo` 默认以 `root` 身份运行命令.  
-`sudo` 通过检查策略来确定用户是否被授权以 `root` 身份运行命令。这些策略在 `/etc/sudoers` 文件中定义
+`sudo` 通过检查策略来确定用户是否被授权以 `root` 身份运行命令。这些策略在 `/etc/sudoers` 文件中定义（似乎此文件本身即需要 root 权限读取）
 
 参数
 - `-u 用户名` 切换到用户后运行
+- `-l, --list`
+
+	- 如果未指定命令，则列出调用用户（或由 `-U` 选项指定的用户）在当前主机上的权限。若指定 `-ll`，且安全策略支持详细输出格式，则会采用更长的列表格式。
+
+	- 如果指定了命令，且安全策略允许调用用户（或由 `-U` 选项指定的用户）在当前主机上执行该命令，则会显示该命令的完全限定路径及其所有参数。若指定 `-ll`（且安全策略支持），则会以详细格式显示匹配规则以及该命令。如果指定了命令但策略不允许，`sudo` 将以状态值 1 退出。
+
+
+示例
+```sh
+sudo bash -c "多条命令"
+```
+- sudo 后执行一条命令，若尝试执行复杂操作，最简单的是开启子进程 shell
 
 #### passwd
 
@@ -2304,9 +2420,30 @@ TShark 能够检测、读取和写入 Wireshark 支持的相同捕获文件。
 
 #### socat - 多用途中继 (SOcket CAT)
 
+https://linux.die.net/man/1/socat
+
 `CWsocat [options] <address> <address>`
 
 Socat 是一个基于命令行的工具，用于建立两个双向字节流并在它们之间传输数据。由于这些流可以由多种不同类型的数据接收端和发送端（参见地址类型）构建，并且可以应用许多地址选项到这些流上，因此 socat 可以用于多种不同的目的。
+
+参数
+- `CWTCP-LISTEN:<port>`
+	监听并接受 TCP 连接
+	- Useful options: `crnl, fork, bind, range, tcpwrap, pf, max-children, backlog, mss, su, reuseaddr, retry, cool-write`
+
+- `CWEXEC:<command-line>`
+
+端口选项
+- `CWreuseaddr`
+    重用地址
+
+子进程选项
+- `CWfork`
+	连接后创建子进程
+
+示例
+- `socat TCP-LISTEN:4000,reuseaddr,fork EXEC:'node /usr/app/bot.js'`
+	监听 TCP 端口 4000，连接建立后创建子进程执行命令
 
 - `socat - exec:'sh -p',pty,stderr,setsid,sigint,sane`
 	- 地址1为 `-` 标准输入输出
@@ -2317,6 +2454,7 @@ Socat 是一个基于命令行的工具，用于建立两个双向字节流并�
 		- setsid 在新会话中创建进程，获得作业控制权限
 		- sigint 处理中断信号
 		- sane 设置初始状态的组合选项
+
 
 #### ping, ping6 - 向网络主机发送 ICMP ECHO_REQUEST
 
@@ -2355,7 +2493,7 @@ Socat 是一个基于命令行的工具，用于建立两个双向字节流并�
 - `-F 输入文件`
 	文件列表，空行分隔
 
-#### Ncat
+#### ncat
 
 [手册](https://nmap.org/book/ncat-man.html)
 参数：
@@ -2363,6 +2501,31 @@ Socat 是一个基于命令行的工具，用于建立两个双向字节流并�
 	绑定并监听传入连接
 - `-e, --exec <command>`
 	Executes the given command
+- `-v` 
+	信息详细程度，重复多次提高详细程度
+- `--output 文件名`
+	保存信息到文件
+
+聆听模式示例
+
+1. 创建文件
+	```http
+	HTTP/1.1 200 OK
+
+	<html>
+		<body>
+			<h1> from ncat </h1>
+		</body>
+	</html>
+	```
+
+2. 使用 ncat 监听并返回文件设置的响应
+	```sh
+	ncat -l localhost 8080 < helloy.http
+	```
+	```powershell
+	type helloy.http | ncat -l localhost 8080
+	```
 
 #### nc - 任意 TCP 和 UDP 连接/监听
 
