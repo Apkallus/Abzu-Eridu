@@ -124,6 +124,9 @@ GraphQL 可视化工具
 sha1 碰撞
 - [alf.nu jpg 转 pdf](https://alf.nu/SHA1)
 
+DOM XSS
+- 待寻找 burp DOM 插件的替代
+
 ## 字典
 
 字典载荷

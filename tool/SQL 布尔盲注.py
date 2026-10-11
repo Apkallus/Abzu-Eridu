@@ -103,7 +103,7 @@ def sqli_get_data(query, data_length, charset, re_pattern: re.Pattern, payload_t
     return "".join(data_list)
 
 # full_charset 可打印字符集
-# sql_charset 数据库的字段命名字符集，数量更少
+# sql_charset 精简字符集，然而引号包裹后可设置几乎任意字符
 full_charset = string.printable
 sql_charset = "_$" + string.digits + string.ascii_letters
 

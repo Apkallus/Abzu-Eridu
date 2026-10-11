@@ -18,16 +18,38 @@ SQL 语言的一些核心功能在流行的数据库平台中以相同的方式�
 文档
 - [sqlite](https://sqlite.org/docs.html)
 
+
+## 版本
+
+- MySql：
+    `version()` 或 `@@version`
+- Microsoft SQL Server：
+    `@@version`
+- PostgreSQL：
+    `version()`
+
+- SQLite 
+    `sqlite_version()`
+
+- Oracle：
+    ```sql
+    SELECT BANNER FROM v$version
+    ```
+
 ## 字符串连接
 
+- MySql
+    `'字符串a' || '字符串b'` 或 `'字符串a' '字符串b'`
 - PostgreSQL
     `'字符串a' || '字符串b'`
-- MySql
-    `'字符串a' '字符串b'` 或 `'字符串a' || '字符串b'`
-- Microsoft SQL Server
-    `'字符串a' + '字符串b'`
 - Oracle
     `'字符串a' || '字符串b'`
+- sqlite
+    `'字符串a' || '字符串b'`
+
+- Microsoft SQL Server
+    `'字符串a' + '字符串b'`
+
 
 ## 字符串连接函数
 
@@ -67,9 +89,19 @@ SQL 语言的一些核心功能在流行的数据库平台中以相同的方式�
     LISTAGG(列字符串表达式, 分隔符) WITHIN GROUP (ORDER BY 0)
     ```
 
+## 布尔
+
+- sqlite
+    `1` 与 `0`  
+    - 无需逻辑判断
+
+- 所有其他数据库
+    `1=1` 与 `1=0`
+
 ## 行数限制
 
-普通 `LIMIT`
+- 所有其他数据库
+    `LIMIT`
 
 - Oracle
     `ROWNUM`
@@ -109,6 +141,10 @@ SELECT schema_name FROM information_schema.schemata
         SELECT table_name, column_name FROM user_tab_columns;
         ```
 - SQLite 
+    - 查询创建表的 SQL 语句，包含表与所有列
+        ```sql
+        SELECT sql FROM sqlite_master
+        ```
     - 查询表名
         ```sql
         SELECT name FROM sqlite_master WHERE type = 'table'
@@ -117,6 +153,8 @@ SELECT schema_name FROM information_schema.schemata
         ```sql
         SELECT name FROM pragma_table_info('表名')
         ```
+
+
 
 ## 查询函数结构
 
@@ -154,21 +192,6 @@ SELECT schema_name FROM information_schema.schemata
     ```
     - 已知表名模式，查询元数据表得到表名字符串后，动态凭借为函数参数。执行后导出结果为 XML 格式
 
-## 版本
-
-- MySql：
-    `version()` 或 `@@version`
-- Microsoft SQL Server：
-    `@@version`
-- Oracle：
-    ```sql
-    SELECT BANNER FROM v$version
-    ```
-- PostgreSQL：
-    `version()`
-
-- SQLite 
-    `sqlite_version()`
 
 ## SELECT
 
@@ -183,7 +206,15 @@ SELECT schema_name FROM information_schema.schemata
 
 - MySQL
     `-- ` 或 `#`
-    - 双横杠符号后需接空格
+    - 注意，双横杠后需接空格
+- SQLite 
+    `--`
+
+## 空格替代
+
+- SQLite 
+    `/**/`
+
 
 ## 条件错误
 

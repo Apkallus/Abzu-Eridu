@@ -402,7 +402,23 @@ emoji:
             - 挑战页面拥有解决方案，且 docker 型靶机在黑盒缺乏思路时转为白盒。靶场说明中标注挑战无需暴破
             - 仅包含根主题，缺乏子主题分类
 
+    - [yeswehack dojo](https://dojo-yeswehack.com/)
+        - dojo 
+            - 按主题分类的模块化代码片段教程
+                - 代码审计型精炼示例：简要阐述概念后，展示普通输入与几个载荷输入
+                - 针对代码片段的可视化交互型练习：在代码片段中固定输入点、实时显示输入在其中的状态
+                - 包含 hint 与解决方案
+            - 每月发布1个挑战，往期挑战进入存档并在[博客中发布解题思路](https://www.yeswehack.com/blog/dojo)
+        - [博客主题文章](https://www.yeswehack.com/blog/learn-bug-bounty)
+        - [docker 脆弱代码片段](https://github.com/yeswehack/vulnerable-code-snippets)
+        - [工具](https://www.yeswehack.com/researchers/tools)
+            - 其中 Dom Explorer、PP Finder（原型污染） 或可用
+        
 - TBD 📅
+
+    - [pwn.college CSE 598 ASOW - Fall 2026](https://pwn.college/cse598-asow-f2026/)
+
+    - pwn.college CSE 365 回顾
 
     - 《API 攻防》（Hacking APIs） — Corey Ball
 
