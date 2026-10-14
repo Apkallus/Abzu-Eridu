@@ -184,7 +184,7 @@ emoji:
 
 ## 线路
 
-- 操作系统
+1. 操作系统
     1. `《C语言程序设计》 何钦铭、颜晖` 慕课
         - 慕课 [C语言程序设计 - 翁恺](https://www.icourse163.org/course/0809ZJU007A-199001)
         - 教材验证码的 [PTA 编程题目集](https://pintia.cn/problem-sets)
@@ -199,7 +199,7 @@ emoji:
             - 作者提到学习这本书的方式是多次阅读，并且其组织教材结构的抽象化模型聚焦方法在知识学习上很有启发性。  
             - 值得再次重温，网络旁注的扩展部分也有不少内容。
 
-- 网络
+2. 网络
     1. `《Python编程导论》 John V. Guttag` 公开课
         - 公开课页面 [MIT ocw 6.100L](https://ocw.mit.edu/courses/6-100l-introduction-to-cs-and-programming-using-python-fall-2022/pages/material-by-lecture/) 包含视频、代码、题目
         - 教材作者在 [Github 公布的教材代码](https://github.com/guttag/Intro-to-Computation-and-Programming)
@@ -215,7 +215,7 @@ emoji:
         - 学习方法：在线课程教材 + 视频 + 自动题目。视频有多个版本，且其中也包含代码讲解。  
             - 不深入但还是覆盖了一些正则表达式、网络编程、数据库的内容。
 
-    - `《计算机网络 自顶向下方法》 James F·Kurose / Keith W. Ross` 公开课程
+    3. `《计算机网络 自顶向下方法》 James F·Kurose / Keith W. Ross` 公开课程
         - 公开课程[主页](https://gaia.cs.umass.edu/kurose_ross/index.php)  
             - 其中 [wireshark lab](https://gaia.cs.umass.edu/kurose_ross/wireshark.php)、[编程作业](https://gaia.cs.umass.edu/kurose_ross/programming.php) 在图书的对应章节中列出
             - 包含 [视频/幻灯片/章内小节知识检测](https://gaia.cs.umass.edu/kurose_ross/lectures.php) 、[交互式章末习题](https://gaia.cs.umass.edu/kurose_ross/interactive/) 
@@ -229,7 +229,7 @@ emoji:
         - 作者在 [Github 发布的捕获数据包](https://github.com/chrissanders/packets)
         - 命令行数据捕获内容暂略
 
-- Web 应用程序渗透
+3. Web 应用程序渗透
     - [MDN Web开发者教程](https://developer.mozilla.org/en-US/docs/Learn_web_development)
         - 包含教程、讲解与挑战，其合作伙伴 Scrimba 拥有对应的交互式教程
             - 教程扩展部分不在侧边栏中，使用对应模块介绍页的链接进入
@@ -245,24 +245,24 @@ emoji:
 
         - 按主题组织的高质量资料，值得反复查看。
 
-    4. [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) 靶机
+    2. [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) 靶机
         - 项目拥有挑战的对应指南 [Pwning OWASP Juice Shop](https://pwning.owasp-juice.shop/companion-guide/latest/index.html)，不包含知识文档
         - 综合型靶机，在按主题分类的 PortSwigger 后拥有连贯视角，有一些新奇的挑战。 
             - 然而由于其性质，无法与 OWASP WSTG 指南一起构建实践框架。
 
-    5. [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/) 文档
+    3. [OWASP Web 安全测试指南](https://owasp.org/www-project-web-security-testing-guide/) 文档
         - 项目主页的排版：标题缺少锚点，并且目录为静态侧边栏。
             - 直接查看 [Github 文档](https://github.com/OWASP/wstg/tree/master/document)。并且可在 LLM 中直接使用文档的md代码翻译。   
             - 附录部分的工具、推荐文档等内容也值得查看。  
             - Github 项目中拥有对应的 Checklist 检查清单。
 
-    6. [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
+    4. [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
         - 基于 Java，挑战与小节文档在同一页面而非独立环境，教学型SQL，项目 wiki 的文档缺乏信息。    
             - 材料质量不一，包含有争议的概念，但一些内容仍值得查看。    
             模块中介绍 ZAP 的使用，[ZAP 工具文档](https://www.zaproxy.org/docs/) 。 
             - [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)，[IYS 的解决方案](https://inventyourshit.com/labs/webgoat/)
 
-- 二进制
+4. 二进制
     1. [pwn.college CSE 365：网络安全导论](https://pwn.college/cse365-f2025/) 公开课程  
         CSE 365 还包括对 pwn.college 平台本身的介绍：
         - 拥有定制的 GPT5 “sensai”。    
@@ -310,9 +310,9 @@ emoji:
     - 《渗透测试实战 第三版》（The Hacker Playbook 3）-  Peter Kim 
         - 简略的工具介绍
 
-- 网络渗透 & 后渗透
+5. 网络渗透 & 后渗透
 
-    - metasploit 攻击框架系列 
+    1. metasploit 攻击框架系列 
         - 工具 https://github.com/rapid7/metasploit-framework
         - 教程 https://www.offsec.com/metasploit-unleashed/introduction/
         - 文档 
@@ -329,7 +329,7 @@ emoji:
             - 并非开箱即用：陈旧的靶机与设置文档，链接失效，缺失环境设置说明
         - 模块与漏洞仓库 https://www.rapid7.com/db
 
-    - 《灰帽黑客 第六版》（Gray Hat Hacking）- HARPER
+    2. 《灰帽黑客 第六版》（Gray Hat Hacking）- HARPER
         - 部分实验基于无法使用的云 [lab](https://github.com/GrayHatHacking/GHHv6)
         - 内容：
             - 前两部分包含简要的编程与系统概念，简略的工具介绍，对渗透测试与红队的概述。
@@ -337,36 +337,34 @@ emoji:
             - 略过章节：IDA Pro、威胁狩猎、虚拟机部分
         - 或需使用扩展阅读与同主题材料再次阅读
 
-    - 《Network Security Assessment (3rd Edition)》 – Chris McNab
+    3. 《Network Security Assessment (3rd Edition)》 – Chris McNab
         - [图书代码示例](https://resources.oreilly.com/examples/9780596006112/)
         - 内容：
             - 前3章提供概念速览，之后为核心的网络渗透部分
                 - 或需创建类似第3章的文档索引页以导航到各主题
                 - 部分协议/工具/命令示例已过时，提取框架概念
 
-- Web 应用程序渗透 📌 
+6. Web 应用程序渗透 📌 
     
-    - 图书材料：
-        - 《Bug Bounty Bootcamp》 - Vickie Li
-            
-        - 《Web Application Security: Exploitation and Countermeasures for Modern Web Applications》- Andrew Hoffman
-            - 暂略第三部分：防御
+    1. 新材料与 OWASP WSTG 、PortSwigger、《黑客攻防技术宝典：Web实战篇》 一起，并发回顾/阅读/归档  
+        - 图书材料：
+            - 《Bug Bounty Bootcamp》 - Vickie Li
+                
+            - 《Web Application Security: Exploitation and Countermeasures for Modern Web Applications》- Andrew Hoffman
+                - 暂略第三部分：防御
 
-        - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
-            - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
-    
-    - 方法：
-        - 与 OWASP WSTG 、PortSwigger、《黑客攻防技术宝典：Web实战篇》 一起，并发回顾/阅读/归档  
+            - 《Web Hacking Arsenal: A Practical Guide to Modern Web Pentesting》 - Rafay Baloch
+                - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
 
-    - 分析：    
-        - 各材料的内容结构近似且相互引用，并发阅读过程中能够简单发现过时/错误描述。选定拥有清晰结构的书为初始骨架，读完一章/小节后查看其他材料的同主题章节。此时，WSTG 这类零散的百科类文档可被整合到/重构骨架。
-            - 各材料仍拥有作者独特的见解/工具集/工作流
+        - 分析：    
+            - 各材料的内容结构近似且相互引用，并发阅读过程中能够简单发现过时/错误描述。选定拥有清晰结构的书为初始骨架，读完一章/小节后查看其他材料的同主题章节。此时，WSTG 这类零散的百科类文档可被整合到/重构骨架。
+                - 各材料仍拥有作者独特的见解/工具集/工作流
 
-        - 之后或需尝试使用各种自动化工具以快速进行初始探测，结合 lab 记录的步骤确认可自动化的部分，类似 portswigger 的原型污染主题同时介绍手动与自动步骤
+            - 之后或需尝试使用各种自动化工具以快速进行初始探测，结合 lab 记录的步骤确认可自动化的部分，类似 portswigger 的原型污染主题同时介绍手动与自动步骤
 
-        - 研究文档本身即可直接作为或提取内容到主题，类似 portswigger 发布研究后创建对应主题材料
+            - 研究文档本身即可直接作为或提取内容到主题，类似 portswigger 发布研究后创建对应主题材料
 
-    - [hacker101](https://www.hacker101.com/)
+    2. [hacker101](https://www.hacker101.com/)
         - 小型靶场 [hacker101 ctf](https://ctf.hacker101.com/) 
         - [各种资源导航](https://www.hacker101.com/resources)
         - [教学视频](https://www.hacker101.com/videos)
@@ -418,11 +416,13 @@ emoji:
         - [工具](https://www.yeswehack.com/researchers/tools)
             - 其中 Dom Explorer、PP Finder（原型污染） 或可用
         
+    - hacker101 与 hackropole 均遇到 AES-ECB 密码学挑战，回顾二进制基础并归档 linux 命令
+        - pwn.college 
+            - 回顾基础模块、CSE 365
+
 - TBD 📅
 
     - [pwn.college CSE 598 ASOW - Fall 2026](https://pwn.college/cse598-asow-f2026/)
-
-    - pwn.college CSE 365 回顾
 
     - 《API 攻防》（Hacking APIs） — Corey Ball
 

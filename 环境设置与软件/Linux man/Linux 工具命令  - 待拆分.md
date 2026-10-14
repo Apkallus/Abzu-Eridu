@@ -1,7 +1,4 @@
-https://man7.org/linux/man-pages/index.html
-https://www.gnu.org/software/coreutils/manual/html_node/index.html
-https://linux.die.net/man
-https://man.archlinux.org/
+
 
 ## 使用帮助 & 环境基础
 
@@ -772,74 +769,9 @@ Usage: rabin2 [-AcdeEghHiIjlLMqrRsSUvVxzZ] [-@ at] [-a arch] [-b bits] [-B addr]
 
 运行命令，并将根目录设置为 NEWROOT。
 
-#### touch
 
-`touch [OPTION]... FILE...`
 
-更新每个文件的访问和修改时间为当前时间。
-如果不存在，一个不存在的文件参数会被创建为空文件，除非提供 -c 或 -h 选项。
 
-#### mkdir
-
-```sh
-mkdir [OPTION]... DIRECTORY...
-```
-
-创建目录（如果它们尚不存在）。
-
-参数：
-- `-p, --parents`  
-	创建多重父目录的同时，若已存在则不报错（有时仅用来避免报错）
-
-#### mv
-
-```sh
-mv [OPTION]... [-T] SOURCE DEST
-mv [OPTION]... SOURCE... DIRECTORY
-mv [OPTION]... -t DIRECTORY SOURCE...
-```
-
-将 SOURCE 重命名为 DEST，或将 SOURCE(s) 移动到 DIRECTORY。
-
-#### cp
-
-```sh
-cp [OPTION]... [-T] SOURCE DEST
-cp [OPTION]... SOURCE... DIRECTORY
-cp [OPTION]... -t DIRECTORY SOURCE...
-```
-
-将 SOURCE 复制到 DEST，或将 SOURCE(s) 复制到 DIRECTORY。
-
-参数：
-- `-R, -r, --recursive`   
-	递归复制目录内容
-- ` --remove-destination`
-	强制替换，先删除已存在的目标文件，然后创建一个全新的文件。
-- ` -f 或 --force`
-	强制覆盖，如果目标文件存在且无法被打开（例如权限不足），尝试删除它后再复制。
-	如果目标文件可以被打开，尝试直接覆盖其内容。
-- `--no-preserve=ATTR`
-	丢弃属性，在复制时不保留指定的源文件属性。
-	常用的属性包括 mode（权限）、ownership（所有者）、timestamps（时间戳）和 all（所有）。
-- `-a, --archive`
-	完全保留，保留源文件的所有属性，包括所有者、组、权限、时间戳和链接。
-	
-#### rm
-
-```sh
-rm [OPTION]... FILE...
-```
-
-rm 删除每个指定的文件。默认情况下，它不会删除目录。
-
-选项：
-- `-f, --force`
-	忽略不存在的文件，从不提示
-- `-r, -R, --recursive`  
-	递归删除目录及其内容
-- `--no-preserve-root`
-	无`\`根目录保护
 
 #### unlink - 调用unlink函数以删除指定的文件
 
@@ -920,20 +852,6 @@ ln [选项]... -t 目录 目标...
 
 ### 归档
 
-#### gzip, gunzip, zcat - 压缩或扩展文件
-
-```
-gzip [ -acdfhlLnNrtvV19 ] [-S suffix] [ name ... ]
-gunzip [ -acfhlLnNrtvV ] [-S suffix] [ name ... ]
-zcat [ -fhLV ] [ name ... ]
-```
-
-zcat 与 gunzip -c 完全相同。（在某些系统上，zcat 可能被安装为 gzcat 以保留对 compress 的原始链接。）zcat 会解压缩命令行上的文件列表或其标准输入，并将未压缩的数据写入标准输出。zcat 会解压缩具有正确魔数标记的文件，无论它们是否有 .gz 后缀。
-
-- `-d --decompress --uncompress`
-	解压缩
-- `-c --stdout --to-stdout`
-	将输出写入标准输出；保留原始文件不变
 
 #### bzip2, bunzip2 bzcat bzip2recover - 压缩或扩展文件
 
@@ -970,18 +888,7 @@ bzip2recover filename
 - `-l` 显示归档文件
 - `-v` 显示归档文件详细信息
 
-#### tar
 
-`tar [OPTION...] [FILE]...`
-
-- `-c, --create`
-	创建一个新的归档文件
-- `-f, --file=ARCHIVE`
-	使用归档文件或设备 ARCHIVE
-- `-x, --extract, --get`
-	从存档中提取文件
-- `-O, --to-stdout`
-	将文件提取到标准输出
 
 #### 7z
 
@@ -1195,19 +1102,6 @@ less [-[+]aBcCdeEfFgGiIJKLmMnNqQrRsSuUVwWX~]
 	
 - `--filter`：
 	对每个分割后的文件块执行指定的命令。
-
-#### wc - 打印每个文件的行数、单词数和字节数
-
-```
-wc [OPTION]... [FILE]...
-wc [OPTION]... --files0-from=F
-```
-
-为每个 FILE 打印换行符、单词和字节数，如果指定了多个 FILE，则还会打印总计行。如果没有 FILE，或者 FILE 是-，则读取标准输入。
-
-- `--files0-from=F`
-	从文件 F 中读取由 NUL 终止的名称指定的输入文件；如果 F 是 -，则从标准输入读取名称。（信息泄露）
-	- `wc --files0-from=/flag`
 
 ### 过滤 & 匹配
 
