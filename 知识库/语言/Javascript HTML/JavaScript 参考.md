@@ -154,6 +154,24 @@ tagFunction`string text ${expression} string text`
 
 ## JavaScript 标准内置对象
 
+### JSON
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON
+
+`JSON` 命名空间对象包含用于解析 [JavaScript 对象表示法]（JSON）和将值转换为 JSON 字符串的静态方法。
+
+#### JSON.parse() —— 解析 JSON 字符串
+
+静态方法 `JSON.parse()` 用来解析 JSON 字符串，构造由字符串描述的 JavaScript 值或对象。可以提供一个可选的 `reviver` 函数，用于在返回结果对象之前对其进行转换。
+
+#### JSON.stringify() —— 构造 JSON 字符串
+
+`JSON.stringify()` 方法将一个 JavaScript 对象或值转换为 JSON 字符串，如果指定了一个 replacer 函数，则可以选择性地替换值，或者指定的 replacer 是数组，则可选择性地仅包含数组指定的属性。
+
+```js
+JSON.stringify(value[, replacer [, space]])
+```
+
 ### Promise
 
 #### Promise.prototype.then()

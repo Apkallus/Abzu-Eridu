@@ -1,25 +1,14 @@
+https://freemarker.apache.org/docs/api/index.html
+
 ### 模板
 
 https://freemarker.apache.org/docs/dgui_template_exp.html
 
-- 赋值
-    `<#assign x = x + 1>`
+
 - 使用
     `${ ... }`
 
-- 打印序列
-    ```java
-    <#list .data_model?keys as ele>
-    -- ${ele}
-    </#list>
-    ```
 
-### 特殊变量
-
-https://freemarker.apache.org/docs/ref_specvar.html
-- namespace
-- data_model
-- globals
 
 ### 安全文档
 
@@ -105,3 +94,34 @@ https://freemarker.apache.org/docs/app_faq.html#faq_template_uploading_security
         ```freemarker
         ${product.class.getProtectionDomain().getCodeSource().getLocation().toURI().resolve('文件路径').toURL().openStream().readAllBytes()?join(" ")}
         ```
+
+---
+---
+---
+
+## template
+
+### utility
+
+#### Class Execute
+
+https://freemarker.apache.org/docs/api/freemarker/template/utility/Execute.html
+
+### utility
+
+#### ClassUtil
+
+https://freemarker.apache.org/docs/api/freemarker/template/utility/ClassUtil.html
+
+##### Method Details
+
+###### `forName`
+
+```java
+public static Class forName(String className) throws ClassNotFoundException
+```
+
+类似于 [`Class.forName(java.lang.String)`](https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Class.html#forName(java.lang.String))，但该方法会尝试通过线程上下文类加载器加载类。只有当线程上下文类加载器不可访问，或无法找到该类时，才会回退到加载 FreeMarker 类的类加载器。
+
+- 抛出：
+  [`ClassNotFoundException`](https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/ClassNotFoundException.html)

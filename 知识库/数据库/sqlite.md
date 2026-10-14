@@ -1,4 +1,5 @@
-https://sqlite.org/schematab.html  
+https://sqlite.org/docs.html
+[SQL 语言表达式（语法、运算优先级、操作符）](https://www.sqlite.org/lang_expr.html)
 
 ## 待拆分
 

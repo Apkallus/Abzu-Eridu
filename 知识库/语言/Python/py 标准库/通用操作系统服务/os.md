@@ -126,3 +126,20 @@ os.lseek(fd, pos, whence, /)
 - `SEEK_END` 或 `2` – 相对于文件末尾设置 `pos`
 - `SEEK_HOLE` – 将 `pos` 设置为相对于 `pos` 的下一个数据空洞位置
 - `SEEK_DATA` – 将 `pos` 设置为相对于 `pos` 的下一个数据位置
+
+## 进程管理
+
+下列函数可用于创建和管理进程。
+
+所有 [`exec*`] 函数都接受一个参数列表，用来给新程序加载到它的进程中。在所有情况下，传递给新程序的第一个参数是程序本身的名称，而不是用户在命令行上输入的参数。对于 C 程序员来说，这就是传递给 `main()` 函数的 `argv[0]`。例如，`os.execv('/bin/echo', ['foo', 'bar'])` 只会在标准输出上打印 `bar`，而 `foo` 会被忽略。
+
+
+### os.popen() —— 打开一个通往或接受命令 `cmd` 的管道 —— 已废弃
+
+```py
+os.popen(cmd, mode='r', buffering=-1)
+```
+
+打开一个通往或接受命令 `cmd` 的管道。
+
+> `popen()` 是针对 [`subprocess.Popen`] 的简单包装器。使用 `subprocess.Popen` 或 `subprocess.run()` 来控制编码格式等选项。

@@ -69,8 +69,8 @@ function do_extract(selector_start, selector_end){
 /*
 
 do_extract(
-  '#top-level-requests-and-edge-side-includes', 
-  '.docs-content > p:nth-child(416)'
+  '#dgui_template_exp_direct', 
+  'div.code-block:nth-child(26)'
 )
 
 */ 

@@ -131,6 +131,100 @@ The public Element class.
 -  `text`
     第一个子元素前的文本（文本不属于子元素）. This is either a string or the value None, if there was no text.
 
+#####  class lxml.etree._ElementTree
+
+Bases: `object`
+
+###### parse()
+
+```py
+parse(self, source, parser=None, base_url=None)
+```
+
+Updates self with the content of source and returns its root.
+
+> `parser` 即为 `lxml.etree.XMLParser`
+
+##### 🖇️ class lxml.etree.XMLParser —— XML 解析器
+
+https://lxml.de/apidoc/lxml.etree.html#lxml.etree.XMLParser
+
+```python
+class lxml.etree.XMLParser(
+    self,
+    encoding=None,
+    attribute_defaults=False,
+    dtd_validation=False,
+    load_dtd=False,
+    no_network=True,
+    decompress=False,
+    ns_clean=False,
+    recover=False,
+    schema: [XMLSchema] = None,
+    huge_tree=False,
+    remove_blank_text=False,
+    resolve_entities='internal',
+    remove_comments=False,
+    remove_pis=False,
+    strip_cdata=True,
+    collect_ids=True,
+    target=None,
+    compact=True
+)
+```
+
+基类：`[_FeedParser]`
+
+XML 解析器。
+
+解析器可作为附加参数传递给 lxml API 的各种解析函数。系统始终提供一个默认解析器，可通过调用全局函数 `set_default_parser` 进行替换。新解析器可以随时创建，而不会产生显著的运行时开销。
+
+构造函数中的关键字参数主要基于 libxml2 解析器的配置。如果请求了 DTD 验证或属性默认值，则还会加载 DTD（除非你额外提供了一个 [XMLSchema]，从中可以读取默认属性）。
+
+可用的布尔型关键字参数：
+
+- attribute_defaults
+  从 DTD 或 XMLSchema 注入默认属性
+- dtd_validation
+  根据文档引用的 DTD 进行验证
+- load_dtd 🎯
+  使用 DTD 进行解析
+- no_network
+  阻止对相关文件的网络访问（默认值：True）
+- decompress
+  自动解压缩 gzip 输入（默认值：False，在 lxml 6.0 中变更，禁用仅影响 libxml2 2.15+）
+- ns_clean
+  清理冗余的命名空间声明
+- recover
+  尽力解析格式错误的 XML
+- remove_blank_text
+  丢弃看似可忽略的空白文本节点。在没有 DTD/Schema 的情况下，启发式算法会保留同一层级中出现在非空白内容之后的空白文本节点
+- remove_comments
+  丢弃注释
+- remove_pis
+  丢弃处理指令
+- strip_cdata
+  将 CDATA 部分替换为普通文本内容（默认值：True）
+- compact
+  为短文本内容节省内存（默认值：True）
+- collect_ids
+  使用 XML ID 哈希表以实现快速访问（默认值：True，在 DTD 验证时始终为 True）
+- huge_tree
+  禁用安全限制，支持非常深的树结构和非常长的文本内容
+
+其他关键字参数：
+
+- resolve_entities 🎯
+  将实体替换为其文本值。设为 False 保留实体引用，设为 True 解析所有实体，设为 `internal` 仅解析内部定义（不访问外部文件/URL）。默认值曾为 True，在 lxml 5.0 中更改为 `internal`
+- encoding
+  覆盖文档编码（注意：使用 libiconv 编码名称）
+- target
+  一个解析器目标对象，用于接收解析事件
+- schema
+  用于验证的 [XMLSchema]
+
+请注意，应避免在线程之间共享解析器。虽然这不会造成危害，但使用独立的解析器效率更高。此限制不适用于默认解析器。
+
 ### api —— APIs specific to lxml.etree
 
 #### iteration

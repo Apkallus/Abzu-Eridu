@@ -78,35 +78,6 @@ class cimg:
 - 默认（不写）则使用系统原生字节序。
 
 
-### subprocess 子进程管理
-
-https://docs.python.org/3/library/subprocess.html
-
-subprocess 模块允许你生成新的进程，连接它们的输入、输出、错误管道，并且获取它们的返回码。
-
-推荐的调用子进程的方式是在任何它支持的用例中使用 run() 函数。对于更进阶的用例，也可以使用底层的 Popen 接口。
-
-例如：
-```py
-
-p = subprocess.run(
-    ["/challenge/目标程序"], # 要执行的命令（列表形式），
-    input=payload,          # 作为 stdin 发送的内容（bytes）
-    capture_output=True,     # 捕获 stdout 和 stderr
-    text=False               # False 表示 input 为 bytes，否则为 str
-    )
-
-if b"pwn.college" in p.stdout:
-    print(f"response: {p.stdout}")
-```
-
-#### 较旧的高阶 API
-
-```py
-subprocess.check_output(args, *, stdin=None, stderr=None, shell=False, cwd=None, encoding=None, errors=None, universal_newlines=None, timeout=None, text=None, **other_popen_kwargs)
-```
-- 附带参数运行命令并返回其输出。
-
 
 
 ### aiohttp - 异步网络模块

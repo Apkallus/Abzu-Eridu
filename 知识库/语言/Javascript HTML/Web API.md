@@ -630,6 +630,14 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLIFrameElement
 - `contentDocument`
   如果 `iframe` 及其父文档处于同源，则返回一个 `Document`（即嵌套浏览上下文中的活动文档），否则返回 `null`。
 
+### HTMLIFrameElement：srcdoc 属性 —— 指定页面的内容
+
+```js
+const iframe = document.createElement("iframe");
+iframe.srcdoc = `<!DOCTYPE html><p>你好，世界！</p>`;
+document.body.appendChild(iframe);
+```
+
 ### HTMLIFrameElement：contentWindow 属性
 
 https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLIFrameElement/contentWindow
@@ -655,6 +663,24 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLIFrameElement/contentWindow
 
 - `Window.navigator` 只读属性
   返回一个 `Navigator` 对象的引用，可以用于请求运行当前代码的应用程序的相关信息。
+
+### Window: atob() 方法 —— base64 解码
+
+Window 接口的 `atob()` 方法解码使用 [Base64] 编码的数据字符串。你可以使用 `Window.btoa()` 方法编码和传输可能导致通信问题的数据，然后传输它并使用 `atob()` 方法再次解码数据。
+
+```js
+atob(encodedData)
+```
+
+### Window: btoa() 方法 —— base64 编码
+
+Window 接口的 `btoa()` 方法从一个二进制字符串（即，字符串中的每个字符都被视为二进制数据的一个字节）创建一个 [Base64] 编码的 [ASCII] 字符串。
+
+你可以使用此方法编码可能导致通信问题的数据，传输数据，然后使用[`Window.atob()`] 方法再次解码数据。
+
+```js
+btoa(stringToEncode)
+```
 
 ### window.postMessage —— 跨源通信
 

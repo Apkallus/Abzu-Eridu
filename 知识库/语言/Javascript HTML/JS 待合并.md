@@ -163,24 +163,6 @@ const 函数对象 = async function() {
 函数对象();
 ```
 
-## 浏览器 DOM
-
-DOM 是用于在现代 Web 浏览器中管理状态的层次化表示数据。`window` 对象是最顶层标准对象之一。
-
-## ```atob()```与```btoa()``` 
-[mdn文档](https://mdn.org.cn/en-US/docs/Web/API/Window/atob)：
-
-```typescript
-const routes: Routes = [
-{
-path: atob('c2NvcmUtYm9hcmQ='),
-component: ScoreBoardComponent
-}
-]
-```
-    
-> Window 接口的 atob() 方法解码使用 Base64 编码的数据字符串。使用 Window.btoa() 方法编码和传输可能导致通信问题的数据，然后传输它并使用 atob() 方法再次解码数据。
-
 ## XMLHttpRequest
 
 
