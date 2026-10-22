@@ -1,0 +1,1 @@
+[linux 规范主页](https://refspecs.linuxfoundation.org/)

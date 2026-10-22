@@ -66,14 +66,14 @@ function do_extract(selector_start, selector_end){
 }
 
 // 控制台调用函数 
-/*
+
 
 do_extract(
-  '#dgui_template_exp_direct', 
-  'div.code-block:nth-child(26)'
+  '#getting_started', 
+  '.fancy > p:nth-child(30)'
 )
 
-*/ 
+
 
 /*
 - 或修改为在底部显示一个按钮，点击后复制内容并移除按钮

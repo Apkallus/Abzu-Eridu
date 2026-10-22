@@ -26,7 +26,7 @@ HTTP 自定义头
 - Second address line
     详细地址
 
-## 核心工具
+## 工具
 
 速查载荷表
 - [PayloadsAllTheThings](https://swisskyrepo.github.io/PayloadsAllTheThings/)
@@ -37,26 +37,16 @@ wiki
 代码格式化
 - [beautifier.io](https://beautifier.io/)
 - burp 的格式化复制有时将破坏格式（丢失缩进），普通复制或效果更佳
+- [codebeautify.org](https://codebeautify.org)
 - [formatter.org](https://formatter.org/python-formatter)
 - [beautifytools](https://beautifytools.com/xml-beautifier.php)
+- 在浏览器的开发者工具中查看代码时，点击 `{}` 开启代码美化功能
 
 SQL 自动化
 - [sqlmap](https://github.com/sqlmapproject/sqlmap/wiki/Usage)
 
 文件元数据
 - [exiftool](https://exiftool.sourceforge.net/exiftool_pod.html)
-
-hash
-- hashcat 暴破工具
-- [weakpass](https://weakpass.com/)
-    - 各种字典下载
-        - [rockyou](https://weakpass.com/wordlists/rockyou.txt)
-    - 工具页面
-        - 以 hashcat 格式提取 zip 文件的 hash ，且包含 hashcat 对应类型
-        - hash 类型识别
-        - hash 彩虹表功能不可用
-- [md5.gromweb](https://md5.gromweb.com/)
-    - 仅限 MD5
 
 解除混淆
 - [webcrack](https://github.com/j4k0xb/webcrack)
@@ -121,6 +111,40 @@ sha1 碰撞
 
 DOM XSS
 - 待寻找 burp DOM 插件的替代
+
+在线代码编辑器
+- [HTML 编辑器 squarefree（跨站）](https://htmledit.squarefree.com/)
+
+### hash
+   
+hash
+- hashcat 暴破工具
+- [weakpass](https://weakpass.com/)
+    - 各种字典下载
+        - [rockyou](https://weakpass.com/wordlists/rockyou.txt)
+    - 工具页面
+        - 以 hashcat 格式提取 zip 文件的 hash ，且包含 hashcat 对应类型
+        - [hash 类型识别](https://tools.weakpass.com/#identify)
+        - hash 彩虹表功能不可用
+- [md5.gromweb](https://md5.gromweb.com/)
+    - 仅限 MD5
+
+
+工作流
+1. 在 weakpass 类型识别加密序列并获得 hashcat 对应参数。例如      
+    `c20fa16907343eef642d10f0bdb81bf629e6aaf6c906f26eabda079ca9e5ab67`
+    - 类型 `sha256` 
+    - 参数 `-m 1400`
+
+2. 在 hashcat 暴破
+    ```sh
+    hashcat -a 0 -m 1400 -D 1 hash_seq.txt rockyou.txt
+    ``` 
+    - 设置加密序列与字典文件
+
+3. 得到明文或失败
+    `c20fa16907343eef642d10f0bdb81bf629e6aaf6c906f26eabda079ca9e5ab67:apple@123`
+    - 明文 `apple@123`
 
 ## 字典
 
@@ -276,82 +300,6 @@ DOM XSS
 
 - 预测载荷的解码顺序，对载荷执行多重/多类编码，或使用编码不敏感的载荷
 
-## 命令，之后重温二进制时合并
-
-- 系统信息
-
-    ```sh
-    # 架构信息
-    uname -a
-
-    # 操作系统版本信息
-    cat /etc/os-release
-
-    # 内核编译信息
-    cat /proc/version                 
-    ```
-
-- 用户权限
-
-    ```sh
-    # 当前用户
-    whoami 
-
-    # 用户组
-    id
-
-    # sudo 权限
-    sudo -ll
-
-    # 用户表
-    cat /etc/passwd
-
-    # 用户组
-    cat /etc/group
-
-    # 当前登录用户及其操作 
-    w
-
-    # 登录历史记录
-    last
-    ```
-
-- 文件环境
-    ```sh
-    # 查看工作目录
-    pwd
-
-    # 查看环境变量
-    env
-    cat /proc/self/environ
-
-    # 文件挂载
-    cat /etc/fstab
-    ```
-
-- 网络
-
-    ```sh
-    # 主机
-    cat /etc/hosts
-    ```
-
-- 进程
-
-    ```sh
-    # 进程信息
-    ps aux
-
-    # 服务状态
-    service --status-all 
-    ```
-
-- 计划任务
-    ```sh
-    # 所有计划任务
-    ls -al /etc/cron*
-    ```
-
 ## 编码模式，之后合并
 
 - deflate_compress
@@ -451,6 +399,24 @@ DOM XSS
 应用目录下 `/package.json`
 - `"devDependencies"`
 
+## 文档阅读
+
+- quickstart
+    核心功能示例与口语化文档
+
+- 指南
+    更多示例与口语化文档
+
+- API 文档
+    编程接口，函数参数与功能
+
+- CLI 文档
+    命令行，程序参数与功能
+
+- 规范
+    抽象描述
+
+
 ## 代码审计
 
 流程
@@ -510,3 +476,7 @@ DOM XSS
 
 反混淆
 - 不可见 Unicode 字符作为参数或值
+
+## 侦察
+
+搜索获取的特异序列或字符串作为指纹

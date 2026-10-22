@@ -26,11 +26,15 @@ emoji:
         - 恢复并完成后删除开头标记
     - 文件标记传递到目录
 
-类型
+文件内标记
+- `v`
+
+类型：
 - 二进制利用
 - 网络渗透
 - web 应用程序渗透
-- 云渗透
+- 专项：
+    - 云渗透
 
 
 ## 资源池
@@ -121,6 +125,9 @@ emoji:
     - OverTheWire 
     - ropemporium
     - https://crackmes.one/
+    - https://pwnable.tw/challenge/
+    - https://pwnable.kr/index.php
+    - https://pwnable.xyz/
 
 - 密码
     - [Cryptopals](https://cryptopals.com/) ❓
@@ -148,10 +155,17 @@ emoji:
 
 ### 图书/可用
 
-- 《API 攻防》（Hacking APIs） — Corey Ball
-- 《攻击网络协议》（Attacking Network Protocols） — James Forshaw
+逆向
+- Rootkits and Bootkits
+- 《恶意代码分析实战 Practical Malware Analysis》
+- 《逆向工程实战 Practical Reverse Engineering》
+- https://www.ghidrabook.com/
+
+
+
+
+
 - 《深入解析Windows操作系统 第7版》(Windows Internals, Part 1/2)
-- 《黑客之道：漏洞发掘的艺术》- Jon Erickson
 
 - Security Engineering: A Guide to Building Dependable Distributed Systems 3rd Edition, by Ross Anderson (Author)   
     <https://www.cl.cam.ac.uk/archive/rja14/book.html>
@@ -163,6 +177,27 @@ emoji:
 - 《Penetration Testing Azure for Ethical Hackers》 - David Okeyode, Karl Fosaaen
 
 - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis
+
+- A Bug Hunter's Diary
+
+#### 教科书
+
+汇编
+- The Art of 64-Bit Assembly, Volume 1
+- Modern X86 Assembly Language Programming
+- [Reverse Engineering for Beginners](https://beginners.re/)
+
+elf
+- Learning Linux Binary Analysis
+- Linkers and Loaders
+
+操作系统
+- [Operating Systems: Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+- linux 编程接口
+
+专项
+- Game Hacking: Developing Autonomous Bots for Online Games 
+- Practical IoT Hacking
 
 ### 开发文档
 
@@ -178,6 +213,8 @@ emoji:
 
 - [MIT 6.S081 操作系统工程](https://pdos.csail.mit.edu/6.S081/2025/index.html) ❓
     操作系统的设计与实现，以及其作为系统编程基础的作用
+
+- [MIT 6.858: Computer System Security](https://css.csail.mit.edu/6.858/2022/)
 
 - [RPISEC Modern Binary Exploitation](https://github.com/RPISEC/MBE) ❓
     二进制漏洞利用课程的材料，旨在教授漏洞研究、逆向工程和二进制漏洞利用方面的技能。
@@ -234,9 +271,9 @@ emoji:
         - 包含教程、讲解与挑战，其合作伙伴 Scrimba 拥有对应的交互式教程
             - 教程扩展部分不在侧边栏中，使用对应模块介绍页的链接进入
 
-    - `《黑客攻防技术宝典：Web实战篇》 Dafydd Stuttard / Marcus Pinto`
+    - `《黑客攻防技术宝典：Web实战篇（The Web Application Hacker’s Handbook）》 Dafydd Stuttard / Marcus Pinto`
         - 拥有知识架构以及部分过时的内容，但结合作者的 PortSwigger Academy 仍值得阅读。
-    - [PortSwigger Web Security Academy](https://portswigger.net/web-security)  文档与 lab
+    - [PortSwigger Web Security Academy](https://portswigger.net/web-security)  Web 文档与 lab
         - 包含
             - [主题文档与对应 lab](https://portswigger.net/web-security/all-topics) 
             - [研究文章](https://portswigger.net/research)
@@ -245,7 +282,7 @@ emoji:
 
         - 按主题组织的高质量资料，值得反复查看。
 
-    2. [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) 靶机
+    2. [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) Web lab
         - 项目拥有挑战的对应指南 [Pwning OWASP Juice Shop](https://pwning.owasp-juice.shop/companion-guide/latest/index.html)，不包含知识文档
         - 综合型靶机，在按主题分类的 PortSwigger 后拥有连贯视角，有一些新奇的挑战。 
             - 然而由于其性质，无法与 OWASP WSTG 指南一起构建实践框架。
@@ -256,9 +293,9 @@ emoji:
             - 附录部分的工具、推荐文档等内容也值得查看。  
             - Github 项目中拥有对应的 Checklist 检查清单。
 
-    4. [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
+    4. [OWASP WebGoat](https://owasp.org/www-project-webgoat/) Web lab
         - 基于 Java，挑战与小节文档在同一页面而非独立环境，教学型SQL，项目 wiki 的文档缺乏信息。    
-            - 材料质量不一，包含有争议的概念，但一些内容仍值得查看。    
+            - 材料质量不一，但一些内容仍值得查看。    
             模块中介绍 ZAP 的使用，[ZAP 工具文档](https://www.zaproxy.org/docs/) 。 
             - [cycubix 的解决方案](https://docs.cycubix.com/application-security-series/web-application-security-essentials/solutions)，[IYS 的解决方案](https://inventyourshit.com/labs/webgoat/)
 
@@ -267,7 +304,8 @@ emoji:
         CSE 365 还包括对 pwn.college 平台本身的介绍：
         - 拥有定制的 GPT5 “sensai”。    
         - 模块视频 + 文档 + CTF 型靶机
-            - 视频与幻灯片的部分概念不存在于文档中。       
+            - 视频与幻灯片的部分概念不存在于文档中。    
+            - 拥有练习模式，获取管理员权限调试   
         - 公开课进行 Twitch 直播，Youtube 拥有往期视频。（B站拥有 LLM 翻译）
         - 往期课程无首页链接但可修改URL访问： `cse365-f2025` `cse365-s2025` `cse365-f2024`。或使用导航栏的搜索功能
 
@@ -344,7 +382,7 @@ emoji:
                 - 或需创建类似第3章的文档索引页以导航到各主题
                 - 部分协议/工具/命令示例已过时，提取框架概念
 
-6. Web 应用程序渗透 📌 
+6. 📌 Web 应用程序渗透  
     
     1. 新材料与 OWASP WSTG 、PortSwigger、《黑客攻防技术宝典：Web实战篇》 一起，并发回顾/阅读/归档  
         - 图书材料：
@@ -371,54 +409,70 @@ emoji:
         - 分析
             - 在过程中构造速查/检查表，快速映射注入点与探测项到对应主题
             - portswigger 这类拥有教学文档的专项靶场中，能够高效学习并实践主题内容，过程中对特定主题构建“侦察-探测-利用”的工作流；而 hacker101 这类模拟场景、主题未知的复合靶场仅当基于主题文档并构建完整循环工作流时有效。
-                - 当前所有 web 靶场均可用
+                - 当前所有 web 靶场均可用（浏览器利用、移动应用渗透、云渗透归为独立主题）
 
-    - [picoCTF -> CyLab Security Academy](https://cylabacademy.org)
-        - [综述文档](https://primer.cylabacademy.org/)
-        - [资源](https://learn.cylabacademy.org/resources)
-            - 视频
-            - 主题简略文档
-        - [挑战库](https://learn.cylabacademy.org/library)
-            - 综合挑战库，包含web应用、加密、逆向工程、取证、二进制、LLM
-            - 仅包含根主题，缺乏子主题分类
-            - 挑战较新，使用现代技术栈。运行在 AWS EC2，每个挑战使用单独 docker
-            - 挑战拥有 hint
-        - 使用方式：
-            - 学习路径并不涵盖所有挑战，也并非按照主题与子主题组织。直接在挑战库中按主题索引，当前专注于 web应用主题，按照难度进行
-            
-    - [Root Me](https://www.root-me.org/?lang=en)
-        - 资源
-            - [陈旧文档](https://repository.root-me.org/)
-        - 综合靶场，包含编程、网络、web应用、加密、取证、程序应用
-            - 挑战持续更新，但频率下降，最早的挑战发布于几十年前。使用多用户服务器，部分挑战开启容器后重定向到对应端口
-            - 挑战页面或拥有关联文档资源，以及在完成后解锁的其他挑战者的解决方案
-        - 使用方式：
-            - 中文缺失文档，使用 en
-            - 主题使用挑战名称进行分类，但不完全。当前专注于 web应用主题，按照难度进行
+    3. 📌 进行一批靶场内的 web 主题挑战 
+        - [picoCTF -> CyLab Security Academy](https://cylabacademy.org)
+            - [综述文档](https://primer.cylabacademy.org/)
+            - [资源](https://learn.cylabacademy.org/resources)
+                - 视频
+                - 主题简略文档
+            - [挑战库](https://learn.cylabacademy.org/library)
+                - 综合挑战库，包含web应用、加密、逆向工程、取证、二进制、LLM
+                - 仅包含根主题，缺乏子主题分类
+                - 挑战较新，使用现代技术栈。运行在 AWS EC2，每个挑战使用单独 docker
+                - 挑战拥有 hint
+            - 使用方式：
+                - 学习路径并不涵盖所有挑战，也并非按照主题与子主题组织。直接在挑战库中按主题索引，当前专注于 web应用主题，按照难度进行
+            - [所有挑战的解决方案](https://picoctfsolutions.com/)
+                - 包含常用工具 
+        - [Root Me](https://www.root-me.org/?lang=en)
+            - 资源
+                - [陈旧文档](https://repository.root-me.org/)
+            - 综合靶场，包含编程、网络、web应用、加密、取证、程序应用
+                - 挑战持续更新，但频率下降，最早的挑战发布于几十年前。使用多用户服务器，部分挑战开启容器后重定向到对应端口
+                - 挑战页面或拥有关联文档资源，以及在完成后解锁的其他挑战者的解决方案
+            - 使用方式：
+                - 中文缺失文档，使用 en
+                - 主题使用挑战名称进行分类，但不完全。当前专注于 web应用主题，按照难度进行
 
-    - [hackropole](https://hackropole.fr/en/)
-        - 在线追踪进度，使用本地 docker 靶机的综合靶场，包含加密、取证、硬件、二进制、逆向、web
-            - 作为年度 CTF 归档靶场，使用流行技术栈且持续更新。
-            - 提供文件的挑战均为代码审计型，需实际查看组件版本对应的更新日志、文档、源码，部分挑战设置巧妙或难度较高
-            - 挑战页面拥有解决方案，且 docker 型靶机在黑盒缺乏思路时转为白盒。靶场说明中标注挑战无需暴破
-            - 仅包含根主题，缺乏子主题分类
+        - [hackropole](https://hackropole.fr/en/)
+            - 在线追踪进度，使用本地 docker 靶机的综合靶场，包含加密、取证、硬件、二进制、逆向、web
+                - 作为年度 CTF 归档靶场，使用流行技术栈且持续更新。
+                - 提供文件的挑战均为代码审计型，需实际查看组件版本对应的更新日志、文档、源码，部分挑战设置巧妙或难度较高
+                - 挑战页面拥有解决方案，且 docker 型靶机在黑盒缺乏思路时转为白盒。靶场说明中标注挑战无需暴破
+                - 仅包含根主题，缺乏子主题分类
 
-    - [yeswehack dojo](https://dojo-yeswehack.com/)
-        - dojo 
-            - （部分）按主题分类（但分类错误）的模块化代码片段教程（后半部分模块均拆分自 2024 年的一个 CTF 挑战）
-                - 代码审计型精炼示例：简要阐述概念后，展示普通输入与几个载荷输入
-                - 针对代码片段的可视化交互型练习：在代码片段中固定输入点、实时显示输入在其中的状态。包含 hint 与解决方案
-                - 拥有盲注练习，但设置速率限制。每个载荷提交请求均触发几十个可视化组件的请求。仅对前几个字符进行概念测试
-                - 类似 owasp webgoat，拥有一些亮点但总体质量较低
-            - 每月发布1个挑战，往期挑战进入存档并在[博客中发布解题思路](https://www.yeswehack.com/blog/dojo)
-        - [博客主题文章](https://www.yeswehack.com/blog/learn-bug-bounty)
-        - [docker 脆弱代码片段](https://github.com/yeswehack/vulnerable-code-snippets)
-        - [工具](https://www.yeswehack.com/researchers/tools)
-            - 其中 Dom Explorer、PP Finder（原型污染） 或可用
+        - [yeswehack dojo](https://dojo-yeswehack.com/)
+            - dojo 
+                - （部分）按主题分类（但分类错误）的模块化代码片段教程（后半部分模块均拆分自 2024 年的一个 CTF 挑战）
+                    - 代码审计型精炼示例：简要阐述概念后，展示普通输入与几个载荷输入
+                    - 针对代码片段的可视化交互型练习：在代码片段中固定输入点、实时显示输入在其中的状态。包含 hint 与解决方案
+                    - 拥有盲注练习，但设置速率限制。每个载荷提交请求均触发几十个可视化组件的请求。仅对前几个字符进行概念测试
+                    - 类似 owasp webgoat，拥有一些亮点但总体质量较低
+                - 每月发布1个挑战，往期挑战进入存档并在[博客中发布解题思路](https://www.yeswehack.com/blog/dojo)
+            - [博客主题文章](https://www.yeswehack.com/blog/learn-bug-bounty)
+            - [docker 脆弱代码片段](https://github.com/yeswehack/vulnerable-code-snippets)
+            - [工具](https://www.yeswehack.com/researchers/tools)
+                - 其中 Dom Explorer、PP Finder（原型污染） 或可用
         
-    - hacker101 与 hackropole 均遇到 AES-ECB 密码学挑战，回顾二进制基础并归档 linux 命令
-        - pwn.college 
-            - 回顾基础模块、CSE 365
+        - 分析
+            - 进度
+                - picoCTF、Root Me、hackropole 三个大型综合靶场
+                    - 已尝试尽力做 Web 主题1星挑战（但仍不够尽力）。
+                - yeswehack dojo 作为 Web 专项靶场
+                    - 教程片段很少，已完成。
+                    - 几十个每月挑战存档作为类2星以上挑战
+
+            - hacker101 与 hackropole 均遇到 AES-ECB 密码学挑战，此时逐渐过渡到二进制类型
+                - web 靶场低频率维持
+                - 回顾 pwn.college CSE 365 网络安全基础中作为衔接的前几个模块：Linux 命令、权限模型、Web 基础。
+                    - 此时尚不包含二进制利用且主题材料尚未建立，查阅并归档到 man/规范/指南中
+                - 对之后的二进制主题使用与之前 Web 主题类似的：并发回顾/阅读/归档过程
+
+- 二进制
+
+    - foo
 
 - TBD 📅
 
@@ -426,9 +480,33 @@ emoji:
 
     - 《API 攻防》（Hacking APIs） — Corey Ball
 
-    - 二进制回顾
-    
+    - 二进制
+        - 并发阅读
+            - The Art of Software Security Assessment
+            - pwn.college
+            - 《黑客之道：漏洞发掘的艺术（Hacking: The Art of Exploitation）》
+            - Exploiting Software: How to Break Code 
+            - The Shellcoder's Handbook: Discovering and Exploiting Security Holes 
+            
+            - CTF Wiki
+            - https://guyinatuxedo.github.io/index.html
+        
+        - 靶场
+            - https://exploit.education/
+
+        - 反汇编
+            - 《二进制分析实战 Practical Binary Analysis》
+
+        - 内核
+            - A Guide to Kernel Exploitation: Attacking the Core
+
+        - 发现
+            - Fuzzing: Brute Force Vulnerability Discovery
+
+
     - 基于 AWS 的云渗透
+
+    - 《攻击网络协议》（Attacking Network Protocols） — James Forshaw
 
     - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 
 
