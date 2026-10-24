@@ -56,6 +56,13 @@ def regex_grep_data(res: requests.Response, re_pattern: re.Pattern):
     return grep_data
 
 def sqli_get_length(query, re_pattern, payload_template):
+    """
+    测试字符串长度：
+    1. 使用参数模板，循环填充当前测试长度作为最终载荷
+    2. 调用 HTTP 请求发送函数（传递载荷），得到响应
+    3. 调用正则表达式解析触点（传递正则表达式）
+        - 待改进为传递参数触点
+    """
     # 循环检测字符串长度
     data_length = 0
     for test_len in range(512):
@@ -79,6 +86,13 @@ def sqli_get_length(query, re_pattern, payload_template):
 
 
 def sqli_get_data(query, data_length, charset, re_pattern: re.Pattern, payload_template, debug=False):
+    """
+    测试字符串：
+    1. 使用参数模板，循环填充当前测试偏移与字符作为最终载荷
+    2. 调用 HTTP 请求发送函数（传递载荷）得到响应
+    3. 调用正则表达式解析触点（传递正则表达式）
+        - 待改进为传递参数触点
+    """
     # 暴破字符，偏移从1而不是0开始
     data_list = []
     for start_position in range(1, data_length + 1):
@@ -112,6 +126,11 @@ re_pattern = re.compile(r'''{"status":"(.+?)"}''')
 
 # 查询长度 -> 查询数据
 def do_query(query, charset):
+    """
+    半自动暴破数据
+    - 设置当前数据库对应的长度与字符载荷模板，调用对应函数
+    - 每次使用的模板保留作为后续参考
+    """
     print(f"cur_query: {query}")
 
     ## 注意，查询需被括号包裹

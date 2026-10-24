@@ -4,27 +4,6 @@
 
 ### 帮助系统
 
-#### man
-
-man 是系统的手册分页程序。
-
-手册页操作：
-您可以使用方向键（以及 PgUp/PgDn 键）滚动手册页，并使用 `/` 进行搜索。
-搜索后，可按 `n` 键跳至下一个结果，按 `N` 键跳至上一个结果。
-除了 `/`，您还可以使用 `?` 进行反向搜索！
-
-参数：
-- `-k, --apropos [关键词]`  
-	大约等同于 apropos。搜索关键词对应的手册概述并显示所有匹配结果。
-
-例：
-- `man ascii`
-	查看 ascii 码进制映射
-
-#### --help
-
-#### info
-
 ### 包管理工具
 
 #### Cargo ———— Rust 的包管理器
@@ -274,11 +253,6 @@ tree [-adfghilnopqrstuvxACDFNS] [-L level [-R]] [-H baseHREF] [-T title] [-o fil
 
 递归列出目录中文件信息
 
-#### file - 确定文件类型
-
-`file [-bchikLNnprsvz0] [--apple] [--mime-encoding] [--mime-type] [-e testname] [-F separator] [-f namefile] [-m magicfiles] file ...`
-
-`file` 会尝试对每个参数进行分类。测试分为三组，按以下顺序执行：文件系统测试、魔数测试和语言测试。第一个成功的测试会导致文件类型被打印出来。
 
 #### basename 从文件名中剥离目录和后缀
 
@@ -581,76 +555,7 @@ unlink OPTION
 
 调用unlink函数以删除指定的FILE。
 
-#### ln （硬链接/软链接）
-
-```sh
-ln [选项]... [-T] 目标 链接名
-ln [选项]... 目标
-ln [选项]... 目标... 目录
-ln [选项]... -t 目录 目标...
-```
-
-在第一种格式中，创建具有指定链接名且指向指定目标的链接。在第二种格式中，在当前目录创建指向目标位置的链接。在第三、四种格式中，在指定目录中创建指向指定目标的链接。默认创建硬链接，当使用 --symbolic 时创建符号链接。
-
-参数：
-- `-s, --symbolic`  
-	创建符号链接而非硬链接
-
-例：
-- `ln -s /flag quit`
-
 ### 查找
-
-#### find - 在目录层次结构中搜索文件
-
-`find [path...] [expression]`
-
-如果未指定搜索条件，`find` 将匹配所有文件。  
-如果未指定搜索位置，`find` 将使用当前工作目录（`.`）。  
-
-参数：
-- `-P`
-	永不跟随符号链接。这是默认行为。
-- `-L`
-	跟随符号链接。
-- `-H`
-	不要跟随符号链接，除非在处理命令行参数时。
-
-表达式：
-- `-name pattern`  
-	基础文件名匹配 pattern
-- `-type [类型]`  
-	d 目录  
-	f 普通文件  
-	l 符号链接  
-	p 命名管道  
-	s 套接字  
-- `-maxdepth levels`
-	最多向下遍历命令行参数指定的目录层数（一个非负整数）。-maxdepth 0 表示仅对命令行参数应用测试和操作。
-- `-quit`
-	立即退出。
-
-操作：
-- `-exec command`
-	执行 command；如果返回 0 状态则返回 true。
-	find 的所有后续参数被视为 command 的参数，直到遇到一个由 ';' 组成的参数为止。（在shell中需对分号进行转义或引号包裹为字面量）
-	在 command 的参数中，字符串 '{}' 将被当前正在处理的文件名替换，而不仅仅是在单独的参数中
-	- `find / -maxdepth 1 -name flag -exec cat {} \; -quit`
-		在根目录的第一层（本层）寻找名称为flag的文件，并将其作为参数传递到执行的cat命令
-	- `find / -exec /bin/sh -p \; -quit`
-		随意找到任何文件后执行以权限传递模式 -p 运行的 sh
-	
-	
-#### 文件名通配符
-
-- `*` 多字符通配符，可以匹配文件名中除 `/` 或开头的 `.` 字符之外的任何部分。
-- `?` 单字符通配符，，可以匹配文件名中除 `/` 或开头的 `.` 字符之外的任何部分。
-- `[]` 单字符限定匹配，匹配括号内指定的可能字符子集的通配符。
-- `[!]`、`[^]` 排除符，如果方括号内的第一个字符是 `!` 或（在较新版本的 bash 中）`^`，该通配符模式将进行反向匹配，即该方括号实例会匹配*不*在所列出的字符范围内的字符。  
-	当 `!` 字符不是 `[]` 通配符的首字符时，它在 bash 中具有不同的特殊含义！`^` 没有这个问题，但在较旧的 shell 中可能不兼容。
-
-### 归档
-
 
 #### bzip2, bunzip2 bzcat bzip2recover - 压缩或扩展文件
 
@@ -760,21 +665,7 @@ bzip2recover filename
 
 ### 文本编辑器
 
-#### vim - Vi 增强版，程序员文本编辑器
 
-```
-vim [options] [file ..]
-vim [options] -
-vim [options] -t tag
-vim [options] -q [errorfile]
-```
-
-vim 是一个向上兼容 Vi 的文本编辑器。它可以用来编辑各种纯文本文件。它特别适用于编辑程序。
-
-https://github.com/vim/vim/blob/5ab969f719bb09555e90e8dff8c94fc37bcbf2ae/runtime/doc/usr_21.txt#L52
-
-- `:!{command}`
-	执行 shell 命令
 
 #### emacs
 
@@ -826,61 +717,6 @@ xxd -r[evert] [options] [infile [outfile]]
 
 ### 查看 & 选择
 
-#### head
-
-```head [参数] [文件]```
-
-默认查看文件前十行
-
-参数
-- ```n行数``` 或 ```n 行数```  
-	显示设置的行数
-
-#### tail - 输出文件的最后一部分
-
-`tail [OPTION]... [FILE]...`
-
-将每个文件的最后 10 行打印到标准输出。如果有多个文件，每个文件前会加上一个标题，显示文件名。如果没有文件，或者文件是-，则读取标准输入。
-
-参数
-- `-n, --lines=K`
-	输出最后 K 行，而不是最后 10 行
-
-#### tac
-
-#### cut
-
-```sh
-cut OPTION... [FILE]...
-```
-
-从每个 FILE 中打印选定行的一部分到标准输出。
-
-参数：
-- `-d, --delimiter=分隔符`
-	指定分隔符代替 TAB 作为字段分隔符
-- `-f, --fields=LIST`
-	指定*字段*编号；如果未指定-s 选项，也会打印包含无分隔符字符的任何行
-
-#### more - 文件浏览过滤器，用于 CRT 查看
-
-`more [-dlfpcsu] [-num] [+/pattern] [+linenum] [file ...]`
-
-逐屏分页浏览文本的过滤器。这个版本特别原始。
-
-#### less
-
-```
-less [-[+]aBcCdeEfFgGiIJKLmMnNqQrRsSuUVwWX~]
-[-b space] [-h lines] [-j line] [-k keyfile]
-[-{oO} logfile] [-p pattern] [-P prompt] [-t tag]
-[-T tagsfile] [-x tab,...] [-y lines] [-[z] lines]
-[-# shift] [+[+]cmd] [--] [filename]...
-```
-
-逐屏分页浏览文本的过滤器，但允许在文件中向前和向后移动。
-此外，不需要在开始前读取整个输入文件，因此对于大型输入文件，它比文本编辑器（如）启动更快。
-
 #### readlink 读取符号链接指向的目标
 
 示例：
@@ -901,61 +737,6 @@ less [-[+]aBcCdeEfFgGiIJKLmMnNqQrRsSuUVwWX~]
 	对每个分割后的文件块执行指定的命令。
 
 ### 过滤 & 匹配
-
-#### grep
-
-[手册](https://www.man7.org/linux/man-pages/man1/grep.1.html)
-
-```sh
-grep [OPTION]... PATTERNS [FILE]...
-grep [OPTION]... -e PATTERNS ... [FILE]...
-grep [OPTION]... -f PATTERN_FILE ... [FILE]...
-```
-
-`grep` 在每个`FILE`中搜索模式。  
-在第一个形式中（如果没有 -e 或 -f 选项），第一个操作数模式是由换行符分隔的一个或多个模式，grep 会打印出与模式匹配的每一行。
-
-此外，还提供了两个变体程序 egrep 和 fgrep。egrep 等同于 grep -E。fgrep 等同于 grep -F。直接以 egrep 或 fgrep 的形式调用已被弃用，但提供这些选项是为了允许依赖它们的旧应用程序无需修改即可运行。
-
-参数
-- `-n`  
-	显式匹配行的行号
-- `-r, --recursive`  
-	递归搜索目录
-- `-R, --dereference-recursive`
-    递归读取每个目录下的所有文件。跟随所有符号链接，与 -r 不同。
-- `-E, --extended-regexp` 
-	将模式解释为扩展正则表达式。
-- `-P, --perl-regexp`
-	将模式解释为 perl 正则表达式。
-	- `(?<=foo)`
-		匹配 foo 但不包含在结果中
-- `-m NUM, --max-count=NUM`
-	在读取 NUM 行匹配内容后停止读取文件。
-- `-o, --only-matching`
-	仅打印匹配（非空）的行部分，每个这样的部分单独输出在一行上。
-
-匹配控制：
-- `-v, --invert-match`  
-	反转匹配的意义，选择不匹配的行。(-v 由 POSIX 指定。)
-
-上下文行控制：
-- `-A NUM, --after-context=NUM`
-    在匹配行后打印 NUM 行的后续上下文。
-
-- `-B NUM, --before-context=NUM`
-    在匹配行前打印 NUM 行的前导上下文。
-
-- `-C NUM, -NUM, --context=NUM`
-    打印 NUM 行的输出上下文。
-
-General Output Control:
-- `-q, --quiet, --silent` 安静模式；不将任何内容写入标准输出。如果找到任何匹配项，即使检测到错误，也会立即以零状态退出。另请参阅 -s 或 --no-messages 选项。  
-	可用来在脚本的条件表达式中根据返回值判断是否找到。
-
-File and Directory Selection
-`-a, --text`
-    Process a binary file as if it were text; this is equivalent to the --binary-files=text option. 
 
 ####  rsync - a fast, versatile, remote (and local) file-copying tool
 
@@ -1012,117 +793,11 @@ tac [OPTION]... [FILE]...
 
 https://github.com/jqlang/jq
 
-### 比较 & 排序
-
-#### diff
-
-```sh
-diff [OPTION]... FILES
-```
-
-逐行比较文件。
-
-输出示例：
-- `2a3` 在第一个文件的第2行后追加第二个文件的第3行
-- `5c5` 第一个文件的第5行被替换为第二个文件的第5行
-
-#### sort - 排序文本文件的行
-
-```sh
-sort [OPTION]... [FILE]...
-sort [OPTION]... --files0-from=F
-```
-
-将所有 FILE(s) 的排序后连接结果写入标准输出。
-
-参数：
-- `-r`：反向排序（从Z到A）  
-- `-n`：数值排序（针对数字）  
-- `-u`：仅保留唯一行（*删除重复项*）  
-- `-R`：随机顺序！
-
-#### uniq
-
-#### rev - 反转文件或多个文件的行
-
-`rev [file ...]`
-
-指定的文件复制到标准输出，反转每行中的字符顺序。如果没有指定文件，则读取标准输入。
-
-### 生成 & 组合
-
-
-
-
-#### tee
-
-`tee [选项]... [文件列表]...`
-
-把标准输入的数据复制到文件列表中的每一个文件，同时送往标准输出。
-
-参数：
-- `-a, --append`  
-	追加到给出的文件，而不是覆盖
-
-示例
-```sh
-echo 'test' | tee file.txt
-```
-
-#### mkfifo （命名管道）
-
-```bash
-mkfifo [选项]... 名称...
-```
-
-使用指定的名称创建持久化命名管道（FIFO）。  
-阻塞，读取前需写入，并且写入后阻塞到被读取为止。  
-想象容量为1的栈，入栈后需出栈。
 
 ## 进程 & 终端控制
 
 ### 进程
 
-#### ps - 报告当前进程的快照
-
-```sh
-ps [选项]
-```
-
-`ps` 显示关于部分活动进程的信息
-
-- `-o` 选项启用自定义 `stat` 列
-	- `T`  表示进程因 `Ctrl-Z` 操作而被挂起
-	- `S` 表示其正在等待输入时处于睡眠状态
-	- `R` 表示该进程正在活跃运行
-	- `+` 号代表其处于前台
-
-**“标准”语法：**  
-此语法中，`-e` 用于列出“所有”进程，`-f` 用于显示“完整格式”输出（包括参数）。二者可合并为单一参数 `-ef`。
-
-
-**“BSD”语法：**  
-此语法中，`a` 用于列出所有用户的进程，`x` 用于显示非终端运行的进程，`u` 用于“用户易读”格式输出。三者可合并为单一参数 `aux`。
-
-`ps -ef` 额外输出*父进程 ID*（`ppid`），即启动该进程的父进程 pid；而 `ps aux` 则输出进程占用的系统总 CPU 和内存百分比。
-
-`ps -ef` 和 `ps aux` 默认会根据终端宽度截断命令列表， 传递两次 `w` 参数（如 `ps -efww` 或 `ps auxww`）来禁用截断。
-
-示例
-```sh
-ps aux
-```
-
-#### kill
-
-```sh
-kill [-s 信号|-p] [--] 进程 ID...
-kill -l [信号]
-```
-
-命令 kill 向指定的进程或进程组发送指定的信号。如果没有指定信号，将发送 TERM 信号。TERM 信号会杀死那些不捕获此信号的进程。对于其他进程，可能需要使用 KILL（9）信号，因为该信号无法被捕获。
-
-- `-l` 查看所有的信号与其编码
 
 #### pgrep && pkill
 
@@ -1385,33 +1060,6 @@ Screen 是一个全屏窗口管理器，可以在多个进程（通常是交互�
 	`-r sessionowner/[pid.tty.host]`  
 	恢复一个已分离的screen会话。除了与-d/-D组合的其他选项外，不得指定其他选项，但可能需要`[pid.]tty.host`的前缀来区分多个已分离的screen会话。第二种形式用于连接到另一个用户在多用户模式下运行的screen会话。这表示screen应该在另一个用户的目录中查找会话。这需要setuid-root。
 
-#### tmux - 终端复用
-
-```sh
-tmux [-28lquvV] [-c shell-command] [-f file] [-L socket-name] [-S socket-path] [command [flags]]
-```
-
-tmux 是一个终端复用器：它允许创建、访问和控制多个终端，所有这些终端都可以从单个屏幕进行管理。tmux 可以从屏幕中分离出来，在后台继续运行，稍后可以重新附加到屏幕上。
-
-命令：
-- `tmux ls` - 列出会话
-- `tmux attach` 或 `tmux a` - 重新连接到会话
-
-组合键，tmux 使用 `Ctrl-B` 作为其命令前缀：
-- `Ctrl-B [` - 进入复制模式，可使用键盘的上下页与箭头
-	- `q` 退出复制模式
-- `Ctrl-B 方向键` 切换窗格 
-
-- `Ctrl-B c` - 创建一个新窗口
-- `Ctrl-B n` - 切换到下一个窗口
-- `Ctrl-B p` - 切换到上一个窗口
-- `Ctrl-B 0` 到 `Ctrl-B 9` - 跳转到窗口 0-9
-- `Ctrl-B w` - 查看一个便捷的窗口选择器
-- `Ctrl-B d` - 分离会话到后台，回到终端
-- `Ctrl + D`   
-	发送文件结束（EOF）信号
-
-
 ## 权限 & 用户管理
  
 ### 访问控制 getfacl setfacl getcap setcap capsh getpcaps
@@ -1566,62 +1214,6 @@ tips
 - chown 自动清空 suid
 
 ### 身份切换 & 认证
-
-#### su
-
-```sh
-su [OPTION]... [-] [USER [ARG]...]
-```
-
-切换至目标 USER  
-单独使用 `-` 表示 `-l`。
-如果未给出 USER，则假设为 root。
-
-`su` 是一个 setuid 二进制文件：
-
-```sh
-ls -l /usr/bin/su
--rwsr-xr-x 1 root root 232416 Dec 1 11:45 /usr/bin/su
-```
-
-由于设置了 SUID 位，`su` 会以 `root` 身份运行。以 `root` 身份运行时，它可以启动一个 `root` shell！当然，`su` 具有辨别能力：在允许用户将权限提升至 `root` 之前，它会验证用户是否知道 `root` 密码
-
-参数
-- `-c` 执行命令
-
-#### sudo —— 以其他用户的身份执行命令
-
-https://linux.die.net/man/8/sudo
-
-```sh
-sudo -h | -K | -k | -V
-
-sudo -v [-AknS] [-g group name | #gid] [-p prompt] [-u user name | #uid]
-
-sudo -l[l] [-AknS] [-g group name | #gid] [-p prompt] [-U user name] [-u user name | #uid] [command]
-
-sudo [-AbEHnPS] [-C fd] [-g group name | #gid] [-p prompt] [-r role] [-t type] [-u user name | #uid] [VAR=value] -i | -s [command]
-
-sudoedit [-AnS] [-C fd] [-g group name | #gid] [-p prompt] [-u user name | #uid] file ... 
-```
-
-`sudo` 默认以 `root` 身份运行命令.  
-`sudo` 通过检查策略来确定用户是否被授权以 `root` 身份运行命令。这些策略在 `/etc/sudoers` 文件中定义（似乎此文件本身即需要 root 权限读取）
-
-参数
-- `-u 用户名` 切换到用户后运行
-- `-l, --list`
-
-	- 如果未指定命令，则列出调用用户（或由 `-U` 选项指定的用户）在当前主机上的权限。若指定 `-ll`，且安全策略支持详细输出格式，则会采用更长的列表格式。
-
-	- 如果指定了命令，且安全策略允许调用用户（或由 `-U` 选项指定的用户）在当前主机上执行该命令，则会显示该命令的完全限定路径及其所有参数。若指定 `-ll`（且安全策略支持），则会以详细格式显示匹配规则以及该命令。如果指定了命令但策略不允许，`sudo` 将以状态值 1 退出。
-
-
-示例
-```sh
-sudo bash -c "多条命令"
-```
-- sudo 后执行一条命令，若尝试执行复杂操作，最简单的是开启子进程 shell
 
 #### passwd
 
@@ -2801,10 +2393,6 @@ rmmod 是一个简单的程序，用于从内核中移除一个模块或多个�
 
 ### 时间日期
 
-#### date
-
-- `-f` 
-	读取指定文件的每一行并尝试解析为日期。（信息泄露）
 
 ## 待归档
 

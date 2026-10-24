@@ -69,8 +69,8 @@ function do_extract(selector_start, selector_end){
 
 
 do_extract(
-  '#getting_started', 
-  '.fancy > p:nth-child(30)'
+  'body > h2:nth-child(41)', 
+  'body > h2:nth-child(43)'
 )
 
 

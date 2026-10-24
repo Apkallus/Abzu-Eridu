@@ -424,8 +424,8 @@ elf
                 - 挑战拥有 hint
             - 使用方式：
                 - 学习路径并不涵盖所有挑战，也并非按照主题与子主题组织。直接在挑战库中按主题索引，当前专注于 web应用主题，按照难度进行
-            - [所有挑战的解决方案](https://picoctfsolutions.com/)
-                - 包含常用工具 
+            - [解决方案](https://picoctfsolutions.com/)
+                - 包含提示、代码、常用工具
         - [Root Me](https://www.root-me.org/?lang=en)
             - 资源
                 - [陈旧文档](https://repository.root-me.org/)
