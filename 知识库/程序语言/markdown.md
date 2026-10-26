@@ -138,32 +138,52 @@ flowchart LR
 ## 链接
 
 [基础链接](https://example.net)
-[拥有说明的链接](https://example.net "引号包裹的悬浮链接说明")
+[拥有说明的链接](https://example.net "引号或括号包裹的悬浮链接说明")
 
 ---
 
 ```md
 [基础链接](https://example.net)
-[拥有说明的链接](https://example.net "引号包裹的悬浮链接说明")
+[拥有说明的链接](https://example.net "引号或括号包裹的悬浮链接说明")
 ```
 
 ### 快捷引用链接
 
 https://github.github.com/gfm/#shortcut-reference-link
 
-[快捷引用链接]
+[快捷引用]
 
-[快捷引用链接]: https://exmaple.net
+[快捷引用]: https://exmaple.net (引号或括号包裹的悬浮链接说明)
 
 ---
 
 ```md
 快捷引用标记：实际显示但本身未设置 url
-[快捷引用链接]
+[快捷引用]
 
-快捷引用设置：不显示，但设置 url 以作用到所有同名快捷引用
-[快捷引用链接]: https://exmaple.net
+快捷引用定义：不显示，但设置 url 以作用到所有同名快捷引用
+[快捷引用]: https://exmaple.net (引号或括号包裹的悬浮链接说明)
 ```
+
+## 脚注
+
+https://githubdocs.cn/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#footnotes
+
+[^脚注]
+
+[^脚注]: https://exmaple.net (引号或括号包裹的悬浮链接说明)
+
+---
+
+```md
+与快捷引用类似，⚠️ 或为 VSCode 预览与 GFM 支持差异
+脚注引用标记：实际显示但本身未设置 url
+[^脚注]
+
+脚注定义：不显示，但设置 url 以作用到所有同名快捷引用
+[^脚注]: https://exmaple.net (引号或括号包裹的悬浮链接说明)
+```
+
 
 ## details 折叠区块
 

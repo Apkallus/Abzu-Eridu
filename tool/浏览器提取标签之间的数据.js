@@ -69,8 +69,8 @@ function do_extract(selector_start, selector_end){
 
 
 do_extract(
-  'body > h2:nth-child(41)', 
-  'body > h2:nth-child(43)'
+  'p.fnline:nth-child(186)', 
+  'p.fnline:nth-child(303)'
 )
 
 

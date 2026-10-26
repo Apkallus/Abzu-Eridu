@@ -403,16 +403,6 @@ GNU objcopy 工具将一个目标文件的内容复制到另一个文件中。�
 strip 从对象文件 objfile 中丢弃所有符号。对象文件列表可以包含归档文件。至少必须给出一个对象文件。
 strip 修改其参数中指定的文件，而不是以不同的名称写入修改后的副本。
 
-#### strings - 打印文件中可打印字符的字符串。
-
-strings 主要用于确定非文本文件的内容。
-
-参数：
-- `-t radix`
- `--radix=radix`
-	在文件中每个字符串之前打印其偏移量。单个字符参数指定偏移量的基数:   
-	o 表示八进制，x 表示十六进制，或 d 表示十进制。
-
 #### objdump - 显示来自对象文件的信息
 
 objdump 显示一个或多个目标文件的信息。选项用于控制显示特定的信息。
@@ -678,42 +668,6 @@ bzip2recover filename
 `nano [OPTIONS] [[+LINE,COLUMN] FILE]...`
 
 小巧的编辑器
-
-### 编码/格式转换
-
-
-#### hd/hexdump  
-
-`hexdump [-bcCdovx] [-e format_string] [-f format_file] [-n length] [-s skip]`
-
-- `-f format_file`
-	指定包含一个或多个由换行符分隔的格式字符串的文件。空行和以井号(#)作为第一个非空白字符的行将被忽略。
-
-#### xxd - 制作十六进制转储或执行反向操作
-
-```
-xxd -h[elp]
-xxd [options] [infile [outfile]]
-xxd -r[evert] [options] [infile [outfile]]
-```
-
-- `-p | -ps | -postscript | -plain` 
-	输出为 postscript 连续十六进制转储风格。也称为 plain 十六进制转储风格。
-
-#### base32
-
-`base32 filename`：对文件内容进行 base32 编码。
-`base32 -d filename`：对 base32 编码的文件进行解码。
-
-#### base64 - base64 编码/解码数据并打印到标准输出
-
-`base64 [OPTION]... [FILE]`
-
-- `-d, --decode`
-	解码数据。
-
-- `-w, --wrap=COLS`
-	设置换行字符数量，默认76。设置0禁用换行
 
 ### 查看 & 选择
 
@@ -1285,59 +1239,6 @@ SUID:
 这意味着，无论哪个用户运行该程序（只要他们有执行权限），该程序都将以其所有者用户（在本例中为 `root` 用户）的身份执行。
 作为文件的所有者，您可以使用 chmod 设置文件的 SUID 位
 
-### 相关配置文件
-
-#### /etc/passwd
-
-Linux 系统上的完整用户列表定义在 `/etc/passwd` 文件中
-
-```sh
-root:x:0:0:root:/root:/bin/bash
-hacker:x:1000:1000::/home/hacker:/bin/bash
-```
-
-每行内容按 `:` 分隔，依次包含：
-1. 用户名
-2. 密码*曾经*存储位置的占位符 `x`，若为空则无密码
-3. 数字用户 ID，UID 为 0 的用户是超级管理员，若设置或创建 UID 为 0 的账户将得到 root 权限
-4. 数字默认组 ID
-5. 可选的注释或描述字段
-6. 主目录，若设置或创建账户的主目录为 /root，用户登录后直接进入系统最高权限的目录。
-7. 默认 shell
-
-tips
-- 当 /etc/passwd 拥有哈希密码而不为x时，将直接使用 passwd 而避免访问 shadow
-- 特殊的哈希密码 U6aMy0wojraho 按下回车即可登录，且避免最低8字节密码限制
-
-
-#### /etc/shadow
-
-https://www.cyberciti.biz/faq/understanding-etcshadow-file/
-
-由于 `/etc/passwd` 是全局可读文件，不利于密码安全，因此密码数据被移至 `/etc/shadow`。
-shadow 存储了 Linux 用户账户的哈希密码（或“哈希”）格式，以及与用户密码相关的其他属性。
-只能被 root 用户直接访问
-
-```sh
-root:$6$s74oZg/4.RnUvwo2$hRmCHZ9rxX56BbjnXcxa0MdOsW2moiW8qcAl/Aoc7NEuXl2DmJXPi3gLp7hmyloQvRhjXJ.wjqJ7PprVKLDtg/:19921:0:99999:7:::
-hacker::19916:0:99999:7:::
-zardus:$6$bEFkpM0w/6J0n979$47ksu/JE5QK6hSeB7mmuvJyY05wVypMhMMnEPTIddNUb5R9KXgNTYRTm75VOu1oRLGLbAql3ylkVa5ExuPov1.:19921:0:99999:7:::
-```
-
-每行内容按 `:` 分隔：
-1. 用户名
-2. 密码，通常密码格式设置为 `$id$salt$hashed`。  
-	`$id` 是 GNU/Linux 上使用的算法前缀。  
-	字段值为 `*` 或 `!` 实际表示该账户的密码登录功能已被禁用；空白字段表示未设置密码（某些配置下可能允许无密码 `su`，这是较常见的错误配置）；而长字符串是密码经过单向加密（哈希）后的结果。
-- 其余字段为密码修改日期与状态
-
-#### /etc/sudoers
-
-https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file
-
-`visudo [-chqsV] [-f sudoers]`
-
-visudo 以安全的方式编辑 sudoers 文件，类似于 vipw(8)。visudo 锁定 sudoers 文件以防止多个同时编辑，提供基本的合理性检查，并检查解析错误。如果 sudoers 文件当前正在被编辑，你会收到一条消息提示稍后再试。
 
 ## 网络 & 安全工具
 
@@ -1498,45 +1399,6 @@ iptables 可以使用扩展包匹配模块。这些模块有两种加载方式�
 
 ### 基础下载/请求
 
-#### curl
-
-```curl [options / URLs]```
-
-[手册](https://curl.se/docs/manpage.html)
-
-参数
-- `-d, --data <data>`
-    以 POST 方法发送 data
-	- `@filename` 从文件读取
-		- `@-` 从标准输入读取
-
-- ```-I, --head```
-	Fetch the headers only.
-- ```-k, --insecure```
-	(TLS SFTP SCP) 默认情况下，curl 建立的每个安全连接在传输之前都会验证其安全性。这个选项使 curl 跳过验证步骤，在不检查的情况下继续进行。
-- ```-L, --location```
-	(HTTP) 如果服务器报告请求的页面已移动到不同位置（通过 Location: 标头和 3XX 响应代码指示），此选项会使 curl 重新向新位置发起请求。如果与 --show-headers 或 --head 一起使用，则会显示所有请求页面的标头。
-- ```-O，--remote-name``` 
-	下载的文件名使用原文件名
-- ```-s, --silent``` 
-	静默下载
-- ```-S, --show-error``` 
-	失败时显示错误信息
-- ```-x, --proxy [protocol://]host[:port]``` 
-	Use the specified proxy.
-- ```-X, --request <method>``` 
-	修改请求方法
-- `-H, --header <header/@file>`  
-	在发送的信息中包含的额外头部
-
-	```sh
-	curl -H "Host: your.host" https://example.com
-	```
-- `-v, --verbose`  
-	输出详细信息
-
-- `--path-as-is` 
-	向指定 URL 发出请求，而不删除点点斜杠序列(目录遍历)
 
 #### wget - 非交互式网络下载器
 

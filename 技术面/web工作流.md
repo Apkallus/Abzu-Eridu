@@ -28,8 +28,7 @@ HTTP 自定义头
 
 ## 工具
 
-速查载荷表
-- [PayloadsAllTheThings](https://swisskyrepo.github.io/PayloadsAllTheThings/)
+
 
 wiki
 - [hacktricks](https://hacktricks.wiki/)
@@ -82,7 +81,8 @@ DNS 重绑定测试
 - [v8_rand_buster](https://github.com/d0nutptr/v8_rand_buster)
 
 正则表达式
-- [regex-vis 可视化工具](https://regex-vis.com/)
+- [regex-vis - 可视化工具](https://regex-vis.com/)
+- [picoctfsolutions - 测试](https://picoctfsolutions.com/tools/regex-tester)
 
 wasm 
 - 浏览器开发者工具栏
@@ -115,6 +115,10 @@ DOM XSS
 在线代码编辑器
 - [HTML 编辑器 squarefree（跨站）](https://htmledit.squarefree.com/)
 
+java 内存泄露可视化分析
+- 待使用 [eclipse](https://eclipse.dev/mat/)
+- 待使用 [visualvm](https://visualvm.github.io/)
+
 ### hash
    
 hash
@@ -145,6 +149,20 @@ hash
 3. 得到明文或失败
     `c20fa16907343eef642d10f0bdb81bf629e6aaf6c906f26eabda079ca9e5ab67:apple@123`
     - 明文 `apple@123`
+
+### 载荷速查表
+
+- 综合
+    - [PayloadsAllTheThings](https://swisskyrepo.github.io/PayloadsAllTheThings/)
+
+- web shell 
+    - [picoctfsolutions](https://picoctfsolutions.com/tools/reverse-shell-generator)
+
+- sql
+    - [picoctfsolutions](https://picoctfsolutions.com/tools/sql-injection)
+    
+- xss
+    - [portswigger](https://portswigger.net/web-security/cross-site-scripting/cheat-sheet)
 
 ## 字典
 
@@ -299,10 +317,11 @@ hash
 - 当文档不足够详细时，源码的注释甚至可能包含更多信息
 
 - 预测载荷的解码顺序，对载荷执行多重/多类编码，或使用编码不敏感的载荷
+- 单次命令的 web shell 需避免交互式操作
 
 ## 编码模式，之后合并
 
-- deflate_compress
+- deflate_compress / zlib.compress 压缩编码
     - 格式：`.` + base64URL(deflate编码)
 
 - JSFuck —— JS 动态代码构建
@@ -401,7 +420,7 @@ hash
 
 ## 文档阅读
 
-- quickstart
+- quickstart/示例
     核心功能示例与口语化文档
 
 - 指南

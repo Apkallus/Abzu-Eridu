@@ -48,13 +48,18 @@ emoji:
     - [PortSwigger Web Security Academy](https://portswigger.net/web-security/all-topics) 🌟 ♾️
         - 主题文档 + 靶机 + 研究文章
     - [OWASP WebGoat](https://owasp.org/www-project-webgoat/)
-        - 基础小节文档 + 与文档同一页面的教学挑战
+    - [yeswehack dojo](https://dojo-yeswehack.com/)
+
 - 二进制漏洞
     - [pwn.college](https://pwn.college/) 🌟 ♾️
         - 模块文档 + 模块视频 + 靶机（+ ASU 直播公开视频）
     - [ost2.fyi](https://ost2.fyi/) 
     - [Malwareunicorn.org](https://malwareunicorn.org/#/) ❓
         - 恶意代码逆向
+
+- 综合靶场
+    - [picoCTF -> CyLab Security Academy](https://cylabacademy.org) ♾️
+        - [picoctfsolutions 解决方案](https://picoctfsolutions.com/)
 
 ### 文档
 
@@ -85,6 +90,9 @@ emoji:
     - NIST SP 800-115 
     - OSSTMM v3
 
+- 学术研究
+    - [arxiv](https://arxiv.org/list/cs.CR/recent)
+
 ### 靶场
 
 - web应用程序
@@ -101,7 +109,7 @@ emoji:
 
 - 综合
     - [Root Me](https://www.root-me.org/?lang=en) ♾️
-    - [picoCTF -> CyLab Security Academy](https://cylabacademy.org) ♾️
+
     - [hackropole](https://hackropole.fr/en/) 本地 docker 靶场 ♾️
 
     - http://vulnstack.qiyuanxuetang.net/vuln/
@@ -153,34 +161,35 @@ emoji:
     - [diverctf](https://diverctf.org/en.html)
     - [Bellingcat](https://challenge.bellingcat.com/) 
 
-### 图书/可用
+### 可用
 
 逆向
-- Rootkits and Bootkits
-- 《恶意代码分析实战 Practical Malware Analysis》
-- 《逆向工程实战 Practical Reverse Engineering》
-- https://www.ghidrabook.com/
 
+- 《逆向工程实战（Practical Reverse Engineering: x86, x64, ARM, Windows Kernel, Reversing Tools, and Obfuscation）》 Bruce Dang (2014)
+- https://datanoisetv.github.io/practical-reverse-engineering/front/preface
 
+恶意软件分析
 
+- 《Rootkit 和 Bootkit 现代恶意软件逆向分析和下一代威胁（Rootkits and Bootkits: Reversing Modern Malware and Next Generation Threats）》 Alex Matrosov (2019)
+- 《恶意代码分析实战（Practical Malware Analysis: The Hands-On Guide to Dissecting Malicious Software）》 Michael Sikorski, Andrew Honig (2012)
 
+网络综合
+- https://github.com/gl0bal01/intel-codex
 
-- 《深入解析Windows操作系统 第7版》(Windows Internals, Part 1/2)
+- 《Ethical Hacking: A Hands-on Introduction to Breaking In》 - Daniel G. Graham（2021）
+- 《网络渗透测试的艺术（The Art of Network Penetration Testing》）- Royce Davis （2020）
+
+云
+- 《Penetration Testing Azure for Ethical Hackers》 - David Okeyode, Karl Fosaaen（2021）
+
+未分类
+- 《深入解析Windows操作系统 第7版 (Windows Internals, Part 1/2)》 Pavel Yosifovich（2017）
 
 - Security Engineering: A Guide to Building Dependable Distributed Systems 3rd Edition, by Ross Anderson (Author)   
     <https://www.cl.cam.ac.uk/archive/rja14/book.html>
 
-- 《Ethical Hacking: A Hands-on Introduction to Breaking In》 - Daniel G. Graham
+- https://ieeexplore.ieee.org/Xplore/home.jsp
 
-- 《From Day Zero to Zero Day》- Eugene Lim
-
-- 《Penetration Testing Azure for Ethical Hackers》 - David Okeyode, Karl Fosaaen
-
-- 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis
-
-- A Bug Hunter's Diary
-
-#### 教科书
 
 汇编
 - The Art of 64-Bit Assembly, Volume 1
@@ -301,13 +310,19 @@ elf
 
 4. 二进制
     1. [pwn.college CSE 365：网络安全导论](https://pwn.college/cse365-f2025/) 公开课程  
-        CSE 365 还包括对 pwn.college 平台本身的介绍：
-        - 拥有定制的 GPT5 “sensai”。    
-        - 模块视频 + 文档 + CTF 型靶机
-            - 视频与幻灯片的部分概念不存在于文档中。    
-            - 拥有练习模式，获取管理员权限调试   
-        - 公开课进行 Twitch 直播，Youtube 拥有往期视频。（B站拥有 LLM 翻译）
-        - 往期课程无首页链接但可修改URL访问： `cse365-f2025` `cse365-s2025` `cse365-f2024`。或使用导航栏的搜索功能
+        - pwn.college：
+            - 接入方式：网页终端、网页 VSCode、网页桌面端、SSH
+            - 练习模式，获取管理员权限调试   
+            - 定制的 cyber 特化 GPT “sensai”。   
+            - 核心公开课道场：
+                - 模块视频 + 示例文档 + CTF 型靶机
+                    - 视频与幻灯片的部分概念不存在于文档中。    
+                - 公开课进行 Twitch 直播，Youtube 拥有往期视频。（B站拥有 LLM 翻译）
+                - 往期课程无首页链接但可修改URL访问： `cse365-f2025` `cse365-s2025` `cse365-f2024`。或使用导航栏的搜索功能
+            - 社区道场，上千个挑战
+                - CTF 存档
+                - 社区挑战
+                - 公开课历史道场与其它公开课
 
         - 使用大部分的基础与橙带道场内容
         - 当前公开课直播 Youtube 视频为 2024 fall，略过
@@ -424,8 +439,14 @@ elf
                 - 挑战拥有 hint
             - 使用方式：
                 - 学习路径并不涵盖所有挑战，也并非按照主题与子主题组织。直接在挑战库中按主题索引，当前专注于 web应用主题，按照难度进行
-            - [解决方案](https://picoctfsolutions.com/)
-                - 包含提示、代码、常用工具
+            - [picoctfsolutions 解决方案](https://picoctfsolutions.com/)
+                - 有缺陷的挑战教学文档：
+                    - 独特风格：基于命令行、工具为 curl
+                    - 逐步解题演示、关联概念介绍、工具使用说明
+                    - 挑战文档仅限部分解法，已观察到未涵盖解。存在描述错误，以及无关概念扩展。
+                - 包括简略的主题文章，在线工具集
+                - 改变 picoCTF 的性质为拥有“挑战文档”的综合靶场（仍非“主题文档”）。
+
         - [Root Me](https://www.root-me.org/?lang=en)
             - 资源
                 - [陈旧文档](https://repository.root-me.org/)
@@ -468,11 +489,25 @@ elf
                 - web 靶场低频率维持
                 - 回顾 pwn.college CSE 365 网络安全基础中作为衔接的前几个模块：Linux 命令、权限模型、Web 基础。
                     - 此时尚不包含二进制利用且主题材料尚未建立，查阅并归档到 man/规范/指南中
-                - 对之后的二进制主题使用与之前 Web 主题类似的：并发回顾/阅读/归档过程
+                    - 随时进行 pwn.college CSE 598 ASOW
+                - 之后的二进制主题尝试使用与 Web 主题类似的：并发回顾/阅读/归档过程，过渡期间搜集可用材料
 
 - 二进制
 
-    - foo
+    - 《The Art of Software Security Assessment》(2006)
+
+    - 《黑客之道：漏洞发掘的艺术（Hacking: The Art of Exploitation, 2nd Edition ）》 Jon Erickson (2008)
+
+    - 《The Ghidra Book, 2nd Edition: The Definitive Guide》 Kara Nance, Chris Eagle (2026)
+        - https://www.ghidrabook.com/
+
+    - 《From Day Zero to Zero Day: A Hands-On Guide to Vulnerability Research》 Eugene Lim (2025)
+
+    - 《二进制分析实战》（Practical Binary Analysis）Dennis Andriesse (2018)
+
+    - [ost2.fyi](https://ost2.fyi/) 
+
+    - pwn.college
 
 - TBD 📅
 
@@ -481,28 +516,29 @@ elf
     - 《API 攻防》（Hacking APIs） — Corey Ball
 
     - 二进制
-        - 并发阅读
-            - The Art of Software Security Assessment
-            - pwn.college
-            - 《黑客之道：漏洞发掘的艺术（Hacking: The Art of Exploitation）》
+            
+        - 利用
             - Exploiting Software: How to Break Code 
             - The Shellcoder's Handbook: Discovering and Exploiting Security Holes 
-            
+
+        - 百科/思路
             - CTF Wiki
             - https://guyinatuxedo.github.io/index.html
-        
+
+        - 链
+            - A Bug Hunter's Diary
+            
         - 靶场
             - https://exploit.education/
-
-        - 反汇编
-            - 《二进制分析实战 Practical Binary Analysis》
 
         - 内核
             - A Guide to Kernel Exploitation: Attacking the Core
 
         - 发现
-            - Fuzzing: Brute Force Vulnerability Discovery
+            - 《Fuzzing: Brute Force Vulnerability Discovery》 Michael Sutton, Adam Greene, Pedram Amini · Addison-Wesley (2007)
 
+            - 《硬件系统模糊测试：技术揭秘与案例剖析（Fuzzing Against the Machine: Automate vulnerability research with emulated IoT devices on QEMU）》(2023)
+        
 
     - 基于 AWS 的云渗透
 

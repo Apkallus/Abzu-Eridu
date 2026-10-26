@@ -2,6 +2,10 @@
 
 https://man7.org/linux/man-pages/man5/passwd.5.html
 
+tips
+- 当 `/etc/passwd` 拥有哈希密码而不为`x`时，将直接使用 `passwd` 而避免访问 `shadow`
+- 特殊的哈希密码 `U6aMy0wojraho` 按下回车即可登录，且避免最低8字节密码限制
+
 ## 描述
 
 `/etc/passwd` 文件是一个文本文件，用于描述系统的用户登录账户。它应对所有用户允许读权限（许多工具，如 [`ls(1)`] 用它把用户 ID 映射到用户名），但只对超级用户允许写权限。

@@ -174,3 +174,37 @@
 ## 定义与引用
 
 与 linux 源码查询类似，选中函数后在右侧显示定义与引用
+
+## 文档
+
+### git-commit - 记录仓库的修改
+
+https://git-scm.com/docs/git-commit/zh_HANS-CN
+
+```sh
+git commit' [-a | --interactive | --patch] [-s] [-v] [-u<模式>] [--amend]
+	   [--dry-run] <提交>_ | --fixup [(amend|reword):"><提交>)]
+	   [-F <文件> | -m <消息>] [--reset-author] [--allow-empty]
+	   [--allow-empty-message] [--no-verify] [-e] [--author=<提交人>]
+	   [--date=<日期>] [--cleanup=<模式>] [--[no-]status]
+	   [-i | -o] [--pathspec-from-file=<文件> [--pathspec-file-nul]]
+	   [(--trailer <token>[(=|:)<value>])…​] [-S[<keyid>]]
+	   [--] [<路径>…​]
+```
+
+创建一个新的提交，包含索引的当前内容和描述变化的给定日志信息。新的提交是 `HEAD` 的直接子节点，通常是当前分支的顶端，分支会被更新以指向它
+
+- `--amend`  
+    通过创建一个新的提交来替换当前分支的顶端。用来修改合并提交。
+
+```sh
+# 在 add 与 commit 后，尚未 push：修改 commit 信息
+git commit --amend -m '新信息'
+```
+
+- 
+    ```
+    -m <消息>
+    --message=<msg>
+    ```
+    使用给定的`<msg>`作为提交信息。 如果给定了多个 `-m` 选项，它们的值会作为单独的段落串联起来。

@@ -1,5 +1,7 @@
 # 命令速查表
 
+
+
 ## 系统信息
 
 ```sh
@@ -24,6 +26,12 @@ id
 
 # sudo 权限
 sudo -ll
+# 输出：`!authenticate` 无密码验证
+# Sudoers entry:
+#     RunAsUsers: ALL
+#     Options: !authenticate
+#     Commands:
+#     ALL
 
 # 用户表
 cat /etc/passwd

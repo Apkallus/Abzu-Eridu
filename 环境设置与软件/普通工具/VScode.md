@@ -156,3 +156,9 @@ VSCode扩展
 
 markdown 预览
 - `Ctrl + V => K`
+
+## 查找与替换，搜索
+
+https://code.visualstudio.com/docs/editing/codebasics#_find-and-replace
+
+支持正则表达式匹配，支持捕获组 `(foo)` `$1`
