@@ -1,22 +1,203 @@
-# `pwnlib.tubes` — 与世界对话！
-
 https://docs.pwntools.com/en/latest/tubes.html
 
-`pwnlib` 可不是一辆大卡车！它是一系列管道！
+# `pwnlib.tubes` — 与世界对话！
 
-这是用于与 `socket`、进程、`SSH` 连接等通信的库。我们的目标是能够对远程 `TCP` 服务器、本地 `TTY` 程序以及通过 `SSH` 运行的程序使用同一套 `API`。
+pwnlib 不是大卡车！它是一系列管道！
 
-其组织方式是，大部分功能在 [pwnlib.tubes.tube] 中实现。其余类只应实现让该类正常工作所需的最小功能，以及可能仅与该特定类型 `tube` 相关的代码。
+这是用于与套接字、进程、SSH 连接等通信的库。我们的目标是能够对远程 TCP 服务器、本地 TTY 程序以及通过 SSH 运行的程序使用同一套 API。
 
-## `pwnlib.tubes.tube` — 常用功能
+其组织方式是：大部分功能都在 [pwnlib.tubes.tube] 中实现。其余类只应实现使该类正常工作所必需的功能，以及可能仅与该特定类型 tube 相关的代码。
 
-### `class pwnlib.tubes.tube.tube`
+## 管道的类型
 
-包含套接字、TTY 和 SSH 连接共有的所有 tube 函数。
+- `[pwnlib.tubes.buffer]` — tubes 的 buffer 实现
+  - `[Buffer]`
+    - `[Buffer.__contains__()]`
+    - `[Buffer.__init__()]`
+    - `[Buffer.__len__()]`
+    - `[Buffer.add()]`
+    - `[Buffer.get()]`
+    - `[Buffer.get_fill_size()]`
+    - `[Buffer.index()]`
+    - `[Buffer.unget()]`
+    - `[Buffer.__weakref__]`
+- `[pwnlib.tubes.process]` — 进程
+  - `[process]`
+    - `[process.__getattr__()]`
+    - `[process.__init__()]`
+    - `[process.__on_enoexec()]`
+    - `[process.__preexec_fn()]`
+    - `[process.__pty_make_controlling_tty()]`
+    - `[process._validate()]`
+    - `[process.address_mapping()]`
+    - `[process.can_recv_raw()]`
+    - `[process.close()]`
+    - `[process.communicate()]`
+    - `[process.connected_raw()]`
+    - `[process.elf_mapping()]`
+    - `[process.fileno()]`
+    - `[process.get_mapping()]`
+    - `[process.heap_mapping()]`
+    - `[process.kill()]`
+    - `[process.leak()]`
+    - `[process.lib_size()]`
+    - `[process.libc_mapping()]`
+    - `[process.libs()]`
+    - `[process.maps()]`
+    - `[process.musl_mapping()]`
+    - `[process.poll()]`
+    - `[process.readmem()]`
+    - `[process.recv_raw()]`
+    - `[process.send_raw()]`
+    - `[process.settimeout_raw()]`
+    - `[process.shutdown_raw()]`
+    - `[process.stack_mapping()]`
+    - `[process.terminate()]`
+    - `[process.vdso_mapping()]`
+    - `[process.vvar_mapping()]`
+    - `[process.writemem()]`
+    - `[process._setuid]`
+    - `[process._stop_noticed]`
+    - `[process.alarm]`
+    - `[process.argv]`
+    - `[process.aslr]`
+    - `[process.corefile]`
+    - `[process.cwd]`
+    - `[process.elf]`
+    - `[process.env]`
+    - `[process.executable]`
+    - `[process.libc]`
+    - `[process.proc]`
+    - `[process.program]`
+    - `[process.pty]`
+    - `[process.raw]`
+    - `[process.stderr]`
+    - `[process.stdin]`
+    - `[process.stdout]`
+- `[pwnlib.tubes.serialtube]` — 串口
+  - `[serialtube]`
+    - `[serialtube.__init__()]`
+    - `[serialtube.can_recv_raw()]`
+    - `[serialtube.close()]`
+    - `[serialtube.connected_raw()]`
+    - `[serialtube.fileno()]`
+    - `[serialtube.recv_raw()]`
+    - `[serialtube.send_raw()]`
+    - `[serialtube.settimeout_raw()]`
+    - `[serialtube.shutdown_raw()]`
+- `[pwnlib.tubes.sock]` — 套接字
+  - `[sock]`
+  - `[remote]`
+    - `[remote.fromsocket()]`
+    - `[remote.__init__()]`
+  - `[listen]`
+    - `[listen.__init__()]`
+    - `[listen.close()]`
+    - `[listen.spawn_process()]`
+    - `[listen.wait_for_connection()]`
+    - `[listen.canonname]`
+    - `[listen.family]`
+    - `[listen.lhost]`
+    - `[listen.lport]`
+    - `[listen.protocol]`
+    - `[listen.sockaddr]`
+    - `[listen.type]`
+  - `[server]`
+    - `[server.__init__()]`
+    - `[server.close()]`
+    - `[server.next_connection()]`
+    - `[server.canonname]`
+    - `[server.family]`
+    - `[server.lhost]`
+    - `[server.lport]`
+    - `[server.protocol]`
+    - `[server.sockaddr]`
+    - `[server.type]`
+- `[pwnlib.tubes.ssh]` — SSH
+  - `[ssh]`
+    - `[ssh._pathlib]`
+    - `[ssh.__call__()]`
+    - `[ssh.__getattr__()]`
+    - `[ssh.__getitem__()]`
+    - `[ssh.__init__()]`
+    - `[ssh.__repr__()]`
+    - `[ssh._init_remote_platform_info()]`
+    - `[ssh._libs_remote()]`
+    - `[ssh.checksec()]`
+    - `[ssh.close()]`
+    - `[ssh.connect_remote()]`
+    - `[ssh.connected()]`
+    - `[ssh.download()]`
+    - `[ssh.download_data()]`
+    - `[ssh.download_dir()]`
+    - `[ssh.download_file()]`
+    - `[ssh.get()]`
+    - `[ssh.getenv()]`
+    - `[ssh.interactive()]`
+    - `[ssh.libs()]`
+    - `[ssh.listen()]`
+    - `[ssh.listen_remote()]`
+    - `[ssh.process()]`
+    - `[ssh.put()]`
+    - `[ssh.read()]`
+    - `[ssh.remote()]`
+    - `[ssh.run()]`
+    - `[ssh.run_to_end()]`
+    - `[ssh.set_working_directory()]`
+    - `[ssh.shell()]`
+    - `[ssh.system()]`
+    - `[ssh.unlink()]`
+    - `[ssh.upload()]`
+    - `[ssh.upload_data()]`
+    - `[ssh.upload_dir()]`
+    - `[ssh.upload_file()]`
+    - `[ssh.which()]`
+    - `[ssh.write()]`
+    - `[ssh.arch]`
+    - `[ssh.aslr]`
+    - `[ssh.aslr_ulimit]`
+    - `[ssh.bits]`
+    - `[ssh.cache]`
+    - `[ssh.client]`
+    - `[ssh.distro]`
+    - `[ssh.host]`
+    - `[ssh.ibt]`
+    - `[ssh.key]`
+    - `[ssh.keyfile]`
+    - `[ssh.os]`
+    - `[ssh.password]`
+    - `[ssh.pid]`
+    - `[ssh.port]`
+    - `[ssh.raw]`
+    - `[ssh.sftp]`
+    - `[ssh.user]`
+    - `[ssh.user_shstk]`
+    - `[ssh.version]`
+  - `[ssh_channel]`
+    - `[ssh_channel.interactive()]`
+    - `[ssh_channel.kill()]`
+    - `[ssh_channel.poll()]`
+  - `[ssh_process]`
+    - `[ssh_process.getenv()]`
+    - `[ssh_process.libs()]`
+    - `[ssh_process.argv]`
+    - `[ssh_process.cwd]`
+    - `[ssh_process.elf]`
+    - `[ssh_process.executable]`
+    - `[ssh_process.libc]`
+    - `[ssh_process.pid]`
+  - `[ssh_connecter]`
+  - `[ssh_listener]`
 
-#### `__enter__()`
+## `pwnlib.tubes.tube` — 通用功能
 
-允许使用 `with` 控制作用域和关闭会话。
+## `class pwnlib.tubes.tube.tube`
+
+包含套接字、TTY 和 SSH 连接所共有的所有 tube 函数。
+
+### `__enter__()`
+
+允许使用 `with` 控制作用域并关闭会话。
 
 **示例**
 
@@ -28,7 +209,7 @@ https://docs.pwntools.com/en/latest/tubes.html
 Closed!
 ```
 
-#### `__exit__()`
+### `__exit__()`
 
 ```py
 __exit__(type, value, traceback)
@@ -36,15 +217,15 @@ __exit__(type, value, traceback)
 
 处理 `with` 语句的关闭操作。
 
-参见 `[__enter__()]`。
+参见 [`__enter__()`]。
 
-#### `__init__()`
+### `__init__()`
 
 ```py
 __init__(timeout=pwnlib.timeout.Timeout.default, level=None, *a, **kw)
 ```
 
-#### `__lshift__()`
+### `__lshift__()`
 
 ```py
 __lshift__(other)
@@ -52,18 +233,18 @@ __lshift__(other)
 
 连接多个 tube 的简写。
 
-更多信息参见 `[connect_input()]`。
+更多信息参见 [`connect_input()`]。
 
 **示例**
 
 以下写法等价：
 
 ```py
-tube_a >> tube.b
+tube_a >> tube_b
 tube_a.connect_input(tube_b)
 ```
 
-在串联多个 tube 时很有用：
+这在串联多个 tube 时很有用：
 
 ```py
 tube_a >> tube_b >> tube_a
@@ -71,7 +252,7 @@ tube_a.connect_input(tube_b)
 tube_b.connect_input(tube_a)
 ```
 
-#### `__ne__()`
+### `__ne__()`
 
 ```py
 __ne__(other)
@@ -86,29 +267,29 @@ a >> b >> a
 a <> b
 ```
 
-更多信息参见 `[connect_input()]`。
+更多信息参见 [`connect_input()`]。
 
-#### `__rshift__()`
+### `__rshift__()`
 
 ```py
 __rshift__(other)
 ```
 
-`<<` 运算符的逆操作。参见 `[__lshift__()]`。
+`<<` 运算符的反向操作。参见 [`__lshift__()`]。
 
-更多信息参见 `[connect_input()]`。
+更多信息参见 [`connect_input()`]。
 
-#### `_fillbuffer()`
+### `_fillbuffer()`
 
 ```py
 _fillbuffer(timeout=default)
 ```
 
-通过恰好调用一次 `recv_raw()` 从管道填充内部缓冲区。
+通过恰好调用一次 `recv_raw()`，从管道填充内部缓冲区。
 
-**返回：**
+返回：
 
-接收到的数据字节；如果没有接收到数据，则返回 `''`。
+- 接收到的数据字节，如果未接收到数据则为 `''`。
 
 **示例**
 
@@ -123,7 +304,7 @@ b'abc'
 3
 ```
 
-#### `_normalize_keepends_drop()`
+### `_normalize_keepends_drop()`
 
 ```py
 _normalize_keepends_drop(keepends, drop, drop_default)
@@ -157,31 +338,31 @@ Traceback (most recent call last):
 pwnlib.exception.PwnlibException: 'drop' and 'keepends' arguments cannot be used together.
 ```
 
-#### `_read()`
+### `_read()`
 
 ```py
 _read(*a, **kw)
 ```
 
-`_recv()` 的别名。
+[`_recv()`] 的别名。
 
-#### `_recv()`
+### `_recv() → bytes`
 
 ```py
-_recv(numb=4096, timeout=default) → str
+_recv(numb=4096, timeout=default) → bytes
 ```
 
-从内部缓冲区接收一块数据；如果缓冲区为空，则从操作系统接收。
+从内部缓冲区或操作系统（如果缓冲区为空）接收一个数据块。
 
-#### `can_read()`
+### `can_read()`
 
 ```py
 can_read(*a, **kw)
 ```
 
-`can_recv()` 的别名。
+[`can_recv()`] 的别名。
 
-#### `can_read_raw()`
+### `can_read_raw()`
 
 ```py
 can_read_raw(*a, **kw)
@@ -189,13 +370,13 @@ can_read_raw(*a, **kw)
 
 `can_recv_raw()` 的别名。
 
-#### `can_recv()`
+### `can_recv() → bool`
 
 ```py
 can_recv(timeout=0) → bool
 ```
 
-如果在 `timeout` 秒内有数据可用，则返回 `True`。
+如果在 `timeout` 秒内有可用数据，则返回 `True`。
 
 **示例**
 
@@ -213,21 +394,21 @@ True
 False
 ```
 
-#### `clean()`
+### `clean()`
 
 ```py
 clean(timeout=0.05)
 ```
 
-通过以较低超时反复调用 `[pwnlib.tubes.tube.tube.recv()]` 直到失败，移除 tube 中所有缓冲数据。
+通过以较低超时反复调用 [`pwnlib.tubes.tube.tube.recv()`] 直到失败，移除 tube 中所有缓冲数据。
 
 如果 `timeout` 为零，则只清除缓存数据。
 
-> 注意：如果 `timeout` 设为 0，则不会实际轮询底层网络；只会清除内部缓冲区。
+注意：如果 timeout 设置为零，则不会实际轮询底层网络；只会清除内部缓冲区。
 
-**返回：**
+返回：
 
-所有接收到的数据。
+- 接收到的所有数据。
 
 **示例**
 
@@ -240,17 +421,17 @@ b'clean me up'
 0
 ```
 
-#### `clean_and_log()`
+### `clean_and_log()`
 
 ```py
 clean_and_log(timeout=0.05)
 ```
 
-行为与 `[pwnlib.tubes.tube.tube.clean()]` 完全相同，但会使用 `pwnlib.self.info()` 记录接收到的数据。
+行为与 [`pwnlib.tubes.tube.tube.clean()`] 完全相同，但会通过 `pwnlib.self.info()` 记录接收到的数据。
 
-**返回：**
+返回：
 
-所有接收到的数据。
+- 接收到的所有数据。
 
 **示例**
 
@@ -270,13 +451,11 @@ b'hooray_data'
 >>> context.clear()
 ```
 
-#### 🛠️ `close()`
+### `close()`
 
 关闭 tube。
 
-> 建立新连接暴破时手动关闭
-
-#### `connect_both()`
+### `connect_both()`
 
 ```py
 connect_both(other)
@@ -284,7 +463,7 @@ connect_both(other)
 
 将此 tube 对象的两端与另一个 tube 对象连接。
 
-#### `connect_input()`
+### `connect_input()`
 
 ```py
 connect_input(other)
@@ -312,7 +491,7 @@ connect_input(other)
 data
 ```
 
-#### `connect_output()`
+### `connect_output()`
 
 ```py
 connect_output(other)
@@ -339,7 +518,7 @@ connect_output(other)
 b'data'
 ```
 
-#### 🛠️ `connected()`
+### `connected() → bool`
 
 ```py
 connected(direction='any') → bool
@@ -347,14 +526,10 @@ connected(direction='any') → bool
 
 如果 tube 在指定方向上已连接，则返回 `True`。
 
-**参数：**
+参数：
 
-- **direction**（`str`）— 可为字符串 `'any'`、`'in'`、`'read'`、`'recv'`、`'out'`、`'write'`、`'send'`。
-    - `any` 
-        查看连接是否存在，存在 - true，EOF - false
-
-    - `recv`
-        查看是否可接收数据，存在 - true，EOF - false
+- `direction`（`str`）  
+    可以是字符串 `'any'`、`'in'`、`'read'`、`'recv'`、`'out'`、`'write'`、`'send'`。
 
 Doctest：
 
@@ -376,37 +551,37 @@ Traceback (most recent call last):
 KeyError: "direction must be in ['any', 'in', 'out', 'read', 'recv', 'send', 'write']"
 ```
 
-#### `fileno() → int`
+### `fileno() → int`
 
-返回用于读取的文件号。
+返回用于读取的文件编号。
 
-#### `interactive()`
+### `interactive()`
 
 ```py
 interactive(prompt=pwnlib.term.text.bold_red('$') + ' ')
 ```
 
-同时读写 tube。原则上，这只是将 tube 连接到标准输入和标准输出，但实际使用中更可用，因为我们使用 `[pwnlib.term]` 打印浮动提示符。
+同时读写 tube。原则上，这只是将 tube 连接到标准输入和标准输出；但实际上这更可用，因为我们使用 `pwnlib.term` 打印浮动提示符。
 
-因此，它仅在 `[pwnlib.term.term_mode]` 下有效。
+因此，它只在 `pwnlib.term.term_mode` 中工作。
 
-#### `read()`
+### `read()`
 
 ```py
 read(*a, **kw)
 ```
 
-`recv()` 的别名。
+[`recv()`] 的别名。
 
-#### `readS()`
+### `readS()`
 
 ```py
 readS(*a, **kw)
 ```
 
-`recvS()` 的别名。
+[`recvS()`] 的别名。
 
-#### `read_raw()`
+### `read_raw()`
 
 ```py
 read_raw(*a, **kw)
@@ -414,333 +589,333 @@ read_raw(*a, **kw)
 
 `recv_raw()` 的别名。
 
-#### `readall()`
+### `readall()`
 
 ```py
 readall(*a, **kw)
 ```
 
-`recvall()` 的别名。
+[`recvall()`] 的别名。
 
-#### `readallS()`
+### `readallS()`
 
 ```py
 readallS(*a, **kw)
 ```
 
-`recvallS()` 的别名。
+[`recvallS()`] 的别名。
 
-#### `readallb()`
+### `readallb()`
 
 ```py
 readallb(*a, **kw)
 ```
 
-`recvallb()` 的别名。
+[`recvallb()`] 的别名。
 
-#### `readb()`
+### `readb()`
 
 ```py
 readb(*a, **kw)
 ```
 
-`recvb()` 的别名。
+[`recvb()`] 的别名。
 
-#### `readline()`
+### `readline()`
 
 ```py
 readline(*a, **kw)
 ```
 
-`recvline()` 的别名。
+[`recvline()`] 的别名。
 
-#### `readlineS()`
+### `readlineS()`
 
 ```py
 readlineS(*a, **kw)
 ```
 
-`recvlineS()` 的别名。
+[`recvlineS()`] 的别名。
 
-#### `readline_contains()`
+### `readline_contains()`
 
 ```py
 readline_contains(*a, **kw)
 ```
 
-`recvline_contains()` 的别名。
+[`recvline_contains()`] 的别名。
 
-#### `readline_containsS()`
+### `readline_containsS()`
 
 ```py
 readline_containsS(*a, **kw)
 ```
 
-`recvline_containsS()` 的别名。
+[`recvline_containsS()`] 的别名。
 
-#### `readline_containsb()`
+### `readline_containsb()`
 
 ```py
 readline_containsb(*a, **kw)
 ```
 
-`recvline_containsb()` 的别名。
+[`recvline_containsb()`] 的别名。
 
-#### `readline_endswith()`
+### `readline_endswith()`
 
 ```py
 readline_endswith(*a, **kw)
 ```
 
-`recvline_endswith()` 的别名。
+[`recvline_endswith()`] 的别名。
 
-#### `readline_endswithS()`
+### `readline_endswithS()`
 
 ```py
 readline_endswithS(*a, **kw)
 ```
 
-`recvline_endswithS()` 的别名。
+[`recvline_endswithS()`] 的别名。
 
-#### `readline_endswithb()`
+### `readline_endswithb()`
 
 ```py
 readline_endswithb(*a, **kw)
 ```
 
-`recvline_endswithb()` 的别名。
+[`recvline_endswithb()`] 的别名。
 
-#### `readline_pred()`
+### `readline_pred()`
 
 ```py
 readline_pred(*a, **kw)
 ```
 
-`recvline_pred()` 的别名。
+[`recvline_pred()`] 的别名。
 
-#### `readline_regex()`
+### `readline_regex()`
 
 ```py
 readline_regex(*a, **kw)
 ```
 
-`recvline_regex()` 的别名。
+[`recvline_regex()`] 的别名。
 
-#### `readline_regexS()`
+### `readline_regexS()`
 
 ```py
 readline_regexS(*a, **kw)
 ```
 
-`recvline_regexS()` 的别名。
+[`recvline_regexS()`] 的别名。
 
-#### `readline_regexb()`
+### `readline_regexb()`
 
 ```py
 readline_regexb(*a, **kw)
 ```
 
-`recvline_regexb()` 的别名。
+[`recvline_regexb()`] 的别名。
 
-#### `readline_startswith()`
+### `readline_startswith()`
 
 ```py
 readline_startswith(*a, **kw)
 ```
 
-`recvline_startswith()` 的别名。
+[`recvline_startswith()`] 的别名。
 
-#### `readline_startswithS()`
+### `readline_startswithS()`
 
 ```py
 readline_startswithS(*a, **kw)
 ```
 
-`recvline_startswithS()` 的别名。
+[`recvline_startswithS()`] 的别名。
 
-#### `readline_startswithb()`
+### `readline_startswithb()`
 
 ```py
 readline_startswithb(*a, **kw)
 ```
 
-`recvline_startswithb()` 的别名。
+[`recvline_startswithb()`] 的别名。
 
-#### `readlineb()`
+### `readlineb()`
 
 ```py
 readlineb(*a, **kw)
 ```
 
-`recvlineb()` 的别名。
+[`recvlineb()`] 的别名。
 
-#### `readlines()`
+### `readlines()`
 
 ```py
 readlines(*a, **kw)
 ```
 
-`recvlines()` 的别名。
+[`recvlines()`] 的别名。
 
-#### `readlinesS()`
+### `readlinesS()`
 
 ```py
 readlinesS(*a, **kw)
 ```
 
-`recvlinesS()` 的别名。
+[`recvlinesS()`] 的别名。
 
-#### `readlinesb()`
+### `readlinesb()`
 
 ```py
 readlinesb(*a, **kw)
 ```
 
-`recvlinesb()` 的别名。
+[`recvlinesb()`] 的别名。
 
-#### `readn()`
+### `readn()`
 
 ```py
 readn(*a, **kw)
 ```
 
-`recvn()` 的别名。
+[`recvn()`] 的别名。
 
-#### `readnS()`
+### `readnS()`
 
 ```py
 readnS(*a, **kw)
 ```
 
-`recvnS()` 的别名。
+[`recvnS()`] 的别名。
 
-#### `readnb()`
+### `readnb()`
 
 ```py
 readnb(*a, **kw)
 ```
 
-`recvnb()` 的别名。
+[`recvnb()`] 的别名。
 
-#### `readpred()`
+### `readpred()`
 
 ```py
 readpred(*a, **kw)
 ```
 
-`recvpred()` 的别名。
+[`recvpred()`] 的别名。
 
-#### `readpredS()`
+### `readpredS()`
 
 ```py
 readpredS(*a, **kw)
 ```
 
-`recvpredS()` 的别名。
+[`recvpredS()`] 的别名。
 
-#### `readpredb()`
+### `readpredb()`
 
 ```py
 readpredb(*a, **kw)
 ```
 
-`recvpredb()` 的别名。
+[`recvpredb()`] 的别名。
 
-#### `readregex()`
+### `readregex()`
 
 ```py
 readregex(*a, **kw)
 ```
 
-`recvregex()` 的别名。
+[`recvregex()`] 的别名。
 
-#### `readregexS()`
+### `readregexS()`
 
 ```py
 readregexS(*a, **kw)
 ```
 
-`recvregexS()` 的别名。
+[`recvregexS()`] 的别名。
 
-#### `readregexb()`
+### `readregexb()`
 
 ```py
 readregexb(*a, **kw)
 ```
 
-`recvregexb()` 的别名。
+[`recvregexb()`] 的别名。
 
-#### `readrepeat()`
+### `readrepeat()`
 
 ```py
 readrepeat(*a, **kw)
 ```
 
-`recvrepeat()` 的别名。
+[`recvrepeat()`] 的别名。
 
-#### `readrepeatS()`
+### `readrepeatS()`
 
 ```py
 readrepeatS(*a, **kw)
 ```
 
-`recvrepeatS()` 的别名。
+[`recvrepeatS()`] 的别名。
 
-#### `readrepeatb()`
+### `readrepeatb()`
 
 ```py
 readrepeatb(*a, **kw)
 ```
 
-`recvrepeatb()` 的别名。
+[`recvrepeatb()`] 的别名。
 
-#### `readuntil()`
+### `readuntil()`
 
 ```py
 readuntil(*a, **kw)
 ```
 
-`recvuntil()` 的别名。
+[`recvuntil()`] 的别名。
 
-#### `readuntilS()`
+### `readuntilS()`
 
 ```py
 readuntilS(*a, **kw)
 ```
 
-`recvuntilS()` 的别名。
+[`recvuntilS()`] 的别名。
 
-#### `readuntilb()`
+### `readuntilb()`
 
 ```py
 readuntilb(*a, **kw)
 ```
 
-`recvuntilb()` 的别名。
+[`recvuntilb()`] 的别名。
 
-#### `recv()`
+### `recv() → bytes`
 
 ```py
 recv(numb=4096, timeout=default) → bytes
 ```
 
-从 tube 接收最多 `numb` 字节数据，并在有任何数据可用时立即返回。
+从 tube 接收最多 `numb` 字节数据，并在有任何数量数据可用时立即返回。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字符串（`''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字符串（`''`）。
 
-**引发：**
+引发：
 
-- **exceptions.EOFError** — 连接已关闭。
+- `exceptions.EOFError` – 连接已关闭。
 
-**返回：**
+返回：
 
-包含从套接字接收到的字节的 bytes 对象；如果等待期间发生超时，则返回 `''`。
+- 一个 bytes 对象，包含从套接字接收到的字节；如果在等待时发生超时，则为 `''`。
 
 **示例**
 
 ```pycon
 >>> t = tube()
->>> # 伪造数据源
+>>> # Fake a data source
 >>> t.recv_raw = lambda n: b'Hello, world'
 >>> t.recv() == b'Hello, world'
 True
@@ -753,15 +928,15 @@ True
     b'Hello, world'
 ```
 
-#### `recvS()`
+### `recvS()`
 
 ```py
 recvS(*a, **kw)
 ```
 
-与 `recv()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recv()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvall()`
+### `recvall() → bytes`
 
 ```py
 recvall(timeout=Timeout.forever) → bytes
@@ -769,56 +944,59 @@ recvall(timeout=Timeout.forever) → bytes
 
 接收数据直到 EOF，并关闭 tube。
 
-#### `recvallS()`
+### `recvallS()`
 
 ```py
 recvallS(*a, **kw)
 ```
 
-与 `recvall()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvall()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvallb()`
+### `recvallb()`
 
 ```py
 recvallb(*a, **kw)
 ```
 
-与 `recvall()` 相同，但返回 bytearray。
+与 [`recvall()`] 相同，但返回 `bytearray`。
 
-#### `recvb()`
+### `recvb()`
 
 ```py
 recvb(*a, **kw)
 ```
 
-与 `recv()` 相同，但返回 bytearray。
+与 [`recv()`] 相同，但返回 `bytearray`。
 
-#### `recvline()`
+### `recvline() → bytes`
 
 ```py
 recvline(drop=False, timeout=default) → bytes
 ```
 
-从 tube 接收一行。
+从 tube 接收单行。
 
-“行”是由 `newline` 中设置的字节序列终止的任意字节序列，默认值为 `b'\n'`。
+“行”是由 [`newline`] 中设置的字节序列终止的任意字节序列，默认是 `b'\n'`。
 
-如果在接收到换行符之前连接关闭（`EOFError`），默认情况下会返回缓冲数据并记录警告。如果缓冲区为空，则引发 `EOFError`。可以通过设置 `[pwnlib.context.ContextType.throw_eof_on_incomplete_line()]` 更改此行为。
+如果在收到换行符之前连接关闭（`EOFError`），默认会返回已缓冲的数据，并记录一条警告。如果缓冲区为空，则引发 `EOFError`。可以通过设置 `pwnlib.context.ContextType.throw_eof_on_incomplete_line()` 改变此行为。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字节字符串（`b''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字节字符串（`b''`）。
 
-**参数：**
+参数：
 
-- **drop**（`bool`）— 丢弃行尾（`False`）。
-- **timeout**（`int`）— 超时。
+- `drop`（`bool`）  
+    丢弃行尾（`False`）。
 
-**引发：**
+- `timeout`（`int`）  
+    超时时间。
 
-- `EOFError` — 连接在请求满足之前关闭，且缓冲区为空。
+引发：
 
-**返回：**
+- `EOFError` – 在请求可满足之前连接关闭，且缓冲区为空。
 
-在接收到第一个换行符 `'\n'` 之前通过 tube 接收到的所有字节。可选保留结尾。如果在接收到换行符之前连接关闭，则返回截至此时接收到的剩余数据。
+返回：
+
+- 在收到第一个换行符 `'\n'` 之前通过 tube 接收到的所有字节。可选择保留结尾。如果在收到换行符之前连接关闭，则返回截至该点已接收的剩余数据。
 
 **示例**
 
@@ -852,15 +1030,15 @@ Traceback (most recent call last):
 EOFError
 ```
 
-#### `recvlineS()`
+### `recvlineS()`
 
 ```py
 recvlineS(*a, **kw)
 ```
 
-与 `recvline()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvline()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvline_contains()`
+### `recvline_contains() → bytes`
 
 ```py
 recvline_contains(items, drop=True, timeout=default) → bytes
@@ -868,11 +1046,16 @@ recvline_contains(items, drop=True, timeout=default) → bytes
 
 接收行，直到找到至少包含 `items` 中一项的行。
 
-**参数：**
+参数：
 
-- **items**（`str`, `tuple`）— 要搜索的字符串列表，或单个字符串。
-- **drop**（`bool`）— 丢弃行尾（`True`）。
-- **timeout**（`int`）— 超时，单位为秒。
+- `items`（`str`、`tuple`）  
+    要搜索的字符串列表，或单个字符串。
+
+- `drop`（`bool`）  
+    丢弃行尾（`True`）。
+
+- `timeout`（`int`）  
+    超时时间，单位为秒。
 
 **示例**
 
@@ -892,23 +1075,23 @@ b'apple pear orange'
 b'bicycle car train'
 ```
 
-#### `recvline_containsS()`
+### `recvline_containsS()`
 
 ```py
 recvline_containsS(*a, **kw)
 ```
 
-与 `recvline_contains()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvline_contains()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvline_containsb()`
+### `recvline_containsb()`
 
 ```py
 recvline_containsb(*a, **kw)
 ```
 
-与 `recvline_contains()` 相同，但返回 bytearray。
+与 [`recvline_contains()`] 相同，但返回 `bytearray`。
 
-#### `recvline_endswith()`
+### `recvline_endswith() → bytes`
 
 ```py
 recvline_endswith(delims, drop=True, timeout=default) → bytes
@@ -916,9 +1099,9 @@ recvline_endswith(delims, drop=True, timeout=default) → bytes
 
 持续接收行，直到找到以 `delims` 中某一项结尾的行。返回最后接收到的行。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字符串（`''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字符串（`''`）。
 
-更多细节参见 `[recvline_startswith()]`。
+更多细节参见 [`recvline_startswith()`]。
 
 **示例**
 
@@ -933,23 +1116,23 @@ b'Kaboodle\n'
 b'Kaboodle'
 ```
 
-#### `recvline_endswithS()`
+### `recvline_endswithS()`
 
 ```py
 recvline_endswithS(*a, **kw)
 ```
 
-与 `recvline_endswith()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvline_endswith()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvline_endswithb()`
+### `recvline_endswithb()`
 
 ```py
 recvline_endswithb(*a, **kw)
 ```
 
-与 `recvline_endswith()` 相同，但返回 bytearray。
+与 [`recvline_endswith()`] 相同，但返回 `bytearray`。
 
-#### `recvline_pred()`
+### `recvline_pred() → bytes`
 
 ```py
 recvline_pred(pred, drop=True, timeout=default) → bytes
@@ -957,12 +1140,15 @@ recvline_pred(pred, drop=True, timeout=default) → bytes
 
 接收数据，直到 `pred(line)` 返回真值。丢弃所有其他数据。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字符串（`''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字符串（`''`）。
 
-**参数：**
+参数：
 
-- **pred**（callable）— 要调用的函数。返回使此函数返回 `True` 的行。
-- **drop**（`bool`）— 丢弃行尾（`True`）。
+- `pred`（`callable`）  
+    要调用的函数。返回该函数返回 `True` 的行。
+
+- `drop`（`bool`）  
+    丢弃行尾（`True`）。
 
 **示例**
 
@@ -979,35 +1165,35 @@ b'Bar\n'
 b''
 ```
 
-#### `recvline_regex()`
+### `recvline_regex() → bytes`
 
 ```py
 recvline_regex(regex, exact=False, drop=True, timeout=default) → bytes
 ```
 
-`recvline_pred()` 的包装器，在正则表达式匹配某一行时返回。
+[`recvline_pred()`] 的包装器，当正则表达式匹配某行时返回。
 
-默认使用 `re.RegexObject.search()`，但如果 `exact` 设为 `True`，则改用 `re.RegexObject.match()`。
+默认使用 `re.RegexObject.search()`；但如果 `exact` 设置为 `True`，则改用 `re.RegexObject.match()`。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字符串（`''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字符串（`''`）。
 
-#### `recvline_regexS()`
+### `recvline_regexS()`
 
 ```py
 recvline_regexS(*a, **kw)
 ```
 
-与 `recvline_regex()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvline_regex()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvline_regexb()`
+### `recvline_regexb()`
 
 ```py
 recvline_regexb(*a, **kw)
 ```
 
-与 `recvline_regex()` 相同，但返回 bytearray。
+与 [`recvline_regex()`] 相同，但返回 `bytearray`。
 
-#### `recvline_startswith()`
+### `recvline_startswith() → bytes`
 
 ```py
 recvline_startswith(delims, drop=True, timeout=default) → bytes
@@ -1015,17 +1201,22 @@ recvline_startswith(delims, drop=True, timeout=default) → bytes
 
 持续接收行，直到找到以 `delims` 中某一项开头的行。返回最后接收到的行。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字符串（`''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字符串（`''`）。
 
-**参数：**
+参数：
 
-- **delims**（`str`, `tuple`）— 要搜索的字符串列表，或单个字符组成的字符串。
-- **drop**（`bool`）— 丢弃行尾（`True`）。
-- **timeout**（`int`）— 超时，单位为秒。
+- `delims`（`str`、`tuple`）  
+    要搜索的字符串列表，或单字符字符串。
 
-**返回：**
+- `drop`（`bool`）  
+    丢弃行尾（`True`）。
 
-接收到的第一行，其开头是 `delims` 中的某个分隔符。
+- `timeout`（`int`）  
+    超时时间，单位为秒。
+
+返回：
+
+- 接收到的第一行，其开头为 `delims` 中的某个分隔符。
 
 **示例**
 
@@ -1040,55 +1231,60 @@ b'Xylophone\n'
 b'World'
 ```
 
-#### `recvline_startswithS()`
+### `recvline_startswithS()`
 
 ```py
 recvline_startswithS(*a, **kw)
 ```
 
-与 `recvline_startswith()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvline_startswith()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvline_startswithb()`
+### `recvline_startswithb()`
 
 ```py
 recvline_startswithb(*a, **kw)
 ```
 
-与 `recvline_startswith()` 相同，但返回 bytearray。
+与 [`recvline_startswith()`] 相同，但返回 `bytearray`。
 
-#### `recvlineb()`
+### `recvlineb()`
 
 ```py
 recvlineb(*a, **kw)
 ```
 
-与 `recvline()` 相同，但返回 bytearray。
+与 [`recvline()`] 相同，但返回 `bytearray`。
 
-#### `recvlines()`
+### `recvlines() → bytes 对象列表`
 
 ```py
-recvlines(numlines, drop=True, timeout=default) → list of bytes objects
+recvlines(numlines, drop=True, timeout=default) → bytes 对象列表
 ```
 
 接收最多 `numlines` 行。
 
-“行”是由 `newline` 设置的字节序列终止的任意字节序列，默认值为 `'\n'`。
+“行”是由 [`newline`] 设置的字节序列终止的任意字节序列，默认是 `'\n'`。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字符串（`''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字符串（`''`）。
 
-**参数：**
+参数：
 
-- **numlines**（`int`）— 要接收的最大行数。
-- **drop**（`bool`）— 丢弃每行末尾的换行符（`True`）。
-- **timeout**（`int`）— 最大超时。
+- `numlines`（`int`）  
+    要接收的最大行数。
 
-**引发：**
+- `drop`（`bool`）  
+    丢弃每行末尾的换行符（`True`）。
 
-- **exceptions.EOFError** — 连接在请求满足之前关闭。
+- `timeout`（`int`）  
+    最大超时时间。
 
-**返回：**
+引发：
 
-包含从套接字接收到的字节的字符串；如果等待期间发生超时，则返回 `''`。
+- `exceptions.EOFError` – 在请求可满足之前连接关闭。
+
+返回：
+
+- 一个字符串，包含从套接字接收到的字节；如果在等待时发生超时，则为 `''`。
 
 **示例**
 
@@ -1106,13 +1302,13 @@ recvlines(numlines, drop=True, timeout=default) → list of bytes objects
 [b'Foo\n', b'Bar\n', b'Baz\n']
 ```
 
-#### `recvlinesS()`
+### `recvlinesS() → str 列表`
 
 ```py
-recvlinesS(numlines, drop=True, timeout=default) → str list
+recvlinesS(numlines, drop=True, timeout=default) → str 列表
 ```
 
-此函数与 `recvlines()` 相同，但使用 `context.encoding()` 将接收到的字节解码为字符串。只要可能，应使用 `recvlines()` 以获得更好的性能。
+此函数与 [`recvlines()`] 相同，但使用 `context.encoding()` 将接收到的字节解码为字符串。为了更好的性能，应尽可能使用 [`recvlines()`]。
 
 **示例**
 
@@ -1126,13 +1322,13 @@ recvlinesS(numlines, drop=True, timeout=default) → str list
 ['Foo', 'Bar', 'Baz']
 ```
 
-#### `recvlinesb()`
+### `recvlinesb() → bytearray 列表`
 
 ```py
-recvlinesb(numlines, drop=True, timeout=default) → bytearray list
+recvlinesb(numlines, drop=True, timeout=default) → bytearray 列表
 ```
 
-此函数与 `recvlines()` 相同，但返回 bytearray。
+此函数与 [`recvlines()`] 相同，但返回 `bytearray`。
 
 **示例**
 
@@ -1146,7 +1342,7 @@ recvlinesb(numlines, drop=True, timeout=default) → bytearray list
 [bytearray(b'Foo'), bytearray(b'Bar'), bytearray(b'Baz')]
 ```
 
-#### `recvn()`
+### `recvn() → bytes`
 
 ```py
 recvn(numb, timeout=default) → bytes
@@ -1154,15 +1350,15 @@ recvn(numb, timeout=default) → bytes
 
 精确接收 `n` 字节。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字符串（`''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字符串（`''`）。
 
-**引发：**
+引发：
 
-- **exceptions.EOFError** — 连接在请求满足之前关闭。
+- `exceptions.EOFError` – 在请求可满足之前连接关闭。
 
-**返回：**
+返回：
 
-包含从套接字接收到的字节的字符串；如果等待期间发生超时，则返回 `''`。
+- 一个字符串，包含从套接字接收到的字节；如果在等待时发生超时，则为 `''`。
 
 **示例**
 
@@ -1175,7 +1371,7 @@ True
 >>> t.recvn(len(data)+1) == data + data[:1]
 True
 >>> t.recv_raw = lambda *a: None
->>> # 剩余数据被缓冲
+>>> # 剩余数据会被缓冲
 >>> t.recv() == data[1:]
 True
 >>> t.recv_raw = lambda *a: time.sleep(0.01) or b'a'
@@ -1185,44 +1381,47 @@ b''
 b'aaaaaa...'
 ```
 
-#### `recvnS()`
+### `recvnS()`
 
 ```py
 recvnS(*a, **kw)
 ```
 
-与 `recvn()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvn()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvnb()`
+### `recvnb()`
 
 ```py
 recvnb(*a, **kw)
 ```
 
-与 `recvn()` 相同，但返回 bytearray。
+与 [`recvn()`] 相同，但返回 `bytearray`。
 
-#### `recvpred()`
+### `recvpred() → bytes`
 
 ```py
 recvpred(pred, timeout=default) → bytes
 ```
 
-从 tube 每次接收一个字节，直到 `pred(all_bytes)` 求值为 `True`。
+从 tube 一次接收一个字节，直到 `pred(all_bytes)` 求值为 `True`。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字符串（`''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字符串（`''`）。
 
-**参数：**
+参数：
 
-- **pred**（callable）— 要调用的函数，参数为当前累积的数据。
-- **timeout**（`int`）— 操作超时。
+- `pred`（`callable`）  
+    要调用的函数，参数为当前累积的数据。
 
-**引发：**
+- `timeout`（`int`）  
+    操作超时时间。
 
-- **exceptions.EOFError** — 连接已关闭。
+引发：
 
-**返回：**
+- `exceptions.EOFError` – 连接已关闭。
 
-包含从套接字接收到的字节的 bytes 对象；如果等待期间发生超时，则返回 `''`。
+返回：
+
+- 一个 bytes 对象，包含从套接字接收到的字节；如果在等待时发生超时，则为 `''`。
 
 **示例**
 
@@ -1237,35 +1436,35 @@ b'abbba'
 b''
 ```
 
-#### `recvpredS()`
+### `recvpredS()`
 
 ```py
 recvpredS(*a, **kw)
 ```
 
-与 `recvpred()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvpred()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvpredb()`
+### `recvpredb()`
 
 ```py
 recvpredb(*a, **kw)
 ```
 
-与 `recvpred()` 相同，但返回 bytearray。
+与 [`recvpred()`] 相同，但返回 `bytearray`。
 
-#### `recvregex()`
+### `recvregex() → bytes`
 
 ```py
 recvregex(regex, exact=False, timeout=default, capture=False) → bytes
 ```
 
-`recvpred()` 的包装器，在正则表达式匹配缓冲区中的字符串时返回。
+[`recvpred()`] 的包装器，当正则表达式匹配缓冲区中的字符串时返回。
 
-返回直到正则匹配之前接收到的所有数据。如果 `capture` 设为 `True`，则返回 `re.Match` 对象。
+返回在正则表达式匹配之前接收到的所有数据。如果 `capture` 设置为 `True`，则改为返回 `re.Match` 对象。
 
-默认使用 `re.RegexObject.search()`，但如果 `exact` 设为 `True`，则改用 `re.RegexObject.match()`。
+默认使用 `re.RegexObject.search()`；但如果 `exact` 设置为 `True`，则改用 `re.RegexObject.match()`。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字符串（`''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字符串（`''`）。
 
 **示例**
 
@@ -1279,31 +1478,29 @@ b'1337'
 b'Bla blubb blargh\n'
 ```
 
-#### `recvregexS()`
+### `recvregexS()`
 
 ```py
 recvregexS(*a, **kw)
 ```
 
-与 `recvregex()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvregex()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvregexb()`
+### `recvregexb()`
 
 ```py
 recvregexb(*a, **kw)
 ```
 
-与 `recvregex()` 相同，但返回 bytearray。
+与 [`recvregex()`] 相同，但返回 `bytearray`。
 
-#### 🛠️ `recvrepeat()`
+### `recvrepeat() → bytes`
 
 ```py
 recvrepeat(timeout=default) → bytes
 ```
 
 接收数据直到超时或 EOF。
-
-> 无常规 recv 的 EOF 异常，无法直接根据返回值区分超时或 EOF。
 
 **示例**
 
@@ -1325,23 +1522,23 @@ b'abc'
 b'd'
 ```
 
-#### `recvrepeatS()`
+### `recvrepeatS()`
 
 ```py
 recvrepeatS(*a, **kw)
 ```
 
-与 `recvrepeat()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvrepeat()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvrepeatb()`
+### `recvrepeatb()`
 
 ```py
 recvrepeatb(*a, **kw)
 ```
 
-与 `recvrepeat()` 相同，但返回 bytearray。
+与 [`recvrepeat()`] 相同，但返回 `bytearray`。
 
-#### `recvuntil()`
+### `recvuntil() → bytes`
 
 ```py
 recvuntil(delims, drop=False, timeout=default) → bytes
@@ -1349,20 +1546,23 @@ recvuntil(delims, drop=False, timeout=default) → bytes
 
 接收数据直到遇到 `delims` 之一。
 
-如果在 `timeout` 秒过去之前请求未满足，则所有数据会被缓冲，并返回空字符串（`''`）。
+如果在 `timeout` 秒过去之前请求未满足，则所有数据都会被缓冲，并返回空字符串（`''`）。
 
-**参数：**
+参数：
 
-- **delims**（`bytes`, `tuple`）— 分隔符字符的字节字符串，或分隔符字节字符串列表。
-- **drop**（`bool`）— 丢弃结尾。如果为 `True`，则从返回值末尾移除。
+- `delims`（`bytes`、`tuple`）  
+    分隔字符的字节字符串，或分隔字节字符串列表。
 
-**引发：**
+- `drop`（`bool`）  
+    丢弃结尾。如果为 `True`，则从返回值末尾移除。
 
-- **exceptions.EOFError** — 连接在请求满足之前关闭。
+引发：
 
-**返回：**
+- `exceptions.EOFError` – 在请求可满足之前连接关闭。
 
-包含从套接字接收到的字节的字符串；如果等待期间发生超时，则返回 `''`。
+返回：
+
+- 一个字符串，包含从套接字接收到的字节；如果在等待时发生超时，则为 `''`。
 
 **示例**
 
@@ -1380,7 +1580,7 @@ b'Hello'
 >>> t.recvuntil(b' Wor')
 b'Hello Wor'
 >>> _=t.clean(0)
->>> # 匹配完整字符串，丢弃匹配部分
+>>> # 匹配完整字符串，并丢弃匹配内容
 >>> t.recvuntil(b' Wor', drop=True)
 b'Hello'
 ```
@@ -1393,23 +1593,23 @@ b'Hello'
 b'Hello'
 ```
 
-#### `recvuntilS()`
+### `recvuntilS()`
 
 ```py
 recvuntilS(*a, **kw)
 ```
 
-与 `recvuntil()` 相同，但返回 str，使用 `context.encoding` 解码结果。（注意：二进制版本要快得多。）
+与 [`recvuntil()`] 相同，但返回 `str`，使用 `context.encoding` 解码结果。（注意，二进制版本要快得多。）
 
-#### `recvuntilb()`
+### `recvuntilb()`
 
 ```py
 recvuntilb(*a, **kw)
 ```
 
-与 `recvuntil()` 相同，但返回 bytearray。
+与 [`recvuntil()`] 相同，但返回 `bytearray`。
 
-#### `send()`
+### `send()`
 
 ```py
 send(data)
@@ -1417,9 +1617,9 @@ send(data)
 
 发送数据。
 
-如果启用了日志级别 `DEBUG`，还会打印接收到的数据。
+如果启用了日志级别 `DEBUG`，还会打印出接收到的数据。
 
-如果由于连接关闭而无法继续发送，则引发 `exceptions.EOFError`。
+如果由于连接已关闭而无法再发送，则引发 `exceptions.EOFError`。
 
 **示例**
 
@@ -1431,23 +1631,21 @@ send(data)
 b'hello'
 ```
 
-#### `sendafter()`
+### `sendafter() → str`
 
 ```py
 sendafter(delim, data, timeout=default) → str
 ```
 
-`recvuntil(delim, timeout=timeout)` 和 `send(data)` 的组合。
+`recvuntil(delim, timeout=timeout)` 与 `send(data)` 的组合。
 
-#### `sendline()`
+### `sendline()`
 
 ```py
 sendline(data)
 ```
 
 `t.send(data + t.newline)` 的简写。
-
-> 发送一行数据，末尾添加换行符 `\n`（对应接收程序的 `scanf`）
 
 **示例**
 
@@ -1462,33 +1660,31 @@ b'hello\n'
 b'hello\r\n'
 ```
 
-#### 🛠️ `sendlineafter()`
+### `sendlineafter() → str`
 
 ```py
 sendlineafter(delim, data, timeout=default) → str
 ```
 
-`recvuntil(delim, timeout=timeout)` 和 `sendline(data)` 的组合。
+`recvuntil(delim, timeout=timeout)` 与 `sendline(data)` 的组合。
 
-> 在获得 `delim` 提示后，发送 `data` 数据
-
-#### `sendlinethen()`
+### `sendlinethen() → str`
 
 ```py
 sendlinethen(delim, data, timeout=default) → str
 ```
 
-`sendline(data)` 和 `recvuntil(delim, timeout=timeout)` 的组合。
+`sendline(data)` 与 `recvuntil(delim, timeout=timeout)` 的组合。
 
-#### `sendthen()`
+### `sendthen() → str`
 
 ```py
 sendthen(delim, data, timeout=default) → str
 ```
 
-`send(data)` 和 `recvuntil(delim, timeout=timeout)` 的组合。
+`send(data)` 与 `recvuntil(delim, timeout=timeout)` 的组合。
 
-#### `settimeout()`
+### `settimeout()`
 
 ```py
 settimeout(timeout)
@@ -1506,21 +1702,22 @@ settimeout(timeout)
 True
 ```
 
-#### `shutdown()`
+### `shutdown()`
 
 ```py
 shutdown(direction='send')
 ```
 
-根据 `direction` 关闭 tube 的进一步读取或写入。
+根据 `direction` 关闭 tube 以停止进一步读取或写入。
 
-**参数：**
+参数：
 
-- **direction**（`str`）— 要关闭的方向；`"in"`、`"read"` 或 `"recv"` 关闭输入方向，`"out"`、`"write"` 或 `"send"` 关闭输出方向。
+- `direction`（`str`）  
+    要关闭的方向；`"in"`、`"read"` 或 `"recv"` 关闭入方向，`"out"`、`"write"` 或 `"send"` 关闭出方向。
 
-**返回：**
+返回：
 
-`None`
+- `None`
 
 **示例**
 
@@ -1541,7 +1738,7 @@ Traceback (most recent call last):
 KeyError: "direction must be in ['in', 'out', 'read', 'recv', 'send', 'write']"
 ```
 
-#### `spawn_process()`
+### `spawn_process()`
 
 ```py
 spawn_process(*args, **kwargs)
@@ -1551,43 +1748,44 @@ spawn_process(*args, **kwargs)
 
 接受与 `subprocess.Popen` 相同的参数。
 
-#### `stream()`
+### `stream()`
 
 接收数据直到 tube 退出，并将其打印到 stdout。
 
-类似于 `interactive()`，但不发送输入。
+类似于 [`interactive()`]，但不发送输入。
 
 类似于 `print(tube.recvall())`，但数据在接收时打印，而不是在所有数据接收完后打印。
 
-**参数：**
+参数：
 
-- **line_mode**（`bool`）— 是逐行接收还是原始数据接收。
+- `line_mode`（`bool`）  
+    是逐行接收还是原始数据接收。
 
-**返回：**
+返回：
 
-打印的所有数据。
+- 打印的所有数据。
 
-#### `timeout_change()`
+### `timeout_change()`
 
-不应直接调用。通知 tube 的原始层超时已更改。
+不应直接调用。通知 tube 的 raw 层超时已更改。
 
 继承自 `Timeout`。
 
-#### `unread()`
+### `unread()`
 
 ```py
 unread(*a, **kw)
 ```
 
-`unrecv()` 的别名。
+[`unrecv()`] 的别名。
 
-#### `unrecv()`
+### `unrecv()`
 
 ```py
 unrecv(data)
 ```
 
-将指定数据放回接收缓冲区开头。
+将指定数据放回接收缓冲区的开头。
 
 **示例**
 
@@ -1605,7 +1803,7 @@ b'world'
 b'hello'
 ```
 
-#### `upload_manually()`
+### `upload_manually()`
 
 ```py
 upload_manually(data, target_path='./payload', prompt=b'$', chunk_size=0x200, chmod_flags='u+x', compression='auto', end_marker='PWNTOOLS_DONE')
@@ -1613,26 +1811,39 @@ upload_manually(data, target_path='./payload', prompt=b'$', chunk_size=0x200, ch
 
 使用 base64 编码和压缩手动上传文件。当 tube 连接到 shell 时可以使用。
 
-文件以 base64 编码块的形式上传，通过追加到文件然后解压：
+文件以 base64 编码块的形式追加到文件，然后解压：
 
-```sh
+```py
 loop:
     echo <chunk> | base64 -d >> <target_path>.<compression>
 <compression> -d -f <target_path>.<compression>
 chmod <chmod_flags> <target_path>
 ```
 
-假设目标系统上有 `base64` 命令。当 `compression` 为 `auto` 时，会在 `gzip` 和 `xz` 之间选择可用的最佳压缩工具，若都不可用则回退到未压缩上传。
+假设目标系统上可用 `base64` 命令。当 `compression` 为 `auto` 时，会在 `gzip` 和 `xz` 中选择可用的最佳压缩工具，回退到未压缩上传。
 
-**参数：**
+参数：
 
-- **data**（`bytes`）— 要上传的数据。
-- **target_path**（`str`）— 上传数据的目标路径。
-- **prompt**（`bytes`）— 要等待的 shell 提示符。
-- **chunk_size**（`int`）— 每个上传块的大小。
-- **chmod_flags**（`str`）— 与 chmod 一起使用的标志。`""` 表示忽略。
-- **compression**（`str`）— 要使用的压缩方式。`auto` 自动选择最佳压缩，或 `gzip` 或 `xz`。
-- **end_marker**（`str`）— 用于检测输出结束的标记。仅在未设置 prompt 时使用。
+- `data`（`bytes`）  
+    要上传的数据。
+
+- `target_path`（`str`）  
+    要上传数据到的路径。
+
+- `prompt`（`bytes`）  
+    要等待的 shell 提示符。
+
+- `chunk_size`（`int`）  
+    每个要上传块的大小。
+
+- `chmod_flags`（`str`）  
+    与 chmod 一起使用的标志。`""` 表示忽略。
+
+- `compression`（`str`）  
+    要使用的压缩。`auto` 自动选择最佳压缩，或 `gzip` 或 `xz`。
+
+- `end_marker`（`str`）  
+    用于检测输出结束的标记。仅在未设置 prompt 时使用。
 
 示例：
 
@@ -1659,7 +1870,7 @@ b'Hello world!\n'
 >>> l.close()
 ```
 
-#### `wait()`
+### `wait()`
 
 ```py
 wait(timeout=pwnlib.timeout.Timeout.default)
@@ -1667,7 +1878,7 @@ wait(timeout=pwnlib.timeout.Timeout.default)
 
 等待直到 tube 关闭。
 
-#### `wait_for_close()`
+### `wait_for_close()`
 
 ```py
 wait_for_close(timeout=pwnlib.timeout.Timeout.default)
@@ -1675,15 +1886,15 @@ wait_for_close(timeout=pwnlib.timeout.Timeout.default)
 
 等待直到 tube 关闭。
 
-#### `write()`
+### `write()`
 
 ```py
 write(*a, **kw)
 ```
 
-`send()` 的别名。
+[`send()`] 的别名。
 
-#### `write_raw()`
+### `write_raw()`
 
 ```py
 write_raw(*a, **kw)
@@ -1691,31 +1902,31 @@ write_raw(*a, **kw)
 
 `send_raw()` 的别名。
 
-#### `writeafter()`
+### `writeafter()`
 
 ```py
 writeafter(*a, **kw)
 ```
 
-`sendafter()` 的别名。
+[`sendafter()`] 的别名。
 
-#### `writeline()`
+### `writeline()`
 
 ```py
 writeline(*a, **kw)
 ```
 
-`sendline()` 的别名。
+[`sendline()`] 的别名。
 
-#### `writelineafter()`
+### `writelineafter()`
 
 ```py
 writelineafter(*a, **kw)
 ```
 
-`sendlineafter()` 的别名。
+[`sendlineafter()`] 的别名。
 
-#### `writelines()`
+### `writelines()`
 
 ```py
 writelines(*a, **kw)
@@ -1723,33 +1934,33 @@ writelines(*a, **kw)
 
 `sendlines()` 的别名。
 
-#### `writelinethen()`
+### `writelinethen()`
 
 ```py
 writelinethen(*a, **kw)
 ```
 
-`sendlinethen()` 的别名。
+[`sendlinethen()`] 的别名。
 
-#### `writethen()`
+### `writethen()`
 
 ```py
 writethen(*a, **kw)
 ```
 
-`sendthen()` 的别名。
+[`sendthen()`] 的别名。
 
-#### `default: TimeoutDefault = pwnlib.timeout.Timeout.default`
+### `default: TimeoutDefault = pwnlib.timeout.Timeout.default`
 
 表示不应更改超时的值。
 
-#### `forever: None = None`
+### `forever: None = None`
 
 表示不应发生超时的值。
 
-#### `property newline`
+### `property newline`
 
-通过 `sendline()` 等方法发送或用于 `recvline()` 的字符。
+`sendline()` 等方法发送的字符，或用于 `recvline()` 的字符。
 
 ```pycon
 >>> t = tube()
@@ -1767,6 +1978,6 @@ b'\r\n'
 ```
 
 ```pycon
->>> # 清理
+# 清理
 >>> context.clear()
 ```

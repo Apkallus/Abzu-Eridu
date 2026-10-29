@@ -682,3 +682,14 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 #### Function.prototype.call()
 
 `Function` 实例的 `call()` 方法会以给定的 `this` 值和逐个提供的参数调用该函数。
+
+#### Function.prototype.apply()
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
+
+`Function` 实例的 `apply()` 方法会以给定的 `this` 值和作为数组（或类数组对象）提供的 `arguments` 调用该函数。
+
+```js
+apply(thisArg)
+apply(thisArg, argsArray)
+```

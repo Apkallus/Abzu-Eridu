@@ -9,7 +9,7 @@ emoji:
 - 📅 之后
 - 🔍 待查看
 - ❓ 未定
-- ⏸️ 搁置
+- ⏸️ 长久搁置
 - 🎯 兴趣点
 - 🖇️ 关联到兴趣点
 - ⚔️ 载荷工具
@@ -161,29 +161,58 @@ emoji:
     - [diverctf](https://diverctf.org/en.html)
     - [Bellingcat](https://challenge.bellingcat.com/) 
 
+
+### 工具
+
+模糊测试
+- https://github.com/google/clusterfuzz
+- https://github.com/AFLplusplus/AFLplusplus
+
+二进制分析框架
+- https://github.com/angr/angr
+- https://github.com/JonathanSalwan/Triton
+
 ### 可用
 
-逆向
 
-- 《逆向工程实战（Practical Reverse Engineering: x86, x64, ARM, Windows Kernel, Reversing Tools, and Obfuscation）》 Bruce Dang (2014)
-- https://datanoisetv.github.io/practical-reverse-engineering/front/preface
+二进制
+- 模糊测试
+    - https://www.fuzzingbook.org/
 
-恶意软件分析
+- 链
+    - A Bug Hunter's Diary
 
-- 《Rootkit 和 Bootkit 现代恶意软件逆向分析和下一代威胁（Rootkits and Bootkits: Reversing Modern Malware and Next Generation Threats）》 Alex Matrosov (2019)
-- 《恶意代码分析实战（Practical Malware Analysis: The Hands-On Guide to Dissecting Malicious Software）》 Michael Sikorski, Andrew Honig (2012)
+- 逆向
+    - 《逆向工程实战（Practical Reverse Engineering: x86, x64, ARM, Windows Kernel, Reversing Tools, and Obfuscation）》 Bruce Dang (2014) ⏸️
+        - 副标题涵盖图书主题，或仅作为选读材料
+
+    - https://datanoisetv.github.io/practical-reverse-engineering/front/preface
+
+- 恶意软件分析
+    - 《Rootkit 和 Bootkit 现代恶意软件逆向分析和下一代威胁（Rootkits and Bootkits: Reversing Modern Malware and Next Generation Threats）》 Alex Matrosov (2019)
+
+    - 《恶意代码分析实战（Practical Malware Analysis: The Hands-On Guide to Dissecting Malicious Software）》 Michael Sikorski, Andrew Honig (2012)
+
+嵌入式
+- 《硬件系统模糊测试：技术揭秘与案例剖析（Fuzzing Against the Machine: Automate vulnerability research with emulated IoT devices on QEMU）》(2023)
+
+windows
+-  《Windows APT Warfare: Identify and prevent Windows APT attacks effectively》Sheng-Hao Ma（2023）
+- 《Windows Kernel Programming》Pavel Yosifovich（2023）
+- 《深入解析Windows操作系统 第7版 (Windows Internals, Part 1/2)》 Pavel Yosifovich（2017）
 
 网络综合
 - https://github.com/gl0bal01/intel-codex
 
 - 《Ethical Hacking: A Hands-on Introduction to Breaking In》 - Daniel G. Graham（2021）
+
 - 《网络渗透测试的艺术（The Art of Network Penetration Testing》）- Royce Davis （2020）
 
 云
 - 《Penetration Testing Azure for Ethical Hackers》 - David Okeyode, Karl Fosaaen（2021）
 
 未分类
-- 《深入解析Windows操作系统 第7版 (Windows Internals, Part 1/2)》 Pavel Yosifovich（2017）
+
 
 - Security Engineering: A Guide to Building Dependable Distributed Systems 3rd Edition, by Ross Anderson (Author)   
     <https://www.cl.cam.ac.uk/archive/rja14/book.html>
@@ -355,7 +384,7 @@ elf
                 - 实验粗糙，仅阅读说明。略过问题集
             - 重点是网络安全部分，之后或许返回查看代码模板，或许查看英文第三版新章节
 
-- ⚠️ 中断 ⚠️
+- ⚠️ 后渗透中断 ⚠️
       
     - 《渗透测试高手》（Advanced Penetration Testing）-  Wil Allsopp 
         - 从钓鱼到C2开始，缺乏前期侦察
@@ -410,7 +439,7 @@ elf
                 - 虽然出版日期相对较新，然而侦察章节列举的工具大多停止更新
 
         - 分析：    
-            - 各材料的内容结构近似且相互引用，并发阅读过程中能够简单发现过时/错误描述。选定拥有清晰结构的书为初始骨架，读完一章/小节后查看其他材料的同主题章节。此时，WSTG 这类零散的百科类文档可被整合到/重构骨架。
+            - 各材料的内容结构近似且相互引用，并发过程中能够简单发现过时/错误描述。选定拥有清晰结构的书为初始骨架，读完一章/小节后查看其他材料的同主题章节。此时，WSTG 这类零散的百科类文档可被整合到/重构骨架。
                 - 各材料仍拥有作者独特的见解/工具集/工作流
 
             - 之后或需尝试使用各种自动化工具以快速进行初始探测，结合 lab 记录的步骤确认可自动化的部分，类似 portswigger 的原型污染主题同时介绍手动与自动步骤
@@ -471,78 +500,76 @@ elf
                     - 针对代码片段的可视化交互型练习：在代码片段中固定输入点、实时显示输入在其中的状态。包含 hint 与解决方案
                     - 拥有盲注练习，但设置速率限制。每个载荷提交请求均触发几十个可视化组件的请求。仅对前几个字符进行概念测试
                     - 类似 owasp webgoat，拥有一些亮点但总体质量较低
-                - 每月发布1个挑战，往期挑战进入存档并在[博客中发布解题思路](https://www.yeswehack.com/blog/dojo)
+                - 每月发布1个挑战，往期挑战进入存档并在[博客中发布解题思路](https://www.yeswehack.com/blog/dojo)，作为类2星以上挑战
             - [博客主题文章](https://www.yeswehack.com/blog/learn-bug-bounty)
             - [docker 脆弱代码片段](https://github.com/yeswehack/vulnerable-code-snippets)
             - [工具](https://www.yeswehack.com/researchers/tools)
                 - 其中 Dom Explorer、PP Finder（原型污染） 或可用
         
+        - 进度
+            - picoCTF、Root Me、hackropole 三个大型综合靶场的 Web 主题1星挑战，与 yeswehack dojo 教程片段
+        
         - 分析
-            - 进度
-                - picoCTF、Root Me、hackropole 三个大型综合靶场
-                    - 已尝试尽力做 Web 主题1星挑战（但仍不够尽力）。
-                - yeswehack dojo 作为 Web 专项靶场
-                    - 教程片段很少，已完成。
-                    - 几十个每月挑战存档作为类2星以上挑战
+            - hacker101 与 hackropole 均遇到 AES-ECB 密码学挑战
+            - web 靶场转为低频率维持，过渡到 linux 与二进制主题
+                - 回顾 pwn.college CSE 365 网络安全基础。其中，前几个模块作为衔接：Linux 命令、权限模型、Web 基础。查阅并归档到 man/规范/指南中
 
-            - hacker101 与 hackropole 均遇到 AES-ECB 密码学挑战，此时逐渐过渡到二进制类型
-                - web 靶场低频率维持
-                - 回顾 pwn.college CSE 365 网络安全基础中作为衔接的前几个模块：Linux 命令、权限模型、Web 基础。
-                    - 此时尚不包含二进制利用且主题材料尚未建立，查阅并归档到 man/规范/指南中
-                    - 随时进行 pwn.college CSE 598 ASOW
-                - 之后的二进制主题尝试使用与 Web 主题类似的：并发回顾/阅读/归档过程，过渡期间搜集可用材料
+        - 📅 [pwn.college CSE 598 ASOW - Fall 2026](https://pwn.college/cse598-asow-f2026/) 
+            - 随时进行
+        
+- 📌 二进制  
+    web 的材料中同主题章节并发过程，基于6个材料本身的结构与内容高度相似；二进制主题分为跨度较大的若干子主题，进行少量核心材料的并发过程：
 
-- 二进制
+    - 漏洞基础与研究
+        - 《黑客之道：漏洞发掘的艺术（Hacking: The Art of Exploitation, 2nd Edition ）》 Jon Erickson (2008)
+            - 1/5 - C 语言
+            - 1/6 - 漏洞利用，其中 1/3 为格式化字符串
+            - 1/5 - 网络
+            - 1/12 - Shellcode
+            - 1/6 - 对策
+            - 1/13 - 密码学
 
-    - 《The Art of Software Security Assessment》(2006)
+        - 《From Day Zero to Zero Day: A Hands-On Guide to Vulnerability Research》 Eugene Lim (2025)
+            - 代码审计、逆向工程、模糊测试
 
-    - 《黑客之道：漏洞发掘的艺术（Hacking: The Art of Exploitation, 2nd Edition ）》 Jon Erickson (2008)
+    - 二进制分析与反汇编工作流
+        - 《二进制分析实战（Practical Binary Analysis: Build Your Own Linux Tools for Binary Instrumentation, Analysis, and Disassembly）》Dennis Andriesse (2018)
+            - [示例代码](https://practicalbinaryanalysis.com/)
+            - 二进制文件的结构与分析
 
-    - 《The Ghidra Book, 2nd Edition: The Definitive Guide》 Kara Nance, Chris Eagle (2026)
-        - https://www.ghidrabook.com/
+        - 《The Ghidra Book, 2nd Edition: The Definitive Guide》 Kara Nance, Chris Eagle (2026)
+            - [图书示例文件](https://www.ghidrabook.com/)
+            - 反汇编工具工作流
 
-    - 《From Day Zero to Zero Day: A Hands-On Guide to Vulnerability Research》 Eugene Lim (2025)
+    - 审计
+        - 《The Art of Software Security Assessment》(2006)
 
-    - 《二进制分析实战》（Practical Binary Analysis）Dennis Andriesse (2018)
+    - 内核
+        - 《A Guide to Kernel Exploitation: Attacking the Core》Enrico Perla（2010）
 
-    - [ost2.fyi](https://ost2.fyi/) 
+    - 主题教学型
+        - [ost2.fyi](https://ost2.fyi/Learning-Paths.html) 
 
-    - pwn.college
+    - 主题技巧型
+        - https://guyinatuxedo.github.io/index.html
+        - https://ctf-wiki.org/pwn/linux/user-mode/environment/
+        - https://github.com/ir0nstone/cybersec-notes/tree/master
 
-- TBD 📅
+    - 专项技巧型
+        - https://github.com/shellphish/how2heap
+        - https://github.com/DhavalKapil/heap-exploitation
 
-    - [pwn.college CSE 598 ASOW - Fall 2026](https://pwn.college/cse598-asow-f2026/)
+    - 手册/速查
+        - [GDB](https://sourceware.org/gdb/current/onlinedocs/gdb.html/)
+        - [ROPgadget 作者的 shellcode 库](https://shell-storm.org/shellcode/index.html)
+
+- 📅 TBD 
 
     - 《API 攻防》（Hacking APIs） — Corey Ball
 
-    - 二进制
-            
-        - 利用
-            - Exploiting Software: How to Break Code 
-            - The Shellcoder's Handbook: Discovering and Exploiting Security Holes 
-
-        - 百科/思路
-            - CTF Wiki
-            - https://guyinatuxedo.github.io/index.html
-
-        - 链
-            - A Bug Hunter's Diary
-            
-        - 靶场
-            - https://exploit.education/
-
-        - 内核
-            - A Guide to Kernel Exploitation: Attacking the Core
-
-        - 发现
-            - 《Fuzzing: Brute Force Vulnerability Discovery》 Michael Sutton, Adam Greene, Pedram Amini · Addison-Wesley (2007)
-
-            - 《硬件系统模糊测试：技术揭秘与案例剖析（Fuzzing Against the Machine: Automate vulnerability research with emulated IoT devices on QEMU）》(2023)
-        
-
     - 基于 AWS 的云渗透
 
-    - 《攻击网络协议》（Attacking Network Protocols） — James Forshaw
+    - 《攻击网络协议》（Attacking Network Protocols） — James Forshaw（2017）
 
     - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 
 

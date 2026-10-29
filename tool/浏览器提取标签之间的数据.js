@@ -67,13 +67,18 @@ function do_extract(selector_start, selector_end){
 
 // 控制台调用函数 
 
+/* 
+保存常用网站的提取模式为数组，使用数组扩展
+*/
+const mod = {
+  // man7 从 name 到脚注分割线
+  "man7":['#NAME', '.footline']
+};
 
-do_extract(
-  'p.fnline:nth-child(186)', 
-  'p.fnline:nth-child(303)'
-)
+cur_mod = mod["man7"];
+do_extract(...cur_mod);
 
-
+// 连续使用时仅需在浏览器控制台中使用向上方向键 `⬆`
 
 /*
 - 或修改为在底部显示一个按钮，点击后复制内容并移除按钮

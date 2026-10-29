@@ -2,6 +2,10 @@
 
 https://docs.python.org
 
+文档 URL 中  
+`https://docs.python.org/zh-cn/3/...`
+- 数字 `3` 即对应主版本3的最新子版本，而无需设置 `3.x`
+
 ## 安装与故障排除
 
 ```sh

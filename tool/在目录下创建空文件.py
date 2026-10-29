@@ -1,29 +1,19 @@
 import os
 import re
 
-# 设置输出目录下的完整文件名字符串，若非完整文件名需额外构造
+# 设置已存在的输出目录（不动态构造目录）下的完整文件名字符串，若非完整文件名需额外构造
 file_str = """
-1.o 你好，黑客 Hello Hackers.md
-2.o 探究路径 Pondering Paths.md
-3.o 理解命令 Comprehending Commands.md
-4.o 消化文档 Digesting Documentation.md
-5.o 文件通配 File Globbing.md
-6.o 练习管道 Practicing Piping.md
-7.o Shell 变量 Shell Variables.md
-8.o 数据操作 Data Manipulation.md
-9.o 进程与作业 Processes and Jobs.md
-10.o 理清用户 Untangling Users.md
-11.o 认识权限 Perceiving Permissions.md
-12.o 串联命令 Chaining Commands.md
-13.o 终端复用 Terminal Multiplexing.md
-14.o 探究 PATH Pondering PATH.md
-15.o 滑稽把戏 Silly Shenanigans.md
-16.o 大胆破坏 Daring Destruction.md
-17.o 进阶学习 Further Learning.md
+1.o Web 安全 Web Security.md
+2.o 通信拦截 Intercepting Communication.md
+3.o 密码学 Cryptography.md
+4.o 访问控制 Access Control.md
+5.o 逆向工程 Reverse Engineering.md
+6.o 二进制漏洞利用 Binary Exploitation.md
+7.o 综合安全 Integrated Security.md
 """
 
 # 设置目录路径到原始字符串，
-dir_path_str = r'游乐场\pwn.college\1.1 Linux Luminarium'
+dir_path_str = r'游乐场\o. pwn.college\2.1 Intro to Cybersecurity'
 
 # 通常输入已为完整文件名，若构造文件名，每次任务设置独特格式
 def file_name_builder(file_list):
