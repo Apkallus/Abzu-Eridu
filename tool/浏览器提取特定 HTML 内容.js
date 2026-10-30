@@ -113,6 +113,6 @@ function get_content(content_list) {
     );
 }
 
-// const content_list = pwn_collenge_mod_content
-const content_list = pwn_collenge_mod_title
+const content_list = pwn_collenge_mod_content
+// const content_list = pwn_collenge_mod_title
 get_content(content_list)

@@ -1,6 +1,6 @@
-## 🛠️ execve - 执行程序
-
 https://www.man7.org/linux/man-pages/man2/execve.2.html
+
+# execve - 执行程序
 
 ### 库
 
@@ -331,4 +331,3 @@ argv[2]: ./script
 argv[3]: hello
 argv[4]: world
 ```
-

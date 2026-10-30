@@ -131,7 +131,7 @@ hash
         - [hash 类型识别](https://tools.weakpass.com/#identify)
         - hash 彩虹表功能不可用
 - [md5.gromweb](https://md5.gromweb.com/)
-    - 仅限 MD5
+    - 仅限 MD5，且仅包含一小部分。仍需使用 hashcat 等工具查找
 
 
 工作流
@@ -142,9 +142,10 @@ hash
 
 2. 在 hashcat 暴破
     ```sh
-    hashcat -a 0 -m 1400 -D 1 hash_seq.txt rockyou.txt
+    hashcat -a 0 -m 1400 -D 1 --show hash_seq.txt rockyou.txt
     ``` 
     - 设置加密序列与字典文件
+    - `--show` 每次显示结果，但异常被忽略
 
 3. 得到明文或失败
     `c20fa16907343eef642d10f0bdb81bf629e6aaf6c906f26eabda079ca9e5ab67:apple@123`
@@ -163,6 +164,16 @@ hash
     
 - xss
     - [portswigger](https://portswigger.net/web-security/cross-site-scripting/cheat-sheet)
+
+
+### 网络 —— 待拆分到网络速查表
+
+本机 ip 查询
+- https://www.my-ip.io/api-usage
+
+任意 ip 查询
+- https://ipinfo.io/
+- https://docs.db.ripe.net/How-to-Query-the-RIPE-Database/RESTful-API-Queries#rest-api-search
 
 ## 字典
 
