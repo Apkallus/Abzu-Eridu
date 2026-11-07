@@ -70,6 +70,13 @@ fatal error: Python.h: 没有那个文件或目录
 ```
 - 安装 python 的 `-dev` 头包
 
+## 命令行
+
+```sh
+# 查看模块是否存在，及其所在路径
+python3 -c 'import angr; print(angr)'
+```
+
 ## venv — 创建虚拟环境
 
 https://docs.python.org/zh-cn/3.15/library/venv.html
@@ -395,25 +402,7 @@ print(content)
 
 `hashlib.sha256()`
 
-### base64
 
-```py
-import base64
-encoded = base64.b64encode(b'data to be encoded')
-encoded
-b'ZGF0YSB0byBiZSBlbmNvZGVk'
-data = base64.b64decode(encoded)
-```
-
-- `base64.b64decode(data) -> bytes` ， data 可以是 bytes 或 str
-    - 如果传 bytes：这些 bytes 应该是 ASCII 字符（比如 b"QUJD"）。
-    - 如果传 str：这个 str 里也应该是 ASCII 字符（比如 "QUJD"）。
-- `base64.b64encode(bytes) -> bytes`
-
-### datetime
-
-- `timedelta.total_seconds()`
-    返回时间区间包含的总秒数。
 
 ### Numba 性能库
 

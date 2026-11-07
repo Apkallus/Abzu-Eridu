@@ -3,17 +3,23 @@ import re
 
 # 设置已存在的输出目录（不动态构造目录）下的完整文件名字符串，若非完整文件名需额外构造
 file_str = """
-1.o Web 安全 Web Security.md
-2.o 通信拦截 Intercepting Communication.md
-3.o 密码学 Cryptography.md
-4.o 访问控制 Access Control.md
-5.o 逆向工程 Reverse Engineering.md
-6.o 二进制漏洞利用 Binary Exploitation.md
-7.o 综合安全 Integrated Security.md
+1.o 你的第一个程序 Your First Program.md
+2.o 计算机内存 Computer Memory.md
+3.o 栈 The Stack.md
+4.o 细嚼数字 Nibbling on Numbers.md
+5.o 软件内省 Software Introspection.md
+6.o 输出与输入 Output and Input.md
+7.o 控制流 Control Flow.md
+8.o 字节序奇遇 Endian Escapades.md
+9.o 汇编杂集 Assembly Assortment.md
+10.o 再探栈 The Stack, Revisited.md
+11.o 数字即字符串 Numbers as Strings.md
+12.o 调试复习 Debugging Refresher.md
+13.o 构建 Web 服务器 Building a Web Server.md
 """
 
 # 设置目录路径到原始字符串，
-dir_path_str = r'游乐场\o. pwn.college\2.1 Intro to Cybersecurity'
+dir_path_str = r'游乐场\o. pwn.college\1.3 Computing 101'
 
 # 通常输入已为完整文件名，若构造文件名，每次任务设置独特格式
 def file_name_builder(file_list):

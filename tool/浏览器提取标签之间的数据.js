@@ -72,7 +72,8 @@ function do_extract(selector_start, selector_end){
 */
 const mod = {
   // man7 从 name 到脚注分割线
-  "man7":['#NAME', '.footline']
+  "man7": ['#NAME', '.footline'],
+  "temp": ['', '']
 };
 
 cur_mod = mod["man7"];

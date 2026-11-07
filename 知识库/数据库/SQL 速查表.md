@@ -239,7 +239,7 @@ SELECT schema_name FROM information_schema.schemata
 - MySQL 	
     `SUBSTRING('foobar', 4, 2) `
 - sqlite
-    `SUBSTR()`
+    `SUBSTR(some_column, start, length)`
 
 ## 字符转 ASCII 数字
 
@@ -376,5 +376,5 @@ SELECT schema_name FROM information_schema.schemata
     SELECT '124' || (SELECT 'abc')
     ```
 
-- 使用 `LIKE '*admin*'` 宽泛搜索可能的目标
+- 使用 `LIKE '%admin%'` 宽泛搜索可能的目标
 

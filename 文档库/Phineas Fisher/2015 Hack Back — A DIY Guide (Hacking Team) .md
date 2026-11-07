@@ -121,17 +121,17 @@ Hacking Team 是一家帮助政府入侵并监视记者、活动人士、政治�
 
 不幸的是，我们的世界是颠倒的。你做坏事会发财，做好事却会坐牢。幸运的是，多亏了 Tor 项目[^19]等人员的辛勤工作，你可以通过采取一些简单的预防措施来避免坐牢：
 
-1) 加密硬盘 [^20]
+1. 加密硬盘 [^20]
 
     > 我猜，当警察来扣押你的电脑时，意味着你已经犯了很多错误，但小心总归更好。
 
-2) 使用所有流量经 Tor 路由的虚拟机
+2. 使用所有流量经 Tor 路由的虚拟机
 
     > 这能实现两件事。第一，你的所有流量都通过 Tor 匿名化。第二，把个人生活和黑客活动放在不同电脑上，有助于避免意外混淆两者。
 
     > 你可以使用 Whonix [^21]、Tails [^22]、Qubes TorVM [^23] 等项目，或者自定义方案[^24]。这里[^25]有一份详细比较。
 
-3) （可选）不要直接连接 Tor
+3. （可选）不要直接连接 Tor
 
     > Tor 并非万灵药。他们可以把你在连接 Tor 的时间与你的黑客代号活跃的时间进行关联。此外，也曾出现过针对 Tor 的成功攻击[^26]。你可以使用别人的 Wi-Fi 连接 Tor。Wifislax [^27] 是一个 Linux 发行版，包含大量破解 Wi-Fi 的工具。另一种选择是在 Tor 之前连接 VPN 或桥接节点[^28]，但这样安全性较低，因为他们仍可将黑客的活动与你家的互联网活动关联起来（这曾被用作对 Jeremy Hammond 不利的证据[^29]）。
 
@@ -141,15 +141,15 @@ Hacking Team 是一家帮助政府入侵并监视记者、活动人士、政治�
 
 我不会直接从 Tor 出口节点发起黑客攻击。它们在黑名单上，速度慢，而且无法接收回连。Tor 在我连接用于黑客活动的基础设施时保护我的匿名性，这些基础设施包括：
 
-1) 域名
+1. 域名
 
     > 用于 `C&C` 地址，以及用于保证出网的 `DNS` 隧道。
 
-2) 稳定服务器
+2. 稳定服务器
 
     > 用作 `C&C` 服务器、接收回连 shell、发起攻击以及存放战利品。
 
-3) 被攻陷的服务器
+3. 被攻陷的服务器
 
     > 用作跳板，以隐藏稳定服务器的 IP 地址；也用于在不想经过跳板时获得快速连接，例如扫描端口、扫描整个互联网、用 `sqli` 下载数据库等。
 
@@ -169,15 +169,15 @@ Hacking Team 是一家帮助政府入侵并监视记者、活动人士、政治�
 
 一些工具和技术包括：
 
-1) Google
+1. Google
 
     > 通过几个精心选择的搜索查询，可以找到很多有趣的东西。例如 DPR 的身份[^30]。Google hacking 的圣经是《Google Hacking for Penetration Testers》一书。你可以在[^31]找到一份西班牙语简短摘要。
 
-2) 子域名枚举
+2. 子域名枚举
 
     > 通常，公司的主网站由第三方托管，而借助 `mx.company.com` 或 `ns1.company.com` 之类的子域名，你会找到公司实际的 IP 范围。此外，有时“隐藏”子域名中会存在本不应暴露的东西。用于发现域名和子域名的有用工具包括 `fierce` [^32]、`theHarvester` [^33] 和 `recon-ng` [^34]。
 
-3) Whois 查询与反向查询
+3. Whois 查询与反向查询
 
     > 利用公司某个域名或 IP 范围的 whois 信息进行反向查询，可以找到其他域名和 IP 范围。据我所知，除了 Google“hack”之外，没有免费的反向查询方式：
 
@@ -186,7 +186,7 @@ Hacking Team 是一家帮助政府入侵并监视记者、活动人士、政治�
     “via della moscova 13” site:domaintools.com
     ```
 
-4) 端口扫描与指纹识别
+4. 端口扫描与指纹识别
 
     > 与其他技术不同，这会与公司的服务器通信。我把它放在这一节，是因为它不是攻击，只是信息收集。公司的 IDS 可能会产生警报，但你不必担心，因为整个互联网一直在被扫描。
 
@@ -196,23 +196,23 @@ Hacking Team 是一家帮助政府入侵并监视记者、活动人士、政治�
 
 对于社会工程，掌握员工信息、他们的角色、联系方式、操作系统、浏览器、插件、软件等很有用。一些资源包括：
 
-1) Google
+1. Google
 
     > 在这里，它同样是最有用的工具。
 
-2) theHarvester 与 recon-ng
+2. theHarvester 与 recon-ng
 
     > 我在上一节已经提到过它们，但它们还有更多功能。它们可以快速、自动地找到大量信息。值得阅读它们的全部文档。
 
-3) LinkedIn
+3. LinkedIn
 
     > 在这里可以找到大量关于员工的信息。公司的招聘人员最有可能接受你的连接请求。
 
-4) Data.com
+4. Data.com
 
     > 以前叫 `jigsaw`。他们拥有许多员工的联系信息。
 
-5) 文件元数据
+5. 文件元数据
 
     > 公司已发布文件的元数据中，可以找到大量关于员工及其系统的信息。用于在公司网站上查找文件并提取元数据的有用工具是 `metagoofil` [^40] 和 `FOCA` [^41]。
 
@@ -245,31 +245,31 @@ Hacking Team 暴露在互联网上的东西非常少。例如，与 Gamma Group 
 
 我准备的后渗透工具包括：
 
-1) busybox
+1. busybox
 
     > 用于提供系统缺少的所有标准 Unix 工具。
 
-2) nmap
+2. nmap
 
     > 用于扫描并指纹识别 Hacking Team 的内部网络。
 
-3) Responder.py
+3. Responder.py
 
     > 当你已能访问内部网络但没有域用户时，攻击 Windows 网络最有用的工具。
 
-4) Python
+4. Python
 
     > 用于执行 `Responder.py`。
 
-5) tcpdump
+5. tcpdump
 
     > 用于嗅探流量。
 
-6) dsniff
+6. dsniff
 
     > 用于从 `ftp` 等明文协议中嗅探密码，以及用于 `arpspoofing`。我想使用 Hacking Team 自己的 ALoR 和 NaGA 编写的 `ettercap`，但很难为该系统的环境编译它。
 
-7) socat
+7. socat
 
     > 用于获得带 `pty` 的舒适 shell：
 
@@ -281,15 +281,15 @@ Hacking Team 暴露在互联网上的东西非常少。例如，与 Gamma Group 
 
     > 它还有更多用途，是网络工具中的瑞士军刀。参见其文档的示例部分。
 
-8) screen
+8. screen
 
     > 和带 `pty` 的 shell 一样，它并非真的必要，但我想在 Hacking Team 的网络里找到回家的感觉。
 
-9) SOCKS 代理服务器
+9. SOCKS 代理服务器
 
     > 配合 `proxychains` 使用，以便从任何程序访问他们的本地网络。
 
-10) tgcd
+10. tgcd
 
     > 用于通过防火墙转发端口，例如为 `SOCKS` 服务器转发。
 
@@ -472,45 +472,45 @@ proxychains smbclient ‘//192.168.1.230/FAE DiskStation’ \
 
 #### 远程移动：
 
-1) psexec
+1. psexec
 
     > Windows 上久经考验的横向移动方法。你可以使用 `psexec` [^76]、`winexe` [^77]、metasploit 的 `psexec_psh` [^78]、Powershell Empire 的 `invoke_psexec` [^79]，或 Windows 内置命令 `sc` [^80]。对于 metasploit 模块、Powershell Empire 和 `pth-winexe` [^81]，你只需要哈希，不需要密码。它是最通用的方法（适用于任何开放 `445` 端口的 Windows 计算机），但也是最不隐蔽的。事件日志中会出现类型 `7045`“Service Control Manager”事件。根据我的经验，黑客攻击期间从未有人注意到，但它能帮助调查人员事后拼凑出黑客做了什么。
 
-2) WMI
+2. WMI
 
     > 最隐蔽的方法。`WMI` 服务在所有 Windows 计算机上都已启用，但除服务器外，防火墙默认阻止它。你可以使用 `wmiexec.py` [^82]、`pth-wmis` [^83]（这里有 `wmiexec` 和 `pth-wmis` 的演示[^84]）、Powershell Empire 的 `invoke_wmi` [^85]，或 Windows 内置的 `wmic` [^86]。除 `wmic` 外，都只需要哈希。
 
-3) PSRemoting [^87]
+3. PSRemoting [^87]
 
     > 它默认禁用，我不建议启用新协议。但是，如果系统管理员已经启用了它，那就非常方便，尤其是如果你所有事情都用 PowerShell（而且你几乎应该所有事情都用 PowerShell；随着 PowerShell 5 和 Windows 10，情况会改变[^88]，但目前 PowerShell 让一切在 `RAM` 中完成、规避杀软并留下很小足迹变得很容易）。
 
-4) 计划任务
+4. 计划任务
 
     > 你可以用 `at` 和 `schtasks` [^80] 执行远程程序。它适用于你可以使用 `psexec` 的相同场景，而且也会留下众所周知的足迹[^89]。
 
-5) GPO
+5. GPO
 
     > 如果所有这些协议都被禁用或被防火墙阻止，一旦你成为域管理员，就可以使用 `GPO` 给用户登录脚本、安装 `msi`、执行计划任务[^13]，或者像我们将在 Mauro Romeo（Hacking Team 的系统管理员之一）的计算机上看到的那样，使用 `GPO` 启用 `WMI` 并打开防火墙。
 
 #### “就地”移动：
 
-1) 窃取令牌
+1. 窃取令牌
 
     > 一旦你在某台计算机上拥有管理员权限，就可以使用其他用户的令牌访问域中的资源。两个做到这一点的工具是 `incognito` [^89] 和 `mimikatz` 的 `token::*` 命令[^90]。
 
-2) MS14-068
+2. MS14-068
 
     > 你可以利用 Kerberos 中的验证 bug 生成域管理员票据[^91] [^92] [^93]。
 
-3) Pass the Hash
+3. Pass the Hash
 
     > 如果你有用户的哈希，但该用户未登录，可以使用 `sekurlsa::pth` [^90] 获取该用户的票据。
 
-4) 进程注入
+4. 进程注入
 
     > 任何 RAT 都可以把自己注入其他进程。例如 meterpreter 和 `pupy` [^94] 中的 `migrate` 命令，或 Powershell Empire 中的 `psinject` [^95] 命令。你可以注入到拥有你所需令牌的进程中。
 
-5) runas
+5. runas
 
     > 这有时非常有用，因为它不需要管理员权限。该命令是 Windows 的一部分，但如果你没有 GUI，可以使用 PowerShell [^96]。
 
@@ -522,7 +522,7 @@ proxychains smbclient ‘//192.168.1.230/FAE DiskStation’ \
 
 如今理解 Windows 网络的最佳工具是 `Powerview` [^101]。值得阅读其作者写的所有内容[^102]，尤其是[^103]、[^104]、[^105]和[^106]。PowerShell 本身也相当强大[^107]。由于仍有许多没有 PowerShell 的 Windows 2000 和 2003 服务器，你还必须学习老派方法[^108]，使用 `netview.exe` [^109] 或 Windows 内置的 `net view` 等程序。其他我喜欢的技术包括：
 
-1) 下载文件名列表
+1. 下载文件名列表
 
     > 使用域管理员账户，你可以用 `powerview` 下载网络中所有文件名的列表：
 
@@ -534,19 +534,19 @@ proxychains smbclient ‘//192.168.1.230/FAE DiskStation’ \
 
     > 之后，你可以闲暇时阅读它，并选择要下载哪些文件。
 
-2) 阅读邮件
+2. 阅读邮件
 
     > 正如我们已经看到的，你可以用 PowerShell 下载邮件，其中有很多有用信息。
 
-3) 阅读 SharePoint
+3. 阅读 SharePoint
 
     > 这是许多企业存储大量重要信息的另一个地方。它也可以用 PowerShell 下载[^110]。
 
-4) Active Directory [^111]
+4. Active Directory [^111]
 
     > 它包含大量关于用户和计算机的有用信息。即使不是域管理员，你也可以用 `powerview` 和其他工具[^112]获取很多信息。获得域管理员权限后，你应该用 `csvde` 或其他工具导出所有 AD 信息。
 
-5) 监视员工
+5. 监视员工
 
     > 我最喜欢的爱好之一是猎取系统管理员。监视 Christian Pozzi（Hacking Team 的系统管理员之一）让我访问了一台 Nagios 服务器，而这又让我访问了 `rete sviluppo`（包含 RCS 源代码的开发网络）。简单组合 PowerSploit 的 `Get-Keystrokes` 和 `Get-TimedScreenshot` [^113]、nishang 的 `Do-Exfiltration` [^114] 以及 `GPO`，你就可以监视任何员工，甚至整个域。
 
