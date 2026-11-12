@@ -104,6 +104,33 @@ class int(x, base=10)
 1337
 ```
 
+## all() —— 批量布尔运算
+
+```py
+all(iterable, /)
+```
+
+如果 `iterable` 的所有元素均为真值（或可迭代对象为空）则返回 `True`。等价于:
+
+```py
+def all(iterable):
+    for element in iterable:
+        if not element:
+            return False
+    return True
+```
+
+## iter() - 返回一个迭代器
+
+```py
+iter(iterable, /)
+iter(callable, sentinel, /)
+```
+
+返回一个 `iterator` 对象。
+- 若没有提供第二个参数，则该单一参数必须是一个支持 `iterable` 协议（即实现了 `__iter__()` 方法）的多项集对象，或者必须支持序列协议（即实现了以从 0 开始的整数参数调用的 `__getitem__()` 方法）。
+- 如果提供了第二个参数 `sentinel`，则第一个参数必须是一个可调用对象。 在这种情况下创建的迭代器会在每次调用其 `__next__()` 方法时，无参数地调用该*可调用对象*
+
 ## next()
 
 ```py
@@ -208,3 +235,12 @@ isinstance(object, classinfo, /)
 - 如果 `classinfo` 是由类型对象结成的元组 (或是由其他此类元组递归生成) 或者是多个类型的 `union` 类型，则如果 `object` 是其中任一类型的实例时将会返回 `True`。
 - 如果 `classinfo` 不是一个类型或类型元组及此类元组，则会引发 `TypeError` 异常。
 - 如果之前的检查成功执行则可能不会为无效的类型引发 `TypeError`
+
+
+## round()
+
+```py
+round(number, ndigits=None)
+```
+
+返回 `number` 舍入到小数点后 `ndigits` 位精度的值。如果 `ndigits` 被省略或为 `None`，则返回最接近输入值的整数。

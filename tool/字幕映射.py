@@ -100,13 +100,9 @@ if test:
     mid = mid_test
 
 """
-1
-00:00:00,160 --> 00:00:04,040
-all right hey folks in this video we're
-
-2
-00:00:02,440 --> 00:00:05,879
-going to be continuing talking about
+SEG1 EN1-4
+好的，大家好。本视频继续讨论访问控制，
+具体来说，将深入探讨如何建模访问控制。
 """
 
 @dataclass
@@ -116,17 +112,20 @@ class mid_obj:
     en_seg_end: str
     text: str
 
-
 # re_pattern_str = r'\[SEG (?P<cn_seg>\d+)\] EN (?P<en_seg_start>\d+)-(?P<en_seg_end>\d+)\n(?P<text>.*?)(?=\n\n|\Z)'
-re_pattern_str = r'\[SEG (?P<cn_seg>\d+)\] EN (?P<en_seg_start>\d+)-(?P<en_seg_end>\d+)\n(?P<text>.*?)(?:\n\n|\Z)'
+re_pattern_str = r'SEG(?P<cn_seg>\d+) EN(?P<en_seg_start>\d+)-(?P<en_seg_end>\d+)\n(?P<text>.*?)(?:\n\n|\Z)'
 mid_list = seg_grep_re(re_pattern_str, re.DOTALL, mid, mid_obj)
 print("\n>>> mid 解析 >>>")
 for e in mid_list[:2]: print(e)
 
 """
-[SEG 1] EN 1-4
-好的，大家好。本视频继续讨论访问控制，
-具体来说，将深入探讨如何建模访问控制。
+1
+00:00:00,160 --> 00:00:04,040
+all right hey folks in this video we're
+
+2
+00:00:02,440 --> 00:00:05,879
+going to be continuing talking about
 """
 
 @dataclass

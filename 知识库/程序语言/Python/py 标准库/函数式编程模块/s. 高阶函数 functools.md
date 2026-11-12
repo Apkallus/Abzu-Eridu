@@ -6,6 +6,40 @@ https://docs.python.org/zh-cn/3/library/functools.html
 
 ## 方法
 
+### `@functools.cache()`
+
+```py
+@functools.cache(user_function)
+```
+
+简单轻量级未绑定函数缓存。有时称为 `"memoize"`.
+
+返回值与 `lru_cache(maxsize=None)` 相同，创建一个查找函数参数的字典的简单包装器。 因为它不需要清除旧值，所以比带有大小限制的 `@lru_cache` 更小也更快。
+
+```py
+@cache
+def factorial(n):
+    return n * factorial(n-1) if n else 1
+```
+
+### @functools.lru_cache() —— 自动缓存
+
+```py
+@functools.lru_cache(user_function)
+@functools.lru_cache(maxsize=128, typed=False)
+```
+
+一个为函数提供缓存功能的装饰器，缓存 `maxsize` 组传入参数，在下次以相同参数调用时直接返回上一次的结果。用以节约高开销或 I/O 函数的调用时间。
+
+由于使用字典来缓存结果，因此传给该函数的位置和关键字参数必须为 `hashable`。
+
+如果 `maxsize` 设为 `None`，LRU 特性将被禁用且缓存可无限增长。
+> 即，不使用缓存算法，直接保存。用于数量固定而无需缓存算法，进一步提高性能
+
+一般来说，LRU 缓存只应在你需要重复使用先前计算的值时使用。
+
+被包装的函数会带有一个 `cache_info()` 函数，它返回一个缓存调试参数对象 `named tuple` 以显示 `hits`、 `misses`、 `maxsize` 和 `currsize`。
+
 ### 🛠️ `functools.partial()` —— 部分设置对象
 
 ```py
@@ -71,3 +105,5 @@ def _(host="127.0.0.1", port=1337, *args, **kwargs):
     关键字参数字典，在调用 `partial` 对象时会自动合并并提供给底层函数。
 
 `partial` 对象与 [函数对象] 的类似之处在于它们都是可调用、可弱引用并可具有属性的。 但两者也存在一些重要的区别。 例如，[`__name__`] 和[`__doc__`] 属性不会被自动创建。
+
+

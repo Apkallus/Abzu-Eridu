@@ -1,3 +1,8 @@
+case $- in
+    *i*) ;; # 交互式 shell，继续
+    *) return ;; # 非交互式 shell，返回
+esac
+
 # 设置 set 命令的前缀
 PS4='${BASH_SOURCE} >>> '
 
@@ -25,13 +30,15 @@ else
     # 创建标记文件
     touch $BASHRC_FLAG_PATH
 
-    # 清空当前复制目录并新建
     rm --recursive --force "$MY_COPY_DIR"
-    mkdir --parents "$MY_COPY_DIR"
+    ln -sfn $CHALLENGE_DIR $MY_COPY_DIR
+    # # 清空当前复制目录并新建
+    
+    # mkdir --parents "$MY_COPY_DIR"
 
-    # 在复制目录下，递归创建挑战目录的符号链接
-    # VSCode 中打开 home 即访问挑战目录文件
-    cp --recursive --symbolic-link $CHALLENGE_DIR ${MY_COPY_DIR}
+    # # 在复制目录下，递归创建挑战目录的符号链接
+    # # VSCode 中打开 home 即访问挑战目录文件
+    # cp --recursive --symbolic-link $CHALLENGE_DIR ${MY_COPY_DIR}
 
     # # 查看挑战目录文件类型，复制 text 型文件
     # # find 得到按行分隔的路径，mapfile 去除换行符存入数组

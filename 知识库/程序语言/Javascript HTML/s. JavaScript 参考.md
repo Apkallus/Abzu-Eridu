@@ -1,6 +1,69 @@
 # JavaScript 参考
 
+## 类
+
+### 构造函数
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Classes/constructor
+
+`constructor` 是一种用于创建和初始化 `class` 对象实例的特殊方法。
+
+```js
+constructor() { /* … */ }
+constructor(argument0) { /* … */ }
+constructor(argument0, argument1) { /* … */ }
+constructor(argument0, argument1, /* …, */ argumentN) { /* … */ }
+```
+
+构造函数，提供使用实例化对象前，必须完成的自定义初始化。
+
+### 静态初始化块
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Classes/Static_initialization_blocks
+
+静态初始化块在 `class` 中声明。它包含在类初始化过程中要求值的语句。
+
+初始化在当前类声明的上下文中进行，并可访问私有状态，这允许类与在同一作用域中声明的其他类或函数共享其私有元素信息
+
+```js
+let getDPrivateField;
+
+class D {
+  #privateField;
+  constructor(v) {
+    this.#privateField = v;
+  }
+  static {
+    getDPrivateField = (d) => d.#privateField;
+  }
+}
+
+console.log(getDPrivateField(new D("私有"))); // '私有'
+```
+
 ## 表达式和运算符
+
+### 条件（三元）运算符
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Conditional_operator
+
+条件（三元）运算符是 JavaScript 唯一使用三个操作数的运算符：一个条件后跟一个问号`?`，如果条件为真值，则执行冒号 `:` 前的表达式；若条件为假值，则执行最后的表达式。该运算符经常当作 `if...else` 语句的简捷形式来使用。
+
+
+```
+condition ? exprIfTrue : exprIfFalse
+```
+
+### in
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/in
+
+如果指定的属性在指定的对象或其原型链中，则 `in` 运算符返回 `true`。
+
+```js
+prop in object
+#prop in object
+```
 
 ### 可选链运算符（?.）
 
@@ -62,6 +125,21 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements
 
 - `debugger` 语句
   调用任何可用的调试功能，例如设置断点。如果没有调试功能可用，则此语句不会产生任何效果。
+
+### throw —— 抛出用户自定义的异常
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/throw
+
+抛出用户自定义的异常。当前函数的执行将停止（`throw` 之后的语句不会被执行），并且控制权将传递给调用堆栈中第一个 `catch` 块。如果调用函数中没有 `catch` 块，则程序将终止。
+
+```js
+throw expression;
+```
+
+```js
+throw error; // 抛出之前定义的值（例如，在 catch 块中）
+throw new Error("Required"); // 抛出一个新的错误对象
+```
 
 ### var —— 声明函数作用域或全局作用域的变量
 
@@ -240,6 +318,16 @@ promise1.then((value) => {
   // Expected output: "Success!"
 });
 
+```
+
+#### Promise.prototype.catch()
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch
+
+`Promise` 实例的 `catch()` 方法用于注册一个在 `promise` 被拒绝时调用的函数。它会立即返回一个等效的 `Promise` 对象，这可以允许你链式调用其他 `promise` 的方法。此方法是 `Promise.prototype.then(undefined, onRejected)` 的一种简写形式。
+
+```js
+catch(onRejected)
 ```
 
 ### Number
@@ -553,6 +641,23 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 - `Error.prototype.cause`
   表示导致当前错误被抛出的原因——通常是另一个错误。
 
+#### Error() 构造函数 —— 创建一个包含错误信息的对象
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Error/Error
+
+```js
+new Error()
+new Error(message)
+new Error(message, options)
+new Error(message, fileName)
+new Error(message, fileName, lineNumber)
+Error()
+Error(message)
+Error(message, options)
+Error(message, fileName)
+Error(message, fileName, lineNumber)
+```
+
 ### Array
 
 #### Array.prototype.forEach()
@@ -560,6 +665,8 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
 
 `forEach()` 方法对数组的每个元素执行一次给定的函数。
+
+> 普通遍历优先使用 `for ... of`
 
 ```js
 forEach(callbackFn)
@@ -601,6 +708,8 @@ console.log([2, , 2].every((x) => x === 2)); // true
 
 #### Array.prototype.push()
 
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/push
+
 `push()` 方法将指定的元素添加到数组的末尾，并返回新的数组长度。
 
 ```js
@@ -609,6 +718,8 @@ push(element0, element1, /* … ,*/ elementN)
 
 #### Array.prototype.join()
 
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/join
+
 `join()` 方法将一个数组（或一个类数组对象）的所有元素连接成一个字符串并返回这个字符串，用逗号或指定的分隔符字符串分隔。
 
 ```js
@@ -616,11 +727,11 @@ join(separator)
 ```
 
 ```js
-const a = ["Wind", "Water", "Fire"];
-a.join(); // 'Wind,Water,Fire'
-a.join(", "); // 'Wind, Water, Fire'
-a.join(" + "); // 'Wind + Water + Fire'
-a.join(""); // 'WindWaterFire'
+const e = ["Wind", "Water", "Fire"];
+console.log(e.join()); // 'Wind,Water,Fire'
+console.log(e.join(", ")); // 'Wind, Water, Fire'
+console.log(e.join(" + ")); // 'Wind + Water + Fire'
+console.log(e.join("")); // 'WindWaterFire'
 ```
 
 #### Array.prototype.map()
@@ -684,6 +795,32 @@ reduce(callbackFn, initialValue)
 - 🛡️ `Object.create()` 防御型静态方法
   以一个现有对象作为原型，创建一个新对象。
 
+#### Object.prototype.constructor
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor
+
+`Object` 实例的 `constructor` 数据属性返回一个引用，指向创建该实例对象的构造函数。注意，此属性的值是对函数本身的引用，而不是一个包含函数名称的字符串。
+
+#### Object.hasOwn()
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn
+
+如果指定的对象自身有指定的属性，则静态方法 `Object.hasOwn()` 返回 `true`。如果属性是继承的或者不存在，该方法返回 `false`。
+
+```js
+Object.hasOwn(obj, prop)
+```
+
+#### Object.prototype.hasOwnProperty()
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty
+
+`hasOwnProperty()` 方法返回一个布尔值，表示对象自有属性（而不是继承来的属性）中是否具有指定的属性。
+
+```js
+hasOwnProperty(prop)
+```
+
 #### 🛡️ `Object.defineProperty()` 
 
 `Object.defineProperty()` 静态方法会直接在一个对象上定义一个新属性，或修改其现有属性，并返回此对象。
@@ -703,8 +840,6 @@ Object.defineProperty(obj, prop, descriptor)
 
 - `descriptor`
     要定义或修改的属性的描述符。
-
-
 
 #### Object.entries()
 
@@ -727,7 +862,6 @@ const res_str = Object.entries(window).map(([key, value]) => `${key}=${value}`).
 ```js
 Object.keys(obj)
 ```
-
 
 #### `Object.prototype.__lookupGetter__()`
 

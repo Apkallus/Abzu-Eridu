@@ -1,6 +1,6 @@
 # VSCode 
 
-- [官网下载](https://code.visualstudio.com/Download)
+[官网下载](https://code.visualstudio.com/Download)
 
 旧版 linux 安装
 
@@ -10,15 +10,30 @@
     sudo snap install --classic code # 安装 vscode
     ```
 
-## 使用
-
-- 终端可移动到标签页
+[文档](https://code.visualstudio.com/docs/)
 
 ## 排障
 
 - 若代码无补全或说明信息，尝试切换语言的解析器
 
 - 若提示无法访问浏览器粘贴板，在浏览器中设置权限或关闭跟踪保护。在搜索栏左侧的盾形图标
+
+- [SSH 远程排障 wiki](https://github.com/microsoft/vscode-remote-release/wiki/Remote-SSH-troubleshooting)
+    ```json
+    // 使用终端模式，每个窗口创建独立连接而不复用
+    "remote.SSH.useLocalServer": false, 
+    ```
+
+## 使用
+
+- 终端可移动到标签页
+- 上方“快速访问”中查找文件
+
+## 查找与替换，搜索
+
+https://code.visualstudio.com/docs/editing/codebasics#_find-and-replace
+
+支持正则表达式匹配，支持捕获组 `(foo)` `$1`
 
 ## 网页版
 
@@ -157,8 +172,8 @@ VSCode扩展
 markdown 预览
 - `Ctrl + V => K`
 
-## 查找与替换，搜索
+## 语言
 
-https://code.visualstudio.com/docs/editing/codebasics#_find-and-replace
+### javascript
 
-支持正则表达式匹配，支持捕获组 `(foo)` `$1`
+[支持 JSDoc](https://code.visualstudio.com/docs/languages/javascript#_jsdoc-support)

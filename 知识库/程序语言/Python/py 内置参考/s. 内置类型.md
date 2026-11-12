@@ -304,8 +304,83 @@ hex(sep, bytes_per_sep=1)
 
 bytes 对象的表示使用字面量格式（`b'...'` 即字节串）。使用 `list(b)` 将 bytes 对象转换为整数列表
 
+## 集合类型 --- set, frozenset
+
+`set` 对象是由互不相同的 “可哈希对象” 对象组成的无序集合。常见用途包括成员检测、去除序列中的重复项，以及计算交集、并集、差集和对称差集等数学运算。
+
+> 大规模集合运算相对遍历 `in` 的提升很小
+> - 设置为类集合时，将代码属性操作转为类集合操作，此时已额外添加新容器
+> - 若类集合的迭代器容器显式转为集合时增加开销。若使用类集合视图进行运算，避免与集合的运算（需显式转为集合容器）
+
+### set 和 frozenset 的实例提供操作
+
+#### `frozenset.difference(*others)`, `set.difference(*others)`, `set - other - ...`
+
+```py
+frozenset.difference(*others)
+set.difference(*others)
+set - other - ...
+```
+
+返回一个新集合，其中包含原集合中在 others 指定的其他集合中不存在的元素。
+
+#### `frozenset.isdisjoint(other, /)`, `set.isdisjoint(other, /)`
+
+```py
+frozenset.isdisjoint(other, /)
+set.isdisjoint(other, /)
+```
+
+如果集合中没有与 `other` 共有的元素则返回 `True`。当且仅当两个集合的交集为空集合时，两者为不相交集合。
+
+### 可用于 set 而不能用于不可变的 frozenset 实例的操作
+
+#### `set.update(*others)`, `set |= other | ...`
+
+```py
+set.update(*others)
+set |= other | ...
+```
+
+更新集合，添加来自 others 中的所有元素。
+
+#### `set.difference_update(*others)`, `set -= other | ...`
+
+```py
+set.difference_update(*others)
+set -= other | ...
+```
+
+更新集合，移除其中也存在于 `others` 中的元素。
+> 更新原集合，返回 None
+
+> 注意运算优先级为常规优先级：`-` 高于 `|`
+
+```pycon
+# 并非从左到右顺序，而是常规优先级
+>>> set([1, 2, 3]) | set([4, 5]) - set([1, 2, 3])
+{1, 2, 3, 4, 5}
+```
+
+#### set.discard()
+
+```py
+set.discard(elem, /)
+```
+
+如果元素 elem 存在于集合中则将其移除。
+
+#### set.pop()
+
+```py
+set.pop()
+```
+
+从集合中移除并返回任意一个元素。如果集合为空则会引发 KeyError。
 
 ## 映射类型 --- dict，frozendict
+
+“映射” 对象将 “可哈希对象” 值映射到任意对象。
 
 ### class dict()
 
@@ -324,3 +399,103 @@ setdefault(key, default=None, /)
 ```
 
 如果字典存在键 `key` ，返回它的值。如果不存在，插入值为 `default` 的键 `key` ，并返回 `default` 
+
+#### `del d[key]`
+
+```py
+del d[key]
+```
+
+将 `d[key]` 从 `d` 中移除。如果映射中不存在 `key` 则会引发 `KeyError`。
+
+#### pop()
+
+```py
+pop(key, /)
+pop(key, default, /)
+```
+
+如果 `key` 存在于字典中则将其移除并返回其值，否则返回 `default`。如果 `default` 未给出且 `key` 不存在于字典中，则会引发 `KeyError`。
+
+
+#### values()
+
+```py
+values()
+```
+
+返回由字典值组成的一个新视图。
+
+### 字典视图对象
+
+由 `dict.keys()`, `dict.values()` 和 `dict.items()` 所返回的对象是 “视图”对象。该对象提供字典条目的一个动态视图，这意味着当字典改变时，视图也会相应改变。
+
+`keys()` 视图/ `items()` 视图，与集合类似因为其 `value`/ `(key, value)` 对是唯一的并且为 `hashable`。
+
+如果 `items()` 视图中的所有 `value` 也都是可哈希的，那么 `items()` 视图就可以与其他集合执行互操作。 （`values()` 视图不会被认为与集合类似因为 `values` 通常不是唯一的）。 
+
+对于与集合类似的视图，可以使用为抽象基类 `collections.abc.Set` 定义的所有操作（例如，`==`, `<` 或 `^` 等）。虽然使用了集合运算符，但与集合类似的视图接受任何可迭代对象作为其操作数，而不像集合那样只接受集合作为输入。
+> 即，虽然 `values()` 并非类集合，但仍作为可迭代对象。从而可与其他集合类视图运算
+
+## 序列类型 --- list, tuple, range
+
+### 通用序列操作
+
+序列 `s` 中的项并不会被拷贝；它们会被多次引用。
+
+```pycon
+>>> lists = [[]] * 3
+>>> lists
+[[], [], []]
+>>> lists[0].append(3)
+>>> lists
+[[3], [3], [3]]
+```
+
+具体的原因在于 `[[]]` 是一个包含了一个空列表的单元素列表，所以 `[[]] * 3` 结果中的三个元素都是对这一个空列表的引用。修改 `lists` 中的任何一个元素实际上都是对这一个空列表的修改。你可以用以下方式创建以不同列表为元素的列表:
+
+```pycon
+>>> lists = [[] for i in range(3)]
+>>> lists[0].append(3)
+>>> lists[1].append(5)
+>>> lists[2].append(7)
+>>> lists
+[[3], [5], [7]]
+```
+
+进一步的解释可以在 FAQ 条目 “如何创建多维列表？” 中查看。
+
+### 不可变序列类型
+
+不可变序列类型普遍实现而可变序列类型未实现的唯一操作就是对 `hash()` 内置函数的支持。
+
+### 可变序列类型
+
+#### 可变序列方法
+
+##### sequence.append()
+
+```py
+sequence.append(value, /)
+```
+
+将 `value` 添加到序列的末尾。 这等价于 `seq[len(seq):len(seq)] = [value]` 的写法。
+
+##### sequence.pop()
+
+```py
+sequence.pop(index=-1, /)
+```
+
+提取位于 `index` 上的条目并从 `sequence` 中将其移除。 在默认情况下，将移除并返回 `sequence` 中的最后一个条目。
+
+
+### 列表
+
+列表是可变序列，通常用于存放同类项目的集合（其中精确的相似程度将根据应用而变化）。
+
+#### class list()
+
+```py
+class list(iterable=(), /)
+```

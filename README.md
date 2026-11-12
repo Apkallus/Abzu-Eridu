@@ -405,11 +405,11 @@ elf
 5. 网络渗透 & 后渗透
 
     1. metasploit 攻击框架系列 
-        - 工具 https://github.com/rapid7/metasploit-framework
-        - 教程 https://www.offsec.com/metasploit-unleashed/introduction/
+        - [工具](https://github.com/rapid7/metasploit-framework) 
+        - [教程](https://www.offsec.com/metasploit-unleashed/introduction/) 
         - 文档 
-            - https://docs.rapid7.com/metasploit/
-            - https://docs.metasploit.com/
+            - [rapid7](https://docs.rapid7.com/metasploit/)
+            - [metasploit](https://docs.metasploit.com/)
         - 图书 `Metasploit: The Penetration Tester’s Guide, 2nd Edition`
             - 无专用靶场，主要使用陈旧的 metasploitable3，除 MSSQL 外无配置说明
             - 内容
@@ -417,9 +417,9 @@ elf
                 - 对渗透测试各阶段进行简要介绍，以及过程中在 MSF 对应的模块与少量额外工具
                 - 略过：10无线
             - 若尝试在某阶段使用 MSF 则结合其他材料进行特定章节阅读
-        - 靶机 https://github.com/rapid7/metasploitable3
+        - [靶机](https://github.com/rapid7/metasploitable3) 
             - 并非开箱即用：陈旧的靶机与设置文档，链接失效，缺失环境设置说明
-        - 模块与漏洞仓库 https://www.rapid7.com/db
+        - [模块与漏洞仓库](https://www.rapid7.com/db) 
 
     2. 《灰帽黑客 第六版》（Gray Hat Hacking）- HARPER
         - 部分实验基于无法使用的云 [lab](https://github.com/GrayHatHacking/GHHv6)
@@ -615,7 +615,7 @@ elf
     - 《OSINT TECHNIQUES ELEVENTH EDITION》- Michael Bazzell  &  Jason Edison 
 
     - 《网络渗透测试的艺术》（The Art of Network Penetration Testing）- Royce Davis 
-        - 对应靶场 https://github.com/R3dy/capsulecorp-pentest
+        - 对应[靶场](https://github.com/R3dy/capsulecorp-pentest) 
 
 
 

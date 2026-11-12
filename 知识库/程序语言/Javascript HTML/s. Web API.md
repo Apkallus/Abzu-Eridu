@@ -448,6 +448,8 @@ after(node1, node2, /* … ,*/ nodeN)
 
 ### Element.remove()
 
+https://developer.mozilla.org/zh-CN/docs/Web/API/Element/remove
+
 把对象从它所属的 DOM 树中删除。
 
 ```js
@@ -463,6 +465,25 @@ element = baseElement.querySelector(selectors);
 ```
 - `element` 和 `baseElement` 是 `element` 对象。
 - `selectors` 是一个 CSS 选择器字符串。
+
+### Element.querySelectorAll()
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/Element/querySelectorAll
+
+返回一个静态（非动态，non-live）的 `NodeList`，它包含所有元素的非动态节点，该元素来自与其匹配指定的 CSS 选择器组的元素。（基础元素本身不包括，即使它匹配。）
+
+```js
+elementList = baseElement.querySelectorAll(selectors);
+```
+
+- `elementList`  
+    一个 non-live 的 `NodeList` 对象。
+
+- `baseElement`  
+    一个元素对象。
+
+- `selectors`  
+    一组 CSS 选择器，使用 `,` 分隔  
 
 ### Element.getAttribute()
 
@@ -526,6 +547,31 @@ appendChild(aChild)
   要追加给父节点（通常为一个元素）的节点。
 
 > 注：若文档尚未加载完成，将产生异常。使用搭配事件监听器 `DOMContentLoaded` 
+
+### Node：cloneNode() 方法
+
+`Node` 接口的 `cloneNode()` 方法会返回调用该方法的节点的一个副本。该方法的参数用于控制是否同时克隆节点中包含的子树。
+
+```js
+cloneNode()
+cloneNode(deep)
+```
+
+- `deep` 可选  
+
+    - `true`，深拷贝：复制节点及其整个子树，包括可能存在于 Text 子节点中的文本
+
+    - `false`，浅拷贝：仅复制节点本身。子树，包括节点包含的任何文本，将不会被复制。
+
+    请注意，deep 对空元素没有影响，例如 `<img>` 和 `<input>` 元素。
+
+返回值
+新的、被克隆的 `Node`。克隆的节点没有父节点，并且在被添加到文档中其他节点之前，不会成为文档的一部分
+
+```js
+let p = document.getElementById("para1");
+let p_prime = p.cloneNode(true);
+```
 
 ## History
 

@@ -2051,6 +2051,46 @@ fc-list [ -vVh ] [ --verbose ] [ -f format | --format format ] [ -q | --quiet ] 
 fc-list | grep 字体名
 ```
 
+## 终端
+
+### tput - 初始化终端、使用其能力或查询 terminfo 数据库
+
+https://man7.org/linux/man-pages/man1/tput.1.html
+
+```
+tput [-v] [-T terminal-type] {cap-code [parameter ...]} ...
+tput [-v] [-T terminal-type] [-x] clear
+tput [-v] [-T terminal-type] init
+tput [-v] [-T terminal-type] reset
+tput [-v] [-T terminal-type] longname
+tput [-v] -S
+tput [-v] -V
+```
+
+`tput` 使用 `terminfo` 库和数据库，使终端特定的能力和信息可供 shell 使用，用于初始化或重置终端，或者报告当前（或指定）终端类型的描述。终端能力通过 `cap-code` 访问。
+
+`terminfo(5)` 详细讨论了终端能力，并给出了标准化 `cap-code` 的完整列表。`user_caps(5)` 介绍了其他广泛使用但非标准的能力。
+
+
+`tput` 作为 `ncurses`（new curses）项目的一部分
+
+> python 的 curses 模块提供 curses 库的接口，匹配 ncurses 的 API
+
+### `infocmp` - 比较或打印 `terminfo` 描述
+
+https://man.archlinux.org/man/infocmp.1m
+
+```sh
+infocmp [-1cCdDeEFgGiIKlLnpqrtTuUVWx] [-A directory] [-B directory] [-Q encoding] [-R subset] [-s key] [-v level] [-w width] [terminal-type ...]
+```
+
+`infocmp` 从 `terminfo` 数据库中的已编译条目报告人类可读的终端类型描述，支持多种可选格式；它也可以比较这些条目，并通过引用其他条目的内容重写某个条目，以替换 `use` 表达式。一个 `terminfo` 条目由一个或多个终端类型标识符、终端类型的人类可读描述，以及描述其编程接口的终端能力列表组成。在所有情况下，程序都会先报告布尔值能力，再报告数值能力，最后报告字符串值能力。
+
+```sh
+# 查看终端能力信息
+infocmp
+```
+
 ## 未分类
 
 ### chsh - 更改登录 shell

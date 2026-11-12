@@ -9,16 +9,53 @@
 </h4>
 
 */
-// 选择模块标题与描述、挑战标题与描述
-const pwn_collenge_mod_content = [
-    "document.querySelector('h1').outerHTML",
-    "document.querySelector('div.container:nth-child(2) > div:nth-child(1)').outerHTML",
+
+/**  
+ * 类属性注解的自定义类型
+ * @typedef {Object} Query
+ * @property {string} element - 元素 css 选择器
+ * @property {string} grep_mod - 提取类型
+ * @property {string[] | undefined} [exclude_list] - 排除元素 css 选择器列表
+ */    
+
+/**  
+ * @typedef {Object} Content
+ * @property {string | undefined} base_element
+ * @property {Query[]} query_list
+ */ 
+
+/** 
+ * 选择模块标题与描述，挑战标题与描述
+ * @type {Content[]}
+ */
+const pwn_college_grep_mod_content = [
     {
-        "base_element": ".accordion-item", 
-        "sub_element": [
-            "base_element.querySelector('h4')?.outerHTML ?? ''",
-            "base_element.querySelector('.embed-responsive')?.outerHTML ?? ''"
-        ],
+        base_element: undefined,
+        query_list: [
+            {
+                element: 'h1', 
+                grep_mod: "outerHTML"
+            },
+            {
+                element: 'div.container:nth-child(2) > div:nth-child(1)',
+                grep_mod: "outerHTML",
+                exclude_list: [".github-edit-link"]
+            }
+        ]
+    },
+    {
+        base_element: ".accordion-item",
+        query_list: [
+            {
+                element: 'h4',
+                grep_mod: "outerHTML"
+            },
+            {
+                element: '.embed-responsive',
+                grep_mod: "outerHTML",
+                exclude_list: [".github-edit-link"]
+            }
+        ]
     },
 ]
 
@@ -44,7 +81,7 @@ Comprehending Commands
 - 数字序号从1开始
 
 */
-const pwn_collenge_mod_title = [
+const pwn_college_grep_mod_title = [
     {
         // 选择所有包含模块名的标签
         "base_element": "h4.card-title", 
@@ -79,66 +116,87 @@ const ost2_course_title = [
 ]
 
 // --------
-/*
+/** 
+ * @param {Node} element
+ * @param {Query} query 
+ */
+function clone_exclude_grep(element, query) {  
+    // 若存在移除项，在克隆元素中移除。若不存在则传递原始元素
+    let target = element;
+    if (query.exclude_list != undefined) {
+        // 创建克隆元素
+        target = element.cloneNode(true);
+        // 批量查询，并移除
+        const selectors = query.exclude_list.join(',');
+        console.log('selectors', selectors);
+        target.querySelectorAll(selectors).forEach(el => el.remove());
+    } 
+    // 提取内容
+    const grep_data = target[query.grep_mod];
+    if (grep_data == undefined) {
+        throw new Error("grep_data undefined", query.grep_mod);
+    }
+    return grep_data;
+}
 
-若仅提取特定内容，例如属性值或文本内容，而非整个元素。只需添加一小段
-"base_element.querySelector('h4').getAttribute('data-challenge-name')",
-"base_element.querySelector('.challenge-description').textContent"
+/** @param {Content[]} content_list */
+function do_task(content_list) {
+    const res_list = [];
+    for (const content of content_list) {
 
-半自动化仅限于此，略有提升的可能改进：
-- 修改为 JSON，设置固定项目例如 `当前元素，当前提取目标，若提取属性则提供属性名`
-    ```
-    h4, attribute, data-challenge-name
-    .challenge-description, textContent
-    ```
-*/
-function get_content(content_list) {
-    let res_str = '';
-    content_list.forEach(query => {
-        console.log(`cur query: ${query}`)
-        
-        if (typeof(query) == 'string') {
-            // 若为单项，则直接提取
-            console.log('is string')
-            let cur_str = eval(query);
-            console.log(cur_str)
-            res_str += cur_str + '\n';
+        // 选择基准元素列表：文档或自定义元素。格式统一为列表
+        /** @type {Element[] | Document[]} */
+        const base_elements = content.base_element != undefined
+            ? document.querySelectorAll(content.base_element)
+            : [window.document];
 
-        } else {
-            // 若为复合项，则遍历提取
-            console.log('not string')
-            const base_element_list = document.querySelectorAll(query["base_element"]);
-            console.log(base_element_list)
-            
-            // 遍历每个基础元素
-            base_element_list.forEach(base_element => {
-                console.log(base_element)
-                // 遍历查询项，以 base_element 为基准元素，查询本元素或子孙元素
-                query["sub_element"].forEach(sub_element => {
-                    console.log(sub_element)
-                    let cur_str = eval(sub_element);
-                    console.log(res_str);
-                    res_str += cur_str + '\n';
-                });
-            });
+        console.log('base_elements: ', base_elements);
+
+        // 基于基准元素，执行查询
+        for (const base_element of base_elements) {
+            for (const query of content.query_list) {
+                // 查询内容包含：选择元素、提取类型、排除项
+                console.log('query: ', query);
+
+                // 选取元素列表
+                /** @type {NodeList} */
+                const elements = base_element.querySelectorAll(query.element);
+                console.log('elements: ', elements);
+                
+                for (const element of elements) {
+                    console.log('element: ', element);
+                    
+                    // 对元素创建克隆。在克隆中移除排除项，返回剩余克隆内容
+                    const grep_data = clone_exclude_grep(element, query);
+                    console.log('grep_data: ', grep_data);
+                    res_list.push(grep_data);
+                }
+            }
         }
-    });
+    }
+    return res_list;
+}
 
+/** @param {Content[]} content_list */
+function task_main(content_list) {
+
+    const res_list = do_task(content_list);
+    const res_str = res_list.join('\n');
+
+    console.log('点击页面任意位置以复制');
     // 由于浏览器粘贴板写入需用户交互，此处设置一次性的点击事件监听器，点击任意位置即复制到粘贴板
-    document.addEventListener(
-        'click', 
-        (event) => {
-            console.log('get click');
-            navigator.clipboard.writeText(res_str);
+    document.addEventListener('click', (event) => {
+            console.log('得到点击');
+            navigator.clipboard.writeText(res_str)
+                .then(() => console.log("成功复制到剪贴板"))
+                .catch((error) => console.log("复制失败", error));
             event.preventDefault();
         },
-        { 
-            once: true 
-        }
+        { once: true }
     );
 }
 
-const content_list = pwn_collenge_mod_content
-// const content_list = pwn_collenge_mod_title
-// const content_list = ost2_course_title
-get_content(content_list)
+const content_list = pwn_college_grep_mod_content;
+// const content_list = pwn_college_grep_mod_title;
+// const content_list = ost2_course_title;
+task_main(content_list);

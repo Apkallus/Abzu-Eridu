@@ -30,6 +30,18 @@ https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors
 
 CSS 选择器是 CSS 规则中定位并选取特定元素以应用样式的模式。
 
+### `:not()`
+
+`:not()` CSS 伪类用来匹配不符合一组选择器的元素。由于它的作用是防止特定的元素被选中，它也被称为反选伪类（negation pseudo-class）。
+
+`:not()` 伪类可以将一个或多个以逗号分隔的选择器列表作为其参数。选择器中不得包含另一个否定选择器或伪元素。
+
+```css
+:not(<complex-selector-list>) {
+  /* ... */
+}
+```
+
 ### 伪元素
 
 https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/Pseudo-elements

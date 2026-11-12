@@ -1,6 +1,7 @@
 # python
 
-https://docs.python.org
+[文档首页](https://docs.python.org)
+- [Python 指南](https://docs.python.org/zh-cn/3/howto/)
 
 文档 URL 中  
 `https://docs.python.org/zh-cn/3/...`
