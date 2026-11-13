@@ -5,6 +5,9 @@ https://docs.python.org/zh-cn/3.15/library/profiling.sampling.html
 ```sh
 # 使用 cpu 模式，提高采样率，采样时间 60s，使用火焰图
 python -m profiling.sampling run --mode=cpu -r 20khz -d 60 --flamegraph -o a.html testa.py
+
+# 使用 cpu 模式，提高采样率，采样时间 20s，终端文本输出
+python -m profiling.sampling run --mode=cpu -r 10khz -d 20 -o profile.bin testa.py
 ```
 
 其中的 `EMBEDDED_DATA` JSON 保存数据
@@ -20,8 +23,30 @@ python -m profiling.sampling run script.py
 python -m profiling.sampling run -m mypackage.module
 ```
 
-## 模式选项
+### replay 命令
 
+replay 命令可将二进制性能分析文件转换为其他输出格式:
+
+```sh
+# Convert binary to pstats (default, prints to stdout)
+python -m profiling.sampling replay profile.bin
+
+# Convert binary to flame graph
+python -m profiling.sampling replay --flamegraph -o output.html profile.bin
+
+# Convert binary to gecko format for Firefox Profiler
+python -m profiling.sampling replay --gecko -o profile.json profile.bin
+
+# Convert binary to heatmap
+python -m profiling.sampling replay --heatmap -o my_heatmap profile.bin
+```
+
+## 输出选项
+
+- `--pstats`  
+    生成 pstats 统计信息。这是默认行为。当输出到 stdout 时，结果将以文本表格形式呈现；若使用 `-o`，则生成二进制 pstats 文件。
+    > 仅包含代码行号
+    
 - `--flamegraph`  
     生成独立的 HTML 火焰图。
 

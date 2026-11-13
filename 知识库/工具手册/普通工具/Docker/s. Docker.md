@@ -1,7 +1,7 @@
 # docker
 
 `docker run -d -p 127.0.0.1:3000:3000 getting-started`
-[文档](https://docs.docker.com/get-started/workshop/02_our_app/)
+[教程](https://docs.docker.com/get-started/workshop/02_our_app/)
 
 - `docker run`
 	运行容器，并指定镜像的名称

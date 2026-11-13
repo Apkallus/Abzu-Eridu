@@ -29,3 +29,19 @@ tmp_list = [color_list[i:i+step] for i in range(0, color_list_len, step)]
 # 等效调用
 tmp_list = list(batched(color_list, step))
 ```
+
+
+### itertools.starmap()
+
+```py
+itertools.starmap(function, iterable)
+```
+
+创建一个迭代器，它使用从 iterable 获取的参数来计算 function。 当参数形参已被“预先 zip”为元组时可代替 map() 来使用。
+
+```py
+def starmap(function, iterable):
+    # starmap(pow, [(2,5), (3,2), (10,3)]) → 32 9 1000
+    for args in iterable:
+        yield function(*args)
+```

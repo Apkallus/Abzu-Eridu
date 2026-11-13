@@ -29,6 +29,8 @@
 2. 设置本地文件夹映射到 `/etc/smartdns`
 
     ```powershell
+    docker container remove --force smartdns
+    docker image pull pymumu/smartdns:latest
     docker run -d `
         --name smartdns `
         --restart=always `
@@ -41,6 +43,9 @@
         -v E:\Abzu-Eridu\.cache\smartdns\datalib:/var/lib/smartdns `
         pymumu/smartdns:latest
     ```
+    1. 拉取最新镜像
+    2. 强制移除运行中的同名容器
+    3. 
     - `-d` 后台运行，`--name 容器名称`
     - `--restart=always` 总是重启
     - 53 dns 查询端口

@@ -1612,23 +1612,6 @@ fold [OPTION]... [FILE]...
 
 ## 文本编辑器
 
-### vim - Vi 增强版，程序员文本编辑器
-
-https://vimhelp.org/
-
-https://github.com/vim/vim/tree/master/runtime/doc
-
-```sh
-vim [options] [file ..]
-vim [options] -
-vim [options] -t tag
-vim [options] -q [errorfile]
-```
-
-vim 是一个向上兼容 Vi 的文本编辑器。它可以用来编辑各种纯文本文件。它特别适用于编辑程序。
-
-- `:!{command}`
-	执行 shell 命令
 
 ## 手册
 
@@ -2090,6 +2073,7 @@ infocmp [-1cCdDeEFgGiIKlLnpqrtTuUVWx] [-A directory] [-B directory] [-Q encoding
 # 查看终端能力信息
 infocmp
 ```
+
 
 ## 未分类
 

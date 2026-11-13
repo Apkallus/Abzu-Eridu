@@ -2,20 +2,22 @@
 
 https://docs.docker.com/reference/cli/docker/
 
-## docker image
+## docker image - 镜像
 
 https://docs.docker.com/reference/cli/docker/image/
 
-### docker image pull —— Download an image from a registry
+### docker image pull —— 下载镜像
+
+https://docs.docker.com/reference/cli/docker/image/pull/
 
 ```sh
 docker image pull [OPTIONS] NAME[:TAG|@DIGEST]
 
-# 别名
+# Aliases
 docker pull
 ```
 
-## docker compose
+## docker compose - 构建
 
 https://docs.docker.com/reference/cli/docker/compose/
 
@@ -95,13 +97,13 @@ $ docker ps -a --filter label=com.docker.compose.hook=pre_start
 | `-v, --volumes` |  | 移除 Compose 文件 `volumes` 部分中声明的命名卷以及附加到容器的匿名卷 |
 
 
-## docker container
-### docker container run
+## docker container - 容器
+
+### docker container run - 运行容器
 
 https://docs.docker.com/reference/cli/docker/container/run/
 
 ```sh
-# Usage	
 docker container run [OPTIONS] IMAGE [COMMAND] [ARG...]
 
 # Aliases
@@ -115,11 +117,26 @@ docker run
 使用 `docker ps -a` 可以查看所有容器的列表，包括已停止的容器。
 
 
-- `-t, --tty`
+参数  
+
+- `-t, --tty`  
   分配伪终端（pseudo-TTY）
-- `-i, --interactive`
+
+- `-i, --interactive`  
   即使未附加也保持标准输入（STDIN）开启
   
+`--name`  
+    为容器指定一个名称 
+
+`--restart`（默认值：`no`）   
+    容器退出时应用的重启策略
+
+`-p, --publish`  
+    将容器的端口发布到宿主机 
+
+`-v, --volume`  
+    绑定挂载一个卷 
+
 
 ### docker container start
 
@@ -135,7 +152,7 @@ docker start
 
 Start one or more stopped containers
 
-### docker container attach
+### docker container attach - 连接终端与容器
 
 ```sh
 # Usage	
@@ -145,4 +162,17 @@ docker container attach [OPTIONS] CONTAINER
 docker attach
 ```
 
-连接终端与容器
+
+
+### docker container rm - 移除一个或多个容器
+
+```sh
+Usage	docker container rm [OPTIONS] CONTAINER [CONTAINER...]
+
+# Aliases
+docker container remove
+docker rm
+```
+
+- `-f, --force`  
+  强制移除运行中的容器

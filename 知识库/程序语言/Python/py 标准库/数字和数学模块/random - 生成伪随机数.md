@@ -27,7 +27,7 @@ random.randint(a, b)
 
 ## 序列用函数
 
-### random.choice(seq)
+### random.choice(seq) - 序列随机取一个元素
 
 ```py
 random.choice(seq)
@@ -35,6 +35,13 @@ random.choice(seq)
 
 从非空序列 `seq` 返回一个随机元素。如果 `seq` 为空，则引发 `IndexError`。
 
+### random.choices() - 批量随机取元素
+
+```py
+random.choices(population, weights=None, *, cum_weights=None, k=1)
+```
+
+从 `population` 中有重复地随机选取元素，返回大小为 `k` 的元素列表。如果 `population` 为空，则引发 `IndexError`.
 
 ## 实值分布
 

@@ -392,6 +392,15 @@ class dict(iterable, /, **kwargs)
 
 返回一个新的字典，基于可选的位置参数和可能为空的关键字参数集来初始化。
 
+#### get()
+
+```py
+get(key, default=None, /)
+```
+
+如果 `key` 存在于字典中则返回 `key` 的值，否则返回 `default`。如果 `default` 未给出则默认为 `None`，因而此方法绝不会引发 `KeyError`。
+
+
 #### setdefault()
 
 ```py
@@ -489,6 +498,12 @@ sequence.pop(index=-1, /)
 
 提取位于 `index` 上的条目并从 `sequence` 中将其移除。 在默认情况下，将移除并返回 `sequence` 中的最后一个条目。
 
+
+##### sequence.clear()
+
+移除 sequence 中的所有条目。这等价于 `del sequence[:]`。
+
+> 重置时使用 `clear()`，而不是创建新的空容器
 
 ### 列表
 
