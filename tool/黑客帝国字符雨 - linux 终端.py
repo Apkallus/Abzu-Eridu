@@ -88,16 +88,16 @@ FULL_CHAR_LIST_IT = random_choice_chunk(FULL_CHAR_LIST, k=256)
 
 # 若提高帧间隔，应当降低跳帧值（低渲染速度下，高跳帧值导致下落缓慢）
 # 帧间隔
-DELTA_TIME = 26
+DELTA_TIME = 32
 # 设置跳帧值（每 N 帧更新一次），越小更新越频繁（快）
 # 此处使用跳帧值的反比设置最大颜色显示次数，更快的头拥有更长的轨迹
 FRAME_SKIPPING_RANGE = range(1, 4) 
-FRAME_SKIPPING_IT = random_choice_chunk(FRAME_SKIPPING_RANGE, k=64)
+FRAME_SKIPPING_IT = random_choice_chunk(FRAME_SKIPPING_RANGE, k=128)
 FRAME_COUNTER_INIT = 1 # 初始帧数
 HIGHLIGHT_SHOW_LIMIT = 1 # 高亮颜色的最大显示次数
 MUT_CHAR = 0.1 # 字符突变几率，转为其他字符
 MAX_HEAD = 2 # 每列最大头部数量
-LAUNCH_RAT = 0.007 # 每列发动几率
+LAUNCH_RAT = 0.006 # 每列发动几率
 CHAR_W = 2 # 全角字符宽度2
 INVIS_NUM = 3 # 不可见颜色数量，位于尾部，仅被头部照亮               
 GLOW_RING_COUNT = 3 # 衰减半径，头部照亮范围
@@ -160,8 +160,9 @@ class element_obj:
     char: str
     color_index: int = 1 # 颜色序列索引
     color_show_count: int = 0 # 每个颜色的显示次数
-    last_frame_char: str = None # 增量更新使用的之前渲染字符
-    last_frame_color: int = None # 增量更新使用的之前渲染颜色
+    # 增量更新字段，可设置为继承并同名覆盖的子类，但仅简单设置为单类的字段
+    last_render_char: str | None = None # 增量更新使用的之前渲染字符
+    last_render_color: int | None = None # 增量更新使用的之前渲染颜色
 
 @dataclass(slots=True)
 class col_obj:
@@ -201,7 +202,7 @@ def as_wide_char(ch):
     # 广义上，宽字符包括 W、F 和 A（在东亚语境下），而窄字符则包括 N、Na、H 和 A（不在东亚语境下）。
     return True if east_asian_width(ch) in WIDE_SET else False
 
-def render_char(stdscr: curses.window, col: col_obj, max_visible_color_index, 
+def do_render(stdscr: curses.window, col: col_obj, max_visible_color_index, 
                 glow_conf_list: list[glow_obj], highlight_index):
     """
     渲染字符
@@ -214,78 +215,87 @@ def render_char(stdscr: curses.window, col: col_obj, max_visible_color_index,
     - 迭代元素视图取字段 -> 对元素视图进行分类集合运算，更多开销
         - 迭代元素直接访问数据类字段
         - 分类集合运算创建多个中间视图，再迭代多个分类视图本身，开销仍超过判断分支减少的收益
+    - 结构清晰度 > 性能调整
     """
 
     for e in col.char_dict.values(): 
         # 记录字符与当前颜色索引
-        cur_char = e.char
-        cur_color_index = e.color_index
+        cur_render_char = e.char
+        cur_render_color = e.color_index
         
         # 若字符作为非高亮索引的余烬
-        if cur_color_index > highlight_index:
+        if cur_render_color > highlight_index:
 
             # 若被头部照亮，且辐射亮度相对更亮，则设置为辐射亮度
             for glow_config in glow_conf_list:
-                if e.y_x in glow_config.coverage_set and glow_config.bright < cur_color_index:
-                    cur_color_index = glow_config.bright
+                if e.y_x in glow_config.coverage_set and glow_config.bright < cur_render_color:
+                    cur_render_color = glow_config.bright
                     break
 
         # 设置属性为常数，之后 | 运算。合并颜色可能被中间跳过，放在最后
         attr = 0
 
-        # 若字符为高亮索引，设置粗体
-        if cur_color_index <= highlight_index:
-            attr |= curses.A_BOLD
-
-        # 若字符为隐藏颜色序列
-        # 全量重绘时，仅绘制显示的字符：不设置隐藏字符，以减少 addch 调用
-        # 增量更新时，设置一次隐藏属性：不对上一帧的隐藏状态设置字符，以减少 addch/addstr 调用
-        elif cur_color_index > max_visible_color_index:
-            # 全量重绘时，跳过
-            if not INCREMENTAL:
-                continue 
-
-            # 增量更新时，若上一帧即为隐藏，跳过
-            elif e.last_frame_color is not None and e.last_frame_color > max_visible_color_index:
-                continue
-
-            # 增量更新时，第一次则设置隐藏属性
-            attr |= curses.A_INVIS 
-
-        # 此处汇集高亮、增量无法跳过的隐藏，增量之后或可跳过高亮、余烬
-        # 增量更新时，若字符与可见颜色未变化，则跳过。此处由颜色隐含基于其设置的属性
+        # 增量更新与全量渲染差异
         if INCREMENTAL:
 
+            # 增量更新时，若字符与可见颜色未变化，则跳过。此处由颜色隐含基于其设置的属性
             # 若字符、颜色在上一帧存在且未变化，跳过
-            if e.last_frame_char is not None and cur_char == e.last_frame_char and e.last_frame_color == cur_color_index:
+            if e.last_render_color is not None and cur_render_char == e.last_render_char and e.last_render_color == cur_render_color:
                 continue
 
-            # 保存元素最终渲染的字符与颜色到增量专用的陈旧状态字段
-            e.last_frame_char, e.last_frame_color = cur_char, cur_color_index
+            # 若字符为隐藏颜色序列
+            # 增量更新时，设置一次补丁空格：不对上一帧的隐藏状态设置字符，以减少 addch/addstr 调用
+            if cur_render_color > max_visible_color_index:
 
-            # 增量需额外添加对全角/半角转换（全量直接擦除所有）：
+                # 增量更新时，若上一帧渲染为隐藏，跳过。实际字符变化时，由于隐藏颜色索引仍跳过
+                if e.last_render_char == SPACE:
+                    continue
+
+                # 增量更新时，第一次则设置隐藏属性或空格
+                cur_render_char = SPACE
+            
+            # 若字符为高亮索引，设置粗体
+            elif cur_render_color <= highlight_index:
+                attr |= curses.A_BOLD
+
+            # 此处汇集增量无法跳过隐藏、高亮、余烬
+            
+            # 保存元素最终渲染的字符、颜色，到增量专用的陈旧状态字段
+            e.last_render_char, e.last_render_color = cur_render_char, cur_render_color
+
+            # 增量需额外添加全角/半角的转换（全量直接擦除所有）：
             # 若当前字符为半角，则添加半角空格，并且作为字符串写入
-            if not as_wide_char(cur_char):
-                attr |= _color_pair(cur_color_index)
-                wide_str = cur_char + '\u0020'
+            if not as_wide_char(cur_render_char):
+                attr |= _color_pair(cur_render_color)
+                wide_str = cur_render_char + '\u0020'
                 stdscr.addstr(*e.y_x, wide_str, attr)
                 continue
         
-        attr |= _color_pair(cur_color_index)
-        stdscr.addch(*e.y_x, cur_char, attr)
+            attr |= _color_pair(cur_render_color)
+            stdscr.addch(*e.y_x, cur_render_char, attr)
+
+        # 全量渲染
+        else:
+
+            # 若字符为隐藏颜色序列
+            # 全量重绘时，仅绘制显示的字符：不设置隐藏字符，以减少 addch 调用
+            if cur_render_color > max_visible_color_index:
+                continue 
+            
+            # 若字符为高亮索引，设置粗体
+            elif cur_render_color <= highlight_index:
+                attr |= curses.A_BOLD
+
+            # 此处汇集被渲染的高亮、余烬
+            attr |= _color_pair(cur_render_color)
+            stdscr.addch(*e.y_x, cur_render_char, attr)
 
 def render_rm_patch(stdscr: curses.window, col: col_obj): 
-    # 若移除字符位置并非新头部，则设置为隐藏
+    # 若移除字符位置并非新头部，则设置空格补丁
     header_pos_view = col.header_dict.values()
     for rm_element in col.rm_char_list:
         if rm_element.y_x not in header_pos_view:
-
-            # 若为半角，则设置全角空格后隐藏。否则仅设置隐藏
-            cur_char = rm_element.char
-            if not as_wide_char(cur_char):
-                cur_char = SPACE
-
-            stdscr.addch(*rm_element.y_x, cur_char, curses.A_INVIS)
+            stdscr.addch(*rm_element.y_x, SPACE, 0)
 
     # 补丁完成后，清空移除字符列表
     col.rm_char_list.clear()
@@ -504,7 +514,6 @@ def main(stdscr: curses.window):
         return col_list
     
     col_list = init_col()
-
     max_y = curses.LINES - 1
 
     while True:
@@ -524,10 +533,9 @@ def main(stdscr: curses.window):
 
             # 重置，或修改为继承之前列再添加/移除
             col_list = init_col()
-            
             max_y = curses.LINES - 1
 
-        # 全量重绘时清空屏幕
+        # 全量重绘时每帧清空屏幕
         if not INCREMENTAL:
             stdscr.erase() 
 
@@ -562,9 +570,9 @@ def main(stdscr: curses.window):
 
             # 若列存在任何字符，则渲染
             if len(col.char_dict) > 0: 
-                render_char(stdscr, col, max_visible_color_index, glow_conf_list, highlight_index)
+                do_render(stdscr, col, max_visible_color_index, glow_conf_list, highlight_index)
 
-            # 对应增量模式，若存在任何移除字符，则补丁移除。由于增量列表每次清空，省略模式判断
+            # 对于增量模式，若存在任何移除字符，则补丁移除。每次清空移除列表，省略模式判断
             if len(col.rm_char_list) > 0:
                 render_rm_patch(stdscr, col)
 

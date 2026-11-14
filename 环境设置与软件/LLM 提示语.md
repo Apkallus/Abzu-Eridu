@@ -185,15 +185,18 @@ github 仓库：
 - 编程语言、模板框架
     - [python](https://github.com/python/cpython)
     - [c++](https://github.com/isocpp/CppCoreGuidelines)
+    - [TypeScript](https://github.com/microsoft/TypeScript)
 
     - [flask - python](https://github.com/pallets/flask)
     - [react - JavaScript](https://github.com/react/react)
+    - [node - JavaScript](https://github.com/nodejs/node)
 
 - 服务器
     - [nginx](https://github.com/nginx/nginx)
     - [apache](https://github.com/apache/httpd)
+    - [caddy](https://github.com/caddyserver/caddy)
 
-- 应用
+- 虚拟化
     - [容器 docker](https://github.com/docker/docs)
 
 - 数据库
@@ -217,6 +220,10 @@ github 仓库：
     - [扫描器 nmap](https://github.com/nmap/nmap)
     - [密码 hashcat](https://github.com/hashcat/hashcat)
     - [网络连接](https://github.com/curl/curl)
+    - [代码编辑器 vscode](https://github.com/microsoft/vscode)
+
+- 语言模型
+    - [DeepSeek V3](https://github.com/deepseek-ai/DeepSeek-V3)
 
 - 综合文档与教程仓库 
     - [Web MDN](https://github.com/mdn/content)
@@ -758,7 +765,7 @@ SEG6 EN25-29
 ``````
 
 
-##### 时间轴阶段
+##### ~~时间轴阶段~~ 使用本地代码
 
 ``````md
 

@@ -42,3 +42,28 @@ class Employee(NamedTuple):
 ```py
 Employee = collections.namedtuple('Employee', ['name', 'id'])
 ```
+
+### class typing.Protocol()
+
+```py
+class typing.Protocol(Generic)
+```
+
+协议类的基类。
+
+这些类主要与静态类型检查器搭配使用，用来识别结构子类型（静态鸭子类型），例如：
+
+```py
+class Proto(Protocol):
+    def meth(self) -> int:
+        ...
+        
+class C:
+    def meth(self) -> int:
+        return 0
+
+def func(x: Proto) -> int:
+    return x.meth()
+
+func(C())  # 通过静态类型检查
+```
