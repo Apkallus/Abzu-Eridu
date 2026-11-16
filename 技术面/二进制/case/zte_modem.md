@@ -1,11 +1,8 @@
-工具
-- https://github.com/douniwan5788/zte_modem_tools#
-
 文章
 - https://blog.nkxingxh.top/archives/310/
 - https://noviachen.github.io/posts/e320a5fc.html
 
-使用 zte_modem_tools 以工厂模式临时开启光猫 telnet 端口，同时获取 telnet 临时管理权限用户名与密码
+使用 [zte_modem_tools](https://github.com/douniwan5788/zte_modem_tools) 以工厂模式临时开启光猫 telnet 端口，同时获取 telnet 临时管理权限用户名与密码
 
 使用获取的临时 root 凭证访问光猫 telnet 端点
 - 光猫配置 FTP 目录为根目录，使用 FTP 客户端或 Wget 下载文件
@@ -38,12 +35,17 @@
     reboot
     ```
 
-下载 `db_user_cfg.xml` 并使用 `ztecfg.exe` 解密得到 telnet 固定管理权限凭证
+下载 `db_user_cfg.xml` 并使用 [`ztecfg.exe`](https://noviachen.github.io/posts/e320a5fc.html) 解密得到 telnet 固定管理权限凭证
+
+```powershell
+.\ztecfg.exe -d AESCBC -i .\db_user_cfg.xml -o break.cfg
+```
+
+配置文件
 
 ```xml
 <DM name="TS_UName" val="用户名"/>
 <DM name="TS_UPwd" val="密码"/>
 ```
 
-配置文件中
 - `TelnetCfg` 为 telnet 项配置，包含令牌

@@ -1,1 +1,0 @@
-https://www.gnu.org/savannah-checkouts/gnu/coreutils/manual/html_node/index.html

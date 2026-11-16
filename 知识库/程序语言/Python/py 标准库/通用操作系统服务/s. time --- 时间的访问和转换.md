@@ -2,6 +2,11 @@
 
 https://docs.python.org/zh-cn/3.14/library/time.html
 
+```c
+// pytime.h
+typedef int64_t PyTime_t;
+```
+
 ## 函数
 
 - `time.localtime()`
@@ -9,8 +14,7 @@ https://docs.python.org/zh-cn/3.14/library/time.html
 - `time.strftime("%Y-%m-%d %H:%M:%S", 时间元组)`
     格式化时间字符串
 
-
-### ♾️ `time.sleep`
+### `time.sleep`
 
 ```python
 time.sleep(seconds, /)
@@ -39,12 +43,32 @@ time.sleep(seconds, /)
 >
 > 要主动让出 CPU，请指定实时调度策略，并使用 `os.sched_yield()` 代替。
 
-引发一个审计事件 `time.sleep`，参数为 `seconds`。
+### time.monotonic() → float
 
-在 3.5 版本发生变更：即使睡眠被信号中断，该函数现在也会至少睡眠 *seconds*，除非信号处理程序引发异常（参见 [PEP 475](https://peps.python.org/pep-0475/) 了解理由）。
+```py
+time.monotonic() → float
+```
 
-在 3.11 版本发生变更：在 Unix 上，如果可用，现在使用 `clock_nanosleep()` 和 `nanosleep()` 函数。在 Windows 上，现在使用可等待定时器。
+（以小数表示的秒为单位）返回一个单调时钟的值，即不能倒退的时钟。 该时钟不受系统时钟更新的影响。 返回值的参考点未被定义，因此只有两次调用之间的差值才是有效的。
 
-在 3.13 版本发生变更：引发审计事件。
+```c
+PyTime_t t;
+...
+return PyTime_AsSecondsDouble(t);
+```
 
-在 3.15 版本发生变更：接受任何实数，而不仅是整数或浮点数。
+### time.monotonic_ns() → int
+
+```py
+time.monotonic_ns() → int
+```
+
+与 `monotonic()` 相似，但是返回时间为纳秒数。
+
+```c
+PyTime_t t;
+...
+return PyLong_FromInt64(t);
+```
+
+> 整数，性能高于使用浮点转换的 monotonic，且无精度损失。然而 ns 不如 s 直观

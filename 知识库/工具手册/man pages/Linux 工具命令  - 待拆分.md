@@ -165,23 +165,7 @@ uname [OPTION]...
 
 ### 环境
 
-#### env
 
-```sh
-env [OPTION]... [-] [NAME=VALUE]... [COMMAND [ARG]...]
-```
-在环境中将每个 NAME 设置为 VALUE，并运行 COMMAND。
-单独使用等同于 `-i`。
-通过运行不带任何选项或参数（即输入数据）的 env 命令，可以看到当前用户的所有当前环境变量及其值，包括 PATH 变量中的所有目录
-
-- `-i, --ignore-environment`
-	以空环境开始
-	- `env -i PATH=/usr/bin:/bin`
-		在“干净环境”下，确保只从系统目录找到工具链组件
-
-#### set
-
-- 无参数时查看环境变量
 
 #### printenv —— 打印环境变量
 
@@ -191,15 +175,6 @@ printenv [OPTION] [VARIABLE]...
 
 查看特定或全部环境变量
 
-#### which
-
-```sh
-which [options] [--] programname [...]   
-```
-
-`which` 命令模拟 shell 在搜索命令时的行为：按顺序查看 `$PATH` 中的每个目录，并打印找到的第一个与您传入参数同名的文件。
-
-which 接受一个或多个参数。对于它的每个参数，它会向标准输出打印出当这个参数在 shell 提示符下输入时将会被执行的可执行文件的完整路径。它通过在环境变量 PATH 列出的目录中搜索可执行文件或脚本
 
 #### PIPE & PTY
 
@@ -511,15 +486,6 @@ Usage: rabin2 [-AcdeEghHiIjlLMqrRsSUvVxzZ] [-@ at] [-a arch] [-b bits] [-B addr]
 
 ### 文件/目录管理
 
-#### chroot - 使用特殊根目录运行命令或交互式 shell
-
-`chroot [OPTION] NEWROOT [COMMAND [ARG]...]`
-
-运行命令，并将根目录设置为 NEWROOT。
-
-
-
-
 
 #### unlink - 调用unlink函数以删除指定的文件
 
@@ -531,41 +497,6 @@ unlink OPTION
 调用unlink函数以删除指定的FILE。
 
 ### 查找
-
-#### bzip2, bunzip2 bzcat bzip2recover - 压缩或扩展文件
-
-```
-bzip2 [ -cdfkqstvzVL123456789 ] [ filenames ... ]
-bunzip2 [ -fkvsVL ] [ filenames ... ]
-bzcat [ -s ] [ filenames ... ]
-bzip2recover filename
-```
-
-- `-d --decompress`
-	强制解压缩
-- `-z --compress`
-	强制压缩
-- `-c --stdout`
-	压缩或解压缩到标准输出。
-
-#### zip - 打包和压缩（归档）文件
-
-`zip [-aABcdDeEfFghjklLmoqrRSTuvVwXyz!@$] [--longoption ...] [-b path] [-n suffixes] [-t date] [-tt date] [zipfile [file ...]] [-xi list]`
-
-`zip 目标文件.zip 源文件`
-
-- `zip - 源文件`
-	使用单个短横线("-")作为 zip 文件名时，将 zip 文件写入标准输出。
-	此时丢失原始的属主/属组。
-
-- `-X, --no-extra` 
-	不要保存额外的文件属性（OS/2 上的扩展属性、Unix 上的 uid/gid 和文件时间）。
-	使用-X 选项时，zip 会删除所有旧字段，并且只包含 Unicode 和 Zip64 额外字段（目前这两个额外字段不能禁用）。
-
-#### unzip - 解压 zip 归档文件
-
-- `-l` 显示归档文件
-- `-v` 显示归档文件详细信息
 
 
 
@@ -587,50 +518,9 @@ bzip2recover filename
   u : 更新归档文件中的文件
   x : 提取文件并保留完整路径
 
-#### ar - 创建、修改和从存档中提取文件
-
-`ar [--plugin name] [-X32_64] [-]p[mod [relpos] [count]] archive [member...]`
-
-`ar rc 目标归档文件.a 源文件1 源文件2`
-
-- `r`
-	将文件 member...插入存档（带替换）。
-- `c`
-	创建归档。如果您请求更新，指定的归档如果不存在则总是会被创建。但除非您使用这个修饰符预先说明您期望创建它，否则会发出警告。
-- `p`
-	将归档中指定的成员打印到标准输出文件。如果指定了 v 修饰符，则在将成员内容复制到标准输出之前显示成员名称。
-	如果你没有指定成员参数，归档中的所有文件都会被打印。
 
 
-#### cpio - 复制文件到和从归档
 
-在复制模式下，cpio 将文件复制到归档中。它从标准输入读取文件名列表，每行一个文件名，并将归档写入标准输出。
-
-在复制传递模式下，cpio 将文件从一个目录树复制到另一个目录树，而无需实际使用存档。它从标准输入读取要复制的文件列表；目标目录作为非选项参数提供。
-
-- `-o, --create`
-	以复制出模式运行
-- `-i, --extract`
-	在复制输入模式下运行
-- `-v, --verbose`
-	列出处理的文件
-- `-R [user][:.][group], --owner [user][:.][group]`
-	在复制输出和复制传递模式下，将所有创建的文件的所有权设置为指定的用户和/或组。必须提供用户、组或两者。如果省略组但提供了':'或'.'分隔符，则使用给定用户登录组。只有超级用户可以更改文件的所有权。
-
-示例：
-- `ls | cpio -ov > directory.cpio`
-	创建归档文件
-- `cpio -iv -R hacker.hacker < directory.cpio`
-	获取文件目录.cpio 中存档的文件，并设置属为hacker
-
-#### genisoimage - 创建具有可选 Rock Ridge 属性的 ISO9660/Joliet/HFS 文件系统
-
-`genisoimage [options] [-o filename] pathspec [pathspec ...]`
-
-- `-o filename`
-	指定 ISO9660 文件系统映像的输出文件。
-- `-sort`
-	对媒体上的文件位置进行排序。（错误信息泄露文件内容）
 
 #### upx - 打包器
 
@@ -638,21 +528,7 @@ bzip2recover filename
 
 ## 文本 / 文件内容处理
 
-### 文本编辑器
 
-
-
-#### emacs
-
-开源文本编辑器
-
-核心在于内置的 Emacs Lisp (Elisp) 编程语言。用户可以通过编写 Elisp 脚本或安装插件，实现几乎任何功能，包括编程、编译、调试、邮件收发、新闻阅读、文件管理、版本控制甚至浏览网页
-
-#### nano - Nano 的另一个编辑器，一个增强版的免费 Pico 克隆版
-
-`nano [OPTIONS] [[+LINE,COLUMN] FILE]...`
-
-小巧的编辑器
 
 ### 查看 & 选择
 
@@ -663,17 +539,6 @@ bzip2recover filename
 	读取当前进程(/proc/self/)的 network namespace 的“命名空间句柄”符号链接。
 	(Network namespace 是 Linux 的一种隔离机制：每个 netns 拥有自己独立的网络栈视图)
 
-#### split - 将文件分割成多个片段
-
-`split [OPTION]... [INPUT [PREFIX]]`
-
-将 INPUT 固定大小的片段输出到 PREFIXaa、PREFIXab、...；默认大小是 1000 行，默认 PREFIX 是'x'。如果没有 INPUT，或者当 INPUT 是-时，读取标准输入。
-
-- `-l, --lines=NUMBER`
-	每个输出文件包含 NUMBER 行
-	
-- `--filter`：
-	对每个分割后的文件块执行指定的命令。
 
 ### 过滤 & 匹配
 
@@ -783,16 +648,6 @@ parallel 运行指定的命令，并将其中指定的每个参数逐一传递�
 - `--delay secs`
 	控制任务启动间隔
 
-#### nice - 以修改的调度优先级运行程序
-
-`nice [OPTION] [COMMAND [ARG]...]`
-
-使用调整后的优先级运行 COMMAND，这会影响进程调度。如果没有 COMMAND，则打印当前的优先级。优先级范围从-20（最有利于调度）到 19（最不利于调度）。
-
-- `-n, --adjustment=N`
-	将整数 N 加到优先级（默认值为 10）
-
-- `nice cat /flag`
 
 #### ionice - 获取/设置程序的 I/O 调度类和优先级
 
@@ -821,77 +676,8 @@ RT 调度类会首先获得对磁盘的访问权，无论系统内正在发生�
 - `-p pid`
 	输入进程 PID 来查看或更改已运行的进程。如果未提供此参数，ionice 将使用给定参数运行列出的程序。
 
-#### timeout - 带有时间限制运行命令
-
-`timeout [OPTION] NUMBER[SUFFIX] COMMAND [ARG]...`
-
-- `timeout 1 /bin/sh -p`
-
-#### stdbuf - 运行 COMMAND，对其标准流进行修改的缓冲操作
-
-`stdbuf OPTION... COMMAND`
-
-参数：
-- `-i, --input=MODE`
-	调整标准输入流缓冲
-- `-o, --output=MODE`
-	调整标准输出流缓冲
-- `-e, --error=MODE`
-	调整标准错误流缓冲
-
-如果 MODE 是'L'，相应的流将被行缓冲。此选项与标准输入无效。
-如果 MODE 是'0'，相应的流将无缓冲。
-
-示例：
-- `stdbuf -i0 -o0 -e0 /bin/sh -p`
-
-#### watch - 定期执行程序，全屏显示输出
-
-`watch [-dhvt] [-n <seconds>] [--differences[=cumulative]] [--help] [--interval=<seconds>] [--no-title] [--version] <command>`
-
-watch 会反复执行命令，显示其输出（第一个全屏）。这允许你观察程序输出随时间的变化。默认情况下，程序每 2 秒运行一次；使用 -n 或 --interval 指定不同的间隔。
-
--d 或 --differences 标志将突出显示连续更新之间的差异。--cumulative 选项使高亮显示"粘性"，显示所有曾经更改过的位置的实时显示。-t 或 --no-title 选项关闭显示顶部显示间隔、命令和当前时间的标题，以及其后的空行。
-
-注意命令是通过"sh -c"传递的，这意味着你可能需要使用额外的引号才能达到预期效果。
-
-
-- `-x, --exec`
-	将命令直接传递给 exec 而非 sh -c
-	- `watch -x cat /flag`
-
-- `-n, --interval seconds `
-	指定更新间隔。小于 0.1 和大于 2678400（31 天）的值会被转换为相应的边界值。在任何语言环境下，句点（`.`）和逗号（`,`）均可使用。可以通过 `WATCH_INTERVAL` 环境变量持久地设置非默认间隔（遵循相同的规则和格式）。
-
 
 ### 终端快捷键 & 作业控制（概念）
-
-#### 终端快捷键与命令
-
-`Ctrl-C`（即按住 `Ctrl` 键的同时按下 `C`）会向正在等待终端输入的应用发送"*中断*"信号，通常这将促使应用程序正常退出。
-
-`Ctrl-Z` 将进程*挂起*至后台。
-
-`Ctrl-R` 搜索历史命令，实时匹配当前输入
-- `回车` 选定并执行
-- `→` 右方向键选定并边界 
-
-`fg` 命令——这是一个*内置命令*，它会获取被挂起的进程，将其恢复并放回你终端的*前台*。
-`bg` 命令在*后台*恢复进程。
-
-在命令末尾追加 `&` 符号可直接启动即进入*后台*运行！
-
-
-
-#### tab 键补全
-
-如果你在 shell 中按 tab 键，它会尝试推断你将要输入的内容并自动补全。  
-默认情况下，`bash` 会在出现多个匹配选项时自动扩展到第一个分歧点（在此例中为 `fl`）。  
-当你*第二次*按下 tab 键时，它会列出这些匹配选项。  
-
-补全选项根据位置，即上下文不同，对应不同文件:
-- 命令位置：补的是“可执行命令”（过滤掉普通文件）。
-- 参数位置：补的是“文件名/路径”（不过滤普通文件）。
 
 #### crontab - 创建、编辑和管理定时自动任务（cron 作业）
 
@@ -920,46 +706,6 @@ Crontab 配置
 - `-l` 列出
 - `-e` 编辑
 
-### shell
-
-#### sh
-
-```sh
-sh [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
-	[command_file [argument...]]
-
-sh -c [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
-	command_string [command_name [argument...]]
-
-sh -s [-abCefhimnuvx] [-o option]... [+abCefhimnuvx] [+o option]...
-	[argument...]
-```
-
-选项
-- `-c`
-	- 从 `command_string` 操作数读取命令。将特殊参数 `0`（参见第 2.5.2 节“特殊参数”）的值设置为 `command_name` 操作数的值，并将位置参数（`$1`、`$2` 等）依次设置为其余参数操作数的值。不从标准输入读取任何命令。
-
-
-示例
-```sh
-sudo sh -c "多条命令"
-```
-
-#### bash
-
-```sh
-bash [options] [command_string | file]
-```
-
-- `-c`
-
-	- 如果指定了 `-c` 选项，则从第一个非选项参数 `command_string` 中读取命令。如果 `command_string` 之后还有参数，则第一个参数会被赋值给 `$0`，其余参数则会被依次赋值给位置参数。对 `$0` 的赋值会设置 shell 的名称，该名称将用于警告和错误消息。
-
-示例
-```sh
-sudo bash -c "多条命令"
-```
-
 ## 权限 & 用户管理
  
 ### 身份信息
@@ -971,61 +717,6 @@ w [option ...] [user]
 ```
 
 #### last —— 登录历史记录
-
-#### id
-
-```sh
-id [选项]... [用户名]
-```
-
-打印指定用户名的用户和组信息，或者（当省略用户名时）为当前用户打印。
-
-#### groups
-
-查看当前用户组
-
-### 权限与安全模型
-
-```sh
--rw-r--r-- 1 hacker hacker    0 May 22 13:42 college_file
-drwxr-xr-x 2 hacker hacker 4096 May 22 13:42 pwn_directory
-```
-
-第一个字符是文件类型。
-接下来的九个字符是文件或目录的实际访问权限，分为三组：
-1. 前三个字符表示所有者的权限
-2. 中间三个字符表示所属组的权限
-3. 最后三个字符表示所有其他访问（例如其他用户和其他组）对文件的权限
-
-有两列显示拥有文件的*用户*（本例中为用户 `hacker`）和拥有文件的*组*（本例中同样为组 `hacker`）。
-
-`t` 位即*粘滞位*。
-粘滞位意味着该目录仅允许文件所有者重命名或删除目录中的文件，
-- 疑问：❓ 粘滞目录下的符号链接跟随，当符号链接拥有者与进程 euid 或目录拥有者不同则无法跟随
-
-内核在检查权限时，只会使用“最具体”那一组位。
-具体规则（从高到低优先级）：
-
-1. 如果你是这个文件的所有者 → 只看 `u`（user） 那三位
-2. 否则，如果你属于这个文件的组 → 只看 `g`（group） 那三位
-3. 否则 → 只看 `o`（other） 那三位
-
-Linux 文件/目录权限的一个微妙特性：对目录拥有写入权限的任何人都可以*移动*和*删除*其中的文件。
-即，拥有目录写入权限，但不拥有目录下文件权限时，仍可对目录下文件进行移动与删除。然后写入同名文件进行伪造。
-
-典型用户主目录中的许多文件*默认即为全局可读*，尽管这些文件常被用于存储敏感信息。
-除非显式修改权限，否则 `.bashrc` 就是全局可读的！
-
-SUID:
-
-```sh
--rwsr-xr-x 1 root root 232416 Dec 1 11:45 /usr/bin/sudo
-```
-
-原本是可执行位`x`的位置出现的 `s` 表示该程序是*带有 SUID* 可执行的。
-这意味着，无论哪个用户运行该程序（只要他们有执行权限），该程序都将以其所有者用户（在本例中为 `root` 用户）的身份执行。
-作为文件的所有者，您可以使用 chmod 设置文件的 SUID 位
-
 
 ## 网络 & 安全工具
 
@@ -1252,44 +943,6 @@ TShark 能够检测、读取和写入 Wireshark 支持的相同捕获文件。
 - `sudo tcpdump -i ens32 -n -e "tcp port 23"`
 
 ### 网络扫描 & 连接
-
-#### socat - 多用途中继 (SOcket CAT)
-
-https://linux.die.net/man/1/socat
-
-`CWsocat [options] <address> <address>`
-
-Socat 是一个基于命令行的工具，用于建立两个双向字节流并在它们之间传输数据。由于这些流可以由多种不同类型的数据接收端和发送端（参见地址类型）构建，并且可以应用许多地址选项到这些流上，因此 socat 可以用于多种不同的目的。
-
-参数
-- `CWTCP-LISTEN:<port>`
-	监听并接受 TCP 连接
-	- Useful options: `crnl, fork, bind, range, tcpwrap, pf, max-children, backlog, mss, su, reuseaddr, retry, cool-write`
-
-- `CWEXEC:<command-line>`
-
-端口选项
-- `CWreuseaddr`
-    重用地址
-
-子进程选项
-- `CWfork`
-	连接后创建子进程
-
-示例
-- `socat TCP-LISTEN:4000,reuseaddr,fork EXEC:'node /usr/app/bot.js'`
-	监听 TCP 端口 4000，连接建立后创建子进程执行命令
-
-- `socat - exec:'sh -p',pty,stderr,setsid,sigint,sane`
-	- 地址1为 `-` 标准输入输出
-	- 地址2为 `exec`
-		逗号分隔选项:
-		- pty 伪终端
-		- stderr 标准错误重定向
-		- setsid 在新会话中创建进程，获得作业控制权限
-		- sigint 处理中断信号
-		- sane 设置初始状态的组合选项
-
 
 #### ping, ping6 - 向网络主机发送 ICMP ECHO_REQUEST
 
@@ -1616,23 +1269,6 @@ gcc -o prog code.
 	对 c 进行汇编后修改为 shellcode
 	- 系统调用被设置为普通调用，需手动修改
 
-#### make - GNU make 工具用于维护程序组
-
-`make [ -f makefile ] [ options ] ... [ targets ] ...`
-
-读取 Makefile 并根据其中定义的规则（rules）来执行命令
-
-Makefile格式：
-```makefile
-目标(target): [依赖(prerequisites)]
-[TAB]命令(recipe)
-```
-在 Makefile 中，通常使用换行加 Tab 键来分隔目标和命令，但通过 ; 可以在同一行内完成定义。
-
-- `-E string, --eval string`
-	在命令行中直接写入一段 Makefile 规则
-	- `make --eval='x:; /bin/sh -p'`
-
 ### 调试器
 
 #### gdb - 调试机器码进程
@@ -1916,68 +1552,6 @@ end
 
 - `/dev/tty` 读写数据到终端
 - `/dev/kvm` KVM 使用处理器扩展（HVM）进行虚拟化，cpu 虚拟化加速技术
-
-## 系统管理
-
-### setarch 在新程序环境中更改报告的架构和/或设置个性标志
-
-```sh
-setarch [arch] [options] [program [argument...]]
-arch [options] [program [argument...]]
-```
-
-参数：
-- `-R, --addr-no-randomize`  
-	禁用虚拟地址空间的随机化。启用 ADDR_NO_RANDOMIZE。
-
-例如：
-- `setarch x86_64 -R 文件路径`
-
-### dmesg - 打印或控制内核环形缓冲区
-
-`dmesg [ -c ] [ -n level ] [ -s bufsize ]`
-
-dmesg 用于检查或控制内核环形缓冲区。
-
-- `-W, --follow-new`
-	等待并打印新信息
-
-例：
-- 查看内核保护状态
-
-	```sh
-	dmesg | grep -Ei 'NX|execute disable|SMEP|SMAP|KPTI'
-	[    0.000000] NX (Execute Disable) protection: active
-	```
-
-### insmod - 一个简单的程序，用于将模块插入 Linux 内核
-
-`insmod [OPTIONS] [filename] [module options]`
-
-insmod 是一个简单的程序，用于将模块插入内核。
-大多数用户会选择使用 modprobe(8) 来代替，因为它更聪明，并且能够处理模块依赖。
-
-只有最通用的错误消息会被报告：由于尝试链接模块的工作现在是在内核内部完成的，因此 dmesg(1) 通常会提供更多关于错误的信息。
-
-### lsmod - 显示 Linux 内核中模块的状态
-
-`lsmod [OPTIONS]`
-
-lsmod 是一个简单的程序，它可以很好地格式化 /proc/modules 的内容，显示当前加载的内核模块。
-
-
-### rmmod - 一个简单的程序，用于从 Linux 内核中移除模块
-
-`rmmod [OPTIONS] [list of modulenames]`
-
-rmmod 是一个简单的程序，用于从内核中移除一个模块或多个模块（当提供模块卸载支持时）。大多数用户会选择使用带 -r 选项的 modprobe(8)，因为它还会移除未使用的依赖模块。
-
-当提供模块列表时，程序将逐个处理它们。如果某个模块未找到，rmmod 会立即退出并返回错误代码。如果模块移除失败，程序将记录一个错误，并继续处理下一个模块。这种行为不受 --force 选项控制。
-
-### htop - 查看实时的进程、cpu、内存状态
-
-### 时间日期
-
 
 ## 待归档
 

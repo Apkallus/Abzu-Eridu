@@ -22,6 +22,14 @@ https://docs.python.org/zh-cn/3/library/io.html
 
 ### I/O 基类
 
+#### fileno()
+
+```py
+fileno()
+```
+
+返回流的底层文件描述符（整数）---如果存在。如果 IO 对象不使用文件描述符，则会引发 `OSError` 。
+
 #### class io.RawIOBase
 
 ```py

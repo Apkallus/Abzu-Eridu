@@ -263,6 +263,7 @@ window.nodelay(flag)
     - `True`  
         `getch()` 非阻塞
 
+> 与 getch 组合使用，非阻塞读取 key
 
 #### window.refresh() —— 立即更新显示
 

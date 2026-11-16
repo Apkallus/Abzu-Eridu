@@ -34,3 +34,25 @@ sys.exit([arg])
 
 - `arg`  
     可为一个表示退出状态的整数（默认为零），或为其他类型的对象
+
+
+## sys.stdin、sys.stdout、sys.stderr
+
+```py
+sys.stdin
+sys.stdout
+sys.stderr
+```
+
+解释器用于标准输入、标准输出和标准错误的 “文件对象”:
+
+这些流都是常规 “文本文件”，与 `open()` 函数返回的对象一致。
+
+## sys.platform - 区分当前平台
+
+一个包含平台标识的字符串。
+
+```py
+if sys.platform.startswith('sunos'):
+    # 这里是特定于 SunOS 的代码...
+```

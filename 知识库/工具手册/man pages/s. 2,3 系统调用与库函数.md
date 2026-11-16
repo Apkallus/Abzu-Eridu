@@ -47,3 +47,22 @@ int unlinkat(int dirfd, const char *path, int flags);
 ```
 
 > 仅检查目录权限，而非文件权限
+
+
+
+## `cbreak`、`echo`、`halfdelay`、`intrflush`、`is_cbreak`、`is_echo`、`is_nl`、`is_raw`、`keypad`、`meta`、`nl`、`nocbreak`、`nodelay`、`noecho`、`nonl`、`noqiflush`、`noraw`、`notimeout`、`qiflush`、`raw`、`timeout`、`wtimeout`、`typeahead` — 获取和设置 `curses` 终端输入选项
+
+
+### cbreak, nocbreak
+
+```c
+int cbreak(void);
+int nocbreak(void);
+```
+
+通常，终端驱动程序会缓冲输入的字符，直到输入换行或回车才将其传递给应用程序。这种规范（“cooked”）线路规程还支持软件流控制、简单的行编辑功能（字符和单词擦除，以及整行擦除或“kill”）和作业控制。
+
+`cbreak` 将终端配置为 `cbreak mode`，该模式禁用行缓冲以及擦除和 kill 字符处理——中断、退出、挂起和流控制字符不受影响——并使用户输入的字符立即可供程序使用。
+
+`nocbreak` 恢复规范（“cooked”）模式。
+

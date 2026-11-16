@@ -29,8 +29,8 @@
 2. 设置本地文件夹映射到 `/etc/smartdns`
 
     ```powershell
-    docker container remove --force smartdns
     docker image pull pymumu/smartdns:latest
+    docker container remove --force smartdns
     docker run -d `
         --name smartdns `
         --restart=always `
@@ -42,15 +42,17 @@
         -v E:\Abzu-Eridu\tool\smartdns\config:/etc/smartdns `
         -v E:\Abzu-Eridu\.cache\smartdns\datalib:/var/lib/smartdns `
         pymumu/smartdns:latest
+
     ```
     1. 拉取最新镜像
     2. 强制移除运行中的同名容器
-    3. 
-    - `-d` 后台运行，`--name 容器名称`
-    - `--restart=always` 总是重启
-    - 53 dns 查询端口
-    - 6080 web 界面端口
-    - `-v` 映射文件，主配置与数据库
+    3. 构建运行
+        - `-d` 后台运行，`--name 容器名称`
+        - `--restart=always` 总是重启
+        - 53 dns 查询端口
+        - 6080 web 界面端口
+        - `-v` 映射文件，主配置与数据库  
+            若保存配置文件，仅移除旧容器，并构建新容器
 
 3. 设置本机的 DNS 服务器地址为本机 
     - ipv4 `127.0.0.1`

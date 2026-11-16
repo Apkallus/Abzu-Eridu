@@ -1,6 +1,8 @@
-# os
+https://docs.python.org/zh-cn/3/library/os.html
 
-https://docs.python.org/3.14/library/os.html
+# os --- 多种操作系统接口
+
+本模块提供了一种使用与操作系统相关的功能的便捷式途径。 
 
 - ```os.walk()``` 
     递归遍历目录
@@ -110,9 +112,13 @@ https://docs.python.org/3.14/library/os.html
 - `os.environ` 查看环境变量
     - `os.environ['SUDO_USER']`
 
+
+- `os.name`  
+    导入的依赖特定操作系统的模块的名称。以下名称目前已注册: 'posix', 'nt', 'java'.
+
 ## 文件描述符操作
 
-### os.lseek
+#### os.lseek
 
 ```py
 os.lseek(fd, pos, whence, /)
@@ -127,6 +133,22 @@ os.lseek(fd, pos, whence, /)
 - `SEEK_HOLE` – 将 `pos` 设置为相对于 `pos` 的下一个数据空洞位置
 - `SEEK_DATA` – 将 `pos` 设置为相对于 `pos` 的下一个数据位置
 
+### 查询终端的尺寸
+
+####  os.get_terminal_size()
+
+```py
+os.get_terminal_size(fd=STDOUT_FILENO, /)
+```
+
+返回终端窗口的尺寸，格式为 `(columns, lines)`，它是类型为 `terminal_size` 的元组。
+
+可选参数 `fd` （默认为 `STDOUT_FILENO` 或标准输出）指定应查询的文件描述符。
+
+作为常规使用的高阶函数 `shutil.get_terminal_size()` 的底层实现
+
+可用性: Unix, Windows.
+
 ## 进程管理
 
 下列函数可用于创建和管理进程。
@@ -134,7 +156,7 @@ os.lseek(fd, pos, whence, /)
 所有 [`exec*`] 函数都接受一个参数列表，用来给新程序加载到它的进程中。在所有情况下，传递给新程序的第一个参数是程序本身的名称，而不是用户在命令行上输入的参数。对于 C 程序员来说，这就是传递给 `main()` 函数的 `argv[0]`。例如，`os.execv('/bin/echo', ['foo', 'bar'])` 只会在标准输出上打印 `bar`，而 `foo` 会被忽略。
 
 
-### os.popen() —— 打开一个通往或接受命令 `cmd` 的管道 —— 已废弃
+#### os.popen() —— 打开一个通往或接受命令 `cmd` 的管道 —— 已废弃
 
 ```py
 os.popen(cmd, mode='r', buffering=-1)
@@ -143,3 +165,10 @@ os.popen(cmd, mode='r', buffering=-1)
 打开一个通往或接受命令 `cmd` 的管道。
 
 > `popen()` 是针对 [`subprocess.Popen`] 的简单包装器。使用 `subprocess.Popen` 或 `subprocess.run()` 来控制编码格式等选项。
+
+
+#### os.uname()
+
+返回当前操作系统的标识信息。 返回值是一个 `uname_result`。
+
+在 macOS、iOS 和 Android 上，这将返回 “内核” 名称和发行版本

