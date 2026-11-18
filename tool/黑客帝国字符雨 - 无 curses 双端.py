@@ -44,53 +44,6 @@ def info():
 移除 curses 库时的参考
 - https://github.com/python/cpython/tree/main/Lib/_pyrepl
 
-未优化时的性能
-- profiling
-    ```sh
-    python3 -m profiling.sampling run --mode=cpu -r 20khz -d 60
-    ```
-    - nocurses
-        ```log
-        686498 function calls (130430 primitive calls) in 6.521 seconds
-        nsamples  tottime persample cumtime persample filename:lineno(function)
-            5656    0.283    0.000    0.283    0.000 os.write(STDOUT_FD, ''.join(write_list).encode()) # testa.py:663(refresh)
-            4840    0.242    0.000    0.242    0.000 glow_conf.coverage_set.update(cur_coverage_set) # testa.py:569(update_glow_coverage)
-            3868    0.193    0.000    0.193    0.000 sorted_buff = sorted(color_and_buff.buff.items()) # testa.py:635(refresh)
-        ```
-
-    - curses
-        ```log
-        255170 function calls (50366 primitive calls) in 2.518 seconds
-
-        nsamples  tottime persample cumtime persample filename:lineno(function)
-            99541    4.977    0.000    4.977    0.000 stdscr.refresh() # testb.py:580(main)
-             4172    0.209    0.000    0.209    0.000 glow_conf.coverage_set.update(cur_coverage_set) # testb.py:447(update_glow_coverage)
-             3056    0.153    0.000    0.153    0.000 if e.y_x in glow_config.coverage_set and glow_config.bright < cur_render_color: # testb.py:231(do_render)
-        ```
-
-- strace
-    ```sh
-    timeout 30 strace -c
-    ```
-    - nocurses
-        ```log
-        % time     seconds  usecs/call     calls    errors syscall
-        ------ ----------- ----------- --------- --------- ------------------
-         21.21    0.009750          10       927           write
-         17.38    0.007988           8       926         1 clock_nanosleep
-         15.87    0.007297           7       940         1 ioctl
-        100.00    0.045974           9      4911        56 total
-        ```
-
-    - curses
-        ```log
-        % time     seconds  usecs/call     calls    errors syscall
-        ------ ----------- ----------- --------- --------- ------------------
-         92.53    1.466099          17     85167           write
-          4.81    0.076201          15      5013           poll
-          0.93    0.014738          31       473           clock_nanosleep
-        100.00    1.584409          17     92585        51 total
-        ```
 """
 
 
@@ -222,7 +175,7 @@ FRAME_COUNTER_INIT = 1 # 初始帧数
 HIGHLIGHT_SHOW_LIMIT = 1 # 高亮颜色的最大显示次数
 MUT_CHAR = 0.1 # 字符突变几率，转为其他字符
 MAX_HEAD = 2 # 每列最大头部数量
-LAUNCH_RAT = 0.006 # 每列发动几率
+LAUNCH_RAT = 0.008 # 每列发动几率
 CHAR_W = 2 # 全角字符宽度2
 INVIS_NUM = 3 # 不可见颜色数量，位于尾部，仅被头部照亮               
 GLOW_RING_COUNT = 3 # 衰减半径，头部照亮范围

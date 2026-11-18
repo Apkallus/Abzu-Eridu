@@ -1,13 +1,15 @@
-https://docs.python.org/zh-cn/3.15/library/profiling.sampling.html
+https://docs.python.org/zh-cn/3/library/profiling.sampling.html
 
 # profiling.sampling --- 统计型性能分析器
 
 ```sh
 # 使用 cpu 模式，提高采样率，采样时间 60s，使用火焰图
-python -m profiling.sampling run --mode=cpu -r 20khz -d 60 --flamegraph -o a.html testa.py
+python3 -m profiling.sampling run --mode=cpu -r 20khz -d 30 --flamegraph -o profile.html script.py
 
-# 使用 cpu 模式，提高采样率，采样时间 20s，终端文本输出
-python -m profiling.sampling run --mode=cpu -r 10khz -d 20 -o profile.bin testa.py
+# 使用 cpu 模式，提高采样率，采样时间 30s，终端文本输出
+python3 -m profiling.sampling run --mode=cpu -r 20khz -d 30 --binary -o profile script.py
+# 查看二进制文件
+python3 -m profiling.sampling replay profile
 ```
 
 其中的 `EMBEDDED_DATA` JSON 保存数据
@@ -46,6 +48,7 @@ python -m profiling.sampling replay --heatmap -o my_heatmap profile.bin
 - `--pstats`  
     生成 pstats 统计信息。这是默认行为。当输出到 stdout 时，结果将以文本表格形式呈现；若使用 `-o`，则生成二进制 pstats 文件。
     > 仅包含代码行号
+    > 文件字符解析异常，存在无法解析为 utf-8 的字符
     
 - `--flamegraph`  
     生成独立的 HTML 火焰图。
@@ -100,3 +103,45 @@ python -m profiling.sampling run --opcodes --flamegraph script.py
 
 该功能可让开发者了解 Python 字节码的执行情况，包括自适应特化优化。
 
+
+## 输出格式
+
+### pstats
+
+pstats 格式（`--pstats`）会生成一种与确定性分析器所生成结果类似的文本表格。这是默认的输出格式:
+
+```sh
+python -m profiling.sampling run script.py
+python -m profiling.sampling run --pstats script.py
+```
+
+使用 `--no-summary` 同时抑制图例部分和摘要部分。
+
+pstats 格式支持多种用于控制显示方式的选项。`--sort` 选项用于确定用于对结果进行排序的列`
+
+`--limit` 选项将输出限制为前 N 条记录
+
+`--no-summary` 选项会抑制统计表之前的标题摘要。
+
+### 折叠堆栈格式
+
+折叠堆栈格式（`--collapsed`）会为每个唯一的调用堆栈生成一行，并记录该堆栈被采样的次数:
+
+```sh
+python -m profiling.sampling run --collapsed script.py
+```
+
+### 二进制格式
+
+二进制格式（`--binary`）可生成紧凑的二进制文件，从而高效存储分析数据:
+
+```sh
+python -m profiling.sampling run --binary -o profile.bin script.py
+python -m profiling.sampling attach --binary -o profile.bin 12345
+```
+
+> 当直接使用默认的 pstats 文本解析异常时，输出为二进制格式，再使用 replay 查看
+
+`--compression` 选项用于控制数据压缩
+
+若要分析二进制配置文件，请使用 `replay command` 将其转换为其他格式，例如火焰图或 `pstats` 输出格式。

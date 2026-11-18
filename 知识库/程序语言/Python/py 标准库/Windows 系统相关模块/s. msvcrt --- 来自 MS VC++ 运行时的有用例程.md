@@ -9,11 +9,19 @@ https://docs.python.org/zh-cn/3/library/msvcrt.html
 
 ```py
 # kbhit 非阻塞等待读取按键，getwch 在按键事件发生时读取按键
+QUIT_KEY = b'q'
+
+def getch():
+    key = None
+    if msvcrt.kbhit():
+        key = msvcrt.getwch().encode()
+    return key
+
 while True:
-    key = msvcrt.getwch() if msvcrt.kbhit() else -1
-    if key != -1:
+    key = getch() 
+    # 若收到键盘 `q` 则退出
+    if key and QUIT_KEY in key:
         break
-print(key)
 ```
 
 ## 控制台 I/O

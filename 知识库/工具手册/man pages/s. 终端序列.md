@@ -53,7 +53,6 @@ https://github.com/ThomasDickey/ncurses-snapshots/
 `CSI`（或 `ESC [`）后跟一串参数，最多 `NPAR`（`16`）个，这些参数是用分号分隔的十进制数。空参数或缺失参数取为 `0`。
 
 > 原点为 1,1 而非 0,0 
-> 坐标为字符，而非字节码长度。即半角、全角，均为1
 
 CSI 序列的动作由其最终字符决定。
 
@@ -115,6 +114,8 @@ while true; do
 done
 ```
 
-## 未使用
+## 待使用
+
+[python 标准库私有模块的无 curses 实现](https://github.com/python/cpython/tree/main/Lib/_pyrepl) 
 
 https://invisible-island.net/xterm/ctlseqs/ctlseqs.html

@@ -1,6 +1,6 @@
 # ctypes — Python 的外部函数库
 
-https://docs.pythonlang.cn/3/library/ctypes.html
+https://docs.python.org/zh-cn/3/library/ctypes.html
 
 
 `ctypes` 是 Python 的一个外部函数库。它提供了与 C 兼容的数据类型，并允许调用 DLL 或共享库中的函数。它可用于用纯 Python 包装这些库。
@@ -72,6 +72,18 @@ CPython 实现细节
 printf = ctypes.CDLL(None).printf
 ```
 
+#### class ctypes.WinDLL
+
+```py
+class ctypes.WinDLL
+```
+
+请参阅超类 `CDLL` 获取通用信息。
+
+这些库中的函数使用 `stdcall` 调用约定，并且预期默认返回 `int`。
+
+可用性: Windows
+
 
 ### 外部函数
 
@@ -110,3 +122,39 @@ ctypes.create_string_buffer(size)
 
 - `value`  
     作为以 `NUL` 结尾的字符串访问
+
+## Windows 数据类型
+
+`ctypes.wintypes` 模块提供了可用于 Windows API 的类型。其中大多数类型是 ctypes 中定义的类型的别名。有关相应的 C 语言定义，请参阅 Microsoft 的 [Windows data types](https://learn.microsoft.com/en-us/windows/win32/winprog/windows-data-types) 文档。
+
+### 指针类型
+
+一批 `ctypes.POINTER(T)` 别名
+
+## 结构化数据类型
+
+### class ctypes.Union()
+
+```py
+class ctypes.Union(*args, **kw)
+```
+
+本机字节序的联合所对应的抽象基类。
+
+联合与结构体共享共同的属性和行为；详情请参见 `Structure` 的文档。
+
+### class ctypes.Structure()
+
+```py
+class ctypes.Structure(*args, **kw)
+```
+
+*本机*字节序的结构体所对应的抽象基类。
+
+具体的结构体和联合体类型必须通过继承其中一种类型来创建，并且至少需要定义一个 `_fields_` 类变量。ctypes 将创建 “描述符”`s`，从而允许通过直接访问属性来读写字段。
+
+### `_fields_`
+
+一个定义结构体字段的序列。 其中的条目必须为 2 元组或 3 元组。 元组的第一项是字段名称，第二项指明字段类型；它可以是任何 ctypes 数据类型。
+
+

@@ -516,6 +516,29 @@ sequence.pop(index=-1, /)
 
 > 重置时使用 `clear()`，而不是创建新的空容器
 
+##### sequence.extend()
+
+```py
+sequence.extend(iterable, /)
+```
+
+使用 `iterable` 的内容扩展 `sequence`。
+
+```c
+list_extend_fast(PyListObject *self, PyObject *iterable) {
+    ...
+
+    PyObject **src = PySequence_Fast_ITEMS(iterable);
+    PyObject **dest = self->ob_item + m;
+    for (Py_ssize_t i = 0; i < n; i++) {
+        PyObject *o = src[i];
+        FT_ATOMIC_STORE_PTR_RELEASE(dest[i], Py_NewRef(o));
+    }
+}
+```
+
+> 指针复制
+
 ### 列表
 
 列表是可变序列，通常用于存放同类项目的集合（其中精确的相似程度将根据应用而变化）。

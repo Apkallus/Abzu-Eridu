@@ -118,7 +118,39 @@ https://docs.python.org/zh-cn/3/library/os.html
 
 ## 文件描述符操作
 
-#### os.lseek
+### os.write()
+
+```py
+os.write(fd, str, /)
+```
+
+将 `str` 中的字节串 `bytestring` 写入文件描述符 `fd`。
+
+### os.writev()
+
+```py
+os.writev(fd, buffers, /)
+```
+
+将缓冲区 `buffers` 的内容写入文件描述符 `fd`。缓冲区 `buffers` 必须是由 “字节类对象” 组成的序列。缓冲区以数组顺序处理。先写入第一个缓冲区的全部内容，再写入第二个缓冲区，照此继续。
+
+返回实际写入的字节总数。
+
+操作系统可能对允许使用的缓冲区数量有限制（使用 `sysconf()` 获取 `'SC_IOV_MAX'` 值）。
+
+可用性: Unix.
+
+### os.isatty()
+
+```py
+os.isatty(fd, /)
+```
+
+如果文件描述符 `fd` 打开且已连接至 `tty` 设备（或类 `tty` 设备），返回 `True`，否则返回 `False`。
+
+> 在调用 tty、termios 模块前，查看当前 fd 是否对应 tty
+
+### os.lseek
 
 ```py
 os.lseek(fd, pos, whence, /)

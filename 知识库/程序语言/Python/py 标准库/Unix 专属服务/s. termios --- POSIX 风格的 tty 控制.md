@@ -6,6 +6,10 @@ https://docs.python.org/zh-cn/3/library/termios.html
 
 ## termios.tcgetattr()
 
+```py
+termios.tcgetattr(fd)
+```
+
 返回一个包含文件描述符 `fd` 的 `tty` 属性的列表
 
 ##  termios.tcsetattr()

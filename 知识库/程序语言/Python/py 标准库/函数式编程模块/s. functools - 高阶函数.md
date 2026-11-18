@@ -40,6 +40,8 @@ def factorial(n):
 
 被包装的函数会带有一个 `cache_info()` 函数，它返回一个缓存调试参数对象 `named tuple` 以显示 `hits`、 `misses`、 `maxsize` 和 `currsize`。
 
+> 当传入不可 hash 对象时抛出异常
+
 ### 🛠️ `functools.partial()` —— 部分设置对象
 
 ```py

@@ -6,6 +6,22 @@ https://docs.python.org/zh-cn/3/library/random.html
 
 对于整数，可从一个范围中进行均匀选择。对于序列，可均匀选择一个随机元素、生成列表的随机排列、以及进行无重复的随机抽样。
 
+## 簿记功能
+
+### random.seed()
+
+```py
+random.seed(a=None, version=2)
+```
+
+初始化随机数生成器。
+
+如果 `a` 被省略或为 `None`，则使用当前系统时间。如果操作系统提供随机源，则使用它们而不是系统时间（有关可用性的详细信息，请参阅 `os.urandom()` 函数）。
+
+如果 `a` 是一个整数，则直接使用其绝对值。
+
+对于版本 2（默认的），`str`、 `bytes` 或 `bytearray` 对象转换为 `int` 并使用它的所有位。
+
 ## 整数用函数
 
 ### random.randrange()

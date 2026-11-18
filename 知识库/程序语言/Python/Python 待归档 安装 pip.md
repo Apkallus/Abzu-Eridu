@@ -3,6 +3,10 @@
 [文档首页](https://docs.python.org)
 - [Python 指南](https://docs.python.org/zh-cn/3/howto/)
 
+[内部文档](https://devguide.python.org/internals/)
+
+[PEP 增强](https://peps.python.org/)
+
 文档 URL 中  
 `https://docs.python.org/zh-cn/3/...`
 - 数字 `3` 即对应主版本3的最新子版本，而无需设置 `3.x`

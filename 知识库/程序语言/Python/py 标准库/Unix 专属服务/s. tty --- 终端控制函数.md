@@ -8,7 +8,6 @@ https://docs.python.org/zh-cn/3/library/tty.html
 
 因为它需要 `termios` 模块，所以只能在 Unix 上运行。
 
-
 ## tty.setcbreak()
 
 ```py
@@ -19,4 +18,4 @@ tty.setcbreak(fd, when=termios.TCSAFLUSH)
 
 这将清除 `ECHO` 和 `ICANON` 本地模式旗标并将最小输入设为 1 字节且无延迟。
 
-> 返回值为终端状态，后续或使用 `termios.tcsetattr()` 恢复
+> 返回值为终端状态，后续使用 `termios.tcsetattr()` 恢复
