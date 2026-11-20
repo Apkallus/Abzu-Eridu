@@ -661,8 +661,13 @@ def refresh(color_and_buff: color_and_buff_obj):
         write_list.append(char)
 
         _, cur_color, cur_attr = render_data
-            
-    os.write(STDOUT_FD, ''.join(write_list).encode())
+
+    # 循环写入，确保短写时完全写入
+    # 创建内存视图，多次写入时移动。而非创建容器
+    mem_view = memoryview(''.join(write_list).encode())
+    while mem_view:
+        write_len = os.write(STDOUT_FD, mem_view)
+        mem_view = mem_view[write_len:]
 
     color_and_buff.buff.clear()
 

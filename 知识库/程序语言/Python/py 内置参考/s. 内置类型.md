@@ -315,6 +315,42 @@ print(b'%(language)s has %(number)03d quote types.' %
       {b'language': b"Python", b"number": 2})
 ```
 
+### bytearray 对象
+
+`bytearray` 对象是 bytes 对象的可变对应物。
+
+#### class bytearray()
+
+```py
+class bytearray(source=b'')
+class bytearray(source, encoding, errors='strict')
+```
+
+`bytearray` 对象没有专属的字面值语法，它们总是通过调用构造器来创建
+
+> 循环中，bytearray `+=` 的性能弱于 list `append` + `b''.join([])`
+
+### 内存视图
+
+`memoryview` 对象允许 Python 代码访问一个对象的内部数据，只要该对象支持 “缓冲区协议” 而无需进行拷贝。
+
+#### class memoryview()
+
+```py
+class memoryview(object)
+```
+
+创建一个引用 `object` 的` memoryview`。 `object` 必须支持缓冲区协议。支持缓冲区协议的内置对象有 `bytes` 和 `bytearray`。
+
+> 零拷贝切片，可用于循环 write 而无需创建中间容器。或类似指针
+
+```py
+mem_view = memoryview(write_list)
+while mem_view:
+    write_len = os.write(STDOUT_FD, mem_view)
+    mem_view = mem_view[write_len:]
+```
+
 ## 集合类型 --- set, frozenset
 
 `set` 对象是由互不相同的 “可哈希对象” 对象组成的无序集合。常见用途包括成员检测、去除序列中的重复项，以及计算交集、并集、差集和对称差集等数学运算。
@@ -501,6 +537,39 @@ sequence.append(value, /)
 
 将 `value` 添加到序列的末尾。 这等价于 `seq[len(seq):len(seq)] = [value]` 的写法。
 
+```c
+static PyObject *
+list_append_impl(PyListObject *self, PyObject *object)
+{
+    if (_PyList_AppendTakeRef(self, Py_NewRef(object)) < 0) {
+        return NULL;
+    }
+    Py_RETURN_NONE;
+}
+```
+
+##### sequence.extend()
+
+```py
+sequence.extend(iterable, /)
+```
+
+使用 `iterable` 的内容扩展 `sequence`。
+
+```c
+list_extend_fast(PyListObject *self, PyObject *iterable) {
+    ...
+    // 快速返回传入序列
+    PyObject **src = PySequence_Fast_ITEMS(iterable);
+    // 复制 n 个元素指针
+    PyObject **dest = self->ob_item + m;
+    for (Py_ssize_t i = 0; i < n; i++) {
+        PyObject *o = src[i];
+        FT_ATOMIC_STORE_PTR_RELEASE(dest[i], Py_NewRef(o));
+    }
+}
+```
+
 ##### sequence.pop()
 
 ```py
@@ -516,28 +585,6 @@ sequence.pop(index=-1, /)
 
 > 重置时使用 `clear()`，而不是创建新的空容器
 
-##### sequence.extend()
-
-```py
-sequence.extend(iterable, /)
-```
-
-使用 `iterable` 的内容扩展 `sequence`。
-
-```c
-list_extend_fast(PyListObject *self, PyObject *iterable) {
-    ...
-
-    PyObject **src = PySequence_Fast_ITEMS(iterable);
-    PyObject **dest = self->ob_item + m;
-    for (Py_ssize_t i = 0; i < n; i++) {
-        PyObject *o = src[i];
-        FT_ATOMIC_STORE_PTR_RELEASE(dest[i], Py_NewRef(o));
-    }
-}
-```
-
-> 指针复制
 
 ### 列表
 

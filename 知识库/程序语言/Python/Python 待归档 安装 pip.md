@@ -2,6 +2,8 @@
 
 [文档首页](https://docs.python.org)
 - [Python 指南](https://docs.python.org/zh-cn/3/howto/)
+- [Python - C 实现细节](https://docs.python.org/zh-cn/3.15/c-api/index.html)
+    > 直接得到源码的函数功能描述
 
 [内部文档](https://devguide.python.org/internals/)
 

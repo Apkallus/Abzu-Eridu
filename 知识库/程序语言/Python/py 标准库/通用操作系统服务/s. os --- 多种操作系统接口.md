@@ -126,6 +126,9 @@ os.write(fd, str, /)
 
 将 `str` 中的字节串 `bytestring` 写入文件描述符 `fd`。
 
+返回实际写入的字节数。
+> 或短写，仅写入一部分。需循环写入
+
 ### os.writev()
 
 ```py

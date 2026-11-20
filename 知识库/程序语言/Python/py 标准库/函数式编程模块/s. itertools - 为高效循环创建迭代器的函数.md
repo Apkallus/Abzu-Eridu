@@ -30,6 +30,43 @@ tmp_list = [color_list[i:i+step] for i in range(0, color_list_len, step)]
 tmp_list = list(batched(color_list, step))
 ```
 
+```c
+static PyObject *
+batched_next(PyObject *op)
+{
+    batchedobject *bo = batchedobject_CAST(op);
+    Py_ssize_t i;
+    Py_ssize_t n = FT_ATOMIC_LOAD_SSIZE_RELAXED(bo->batch_size);
+    PyObject *it = bo->it;
+    PyObject *item;
+    PyObject *result;
+
+    if (n < 0) {
+        return NULL;
+    }
+    // 创建中间元组
+    result = PyTuple_New(n);
+    if (result == NULL) {
+        return NULL;
+    }
+    // n 次迭代器调用以填充中间元组
+    iternextfunc iternext = *Py_TYPE(it)->tp_iternext;
+    PyObject **items = _PyTuple_ITEMS(result);
+    for (i=0 ; i < n ; i++) {
+        item = iternext(it);
+        if (item == NULL) {
+            goto null_item;
+        }
+        items[i] = item;
+    }
+    return result;
+
+ null_item:
+...
+}
+```
+
+> 建立元组作为中间容器，并未减少开销。应使用步长索引直接取值
 
 ### itertools.starmap()
 

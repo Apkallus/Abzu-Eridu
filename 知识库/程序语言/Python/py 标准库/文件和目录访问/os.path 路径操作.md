@@ -25,3 +25,27 @@ os.path.join('/home/foo', '/bar')
 ```
 
 > 最后一个参数设置绝对路径以消除前缀
+
+## 查询终端的尺寸
+
+### os.get_terminal_size()
+
+```py
+os.get_terminal_size(fd=STDOUT_FILENO, /)
+```
+
+返回终端窗口的尺寸，格式为 `(columns, lines)`，它是类型为 `terminal_size` 的元组。
+
+### class os.terminal_size
+
+```py
+class os.terminal_size
+```
+
+元组的子类，存储终端窗口尺寸 `(columns, lines)`。
+
+- `columns`  
+    终端窗口的宽度，单位为字符。
+
+- `lines`  
+    终端窗口的高度，单位为字符。

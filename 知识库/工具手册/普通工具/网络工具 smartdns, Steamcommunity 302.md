@@ -1,11 +1,5 @@
 # 网络设置
 
-## DNS服务器
-
-- [阿里公共 DNS](https://developer.aliyun.com/article/757592#slide-2)
-    - ipv4：223.5.5.5，223.6.6.6
-    - ipv6：2400:3200::1，2400:3200:baba::1
-
 ## DOH
 
 列表

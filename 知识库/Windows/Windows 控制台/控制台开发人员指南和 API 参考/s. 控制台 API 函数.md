@@ -84,3 +84,28 @@ HANDLE WINAPI GetStdHandle(
 如果函数失败，返回值为 `INVALID_HANDLE_VALUE`。要获取扩展错误信息，请调用 `GetLastError`。
 
 如果应用程序没有关联的标准句柄（例如在交互式桌面上运行的服务），并且未重定向这些句柄，则返回值为 `NULL`。
+
+## SetConsoleOutputCP 函数
+
+https://learn.microsoft.com/zh-cn/windows/console/setconsoleoutputcp
+
+设置与调用进程关联的控制台使用的输出代码页。 控制台使用其输出代码页将各种输出函数写入的字符值转换为控制台窗口中显示的图像。
+
+### 语法
+
+```C
+BOOL WINAPI SetConsoleOutputCP(
+  _In_ UINT wCodePageID
+);
+```
+
+### 参数
+
+*wCodePageID* [in] 要设置的代码页的标识符。 有关详细信息，请参阅“备注”。
+
+### 返回值
+
+如果该函数成功，则返回值为非零值。
+
+如果函数失败，则返回值为零。 要获得更多的错误信息，请调用 [**GetLastError**]
+

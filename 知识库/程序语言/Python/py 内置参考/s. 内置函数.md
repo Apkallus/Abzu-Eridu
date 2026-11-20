@@ -2,6 +2,72 @@ https://docs.python.org/zh-cn/3/library/functions.html
 
 # 内置函数
 
+## @classmethod - 把一个方法封装成类方法
+
+```py
+@classmethod
+```
+
+类方法隐含的第一个参数即为类
+
+```py
+class C:
+    @classmethod
+    def f(cls, arg1, arg2): ...
+```
+
+使用方式
+1. 工厂
+    ```py
+    @dataclass(slots=True)
+    class terminal_size_related_obj:
+        terminal_size: os.terminal_size
+
+        @classmethod
+        def build(cls):
+            # 得到值
+            terminal_size = get_terminal_size()
+            # 使用值初始化类实例构建
+            return cls(terminal_size)
+    ```
+
+2. 共享值与方法
+
+## class property(e) - 返回 property 属性
+
+```py
+class property(fget=None, fset=None, fdel=None, doc=None)
+```
+
+`fget` 是获取属性值的函数。 `fset` 是用于设置属性值的函数。 `fdel` 是用于删除属性值的函数。并且 `doc` 为属性对象创建文档字符串。
+
+```py
+class C:
+    def __init__(self):
+        self._x = None
+
+    def getx(self):
+        return self._x
+
+    def setx(self, value):
+        self._x = value
+
+    def delx(self):
+        del self._x
+
+    x = property(getx, setx, delx, "I'm the 'x' property.")
+```
+
+## filter()
+
+```py
+filter(function, iterable, /)
+```
+
+使用 `iterable` 中 `function` 返回真值的元素构造一个迭代器。 `iterable` 可以是一个序列，一个支持迭代的容器或者一个迭代器。
+
+`itertools.filterfalse()` 返回假值的元素构造一个迭代器。
+
 ## bin() —— 整数转二进制字符串
 
 ```py

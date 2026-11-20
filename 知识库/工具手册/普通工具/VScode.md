@@ -19,11 +19,7 @@
 - 若提示无法访问浏览器粘贴板，在浏览器中设置权限或关闭跟踪保护。在搜索栏左侧的盾形图标
 
 - [SSH 远程排障 wiki](https://github.com/microsoft/vscode-remote-release/wiki/Remote-SSH-troubleshooting)
-    ```json
-    // 使用终端模式，每个窗口创建独立连接而不复用
-    "remote.SSH.useLocalServer": false, 
-    ```
-    - 设置后故障消失，且响应速度更快。且之前其他程序异常退出的情况消失
+    - 无效
 
 ## 使用
 

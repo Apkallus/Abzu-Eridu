@@ -159,7 +159,7 @@ vmware 设置
 - 管理员权限下 - 文件 - 配置虚拟机自动启动 - 选择虚拟机
 - 或需在 `services.msc` 中设置 vmware 的自动启动服务状态为自动
 - 注意：自动启动的虚拟机并不在 vmware gui 界面中显示，使用 ssh 登录
-- 另一种方式：runvm 的命令行启动
+- 另一种方式：vmrun 的命令行启动
 
 linux 安装
 - 安装依赖项 `sudo apt install build-essential linux-headers-$(uname -r)`

@@ -24,6 +24,12 @@ typedef struct _INPUT_RECORD {
 - `EventType`  
     输入事件类型和 `事件成员中` 存储的事件记录的句柄。
 
+    - `KEY_EVENT` 0x0001  
+        事件成员包含一个`KEY_EVENT_RECORD`结构，其中包含有关键盘事件的信息。
+
+    - ` WINDOW_BUFFER_SIZE_EVENT` 0x0004  
+        事件成员包含一个`WINDOW_BUFFER_SIZE_RECORD`结构，其中包含有关控制台屏幕缓冲区的新大小的信息。
+
 ## KEY_EVENT_RECORD 结构
 
 描述控制台 `INPUT_RECORD` 结构中的键盘输入事件。
@@ -74,6 +80,8 @@ typedef struct _WINDOW_BUFFER_SIZE_RECORD {
 ### 成员
 
 **dwSize**[**COORD**] 结构，包含控制台屏幕缓冲区的大小，以字符单元格列和行为单位。
+
+> 注意，此处为“缓冲区”大小。可用来监听屏幕大小变化事件，但仍需实际读取屏幕大小
 
 ### 注解
 
